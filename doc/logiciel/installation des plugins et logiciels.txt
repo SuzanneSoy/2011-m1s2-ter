@@ -1,0 +1,20 @@
+Toutes les informations sur l'installation sur les plug-ins, SDK et documentations à l'adresse suivante :
+http://developer.android.com/index.html
+
+Plug-in Eclipse :
+Vous trouverez le plug-in Eclipse à l'adresse :
+http://developer.android.com/sdk/eclipse-adt.html
+À cette adresse, allez à la section « Downloading the ADT Plugin » puis réaliser les manipulations correspondantes a votre version d'Eclipse.
+
+SDK d'Android :
+Une fois, le plug-in installé, téléchargez le SDK d'Android correspondant à votre système d'exploitation à l'adresse suivante :
+http://developer.android.com/sdk/index.html
+
+Une fois téléchargée, décompressez l'archive et copiez le répertoire dans un répertoire votre répertoire de librairie par exemple. Une fois ceci réalisé, il faut configurer le plug-in d'Éclipse. Pour ce faire, ouvrez Éclipse, allez dans « Preference->Android ». Dans la zone de saisie, indiquez l'emplacement du SDK précédemment téléchargé, et cliquez sur « Apply », et « OK ». Il est possible qu'un pop-up s'ouvre, vous indiquant qu'il n'y a pas de plates-formes d'installées. Pour installer les différentes plates-formes, allez dans « Window->Android SDK and AVD Manager », puis cliquez sur « Available packages » et sélectionner les différentes plates-formes qui vous intéressent.
+
+Visual Paradigm :
+« Visual Paradigm » est un logiciel pour générer les différents diagrammes UML dont on pourrait avoir besoin lors de la réalisation du projet. Il possède en plus une intégration à l'IDE Eclipse.
+Pour le télécharger, allez à la page :
+http://www.visual-paradigm.com/download/vpuml.jsp?edition=ce
+
+Cliquez sur « Get Community Edition FREE for non-commercial use » pour télécharger l’application, et en même temps enregistrez-vous en cliquant sur le lien « Create a Visual Paradigm Account » pour recevoir votre licence. Pour l'installation, il suffit d'exécuter le fichier télécharger et de suivre les étapes indiquées.
