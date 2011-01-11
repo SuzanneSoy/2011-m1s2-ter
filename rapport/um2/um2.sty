@@ -1,0 +1,78 @@
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{um2/geometry}% Nécessite la version 5 ou ultérieure.
+
+\def\and{\\}%
+
+\def\@institution{Université Montpellier 2}
+\def\@blurb{}
+
+\def\institution#1{\def\@institution{#1}}
+\def\blurb#1{\def\@blurb{#1}}
+
+\def\maketitle{%
+  \pagenumbering{roman}%
+  \thispagestyle{empty}%
+  \newgeometry{margin=0cm}%
+  \edef\umdeuxOldParindent{\the\parindent}%
+  \parindent=0pt%
+  \begin{titlepage}%
+    \setlength{\linewidth}{21cm}%
+    \null%
+    \vskip 1.5cm%
+    \hskip 1.5cm%
+    \begin{minipage}[c]{5.5cm}%
+      \includegraphics[height=2cm]{um2/nouveauLogo_UM2.png}%
+    \end{minipage}%
+    \begin{minipage}[c]{7cm}%
+      \begin{center}%
+        \large\@institution%
+      \end{center}%
+    \end{minipage}%
+    \begin{minipage}[c]{5.5cm}%
+      \raggedleft%
+      \includegraphics[height=2cm]{um2/ufr.png}%
+    \end{minipage}%
+    % 
+    \vskip 1cm%
+    \begin{minipage}[c]{5.5cm}%
+    \end{minipage}%
+    \hfill%
+    \begin{minipage}[c]{8cm}%
+      \begin{center}%
+        \@blurb%
+      \end{center}%
+    \end{minipage}%
+    \hfill%
+    \begin{minipage}[c]{5.5cm}%
+    \end{minipage}%
+    
+    \vfill%
+      \begin{center}%
+        \huge\@title\par%
+      \end{center}%
+    \vfill%
+      \begin{center}%
+        \Large\@author%
+      \end{center}%
+    \vfill%
+      \begin{center}%
+        \includegraphics[height=2.5cm]{um2/petitlogoUM2.png}%
+      \end{center}%
+    \vskip .7cm%
+    \null
+  \end{titlepage}%
+  \global\let\and\relax%
+  \parindent=\umdeuxOldParindent%
+  \restoregeometry%
+  \pagenumbering{arabic}%
+}
+
+
+\hypersetup{%
+  colorlinks,%
+  linkcolor=black,%
+  filecolor=black,%
+  urlcolor=black,%
+  citecolor=black%
+}
