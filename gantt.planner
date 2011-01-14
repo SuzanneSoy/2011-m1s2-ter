@@ -1,0 +1,376 @@
+<?xml version="1.0"?>
+<project name="" company="" manager="" phase="" project-start="20110114T000000Z" mrproject-version="2" calendar="1">
+  <properties/>
+  <phases/>
+  <calendars>
+    <day-types>
+      <day-type id="0" name="Travail" description="Un jour de travail normal"/>
+      <day-type id="1" name="Non travaill&#xE9;" description="Un jour ch&#xF4;m&#xE9; normal"/>
+      <day-type id="2" name="Utiliser la base" description="Utiliser le jour du calendrier de base"/>
+    </day-types>
+    <calendar id="1" name="D&#xE9;faut">
+      <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="0" sun="0"/>
+      <overridden-day-types>
+        <overridden-day-type id="0">
+          <interval start="0800" end="1200"/>
+          <interval start="1300" end="1700"/>
+        </overridden-day-type>
+      </overridden-day-types>
+      <days>
+        <day date="20110302" type="day-type" id="1"/>
+        <day date="20110228" type="day-type" id="1"/>
+        <day date="20110213" type="day-type" id="1"/>
+        <day date="20110305" type="day-type" id="1"/>
+        <day date="20110303" type="day-type" id="1"/>
+        <day date="20110301" type="day-type" id="1"/>
+        <day date="20110306" type="day-type" id="1"/>
+        <day date="20110212" type="day-type" id="1"/>
+        <day date="20110304" type="day-type" id="1"/>
+      </days>
+    </calendar>
+  </calendars>
+  <tasks>
+    <task id="1" name="R&#xE9;union de lancement" note="&#10;" work="0" duration="28800" start="20110114T000000Z" end="20110114T160000Z" work-start="20110114T080000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-duration"/>
+    <task id="2" name="Recherche de b&#xEA;ta-testeurs" note="" work="0" duration="892800" start="20110114T000000Z" end="20110210T130000Z" work-start="20110114T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+      <constraint type="start-no-earlier-than" time="20110114T000000Z"/>
+    </task>
+    <task id="3" name="It&#xE9;ration 1" note="" work="0" duration="720000" start="20110117T000000Z" end="20110211T000000Z" work-start="20110117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="4" name="Serveur &amp; SQL" note="" work="0" duration="201600" start="20110117T000000Z" end="20110123T100000Z" work-start="20110117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110117T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="1" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="5" name="Fen&#xEA;tre principale &amp; configuration" note="" work="0" duration="201600" start="20110117T000000Z" end="20110123T100000Z" work-start="20110117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110117T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="1" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="6" name="Fen&#xEA;tre score" note="" work="0" duration="172800" start="20110124T000000Z" end="20110129T110000Z" work-start="20110124T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110124T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="5" type="FS"/>
+          <predecessor id="1" predecessor-id="4" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="7" name="R&#xE9;seau client Android" note="" work="0" duration="172800" start="20110124T000000Z" end="20110129T110000Z" work-start="20110124T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110124T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="5" type="FS"/>
+          <predecessor id="1" predecessor-id="4" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="8" name="Fen&#xEA;tre jeu" note="" work="0" duration="172800" start="20110124T000000Z" end="20110129T110000Z" work-start="20110124T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110124T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="5" type="FS"/>
+          <predecessor id="1" predecessor-id="4" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="9" name="Int&#xE9;gration " note="" work="0" duration="28800" start="20110130T000000Z" end="20110130T160000Z" work-start="20110130T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110130T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="8" type="FS"/>
+          <predecessor id="1" predecessor-id="7" type="FS"/>
+          <predecessor id="1" predecessor-id="6" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="10" name="Am&#xE9;liorations v0.1" note="" work="0" duration="201600" start="20110131T000000Z" end="20110206T100000Z" work-start="20110131T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110131T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="9" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="11" name="Tests et d&#xE9;bogage v0.1" note="" work="0" duration="115200" start="20110207T000000Z" end="20110210T130000Z" work-start="20110207T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110207T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="10" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="12" name="Livraison v0.1" note="" work="0" duration="0" start="20110211T000000Z" end="20110211T000000Z" work-start="20110211T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20110211T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="11" type="FS"/>
+        </predecessors>
+      </task>
+    </task>
+    <task id="13" name="Alpha-test v0.1" note="" work="0" duration="489600" start="20110211T000000Z" end="20110307T090000Z" work-start="20110211T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+      <constraint type="start-no-earlier-than" time="20110211T000000Z"/>
+      <predecessors>
+        <predecessor id="1" predecessor-id="2" type="FS"/>
+        <predecessor id="1" predecessor-id="12" type="FS"/>
+      </predecessors>
+    </task>
+    <task id="14" name="It&#xE9;ration 2" note="" work="0" duration="720000" start="20110214T000000Z" end="20110318T000000Z" work-start="20110214T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="15" name="Niveaux de difficult&#xE9; (serveur)" note="" work="0" duration="201600" start="20110214T000000Z" end="20110220T100000Z" work-start="20110214T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110214T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="3" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="16" name="Mode de jeu &#xAB;Marathon&#xBB;" note="" work="0" duration="403200" start="20110214T000000Z" end="20110226T120000Z" work-start="20110214T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110214T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="3" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="17" name="Mode de jeu &#xAB;Shoot'em up&#xBB;" note="" work="0" duration="403200" start="20110214T000000Z" end="20110226T120000Z" work-start="20110214T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110214T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="3" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="18" name="Am&#xE9;liorations v0.2" note="" work="0" duration="201600" start="20110228T000000Z" end="20110313T100000Z" work-start="20110307T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110228T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="17" type="FS"/>
+          <predecessor id="1" predecessor-id="16" type="FS"/>
+          <predecessor id="1" predecessor-id="15" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="19" name="Corrections alpha-test v0.1" note="" work="0" duration="201600" start="20110307T090000Z" end="20110313T110000Z" work-start="20110307T090000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110228T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="13" type="FS"/>
+          <predecessor id="1" predecessor-id="17" type="FS"/>
+          <predecessor id="1" predecessor-id="16" type="FS"/>
+          <predecessor id="1" predecessor-id="15" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="20" name="Tests et d&#xE9;bogage v0.2" note="" work="0" duration="115200" start="20110314T000000Z" end="20110317T130000Z" work-start="20110314T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110314T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="18" type="FS"/>
+          <predecessor id="1" predecessor-id="19" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="21" name="Livraison v0.2" note="" work="0" duration="0" start="20110318T000000Z" end="20110318T000000Z" work-start="20110318T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20110318T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="20" type="FS"/>
+        </predecessors>
+      </task>
+    </task>
+    <task id="22" name="Alpha-test v0.2" note="" work="0" duration="489600" start="20110318T000000Z" end="20110402T090000Z" work-start="20110318T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+      <constraint type="start-no-earlier-than" time="20110318T000000Z"/>
+      <predecessors>
+        <predecessor id="1" predecessor-id="21" type="FS"/>
+      </predecessors>
+    </task>
+    <task id="23" name="It&#xE9;ration 3" note="" work="0" duration="720000" start="20110321T000000Z" end="20110415T000000Z" work-start="20110321T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="24" name="Accessibilit&#xE9; : Tailles &amp; polices" note="" work="0" duration="403200" start="20110321T000000Z" end="20110402T120000Z" work-start="20110321T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110321T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="14" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="25" name="Config : couleurs &amp; design" note="" work="0" duration="403200" start="20110321T000000Z" end="20110402T120000Z" work-start="20110321T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110321T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="14" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="26" name="Int&#xE9;gration r&#xE9;seaux sociaux" note="Fassebouke et Twitter" work="0" duration="403200" start="20110321T000000Z" end="20110402T120000Z" work-start="20110321T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110321T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="14" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="27" name="Mode de jeu &#xAB;Multijoueur&#xBB;" note="" work="0" duration="403200" start="20110321T000000Z" end="20110402T120000Z" work-start="20110321T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110321T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="14" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="28" name="Am&#xE9;liorations v0.3" note="" work="0" duration="201600" start="20110404T000000Z" end="20110410T100000Z" work-start="20110404T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110404T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="24" type="FS"/>
+          <predecessor id="1" predecessor-id="25" type="FS"/>
+          <predecessor id="1" predecessor-id="26" type="FS"/>
+          <predecessor id="1" predecessor-id="27" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="29" name="Corrections alpha-test v0.2" note="" work="0" duration="201600" start="20110404T000000Z" end="20110410T100000Z" work-start="20110404T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110404T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="22" type="FS"/>
+          <predecessor id="1" predecessor-id="24" type="FS"/>
+          <predecessor id="1" predecessor-id="25" type="FS"/>
+          <predecessor id="1" predecessor-id="26" type="FS"/>
+          <predecessor id="1" predecessor-id="27" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="30" name="Tests et d&#xE9;bogage v0.3" note="" work="0" duration="115200" start="20110411T000000Z" end="20110414T130000Z" work-start="20110411T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110411T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="29" type="FS"/>
+          <predecessor id="1" predecessor-id="28" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="31" name="Livraison v0.3" note="" work="0" duration="0" start="20110415T000000Z" end="20110415T000000Z" work-start="20110415T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20110415T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="30" type="FS"/>
+        </predecessors>
+      </task>
+    </task>
+    <task id="32" name="Alpha-test v0.3" note="" work="0" duration="489600" start="20110415T000000Z" end="20110430T090000Z" work-start="20110415T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+      <predecessors>
+        <predecessor id="1" predecessor-id="31" type="FS"/>
+      </predecessors>
+    </task>
+    <task id="33" name="It&#xE9;ration 4" note="" work="0" duration="705600" start="20110418T000000Z" end="20110512T130000Z" work-start="20110418T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="34" name="Mode de jeu &#xAB;Th&#xE9;matique&#xBB;" note="Mot central en relation avec le th&#xE8;me (No&#xEB;l, P&#xE2;ques, ...)" work="0" duration="403200" start="20110418T000000Z" end="20110430T120000Z" work-start="20110418T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110418T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="23" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="35" name="Interface vocale" note="" work="0" duration="403200" start="20110418T000000Z" end="20110430T120000Z" work-start="20110418T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110418T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="23" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="36" name="Mise en pause du jeu" note="" work="0" duration="201600" start="20110418T000000Z" end="20110424T100000Z" work-start="20110418T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110418T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="23" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="37" name="Mode de jeu &#xAB;Chrono&#xBB;" note="" work="0" duration="201600" start="20110425T000000Z" end="20110501T100000Z" work-start="20110425T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110425T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="36" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="38" name="Am&#xE9;liorations v1.0" note="" work="0" duration="201600" start="20110502T000000Z" end="20110508T100000Z" work-start="20110502T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110502T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="36" type="FS"/>
+          <predecessor id="1" predecessor-id="34" type="FS"/>
+          <predecessor id="1" predecessor-id="35" type="FS"/>
+          <predecessor id="1" predecessor-id="37" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="39" name="Corrections alpha-test v0.3" note="" work="0" duration="201600" start="20110502T000000Z" end="20110508T100000Z" work-start="20110502T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110502T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="32" type="FS"/>
+          <predecessor id="1" predecessor-id="37" type="FS"/>
+          <predecessor id="1" predecessor-id="36" type="FS"/>
+          <predecessor id="1" predecessor-id="35" type="FS"/>
+          <predecessor id="1" predecessor-id="34" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="40" name="Tests et d&#xE9;bogage v1.0" note="" work="0" duration="115200" start="20110509T000000Z" end="20110512T130000Z" work-start="20110509T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-duration">
+        <constraint type="start-no-earlier-than" time="20110509T000000Z"/>
+        <predecessors>
+          <predecessor id="1" predecessor-id="38" type="FS"/>
+          <predecessor id="1" predecessor-id="39" type="FS"/>
+        </predecessors>
+      </task>
+    </task>
+    <task id="41" name="Publication de la b&#xEA;ta v1.0" note="" work="0" duration="0" start="20110513T000000Z" end="20110513T000000Z" work-start="20110513T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+      <constraint type="start-no-earlier-than" time="20110513T000000Z"/>
+      <predecessors>
+        <predecessor id="1" predecessor-id="33" type="FS"/>
+      </predecessors>
+    </task>
+  </tasks>
+  <resource-groups/>
+  <resources>
+    <resource id="1" name="BONAVERO Yoann" short-name="YB" type="1" units="0" email="yoann.b87@voila.fr" note="" std-rate="0"/>
+    <resource id="2" name="CHARRON John" short-name="JC" type="1" units="0" email="charron.john@gmail.com" note="" std-rate="0"/>
+    <resource id="3" name="BRUN Bertrand" short-name="BB" type="1" units="0" email="bertrand0brun@gmail.com" note="" std-rate="0"/>
+    <resource id="4" name="DUPERON Georges" short-name="GD" type="1" units="0" email="jahvascriptmaniac@gmail.com" note="" std-rate="0"/>
+    <resource id="5" name="B&#xEA;ta-testeurs" short-name="Beta" type="1" units="0" email="" note="" std-rate="0"/>
+  </resources>
+  <allocations>
+    <allocation task-id="40" resource-id="1" units="0"/>
+    <allocation task-id="39" resource-id="1" units="0"/>
+    <allocation task-id="38" resource-id="1" units="0"/>
+    <allocation task-id="37" resource-id="1" units="0"/>
+    <allocation task-id="36" resource-id="1" units="0"/>
+    <allocation task-id="2" resource-id="1" units="0"/>
+    <allocation task-id="28" resource-id="1" units="0"/>
+    <allocation task-id="30" resource-id="1" units="0"/>
+    <allocation task-id="29" resource-id="1" units="0"/>
+    <allocation task-id="25" resource-id="1" units="0"/>
+    <allocation task-id="20" resource-id="1" units="0"/>
+    <allocation task-id="19" resource-id="1" units="0"/>
+    <allocation task-id="18" resource-id="1" units="0"/>
+    <allocation task-id="16" resource-id="1" units="0"/>
+    <allocation task-id="11" resource-id="1" units="0"/>
+    <allocation task-id="1" resource-id="1" units="0"/>
+    <allocation task-id="10" resource-id="1" units="0"/>
+    <allocation task-id="9" resource-id="1" units="0"/>
+    <allocation task-id="7" resource-id="1" units="0"/>
+    <allocation task-id="4" resource-id="1" units="0"/>
+    <allocation task-id="40" resource-id="2" units="0"/>
+    <allocation task-id="39" resource-id="2" units="0"/>
+    <allocation task-id="38" resource-id="2" units="0"/>
+    <allocation task-id="37" resource-id="2" units="0"/>
+    <allocation task-id="36" resource-id="2" units="0"/>
+    <allocation task-id="2" resource-id="2" units="0"/>
+    <allocation task-id="28" resource-id="2" units="0"/>
+    <allocation task-id="30" resource-id="2" units="0"/>
+    <allocation task-id="29" resource-id="2" units="0"/>
+    <allocation task-id="24" resource-id="2" units="0"/>
+    <allocation task-id="20" resource-id="2" units="0"/>
+    <allocation task-id="19" resource-id="2" units="0"/>
+    <allocation task-id="18" resource-id="2" units="0"/>
+    <allocation task-id="16" resource-id="2" units="0"/>
+    <allocation task-id="11" resource-id="2" units="0"/>
+    <allocation task-id="1" resource-id="2" units="0"/>
+    <allocation task-id="10" resource-id="2" units="0"/>
+    <allocation task-id="9" resource-id="2" units="0"/>
+    <allocation task-id="6" resource-id="2" units="0"/>
+    <allocation task-id="5" resource-id="2" units="0"/>
+    <allocation task-id="40" resource-id="3" units="0"/>
+    <allocation task-id="39" resource-id="3" units="0"/>
+    <allocation task-id="38" resource-id="3" units="0"/>
+    <allocation task-id="35" resource-id="3" units="0"/>
+    <allocation task-id="2" resource-id="3" units="0"/>
+    <allocation task-id="28" resource-id="3" units="0"/>
+    <allocation task-id="30" resource-id="3" units="0"/>
+    <allocation task-id="29" resource-id="3" units="0"/>
+    <allocation task-id="26" resource-id="3" units="0"/>
+    <allocation task-id="27" resource-id="3" units="0"/>
+    <allocation task-id="20" resource-id="3" units="0"/>
+    <allocation task-id="19" resource-id="3" units="0"/>
+    <allocation task-id="18" resource-id="3" units="0"/>
+    <allocation task-id="17" resource-id="3" units="0"/>
+    <allocation task-id="11" resource-id="3" units="0"/>
+    <allocation task-id="1" resource-id="3" units="0"/>
+    <allocation task-id="10" resource-id="3" units="0"/>
+    <allocation task-id="8" resource-id="3" units="0"/>
+    <allocation task-id="9" resource-id="3" units="0"/>
+    <allocation task-id="5" resource-id="3" units="0"/>
+    <allocation task-id="40" resource-id="4" units="0"/>
+    <allocation task-id="39" resource-id="4" units="0"/>
+    <allocation task-id="38" resource-id="4" units="0"/>
+    <allocation task-id="34" resource-id="4" units="0"/>
+    <allocation task-id="2" resource-id="4" units="0"/>
+    <allocation task-id="28" resource-id="4" units="0"/>
+    <allocation task-id="30" resource-id="4" units="0"/>
+    <allocation task-id="29" resource-id="4" units="0"/>
+    <allocation task-id="27" resource-id="4" units="0"/>
+    <allocation task-id="20" resource-id="4" units="0"/>
+    <allocation task-id="19" resource-id="4" units="0"/>
+    <allocation task-id="18" resource-id="4" units="0"/>
+    <allocation task-id="17" resource-id="4" units="0"/>
+    <allocation task-id="15" resource-id="4" units="0"/>
+    <allocation task-id="11" resource-id="4" units="0"/>
+    <allocation task-id="1" resource-id="4" units="0"/>
+    <allocation task-id="10" resource-id="4" units="0"/>
+    <allocation task-id="8" resource-id="4" units="0"/>
+    <allocation task-id="9" resource-id="4" units="0"/>
+    <allocation task-id="4" resource-id="4" units="0"/>
+    <allocation task-id="32" resource-id="5" units="0"/>
+    <allocation task-id="22" resource-id="5" units="0"/>
+    <allocation task-id="13" resource-id="5" units="0"/>
+  </allocations>
+</project>

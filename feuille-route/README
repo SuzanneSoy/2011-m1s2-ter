@@ -1,0 +1,3 @@
+Pour compiler, faites :
+
+pdflatex feuille-route.tex; pdflatex 2x2.tex
