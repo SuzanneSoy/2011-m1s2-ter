@@ -1,0 +1,27 @@
+// BEAUCOUP plus rapide avec un index
+create index i_relation_start on relation(start);
+create index i_relation_end on relation(end);
+create index i_relation_type on relation(type);
+// Pour les voisins reliés par un end avec filtrage des types
+create index i_relation_end_type on relation(end,type);
+
+// select relations partant d'un noeud
+select * from relation where start = 42;
+
+// select cibles de relations partant d'un noeud
+select end from relation where start = 42;
+
+// Deux sauts
+select * from relation where start in (select end from relation where start = 42);
+
+// Mots qui ont des voisins en commun avec 42 (42->123, 314->123 : on prend 314)
+// Renvoie beaucoup trop de résultats à cause de certains types, il faut donc les exclure.
+select * from relation where end in (select end from relation where start = 42) and type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001);
+
+// types de relation à éviter :
+4 12 36 18 29 45 46 47 48 1000 1001
+// Liste des types de relation par ordre de plus gros nombre d'arcs entrants de ce type sur n'importe quel noeud :
+select count(end) as c, type, end from relation group by end order by c desc limit 50;
++ pas mal de manips pour avoir un distinct qui garde l'ordre :(
+4 12 666 41 36 18 3 0 6 42 5 15 9 14 28 32 10 17 35 16 23 8 13 34 52 7 50 37 22 49 30 25 31 51 54 20 24 38 39 40 43 21 1 44 19 55 33 11 46 999 27 26 45 48 29 2
+

@@ -1,0 +1,21 @@
+pseudo-parameter : $taille_nuage
+
+// select random node
+select eid from node where eid = (abs(random()) % (select max(eid) from node))+1 or eid = (select max(eid) from node where eid > 0) order by eid desc limit 1;
+
+Difficulté 1 :
+// select neighbors 1 hop
+select end from relation where start = 42 limit $taille_nuage;
+
+Difficulté 2 :
+// select neighbors 2 hops
+select * from relation where start in (select end from relation where start = 42) limit $taille_nuage;
+
+Difficulté 3 :
+// select neighbors relative to the end (one hop start->end, one hop start<-end).
+select * from relation where end in (select end from relation where start = 42) and type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) limit $taille_nuage;
+
+// Pour compléter :
+// select random words
+do "select random node" $taille_nuage times
+

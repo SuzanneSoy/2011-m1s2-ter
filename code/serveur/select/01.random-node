@@ -1,0 +1,44 @@
+// Select random node :
+// Comparaison de plusieurs méthodes :
+
+// Note : calculer un count(*) prend très longtemps, il vaut mieux faire un max(eid).
+
+// rapide, mais ne renvoie rien si on tombe sur un trou dans les eid, probabilité 105/229894 ≈ 1/2000
+select * from node where eid = (abs(random()) % (select max(eid) from node))+1;
+// assez rapide, renvoie le noeud 1 si on tombe sur un trou dans les eid
+select * from node where eid = (abs(random()) % (select max(eid) from node))+1 or eid = (select min(eid) from node where eid > 0) order by eid desc limit 1;
+// peu rapide, trouve toujours un row, aléatoire
+select * from node limit 1 offset (abs(random()) % (select count(*)+1 from node));
+
+// Comparaison des temps d'exécution des méthodes ci-dessus
+// Note : les deux premiers sont sur 10000 exécutions, le dernier sur 100
+
+> time yes "select * from node where eid = (abs(random()) % (select max(eid) from node));" | head -n 10000 | sqlite3 db > /dev/null
+yes   0,01s user 0,00s system 0% cpu 3,272 total
+head -n 10000  0,00s user 0,02s system 0% cpu 3,283 total
+sqlite3 db > /dev/null  2,70s user 0,52s system 89% cpu 3,586 total
+> time yes "select * from node where eid = (abs(random()) % (select max(eid) from node)) or eid = (select min(eid) from node where eid > 0) order by eid desc limit 1;" | head -n 10000 | sqlite3 db > /dev/null
+yes   0,01s user 0,01s system 0% cpu 7,324 total
+head -n 10000  0,01s user 0,02s system 0% cpu 7,340 total
+sqlite3 db > /dev/null  5,94s user 0,62s system 85% cpu 7,645 total
+> time yes "select * from node limit 1 offset (abs(random()) % (select count(*) from node));" | head -n 100 | sqlite3 db > /dev/null
+yes   0,01s user 0,00s system 33% cpu 0,024 total
+head -n 100  0,00s user 0,00s system 37% cpu 0,021 total
+sqlite3 db > /dev/null  7,40s user 5,99s system 89% cpu 14,984 total
+
+// Avec un index sur node(eid), nettement meilleur pour les deux premières méthodes
+// Les deux premières méthodes ne bougent pas, la troisième est pas mal améliorée.
+create index i_node_eid on node(eid);
+
+> time yes "select * from node where eid = (abs(random()) % (select max(eid) from node));" | head -n 10000 | sqlite3 db > /dev/null                                                                             
+yes   0,01s user 0,01s system 0% cpu 3,421 total
+head -n 10000  0,00s user 0,02s system 0% cpu 3,439 total
+sqlite3 db > /dev/null  2,82s user 0,53s system 89% cpu 3,752 total
+> time yes "select * from node where eid = (abs(random()) % (select max(eid) from node)) or eid = (select min(eid) from node where eid > 0) order by eid desc limit 1;" | head -n 10000 | sqlite3 db > /dev/null
+yes   0,02s user 0,01s system 0% cpu 7,059 total
+head -n 10000  0,02s user 0,02s system 0% cpu 7,076 total
+sqlite3 db > /dev/null  6,10s user 0,54s system 89% cpu 7,390 total
+> time yes "select * from node limit 1 offset (abs(random()) % (select count(*) from node));" | head -n 100 | sqlite3 db > /dev/null                                                                          
+yes   0,00s user 0,01s system 25% cpu 0,031 total
+head -n 100  0,00s user 0,00s system 27% cpu 0,029 total
+sqlite3 db > /dev/null  5,71s user 3,78s system 86% cpu 10,917 total
