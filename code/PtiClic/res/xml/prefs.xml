@@ -3,8 +3,14 @@
 
 	<PreferenceCategory android:title="Connexion">
 
-		<EditTextPreference android:title="Login" android:key="login"></EditTextPreference>
-		<EditTextPreference android:title="Mot de Passe" android:key="passwd"></EditTextPreference>
+		<EditTextPreference android:title="Login" android:key="login" android:summary=""/>
+		<EditTextPreference android:title="Mot de Passe" android:key="passwd"/>
 		
 	</PreferenceCategory>
+	<PreferenceCategory android:title="Debug">
+	
+		<EditTextPreference android:title="Serveur" android:key="server"/>
+		
+	</PreferenceCategory>
+	
 </PreferenceScreen>
