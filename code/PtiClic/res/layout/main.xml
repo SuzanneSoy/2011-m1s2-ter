@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/hello"
-    />
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical">
+
+	<TextView android:text="@string/app_name" android:id="@+id/logo"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:textSize="50px" android:layout_weight="3"/>
+
+	<RelativeLayout android:layout_height="wrap_content"
+		android:id="@+id/RelativeLayout01" android:layout_width="wrap_content" android:layout_gravity="bottom|center_horizontal">
+
+		<Button android:layout_height="wrap_content" android:id="@+id/games" android:text="@string/games_name" android:layout_width="wrap_content" android:paddingLeft="60px" android:paddingRight="60px"></Button>
+
+		<Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/prefs" android:text="@string/prefs_name" android:layout_below="@+id/games" android:layout_alignLeft="@+id/games" android:layout_alignRight="@+id/games"></Button>
+
+	
+</RelativeLayout>
+
+
+
+
+
+
+
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/info" android:layout_weight="1" android:src="@android:drawable/ic_dialog_info" android:layout_gravity="right"></ImageView>
 </LinearLayout>
