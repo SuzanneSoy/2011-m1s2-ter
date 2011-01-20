@@ -11,6 +11,11 @@ create table node(eid integer primary key autoincrement, name, type, weight);
 create table relation(rid integer primary key autoincrement, start, end, type, weight);
 create table type_node(nom, num);
 create table type_relation(nom, num, nom_etendu, info);
+create table user(login primary key, mail, hash_mdp);
+create table sessid(login, sid);
+create table partie(pid, eid_mot_central, relation_1, relation_2, relation_3, relation_4);
+create table partie_nuage(pid, num, eid_mod);
+create table partie_reference(pid, num, relation, poids);
 EOF
 
 # tr : pour virer le CRLF qui traîne
@@ -28,4 +33,12 @@ cat "$1" \
 | grep -v '^//' \
 | grep -v '^$'
 
-echo "commit;"
+cat <<EOF
+create index i_relation_start on relation(start);
+create index i_relation_end on relation(end);
+create index i_relation_type on relation(type);
+create index i_relation_end_type on relation(end,type);
+create index i_sessid_login on sessid(login);
+create index i_sessid_sid on sessid(sid);
+commit;
+EOF
