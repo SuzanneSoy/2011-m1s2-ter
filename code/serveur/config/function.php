@@ -29,4 +29,14 @@ function secure($string)
 	return $string;
 }
 
+function mDie($err,$msg)
+{
+	echo "Error:".$err.":".$msg;
+	exit(1);
+}
+
+function writeRequest($request)
+{
+	
+}
 ?>

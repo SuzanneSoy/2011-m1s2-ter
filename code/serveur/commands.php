@@ -1,12 +1,12 @@
 <?php
 require_once("./config/config.php");
 
-if(!isset($_GET['cmd']) || !isset($_GET['psd']) || !isset($_GET['passwd']))
-	die("La requête est incomplète");
+if(!isset($_POST['cmd']) || !isset($_POST['psd']) || !isset($_POST['passwd']))
+	mDie(1,"La requête est incomplète");
 	
-$cmd = secure($_GET['cmd']);
-$psd = secure($_GET['psd']);
-$passwd = md5($_GET['passwd']);
+$cmd = secure($_POST['cmd']);
+$psd = secure($_POST['psd']);
+$passwd = md5($_POST['passwd']);
 
 $req = "SELECT passwd FROM member WHERE pseudo='$psd'";
 
@@ -14,14 +14,14 @@ $sql = sqlConnect();
 $resp = mysql_query($req);
 
 if(mysql_num_rows($res) < 1)
-	die("Utilisateur non enregistré");
+	mDie(2,"Utilisateur non enregistré");
 	
 $data = mysql_fetch_array($resp);
 
 mysql_close($sql);
 
 if(strcmp($data['passwd'],$passwd) != 0)
-	die("Nom d'utilisateur ou mot de passe incorrect");
+	mDie(3,"Nom d'utilisateur ou mot de passe incorrect");
 	
 
 // Sinon tout est bon on effectu l'opération correspondant à la commande passée.
