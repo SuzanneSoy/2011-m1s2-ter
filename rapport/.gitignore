@@ -3,3 +3,5 @@
 *.out
 *.toc
 *.pdf
+*.synctex.gz
+.DS_Store
