@@ -22,6 +22,7 @@ public class Main extends Activity implements OnClickListener {
         // On récupère le nom du joueur des préférences.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         String loginPref = sp.getString("login", "joueur");
+        // On l'ajoute dans le TextView prévu à cet effet
         ((TextView)findViewById(R.id.login)).setText("Login : " + loginPref);
     }
 
