@@ -1,31 +1,31 @@
-\documentclass[12pt,french,a4paper]{article}
+\documentclass[9pt,french,a4paper]{article}
 
-\usepackage[landscape]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[frenchb]{babel}
-\usepackage{pdfpages}
+%\usepackage{pdfpages}
+\usepackage[pdftex]{graphicx}
+\usepackage[margin=1cm]{geometry}
 
 \makeatletter
+  \def\maketitle{}
   \renewcommand\maketitle{%
   \let\footnotesize\small
   \let\footnoterule\relax
   \let \footnote \thanks
-  \null\vfil
   \vskip 60\p@
   \begin{center}%
     {\LARGE \@title \par}%
-    \vskip 3em%
+    \vskip 1em%
     {\large
      \lineskip .75em%
       \begin{tabular}[t]{c}%
         \@author
       \end{tabular}\par}%
-      \vskip 1.5em%
+    \vskip 1.5em%
     {\large \@date \par}%       % Set date in \large size.
   \end{center}\par
   \@thanks
-  \vfil\null%
   \setcounter{footnote}{0}%
   \global\let\thanks\relax
   \global\let\maketitle\relax
@@ -42,29 +42,32 @@
 
 \title{Feuille de route}
 \author{Groupe 42}
-\date{}
 
 \begin{document}%
 \thispagestyle{empty}
 \maketitle
-\section*{Répartition des lectures dans le groupe}
+\section*{Répartition des rôles et lectures dans le groupe}
 \begin{description}
-\item[\textsc{Bonavero} Yoann] Nom de l'article%\ref{référence biblio}
-\item[\textsc{Brun} Bertrand] Source Code Optimization and Profiling of Energy Consumption in Embedded Systems \cite{citeulike:5700744}
-\item[\textsc{Charron} John] Nom de l'article%\ref{référence biblio}
-\item[\textsc{Dupéron} Georges] Nom de l'article%\ref{référence biblio}
+\item[\textsc{Bonavero} Yoann] Développeur. Lectures~: \cite{Lafourcade_combining}, \cite{audio_tactile}.
+\item[\textsc{Brun} Bertrand] Chef de projet. Lectures~: \cite{Lafourcade_combining}, \cite{citeulike:5700744}.
+\item[\textsc{Charron} John] Responsable de la communication. Lectures~: \cite{Lafourcade_combining}, \cite{Lafourcade_play_for_lexical_acquisition}, \cite{Schwab_modeling_detection}.
+\item[\textsc{Dupéron} Georges] Développeur. Lectures~: \cite{Lafourcade_combining}, \cite{Mynatt94nonvisualpresentation}, \cite{Pike:1983:GOB:964967.801165}.
 \end{description}
-\section*{Répartition des rôles dans le groupe}
-\begin{description}
-\item[\textsc{Brun} Bertrand] Chef de projet
-\item[\textsc{Charron} John] Responsable de la communication
-\end{description}
-%% TODO : bibtex ici
 
+\nocite{*}
 \bibliographystyle{plain}
 \bibliography{biblio}
 
-\includepdf[pages=1,angle=-90]{gantt.pdf}
-\includepdf[pages=2,angle=-90]{gantt.pdf}
-\includepdf[pages=3,angle=-90]{gantt.pdf}
+
+%\includepdf[pages=5]{gp-pticlic.pdf}
+
+\section*{Diagramme de Gantt prévisionnel}
+\noindent
+\vskip 1em%
+\hskip -1.1cm%
+\includegraphics[trim=1.7cm 19cm 1.7cm 4cm,clip,width=20cm]{gp-pticlic.pdf}
+
+%\includepdf[pages=1,angle=-90]{gantt.pdf}
+%\includepdf[pages=2,angle=-90]{gantt.pdf}
+%\includepdf[pages=3,angle=-90]{gantt.pdf}
 \end{document}
