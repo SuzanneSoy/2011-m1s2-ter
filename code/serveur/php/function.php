@@ -29,9 +29,14 @@ function secure($string)
 	return $string;
 }
 
+// TODO Yoann : fonction qui échappe les "
+function escape_json_string($str) {
+	return $str;
+}
+
 function mDie($err,$msg)
 {
-	echo "Error:".$err.":".$msg;
+	echo "{ error:\"".escape_json_string($err)."\", msg:\"".escape_json_string($msg)."\"}";
 	exit(1);
 }
 

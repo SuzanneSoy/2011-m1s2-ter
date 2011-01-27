@@ -1,0 +1,28 @@
+// Requête : http://serveur/pticlic.php?action=getparties&nb=2&mode=normal
+[
+	{
+		id: 1234,
+		cat1: 11,
+		cat2: 23,
+		cat3: 35,
+		cat4: 12,
+		center: { id: 555, "chat" },
+		cloud: [
+			{ id: 123, name: "souris" },
+			{ id: 111, name: "lait" },
+			{ id: 345, name: "machine à laver" }
+		]
+	},
+	{
+		id: 1235,
+		cat1 : 12,
+		cat2 : 34,
+		cat3 : -1,
+		cat4 : -1,
+		center: { id: 666, "bouteille" },
+		cloud: [
+			{ id: 11359, name: "jus de fruit" },
+			{ id: 111, name: "lait" }
+		]
+	}
+]
