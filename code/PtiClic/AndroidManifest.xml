@@ -12,6 +12,7 @@
         </activity>
 
     <activity android:name=".Preference" android:label="Préférence"></activity>
+    <activity android:name=".Game"></activity>
 </application>
 
 

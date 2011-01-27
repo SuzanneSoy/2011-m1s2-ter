@@ -11,15 +11,14 @@
 		android:id="@+id/RelativeLayout01" android:layout_width="wrap_content"
 		android:layout_gravity="bottom|center_horizontal">
 
-		<Button android:layout_height="wrap_content" android:id="@+id/games"
-			android:text="@string/games_name" android:layout_width="wrap_content"
+		<Button android:layout_height="wrap_content" android:text="@string/play_label" android:layout_width="wrap_content"
 			android:paddingLeft="60px" android:paddingRight="60px"
-			android:enabled="false" />
+			android:id="@+id/play"/>
 
 		<Button android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:id="@+id/prefs"
-			android:text="@string/prefs_name" android:layout_below="@+id/games"
-			android:layout_alignLeft="@+id/games" android:layout_alignRight="@+id/games" />
+			android:text="@string/prefs_name" android:layout_below="@+id/play"
+			android:layout_alignLeft="@+id/play" android:layout_alignRight="@+id/play" />
 
 
 	</RelativeLayout>
