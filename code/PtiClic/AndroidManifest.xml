@@ -12,6 +12,9 @@
         </activity>
 
     <activity android:name=".Preference" android:label="Préférence"></activity>
+    <activity android:name=".Game"></activity>
+    <activity android:name=".Info" android:label="Information"></activity>
+    <activity android:name=".Score" android:label="Score"></activity>
 </application>
 
 

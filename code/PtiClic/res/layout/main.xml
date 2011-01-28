@@ -11,17 +11,21 @@
 		android:id="@+id/RelativeLayout01" android:layout_width="wrap_content"
 		android:layout_gravity="bottom|center_horizontal">
 
-		<Button android:layout_height="wrap_content" android:id="@+id/games"
-			android:text="@string/games_name" android:layout_width="wrap_content"
+		<Button android:layout_height="wrap_content" android:text="@string/play_label" android:layout_width="wrap_content"
 			android:paddingLeft="60px" android:paddingRight="60px"
-			android:enabled="false" />
+			android:id="@+id/play"/>
 
 		<Button android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:id="@+id/prefs"
-			android:text="@string/prefs_name" android:layout_below="@+id/games"
-			android:layout_alignLeft="@+id/games" android:layout_alignRight="@+id/games" />
-
-
+			android:text="@string/prefs_name" android:layout_below="@+id/play"
+			android:layout_alignLeft="@+id/play" android:layout_alignRight="@+id/play" />
+		<!-- A SUPPRIMER : -->
+		<Button android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:id="@+id/voirscore"
+			android:text="Voir score" android:layout_below="@+id/prefs"
+			android:layout_alignLeft="@+id/prefs" 
+			android:layout_alignRight="@+id/prefs" />
+		<!-- FIN A SUPPRIMER -->
 	</RelativeLayout>
 
 	<LinearLayout android:id="@+id/LinearLayout01"
@@ -32,8 +36,8 @@
 			android:layout_width="fill_parent"
 			android:textStyle="bold"
 			android:gravity="center_horizontal" android:text="@+id/login" android:id="@+id/login"></TextView>
-		<ImageView android:layout_height="wrap_content" android:id="@+id/info"
-			android:layout_width="wrap_content" android:src="@android:drawable/ic_dialog_info" android:layout_gravity="right" android:layout_weight="5"></ImageView>
+		<ImageButton android:layout_height="wrap_content" android:id="@+id/infoButton"
+			android:layout_width="wrap_content" android:src="@android:drawable/ic_dialog_info" android:layout_gravity="right" android:layout_weight="5"/>
 
 	</LinearLayout>
 

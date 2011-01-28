@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
     <string name="app_name">PtiClic</string>
-<string name="prefs_name">Préférences</string>
-<string name="games_name">Jouer</string>
+    <string name="prefs_name">Préférences</string>
+    <string name="play_label">Jouer</string>
 </resources>
