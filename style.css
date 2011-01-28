@@ -1,0 +1,147 @@
+#entete {
+	margin: 0;
+}
+
+#liens {
+	display: block;
+}
+
+#liens, #pied {
+	background-color: #efd;
+	border-bottom: thin solid #8a8;
+}
+
+#liens {
+	height: 1.3em;
+	padding : 0.3em 0.3em 0.1em;
+}
+
+h1 {
+	margin-top: 0;
+}
+
+#pied {
+	margin: 0;
+	padding: 0.5em;
+	border-top: thin solid #8a8;
+}
+
+img#logo {
+	float:left;
+ 	height: 4em;
+	width: 4em;
+	
+	background-color: #efd;
+	border-right: thin solid #8a8;
+	border-bottom: thin solid #8a8;
+	padding: 0 0.4em 0.3em 0.2em;
+	margin-right: 0.5em;
+}
+
+#liens a,  #pied a {
+	color: #242;
+}
+
+#liens a {
+	font-size: small;
+	letter-spacing: 0.2em;
+	margin: auto 1em;
+}
+
+#liens a:hover, #pied a:hover {
+	color: #8a4;
+}
+
+#pied {
+	text-align: center;
+	font-size: small;
+}
+
+#hebergeur {
+	display: block;
+	float: left;
+}
+
+#organisation {
+	display: block;
+	float: right;
+}
+
+#maj {
+	display: block;
+}
+
+.barriere-float {
+	display: block;
+	clear: both;
+}
+
+
+
+#contenu {
+	margin: 0;
+	padding: 0.3em;
+}
+
+html, body {
+	padding: 0;
+	margin: 0;
+}
+
+h1 {
+	color: #8b4;
+}
+
+h2 {
+	color: #4a4;
+}
+
+h3 {
+	color: #484;
+}
+
+h4 {
+	color: #784;
+}
+
+h5 {
+	color: #874;
+}
+
+h6 {
+	color: #854;
+}
+
+hr {
+	display: none;
+}
+
+a {
+	color: #975;
+}
+
+a:visited {
+	color: #543;
+}
+
+a:hover {
+	color: #c86;
+}
+
+
+
+dd {
+	float:left;
+	margin-left: 1em;
+}
+
+dt {
+	float: left;
+	clear: both;
+	font-weight: bold;
+}
+
+h2#tache-description {
+	padding-top: 0.3em;
+	clear:both;
+}
