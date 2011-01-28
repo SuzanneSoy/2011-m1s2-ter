@@ -5,6 +5,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage{um2/um2}
 
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2ex}
+
 \title{Rapport de TER\\---\\Reconception du jeu Pticlic sous Android}
 \author{Yoann \textsc{Bonavero} \and Bertrand \textsc{Brun} \and John \textsc{Charron} \and Georges \textsc{Dupéron}}
 
@@ -12,72 +15,117 @@
 
 \maketitle
 
-\setcounter{page}{0}
+
 \pagestyle{empty}
 \thispagestyle{empty}
 
 \tableofcontents
 
+
 \pagestyle{empty}
 \thispagestyle{empty}
 \newpage
+\setcounter{page}{1}
 \pagestyle{plain}
 
 
 \section{Introduction}
 
-PtiClic\footnote{http://pticlic.org} est un jeu qui a été conçu et développé par Matthieu Lafourcade et Virginie Zampa. Le jeu a été créé afin de faire des études sur le vocabulaire sur des sujets de divers horizons dans un contexte ludique et motivant. Le joueur clique et dépose tout simplement des mots proposé dans des catégories proposé sous forme d'énoncés. Par exemple, les mots 'pédale', 'piéton', 'pied', 'automobile', 'Sébastien Chabal', 'Lance Armstrong', 'pédalier', 'voiture', 'yeux', 'rapide', 'routier', 'maillot', 'pédaler', 'dopage', 'véhicule', 'musclé', 'nez', etc. sont proposé et à déposer dans les catégories "... est une partie de 'cycliste', "Un contraire de 'cycliste' est ...", "'cycliste' a un rapport avec ...",  "Une caractéristique de 'cycliste' est ..." ou aucune de ces catégorie. Un score est obtenu en soustrayant les mots manquants et les mots incorrects des mots corrects.
+PtiClic\footnote{http://pticlic.org} est un jeu qui a été conçu et développé par Matthieu Lafourcade et Virginie Zampa. Le jeu a été créé afin de faire des études sur le vocabulaire et la sémantique sur des sujets de divers horizons dans un contexte ludique et motivant. Un mot central apparait, un nuage de mots entoure le mot central et le joueur clique et dépose des mots du nuage dans des catégories proposé sous forme d'énoncés. 
+
+Par exemple, pour le mot central 'bicyclette', les mots 'pédale', 'piéton', 'pied', 'automobile', 'Sébastien Chabal', 'Lance Armstrong', 'pédalier', 'voiture', 'yeux', 'rapide', 'routier', 'maillot', 'pédaler', 'dopage', 'véhicule', 'musclé', 'nez', etc. sont proposé. Le joueur dépose ces mots dans les catégories "... est une partie de 'cycliste', "Un contraire de 'cycliste' est ...", "'cycliste' a un rapport avec ...",  "Une caractéristique de 'cycliste' est ..." ou aucune de ces catégorie. Un score est obtenu en soustrayant les mots manquants et les mots incorrects des mots corrects. 
+
+Des linguistes et des informaticiens récupèrent les données liées aux parties jouées, ce qui leur permet de faire de la recherche dans leurs domaines respectifs.
+
+Notre travail consiste à créer une version du PtiClic sous Android, une version modifiée du jeu adaptée pour téléphone mobile. Le sujet du TER définit clairement l'objectif de ce projet~:
+
+\begin{quotation}
+L'étude et le prototypage d'une version fonctionnant sur des Android semble est intéressante. En particulier on s'intéressera a deux aspects : * les contraintes imposées par l'environnement smartphone * le biais qu'imposent ces contraintes sur le jeu et les données récoltées. Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel. 
+\end{quotation}
+
+Dans un premier temps, une version de base sera conçue et réalisée. Ensuite, des fonctionnalités supplémentaires seront ajouter. La démarche adoptée par notre groupe est une approche itérative. Les quatres livraisons vont d'une version de base vers des versions plus élaborées~: un joueur pourrait, entre autres, modifier ses préférences ou choisir son niveau. L'idée est aussi de rendre le jeu plus attirant afin d'accroître le nombre de sujets participant aux études liées au résultat des données extraits des parties jouées.
 
 
 \subsection{Android}
 
-Android est un système d'exploitation pour téléphone mobile basé sur le noyau Linux développé par Android Inc. et racheté par Google en 2005. Google et d'autres membres du Open Handset Alliance ont par la suite contribué à son développement et le Android Open Source Project (AOSP) est chargé de la maintenance et l'évolution d'Android. Ce système d'exploitation est utilisé notamment dans des smartphones, appelé aussi ordiphones, 'terminaux de poche' ou 'téléphones intelligents', produits et distribués par un grand nombre de , qui représente une partie importante du marché du téléphone mobile 3G. 
+Android est un système d'exploitation pour téléphone mobile basé sur le noyau Linux développé par Android Inc., racheté par Google en 2005. Google et d'autres membres du Open Handset Alliance ont par la suite contribué à son développement et le Android Open Source Project (AOSP) est chargé de la maintenance et l'évolution d'Android. Ce système d'exploitation est utilisé notamment dans des smartphones, appelé aussi ordiphones, 'terminaux de poche' ou 'téléphones intelligents', produits et distribués par un grand nombre de fabriquants de téléphones mobiles. Le nombre de téléphones mobiles intégrant le système d'exploitation d'Android a cru sensiblement récemment.
+
+Un grand nombre de développeurs ont créés des applications pour étendre la fonctionnalité des téléphones sous Android et il y a aujourd'hui plus de 200 000 applications disponibles. Bien qu'Android Market est le magasin en ligne opéré par Google, il existe d'autres distributeurs d'applications Android. La majorité des applications sont écrites en Java, bien qu'il soit possible de développer des applications en Python, en Ruby et d'autres par le biais du Android Scripting Environment. 
+
+ 
+\section{Analyse de l'existant}
+
+\section{Analyse des besoins}
+
+\section{Conception}
+
+TODO: UML, diagrammes de classes, Use cases, etc...
 
 
+\section{Réalisation}
+\subsection{Cahier des charges}
+\subsubsection{Langages de programmation}
+\subsubsection{Base de données}
+\subsubsection{d'autres subsubsections?}
 
-Android is a mobile operating system initially developed by Android Inc. Android was bought by Google in 2005.[4] Android is based upon a modified version of the Linux kernel. Google and other members of the Open Handset Alliance collaborated on Android's development and release.[5][6] The Android Open Source Project (AOSP) is tasked with the maintenance and further development of Android.[7] Unit sales for Android OS smartphones ranked first among all smartphone OS handsets sold in the U.S. in the second and third quarters of 2010,[8][9][10] with a third quarter market share of 43.6%.[11]
-
-Android has a large community of developers writing application programs ("apps") that extend the functionality of the devices. There are currently over 200,000 apps available for Android.[12]Android Market is the online app store run by Google, though apps can be downloaded from third-party sites (AT&T permits third-party apps only on their Aria phone [13]). Developers write primarily in the Java language, controlling the device via Google-developed Java libraries.[14] Python, Ruby and other languages are also available for Android development via the Android Scripting Environment.
-
-The unveiling of the Android distribution on 5 November 2007 was announced with the founding of the Open Handset Alliance, a consortium of 79 hardware, software, and telecom companies devoted to advancing open standards for mobile devices.[15][16] Google released most of the Android code under the Apache License, a free software and open source license.[17]
-
-The Android operating system software stack consists of Java applications running on a Java-based, object-oriented application framework on top of Java core libraries running on a Dalvik virtual machine featuring JIT compilation. Libraries written in C include the surface manager, OpenCore[18] media framework, SQLite relational database management system, OpenGL ES 2.0 3D graphics API, WebKit layout engine, SGL graphics engine, SSL, and Bionic libc. The Android operating system consists of 12 million lines of code including 3 million lines of XML, 2.8 million lines of C, 2.1 million lines of Java, and 1.75 million lines of C++.[19]
-
-
-
-
-
-
-
+\subsection{Outils utilisés}
+\subsubsection{Environnement intégré de développement~: Eclipse}
+\subsubsection{Android Developper Toolkit (ADT) Plugin}
+\subsubsection{Android Software Development Kit (SDK)}
+\subsubsection{Gestionnaire de version~: GitHub}
+\subsubsection{JUnit}
+\subsubsection{d'autres subsubsections ?}
 
 
-
-
-
-
- et la nature du jeu étant celle des jeu "casual", l'étude et le prototypage d'une version fonctionnant sur des Android semble est intéressante. En particulier on s'intéressera a deux aspects : * les contraintes imposées par l'environnement smartphone * le biais qu'imposent ces contraintes sur le jeu et les données récoltées. Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel.  
-
-
-\section{Difficultés rencontrées}
-\subsection{Itération 1, semaine 1}
+\section{Discussion}
+\subsection{Difficultés rencontrées}
+\subsubsection{Itération 1, semaine 1}
 \begin{itemize}
 \item Outil de création de diagrammes de GANTT (planner) est assez mauvais.
 \item Lenteur de l'émulateur Android : impossible de travailler sur mon PC.% gd
 \item Caractères non échappés dans le dump de la base.% gd
 \end{itemize}
 
-\section{Compte rendu des réunions}
+
+\section{Conclusions}
+
+\newpage
+
+
+\section{Bibliographie}
+\subsection{PtiClic}
+
+PtiClic : a game for vocabulary assessment combining JeuxDeMots and LSA. In proc of CICLing (Conference on Intelligent text processing and Comptational Linguistics). Mexico : 1-7 mars 2009. (\url{http://www.cicling.org/2009/RCS-41/289-298.pdf})
+
+
+\subsection{Linguistique}
+
+Modelling, Detection and Exploitation of Lexical Functions for Analysis , ECTI Journal, 2007, Vol.2, No2, ISSN 1905-050X, pp 97-108. (\url{http://www.lirmm.fr/\%7Eschwab/Publications/SL_ECTI_journal.pdf})
+
+Making people play for Lexical Acquisition. In Proc. SNLP 2007, 7th Symposium on Natural Language Processing. Pattaya, Thailande, 13-15 December 2007. (\url{http://www.lirmm.fr/~lafourcade/ML-biblio/SNLP07/MLF-snlp2007-v5.doc})
+
+
+\subsection{Java}
+
+Code Conventions for the Java Programming Language, Oracle, 1999. (\url{http://www.oracle.com/technetwork/java/codeconvtoc-136057.html, www.oracle.com/technetwork/java/codeconventions-150003.pdf})
+
+\subsection{Android}
+
+Android Developer, 2011. (\url{http://developer.android.com/})
+
+
+
+
+
+\newpage
+
+\appendix
+
+\section{Annexe A}
+
+
 \subsection{14 janvier 2010}
-Outils :
-\begin{itemize}
-\item Langage Java
-\item Eclipse (version la plus récente)
-\item Plugin ADT (Android Developper Toolkit)
-\item SDK Android
-\item Github
-\item LaTeX
-\item JUnit peut-être
-\end{itemize}
+
 
 Durée du projet 4 mois (4 itérations de 4 semaines)
 
@@ -92,11 +140,7 @@ Utilisation d'une classe \verb!Constant!
 
 Écran d'accueil du jeu : Image (splash), puis directement les icônes des modes de jeu + configuration, au lieu d'avoir un écran avec le logo et jouer/config, suivi du choix du mode de jeu.
 
-\section{Deuxième section}
-\section{Troisième section}
-\newpage
-\appendix
-\section{Annexe A}
 \section{Annexe B}
 
 \end{document}
+
