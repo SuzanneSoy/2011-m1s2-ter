@@ -43,12 +43,14 @@ public class Main extends Activity implements OnClickListener {
 		}
 		if (v.getId()==R.id.voirscore){
 	        // TODO: à supprimer
+	        /*
 	        Intent intent = new Intent(this, Score.class);
 	        intent.putExtra("corrects", 10);
 	        intent.putExtra("mauvais", 2);
 	        intent.putExtra("manquants", 1.5);
 	        intent.putExtra("total", 10); // WHERE??
 	        startActivity(intent);
+	        */
 		}
 	}
 	
