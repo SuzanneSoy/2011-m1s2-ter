@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class Game extends Activity implements OnClickListener {
 	/** Called when the activity is first created. */
@@ -21,10 +22,15 @@ public class Game extends Activity implements OnClickListener {
 		Button r4 = ((Button)findViewById(R.id.relation4));
 		
 		// Écoute des clics sur les relations
-		r1.setOnClickListener(this);
-		r2.setOnClickListener(this);
-		r3.setOnClickListener(this);
-		r4.setOnClickListener(this);
+		if (nbrel > 0) { r1.setOnClickListener(this); } else { r1.setVisibility(View.GONE); }
+		if (nbrel > 1) { r2.setOnClickListener(this); } else { r2.setVisibility(View.GONE); }
+		if (nbrel > 2) { r3.setOnClickListener(this); } else { r3.setVisibility(View.GONE); }
+		if (nbrel > 3) { r4.setOnClickListener(this); } else { r4.setVisibility(View.GONE); }
+		
+		r1.setText("=");
+		r2.setText("∈");
+		((TextView)findViewById(R.id.mainWord)).setText("Chat");
+		((TextView)findViewById(R.id.currentWord)).setText("Matou");
 	}
 	
 	/* (non-Javadoc)

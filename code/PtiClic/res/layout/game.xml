@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent" android:orientation="vertical">
-    <TextView android:id="@+id/mainWord" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_weight="70" android:layout_gravity="center_horizontal" android:text="MainWord" android:layout_x="100px" android:layout_y="20px"></TextView>
-    <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/currentWord" android:layout_weight="10000" android:text="CurrentWord" android:layout_x="100px" android:layout_y="50px"></TextView>
-    <Button android:id="@+id/relation1" android:layout_height="wrap_content" android:text="R1" android:layout_width="wrap_content" android:layout_y="100px" android:layout_x="10px"></Button>
-    <Button android:id="@+id/relation2" android:layout_height="wrap_content" android:text="R2" android:layout_width="wrap_content" android:layout_y="100px" android:layout_x="70px"></Button>
-    <Button android:id="@+id/relation3" android:layout_height="wrap_content" android:text="R3" android:layout_width="wrap_content" android:layout_y="100px" android:layout_x="130px"></Button>
-    <Button android:id="@+id/relation4" android:layout_height="wrap_content" android:text="R4" android:layout_width="wrap_content" android:layout_x="190px" android:layout_y="100px"></Button>
-</AbsoluteLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_x="1dip" android:id="@+id/linearLayout2"
+	android:layout_y="116dip" android:orientation="vertical" android:layout_height="fill_parent" android:layout_width="fill_parent">
+    <LinearLayout android:id="@+id/linearLayout3" android:layout_gravity="center_horizontal" android:layout_height="fill_parent" android:layout_weight="1" android:layout_width="wrap_content">
+        <TextView android:layout_weight="1" android:layout_width="wrap_content" android:layout_gravity="center_vertical" android:layout_height="wrap_content" android:id="@+id/mainWord" android:text="@+id/mainWord"></TextView>
+    </LinearLayout>
+	<AbsoluteLayout android:id="@+id/absoluteLayout1" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1">
+		<TextView android:id="@+id/currentWord" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@+id/currentWord"></TextView>
+	</AbsoluteLayout>
+	<LinearLayout android:id="@+id/linearLayout1" android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_weight="1">
+		<Button android:id="@+id/relation1" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:text="@+id/relation1"></Button>
+		<Button android:id="@+id/relation2" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:text="@+id/relation2"></Button>
+		<Button android:id="@+id/relation3" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:text="@+id/relation3"></Button>
+		<Button android:id="@+id/relation4" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:text="@+id/relation4"></Button>
+	</LinearLayout>
+</LinearLayout>
