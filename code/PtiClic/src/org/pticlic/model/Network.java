@@ -1,12 +1,10 @@
 package org.pticlic.model;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 
 public class Network {
 

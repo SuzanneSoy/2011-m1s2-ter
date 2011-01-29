@@ -3,7 +3,7 @@ package org.pticlic.model;
 
 public class Game {
 
-	static class Word {
+	public static class Word {
 		private int id;
 		private String name;
 		
@@ -109,12 +109,12 @@ public class Game {
 		this.center = center;
 	}
 	
-	public Game.Word[] getCloud() {
-		return cloud;
+	public int getNbWord() {
+		return cloud.length;
 	}
-
-	public void setCloud(Game.Word[] cloud) {
-		this.cloud = cloud;
+	
+	public Game.Word getWordInCloud(int index) {
+		return cloud[index];
 	}
 
 	@Override

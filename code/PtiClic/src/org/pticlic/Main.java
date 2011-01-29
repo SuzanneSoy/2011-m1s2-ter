@@ -1,5 +1,7 @@
 package org.pticlic;
 
+import org.pticlic.games.BaseGame;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,7 +37,7 @@ public class Main extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case (R.id.prefs) : startActivity(new Intent(this, Preference.class)); break;
-		case (R.id.play) : startActivity(new Intent(this, Game.class)); break;
+		case (R.id.play) : startActivity(new Intent(this, BaseGame.class)); break;
 		}
 		if (v.getId()==R.id.voirscore){
 	        // TODO: à supprimer

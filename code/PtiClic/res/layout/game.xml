@@ -15,10 +15,7 @@
 			android:layout_height="wrap_content" android:text="currentWord"
 			android:textStyle="bold" android:gravity="center">
 		</TextView>
-		<TextView android:text="secondWord" android:id="@+id/secondWord"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:textStyle="bold" android:gravity="center" android:visibility="gone">
-		</TextView>
+		
 
 	</LinearLayout>
 
