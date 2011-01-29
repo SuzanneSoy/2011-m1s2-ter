@@ -1,16 +1,12 @@
 package org.pticlic.model;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 
 public class Network {
 
@@ -19,39 +15,61 @@ public class Network {
 	}
 	
 	public enum Mode {
-		SIMPLE_GAME
+		SIMPLE_GAME("normal");
+		
+		private final String value;
+		
+		Mode(String value) {
+			this.value = value;
+		}
+		
+		private String value() { return value; }
 	}
 	
 	private Mode mode;
-	private Context context;
+	private String serverURL;
 	
-	public Network(Context context, Mode mode) {
+	public Network(String serverURL, Mode mode) {
 		this.mode = mode;
-		this.context = context;
+		this.serverURL = serverURL;
 	}
 	
-	
-	// TODO : faire se qui est la 
-//	http://developer.android.com/reference/java/net/URLConnection.html#addRequestProperty%28java.lang.String,%20java.lang.String%29
-	
-	public GamePlayed getGames(int nbGames) {
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-		String serverUrl = sp.getString(Constant.SERVER_URL, "http://serveur/pticlic.php");
-		
+	public Game getGames(int nbGames) {		
 		try {
-			HttpResponse res;
-			URI uri = new URI(serverUrl);
-			HttpPost methodPost = new HttpPost(uri);
-			//methodPost.setEntity(new StringEntity(s, charset));
-		} catch (URISyntaxException e) {
+			URL url = new URL(this.serverURL);
+			URLConnection connection = url.openConnection();
+			connection.addRequestProperty("action", "getparties");
+			connection.addRequestProperty("nb", String.valueOf(nbGames));
+			connection.addRequestProperty("mode", mode.value());
+			
+			Gson gson = new Gson();
+//			JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+//			Game game = gson.fromJson(reader, Game[].class);
+			
+			// TODO : A enlever sert juste pour les tests
+			String json = 
+					"{" +
+					"	id: 1234," +
+					"	cat1: 11," +
+					"	cat2: 23," +
+					"	cat3: -1," +
+					"	cat4: -1, " +
+					"	center: { id: 555, name: \"chat\" }, " +
+					"	cloud: [" +
+					"		{ id: 123, name: \"souris\" }," +
+					"		{ id: 111, name: \"lait\" }," +
+					"		{ id: 345, name: \"machine à laver\" }" +
+					"	]" +
+					"}";
+			Game game = gson.fromJson(json, Game.class);
+			
+			return game;
+		} catch (IOException e) {
 			return null;
 		}
-		
-		return null;
 	}
 	
-	public boolean sendGame(GamePlayed game) {
+	public boolean sendGame(Game game) {
 		throw new UnsupportedOperationException();
 	}
 }
