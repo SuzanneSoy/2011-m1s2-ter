@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 public class Score extends Activity implements OnClickListener{
-
 	private GamePlayed gamePlayed;
 	
 	
@@ -38,7 +37,7 @@ public class Score extends Activity implements OnClickListener{
 
 	protected double calculateTotal(){
 		throw new UnsupportedOperationException();
-		//return this.corrects - this.manquants - this.mauvais; 
+		//return this.corrects - this.manquants - this.mauvais;
 	}
 
 	@Override
