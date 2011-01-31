@@ -11,7 +11,8 @@
 		android:id="@+id/RelativeLayout01" android:layout_width="wrap_content"
 		android:layout_gravity="bottom|center_horizontal">
 
-		<Button android:layout_height="wrap_content" android:text="@string/play_label" android:layout_width="wrap_content"
+		<Button android:layout_height="wrap_content" android:text="@string/play_label" 
+		android:layout_width="wrap_content"
 			android:paddingLeft="60px" android:paddingRight="60px"
 			android:id="@+id/play"/>
 

@@ -1,6 +1,7 @@
 package org.pticlic.games;
 
 import org.pticlic.R;
+import org.pticlic.Score;
 import org.pticlic.model.Constant;
 import org.pticlic.model.Game;
 import org.pticlic.model.GamePlayed;
@@ -8,6 +9,7 @@ import org.pticlic.model.Network;
 import org.pticlic.model.Network.Mode;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -33,7 +35,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		setContentView(R.layout.game);
 		
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		String serverURL = sp.getString(Constant.SERVER_URL, "http://serveur/pticlic.php");
+		String serverURL = sp.getString(Constant.SERVER_URL, "http://serveur/pticlic.php"); // TODO : Mettre comme valeur par defaut l'adresse reel du serveur
 		
 		Network network = new Network(serverURL, Mode.SIMPLE_GAME);
 		game = network.getGames(1);
@@ -55,6 +57,8 @@ public class BaseGame extends Activity implements OnClickListener {
 		if (nbrel > 2) { r3.setOnClickListener(this); } else { r3.setVisibility(View.GONE); }
 		if (nbrel > 3) { r4.setOnClickListener(this); } else { r4.setVisibility(View.GONE); }
 		
+		
+		//TODO : Faudrait gere dynamiquement la gestion des nom des relations.
 		r1.setText("=");
 		r2.setText("Poubelle");
 		r3.setText("∈");
@@ -68,6 +72,9 @@ public class BaseGame extends Activity implements OnClickListener {
 		start();
 	}
 	
+	/**
+	 * Cette methode permet au mot courant de partir du mot central vers le centre de l'appareil.
+	 */
 	private void arrivalView() {
 		//On recupere la largueur de l'ecran.
 		Display display = getWindowManager().getDefaultDisplay(); 
@@ -93,17 +100,24 @@ public class BaseGame extends Activity implements OnClickListener {
 		findViewById(R.id.currentWord).startAnimation(set);
 	}
 	
+	/**
+	 * Cette methode permet de passer au mot courant suivant et de lancer l'animation. 
+	 */
 	private void start() {
 		((TextView)findViewById(R.id.currentWord)).setText(Game.getName(game.getWordInCloud(currentWord)));
 		arrivalView();
 	}
 	
+	/**
+	 * Permet de verifier si la partie est fini auquel cas on lance l'activite Score, sinon on passe au mot suivant.
+	 */
 	private void next() {
 		if (currentWord < nbWord) {
 			currentWord++;
 			start();
 		} else {
-			//TODO : Ajout l'envoie de GamePlayed a Score
+			Intent intent = new Intent(this, Score.class);
+			intent.putExtra(Constant.SCORE_INTENT, gamePlayed);
 		}
 	}
 	

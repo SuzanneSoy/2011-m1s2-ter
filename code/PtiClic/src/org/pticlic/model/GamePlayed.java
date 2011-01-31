@@ -1,13 +1,16 @@
 package org.pticlic.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GamePlayed {
+public class GamePlayed implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private ArrayList<CharSequence>	relation1;
 	private ArrayList<CharSequence>	relation2;
 	private ArrayList<CharSequence>	relation3;
-	private ArrayList<CharSequence> 	relation4;
-	private Game				game;
+	private ArrayList<CharSequence> relation4;
+	private Game					game;
 
 	public GamePlayed() {
 		relation1 = new ArrayList<CharSequence>();
@@ -18,6 +21,10 @@ public class GamePlayed {
 
 	public void setGame(Game game) {
 		this.game = game;
+	}	
+
+	public Game getGame() {
+		return game;
 	}
 
 	public void add(int relation, CharSequence word) {
