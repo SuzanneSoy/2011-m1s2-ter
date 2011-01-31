@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 public class Score extends Activity implements OnClickListener{
-	private GamePlayed gamePlayed;
+	private GamePlayed 	gamePlayed;
 	
 	
 	@Override

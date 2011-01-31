@@ -23,10 +23,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class BaseGame extends Activity implements OnClickListener {
-	private int currentWord = 0;
-	private int nbWord = 0;
-	private Game game;
-	private GamePlayed gamePlayed;
+	private int 		currentWord = 0;
+	private int 		nbWord = 0;
+	private Game 		game;
+	private GamePlayed 	gamePlayed;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -112,12 +112,12 @@ public class BaseGame extends Activity implements OnClickListener {
 	 * Permet de verifier si la partie est fini auquel cas on lance l'activite Score, sinon on passe au mot suivant.
 	 */
 	private void next() {
-		if (currentWord < nbWord) {
-			currentWord++;
+		if (++currentWord < nbWord) {
 			start();
 		} else {
 			Intent intent = new Intent(this, Score.class);
 			intent.putExtra(Constant.SCORE_INTENT, gamePlayed);
+			startActivity(intent);
 		}
 	}
 	

@@ -1,9 +1,15 @@
 package org.pticlic.model;
 
+import java.io.Serializable;
 
-public class Game {
 
-	public static class Word {
+public class Game implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
+	public static class Word implements Serializable {
+
+		private static final long serialVersionUID = 1L;
 		private int id;
 		private String name;
 		
@@ -25,13 +31,13 @@ public class Game {
 			this.name = name;
 		}
 	}
-
-	private int id;
-	private int cat1;
-	private int cat2;
-	private int cat3;
-	private int cat4;
-	private Word center;
+	
+	private int 		id;
+	private int 		cat1;
+	private int 		cat2;
+	private int 		cat3;
+	private int 		cat4;
+	private Word		center;
 	private Game.Word[] cloud;
 	
 	public Game() {
