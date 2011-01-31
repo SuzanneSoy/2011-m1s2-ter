@@ -1,111 +1,132 @@
 <?php
-require_once("./config/config.php");
+// RequÃªte : http://serveur/pticlic.php?action=getparties&nb=2&mode=normal&user=foo&passwd=bar
 
-if(!isset($_POST['cmd']) || !isset($_POST['psd']) || !isset($_POST['passwd']))
-	mDie(1,"La requête est incomplète");
-	
-$cmd = secure($_POST['cmd']);
-$psd = secure($_POST['psd']);
-$passwd = md5($_POST['passwd']);
+$email_admin = '';              // Adresse e-mail Administrateur.
 
-$req = "SELECT passwd FROM member WHERE pseudo='$psd'";
+$SQL_DBNAME = (dirname(__FILE__) . "/db");
 
-$sql = sqlConnect();
-$resp = mysql_query($req);
+function mDie($err,$msg)
+{
+	echo "{ error:".json_encode("".$err).", msg:".json_encode("".$msg)."}";
+	exit;
+}
 
-if(mysql_num_rows($res) < 1)
-	mDie(2,"Utilisateur non enregistré");
-	
-$data = mysql_fetch_array($resp);
+if (!$db = new SQLite3('db')) {
+	mDie(1,"Erreur lors de l'ouverture de la base de donnÃ©es SQLite3");
+}
 
-mysql_close($sql);
+function initdb() {
+	global $db;
+	$db->exec("insert into user(login, mail, hash_passwd) values('foo', 'foo@isp.com', '".md5('bar')."');");
+}
 
-if(strcmp($data['passwd'],$passwd) != 0)
-	mDie(3,"Nom d'utilisateur ou mot de passe incorrect");
-	
+// initdb();
+
+if(!isset($_GET['action']) || !isset($_GET['user']) || !isset($_GET['passwd']))
+	mDie(2,"La requÃªte est incomplÃ¨te");
+
+// Login
+$action = $_GET['action'];
+$user = $_GET['user'];
+$hash_passwd = md5($_GET['passwd']);
+if ($hash_passwd !== $db->querySingle("SELECT hash_passwd FROM user WHERE login='".SQLite3::escapeString($user)."';"))
+	mDie(3,"Utilisateur non enregistrÃ© ou mauvais mot de passe");
 
 function random_node() {
-	return mysql("select eid from node where eid = (abs(random()) % (select max(eid) from node))+1 or eid = (select max(eid) from node where eid > 0) order by eid desc limit 1;");
+	global $db;
+	return $db->querySingle("select eid from node where eid = (abs(random()) % (select max(eid) from node))+1 or eid = (select max(eid) from node where eid > 0) order by eid limit 1;");
 }
 
-function create_game($cloud_size) {
+function create_game($cloudSize) {
+	global $db;
 	// select random node
-	$eid_center=random_node();
+	$centerEid = random_node();
 
 	// select neighbors 1 hop
-	$niveau1=mysql("select end from relation where start = 42 limit $taille_nuage;");
+	if (!$difficulty_1 = $db->query("select end as eid from relation where start = 42 order by random() limit " . $cloudSize . ";")) { mDie(4,"Erreur dans la requÃªte d1"); }
+
 	
 	// select neighbors 2 hops
-	$niveau2=mysql("select * from relation where start in (select end from relation where start = 42) limit $taille_nuage;");
+	if (!$difficulty_2 = $db->query("select end as eid from relation where start in (select end from relation where start = 42) order by random() limit " . $cloudSize . ";")) { mDie(4,"Erreur dans la requÃªte d1"); }
 	
 	// select neighbors relative to the end (one hop start->end, one hop start<-end).
-	$niveau3=mysql("select * from relation where end in (select end from relation where start = 42) and type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) limit $taille_nuage;");
-
-	// pour compléter si nécessaire :
-	// select random words
-	$niveau4=array();
-	for ($i=0; $i < $cloud_size; $i++) {
-		$niveau4[$i] = ???
+	if (!$difficulty_3 = $db->query("select start as eid from relation where end in (select end from relation where start = 42) and type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) order by random() limit " . $cloudSize . ";")) { mDie(4,"Erreur dans la requÃªte d1"); }
+	
+	// TODOÂ : faire les select ci-dessous en les limitant Ã  certaines relations.
+	$db->exec("begin transaction;");
+	$db->exec("insert into game(gid, eid_central_word, relation_1, relation_2, relation_3, relation_4, reference_played_game) values (null, ".$centerEid.", 1,2,3,4,null);");
+	$gid = $db->lastInsertRowID();
+	for ($i=0; $i < $cloudSize; $i++) {
+		switch (rand(1,4)) {
+			case 1:
+				if ($eid = $difficulty_1->fetchArray()) { $eid=$eid['eid']; $difficulty=1; break; }
+			case 2:
+				if ($eid = $difficulty_2->fetchArray()) { $eid=$eid['eid']; $difficulty=2; break; }
+			case 3:
+				if ($eid = $difficulty_3->fetchArray()) { $eid=$eid['eid']; $difficulty=3; break; }
+			case 4:
+				$eid = random_node();
+				$difficulty=4;
+		}
+		$db->exec("insert into game_cloud(gid, num, difficulty, eid_word) values(".$gid.", ".$i.", ".$difficulty.", ".$eid.");");
 	}
-
-	// start transaction;
-	// insert into game $eid_center
-	// insert into game_cloud [$cloud_size mots choisis dans $niveau1, $niveau2, $niveau3, $niveau4]
-	// insert into game_played une partie de référence.
-	// commit;
+	// TODO : insert into game_played une partie de rÃ©fÃ©rence.
+	
+	$db->exec("commit;");
 }
 
+create_game(10);
 
-// Sinon tout est bon on effectu l'opération correspondant à la commande passée.
-if($cmd == 0)						// "Get partie" 
-{
-	// Requête sql de création de partie.
-	$req = "...";
+// // Sinon tout est bon on effectu l'opÃ©ration correspondant Ã  la commande passÃ©e.
+// if($action == 0)						// "Get partie" 
+// {
+// 	// RequÃªte sql de crÃ©ation de partie.
+// 	$req = "...";
 	
-	$sql = sqlConnect();
-	$resp = mysql_query($req);
+// 	$sql = sqlConnect();
+// 	$resp = mysql_query($req);
 	
-	if(mysql_num_rows($resp) == 0)
-		echo mysql_error();
-	else
-	{
-		$sequence = "...";
-		echo $sequence;
-	}
+// 	if(mysql_num_rows($resp) == 0)
+// 		echo mysql_error();
+// 	else
+// 	{
+// 		$sequence = "...";
+// 		echo $sequence;
+// 	}
 	
-	mysql_close($sql);
-}
-else if($cmd == 1)					// "Set partie"
-{
-	// Requête sql d'ajout d'informations (et calcul de résultat).
-	$req = "...";
+// 	mysql_close($sql);
+// }
+// else if($action == 1)					// "Set partie"
+// {
+// 	// RequÃªte sql d'ajout d'informations (et calcul de rÃ©sultat).
+// 	$req = "...";
 	
-	$sql = sqlConnect();
-	$resp = mysql_query($req);
+// 	$sql = sqlConnect();
+// 	$resp = mysql_query($req);
 	
-	if(mysql_num_rows($resp) == 0)
-		echo mysql_error();
-	else
-	{
-		$sequence = "...";
-		echo $sequence;
-	}
+// 	if(mysql_num_rows($resp) == 0)
+// 		echo mysql_error();
+// 	else
+// 	{
+// 		$sequence = "...";
+// 		echo $sequence;
+// 	}
 	
-	mysql_close($sql);
-}
-else if($cmd == 2)
-{
+// 	mysql_close($sql);
+// }
+// else if($action == 2)
+// {
 
-}
-else if($cmd == 3)
-{
+// }
+// else if($action == 3)
+// {
 
-}
-else if($cmd == 4)
-{
+// }
+// else if($action == 4)
+// {
 
-}
-else
-	die("Commande inconnue");
+// }
+// else
+// 	die("Commande inconnue");
 	
 ?>

@@ -29,6 +29,7 @@ cat "$1" \
 | sed -e 's/X/XX/g' | sed -e 's/A/Xa/g' | tr '\n' 'A' | sed -e 's/A")/")/g' | tr 'A' '\n' | sed -e 's/Xa/A/g' | sed -e 's/XX/X/g' \
 | pv -s $(wc -c "$1" | cut -d ' ' -f 1) \
 | sed -e "s#'#''#g" \
+| sed -e 's/\\//g' \
 | sed -E -e 's#^// [0-9]+ occurrences of relations ([a-z_]+) \(t=([0-9]+) nom_etendu="([^"]+)" info="([^"]+)"\)$#insert into type_relation(name, num, extended_name, info) values('\''\1'\'', \2, '\''\3'\'', '\''\4'\'');#' \
 | sed -E -e 's#^// [0-9]+ occurrences of nodes ([a-z_]+) \(t=([0-9]+)\)$#insert into type_node(name, num) values('\''\1'\'', \2);#' \
 | sed -E -e 's#^eid=([0-9]+):n="(.*)":t=([0-9]+):w=(-?[0-9]+)$#insert into node(eid, name, type, weight) values(\1, '\''\2'\'', '\''\3'\'', '\''\4'\'');#' \
@@ -42,7 +43,5 @@ create index i_relation_start on relation(start);
 create index i_relation_end on relation(end);
 create index i_relation_type on relation(type);
 create index i_relation_end_type on relation(end,type);
-create index i_sessid_login on sessid(login);
-create index i_sessid_sid on sessid(sid);
 commit;
 EOF
