@@ -1,4 +1,4 @@
-// Requête : http://serveur/pticlic.php?action=getparties&nb=2&mode=normal
+// Requête : http://serveur/pticlic.php?action=getparties&nb=2&mode=normal&user=foo&passwd=bar
 [
 	{
 		id: 1234,
@@ -7,6 +7,7 @@
 		cat3: 35,
 		cat4: 12,
 		center: { id: 555, "chat" },
+		cloudsize: 3,
 		cloud: [
 			{ id: 123, name: "souris" },
 			{ id: 111, name: "lait" },
@@ -20,6 +21,7 @@
 		cat3 : -1,
 		cat4 : -1,
 		center: { id: 666, "bouteille" },
+		cloudsize: 2,
 		cloud: [
 			{ id: 11359, name: "jus de fruit" },
 			{ id: 111, name: "lait" }
