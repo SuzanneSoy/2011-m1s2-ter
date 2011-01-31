@@ -76,6 +76,7 @@ function create_game($cloudSize) {
 }
 
 create_game(10);
+echo "ok";
 
 // // Sinon tout est bon on effectu l'opération correspondant à la commande passée.
 // if($action == 0)						// "Get partie" 
