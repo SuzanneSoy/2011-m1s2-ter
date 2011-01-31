@@ -3,6 +3,6 @@
     <string name="app_name">PtiClic</string>
 	<string name="prefs_name">Préférences</string>
 	<string name="play_label">Jouer</string>
-	<string name="textInfo">Ce projet a été réalisé l</string>
-	<color name="background">#FF0000</color>
+	<string name="textInfo"></string>
+<string name="version">0.1</string>
 </resources>
