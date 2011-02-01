@@ -36,8 +36,10 @@ public class BaseGame extends Activity implements OnClickListener {
 
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		String serverURL = sp.getString(Constant.SERVER_URL, "http://dumbs.fr/~bbrun/pticlic.json"); // TODO : Mettre comme valeur par defaut l'adresse reel du serveur
-
-		Network network = new Network(serverURL, Mode.SIMPLE_GAME);
+		String id = sp.getString(Constant.USER_ID, "joueur");
+		String passwd = sp.getString(Constant.USER_PASSWD, "");
+				
+		Network network = new Network(serverURL, Mode.SIMPLE_GAME, id, passwd);
 		game = network.getGames(1);
 		int nbrel = game.getNbRelation();
 		nbWord = game.getNbWord();
