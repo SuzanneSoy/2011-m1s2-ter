@@ -21,7 +21,7 @@ public class GamePlayed implements Serializable {
 
 	public void setGame(Game game) {
 		this.game = game;
-	}	
+	}
 
 	public Game getGame() {
 		return game;
@@ -35,5 +35,4 @@ public class GamePlayed implements Serializable {
 		case 4:	relation4.add(word); break;
 		}
 	}
-
 }
