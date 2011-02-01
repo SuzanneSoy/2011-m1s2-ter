@@ -41,9 +41,13 @@ function create_game($cloudSize) {
 	global $db;
 	// select random node
 	$centerEid = random_node();
+	$relation_1 = 5;
+	$relation_2 = 7;
+	//$relation_3 = 9;
+	//$relation_4 = 10;
 
 	// select neighbors 1 hop
-	if (!$difficulty_1 = $db->query("select end as eid from relation where start = 42 order by random() limit " . $cloudSize . ";")) { mDie(4,"Erreur dans la requête d1"); }
+	if (!$difficulty_1 = $db->query("select end as eid from relation where start = 42 and type in (".$relation_1.",".$relation_2.") order by random() limit " . $cloudSize . ";")) { mDie(4,"Erreur dans la requête d1"); }
 
 	
 	// select neighbors 2 hops

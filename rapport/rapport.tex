@@ -118,12 +118,21 @@ Android Developer, 2011. (\url{http://developer.android.com/})
 
 
 \section{Notes Georges}
-Les relations suivantes seront peut-être utilisées (* = oui, c'est sûr)
-r\_carac 17
-r\_agent 13
-r\_patient 14
-* r\_syn 5
+Les relations suivantes seront peut-être utilisées (* = oui, c'est sûr, on a/doit faire les icônes et des requêtes sql)~:
 
+\begin{tabular}{|c|l|l|l|}
+\hline
+icône~? & nom & num & signification \\
+\hline
+$*$ & r\_syn       & 5  & synonyme (chat -> matou) \\
+$*$ & r\_anto      & 7  & antonyme (bon -> mauvais) \\
+$*$ & r\_has\_part & 9  & A comme partie (chat -> patte) \\
+$*$ & r\_holo      & 10 & Fait partie de (patte -> chat) \\
+    & r\_agent     & 13 & Peut exécuter comme action (chat -> manger) \\
+    & r\_patient   & 14 & Peut subir comme action (chat -> être lavé) \\
+    & r\_carac     & 17 & Caractéristique (chat -> affectueux (ou pas…)) \\
+\hline
+\end{tabular}
 \newpage
 
 \appendix
