@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,8 +20,8 @@ public class Main extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		// Écoute des clics sur les différents boutons
-		((Button)findViewById(R.id.prefs)).setOnClickListener(this);
-		((Button)findViewById(R.id.play)).setOnClickListener(this);
+		((ImageView)findViewById(R.id.prefs)).setOnClickListener(this);
+		((ImageView)findViewById(R.id.play)).setOnClickListener(this);
 		((ImageView)findViewById(R.id.infoButton)).setOnClickListener(this);
 
 		// On récupère le nom du joueur des préférences.
@@ -44,5 +43,9 @@ public class Main extends Activity implements OnClickListener {
 		}
 	}
 	
+	@Override
+	public void onBackPressed() {
+		System.exit(0);
+	}
 	
 }
