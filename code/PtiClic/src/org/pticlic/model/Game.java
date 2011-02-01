@@ -1,11 +1,12 @@
 package org.pticlic.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 public class Game implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long 	serialVersionUID = 1L;
 	
 	public static class Word implements Serializable {
 
@@ -32,16 +33,26 @@ public class Game implements Serializable {
 		}
 	}
 	
-	private int 		id;
-	private int 		cat1;
-	private int 		cat2;
-	private int 		cat3;
-	private int 		cat4;
-	private Word		center;
-	private Game.Word[] cloud;
+	private int 				id;
+	private int 				cat1;
+	private int 				cat2;
+	private int 				cat3;
+	private int 				cat4;
+	private Word				center;
+	private Word[]				cloud;
 	
-	public Game() {
-		cloud = new Game.Word[3];
+	
+
+	public Game(int id, int cat1, int cat2, int cat3, int cat4, Word center,
+			Word[] cloud) {
+		super();
+		this.id = id;
+		this.cat1 = cat1;
+		this.cat2 = cat2;
+		this.cat3 = cat3;
+		this.cat4 = cat4;
+		this.center = center;
+		this.cloud = cloud;
 	}
 
 	public int getNbRelation() {
@@ -119,7 +130,7 @@ public class Game implements Serializable {
 		return cloud.length;
 	}
 	
-	public Game.Word getWordInCloud(int index) {
+	public Word getWordInCloud(int index) {
 		return cloud[index];
 	}
 
@@ -128,7 +139,5 @@ public class Game implements Serializable {
 		return "Game [id=" + id + ", cat1=" + cat1 + ", cat2=" + cat2
 				+ ", cat3=" + cat3 + ", cat4=" + cat4 + ", center=" + center
 				+ ", cloud=" + cloud + "]";
-	}
-	
-	
+	}	
 }

@@ -28,6 +28,9 @@
 		<Button android:id="@+id/relation2"
 			android:text="relation2" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:layout_gravity="bottom">
 		</Button>
+		<Button android:id="@+id/poubelle"
+			android:text="poubelle" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:layout_gravity="bottom">
+		</Button>
 		<Button android:id="@+id/relation3"
 			android:text="relation3" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:layout_gravity="bottom">
 		</Button>
