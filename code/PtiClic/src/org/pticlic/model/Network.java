@@ -59,8 +59,8 @@ public class Network {
 	 * @param nbGames Le nombre de parties que l'on veut récupérer.
 	 * @return
 	 */
-	public Game getGames(int nbGames) {
-		Game game = null;
+	public DownloadedGame getGames(int nbGames) {
+		DownloadedGame game = null;
 		try {
 			URL url = new URL(this.serverURL);
 			URLConnection connection = url.openConnection();
@@ -97,14 +97,14 @@ public class Network {
 	 * @return Une nouvelle instance de Game.
 	 * @throws IOException
 	 */
-	private Game makeGame(JsonReader reader, Gson gson) throws IOException {
+	private DownloadedGame makeGame(JsonReader reader, Gson gson) throws IOException {
 		int 		id = -1;
 		int 		cat1 = -1;
 		int 		cat2 = -1;
 		int 		cat3 = -1;
 		int 		cat4 = -1;
-		Game.Word 	center = null;
-		Game.Word[]	cloud = null;
+		DownloadedGame.Word 	center = null;
+		DownloadedGame.Word[]	cloud = null;
 		
 		reader.beginObject();
 		while (reader != null && reader.hasNext()) {
@@ -120,15 +120,15 @@ public class Network {
 			} else if (name.equals("cat4")) {
 				cat4 = reader.nextInt();
 			} else if (name.equals("center")) {
-				center = gson.fromJson(reader, Game.Word.class);
+				center = gson.fromJson(reader, DownloadedGame.Word.class);
 			} else if (name.equals("cloud")) {
-				cloud = gson.fromJson(reader, Game.Word[].class);
+				cloud = gson.fromJson(reader, DownloadedGame.Word[].class);
 			} else {
 				reader.skipValue();
 			}
 		}
 		reader.endObject();
-		return new Game(id, cat1, cat2, cat3, cat4, center, cloud);
+		return new DownloadedGame(id, cat1, cat2, cat3, cat4, center, cloud);
 	}
 	
 	
@@ -138,8 +138,8 @@ public class Network {
 	 * @param game La partie jouee par l'utilisateur 
 	 * @return Le score sous forme JSON.
 	 */
-	public String sendGame(GamePlayed game) {
-		String score = null;
+	public DownloadedScore sendGame(GamePlayed game) {
+		DownloadedScore score = null;
 		try {
 			URL url = new URL(this.serverURL);
 			URLConnection connection = url.openConnection();
@@ -155,7 +155,7 @@ public class Network {
 			JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
 			
 			// TODO : A changer lorsque je serais exactement ce que renvoie le serveur.
-			score = gson.fromJson(reader, String.class);
+			score = gson.fromJson(reader, DownloadedScore.class);
 			
 		} catch (IOException e) {
 			return score;

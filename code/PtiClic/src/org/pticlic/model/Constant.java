@@ -8,5 +8,6 @@ public class Constant {
 	public static final String USER_PASSWD = "passwd";
 	
 	// Constant pour les intents
-	public static final String SCORE_INTENT = "SCORE_INTENT";
+	public static final String SCORE_GAMEPLAYED = "SCORE_INTENT";
+	public static final String SCORE_MODE = "SCORE_MODE";
 }

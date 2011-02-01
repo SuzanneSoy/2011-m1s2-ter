@@ -20,6 +20,7 @@ public class Relation {
 	
 	private Relation() {
 		stringRelations = new HashMap<Integer, String>();
+		stringRelations.put(-1, "");
 		stringRelations.put(0, "idée");
 		stringRelations.put(1, "raffinement sémantique");
 		stringRelations.put(2, "raffinement morphologique");
