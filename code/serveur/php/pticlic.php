@@ -41,20 +41,73 @@ function create_game($cloudSize) {
 	global $db;
 	// select random node
 	$centerEid = random_node();
-	$relation_1 = 5;
-	$relation_2 = 7;
-	//$relation_3 = 9;
-	//$relation_4 = 10;
+	$relations = array(5, 7, 9, 10);
+	$r1 = rand(0,count($relations)-1);
+	$r2 = rand(0,count($relations)-2);
+	if ($r2 >= $r1) $r2++;
+	$r1 = $relations[$r1];
+	$r2 = $relations[$r2];
+	
+	// 'w' => weight (poids), 's' => select
+	// TODO : comment mettre un poids sur random, sachant qu'il ne peut / devrait pas être dans ces select, mais plutôt un appel à random_node() ?
+	$typer1r2 = "type in ($r1, $r2)";
+	$sources = array(
+		// Voisins 1 saut du bon type (= relations déjà existantes)
+		array('w'=>10, 's'=>"select end as eid from relation where start = $centerEid and $typer1r2 order by random();"),
+		// Voisins 1 saut via r_associated (0), donc qu'on voudrait spécifier si possible.
+		array('w'=>10, 's'=>"select end as eid from relation where start = $centerEid and type = 0 order by random();"),
+		// Voisins 1 saut via les autres relations
+		array('w'=>10, 's'=>"select end as eid from relation where start = $centerEid and type not in (0, $r1, $r2) order by random();"),
+		// Voisins 2 sauts, avec un mix de R1 et R2 pour les liens. Par ex [ A -R1-> B -R2-> C ] ou bien [ A -R2-> B -R2-> C ]
+		// TODO !! Optimiser cette requête
+		array('w'=>10, 's'=>"select end as eid from relation where start in (select end from relation where start = $centerEid and $typer1r2) and $typer1r2 order by random();"),
+		// Voisins 1 saut r1/r2 + 1 saut synonyme
+		// TODO !! Optimiser cette requête
+		array('w'=>10, 's'=>"select end as eid from relation where start in (select end from relation where start = $centerEid and $typer1r2) and type = 5 order by random();"),
+		// TODO !! Optimiser cette requête
+		array('w'=>10, 's'=>"select end as eid from relation where start in (select end from relation where start = $centerEid and type = 5) and $typer1r2 order by random();"),
+		// Voisins 2 sauts (tous)
+		array('w'=>10, 's'=>"select end as eid from relation where start in (select end from relation where start = $centerEid) order by random();"),
+		// Centre pointe vers X, M pointe vers X aussi, on prend M.
+		// TODO !! Optimiser cette requête
+		array('w'=>10, 's'=>"select start as eid from relation where end in (select end from relation where start = 42) and type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) order by random();")
+	);
 
+	$sumWeights = 0;
+	echo "  centereid = $centerEid  ";
+	foreach ($sources as $x) {
+		$sumWeights += $x['w'];
+		$x['resultSet'] = $db->query($x['s']);
+	}
+	
+	// On boucle tant qu'il n'y a pas eu au moins 2 sources épuisées
+	$finishedSources = 0;
+	while ($finishedSources < 2) {
+		// On choisit une source aléatoire en tennant compte des poids.
+		$rands = rand(1,$sumWeights);
+		$sumw = 0;
+		$resultSet = false; // TODO : gérer l'erreur si ce n'est pas écrasé (-> random)
+		foreach ($sources as $x) {
+			$sumw += $x['w'];
+			if ($rands < $sumw) {
+				$resultSet = $x['resultSet'];
+				break;
+			}
+		}
+		$finishedSources++;
+	}
+
+	exit;
+	
 	// select neighbors 1 hop
-	if (!$difficulty_1 = $db->query("select end as eid from relation where start = 42 and type in (".$relation_1.",".$relation_2.") order by random() limit " . $cloudSize . ";")) { mDie(4,"Erreur dans la requête d1"); }
+	if (!$difficulty_1 = $db->query()) { mDie(4,"Erreur dans la requête d1"); }
 
 	
 	// select neighbors 2 hops
-	if (!$difficulty_2 = $db->query("select end as eid from relation where start in (select end from relation where start = 42) order by random() limit " . $cloudSize . ";")) { mDie(4,"Erreur dans la requête d1"); }
+	if (!$difficulty_2 = $db->query()) { mDie(4,"Erreur dans la requête d1"); }
 	
 	// select neighbors relative to the end (one hop start->end, one hop start<-end).
-	if (!$difficulty_3 = $db->query("select start as eid from relation where end in (select end from relation where start = 42) and type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) order by random() limit " . $cloudSize . ";")) { mDie(4,"Erreur dans la requête d1"); }
+	if (!$difficulty_3 = $db->query()) { mDie(4,"Erreur dans la requête d1"); }
 	
 	// TODO : faire les select ci-dessous en les limitant à certaines relations.
 	$db->exec("begin transaction;");
@@ -80,7 +133,7 @@ function create_game($cloudSize) {
 }
 
 create_game(10);
-echo "ok";
+echo 'ok';
 
 // // Sinon tout est bon on effectu l'opération correspondant à la commande passée.
 // if($action == 0)						// "Get partie" 
