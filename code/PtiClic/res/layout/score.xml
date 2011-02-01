@@ -6,22 +6,22 @@ android:layout_height="fill_parent" android:orientation="vertical"
 android:layout_width="fill_parent" android:id="@+id/LinearLayout01">
 
 
-<TextView android:text="@+id/corrects" android:id="@+id/corrects" android:layout_width="fill_parent" 
+<TextView android:text="@+id/corrects" android:id="@+id/correct" android:layout_width="fill_parent" 
 android:layout_height="wrap_content" android:textSize="20px"></TextView>
 
-<TextView android:text="@+id/manquants" android:id="@+id/manquants" android:layout_width="fill_parent" 
+<TextView android:text="@+id/manquants" android:id="@+id/missing" android:layout_width="fill_parent" 
 android:layout_height="wrap_content" android:textSize="20px"></TextView>
 
-<TextView android:text="@+id/mauvais" android:id="@+id/mauvais" android:layout_width="fill_parent"
+<TextView android:text="@+id/mauvais" android:id="@+id/bad" android:layout_width="fill_parent"
 android:layout_height="wrap_content" android:textSize="20px"></TextView>
 
 <TextView android:text="@+id/total" android:id="@+id/total" android:layout_width="fill_parent"
 android:layout_height="wrap_content" android:textSize="25px"></TextView>
 
-<TextView android:text="@+id/joueravec" android:id="@+id/joueravec" android:layout_width="wrap_content" 
+<TextView android:text="@+id/joueravec" android:id="@+id/playedWith" android:layout_width="wrap_content" 
 android:layout_height="wrap_content" android:textSize="20px"></TextView>
 
-<Button android:text="J'ai vu !" android:id="@+id/jaivu" android:layout_width="100px"
+<Button android:text="J'ai vu !" android:id="@+id/saw" android:layout_width="100px"
 android:layout_height="40px" android:layout_gravity="center_vertical|center_horizontal|center"></Button>
 
 <TextView android:text="@+id/category1" android:id="@+id/category1" android:layout_width="wrap_content" 

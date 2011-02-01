@@ -23,7 +23,7 @@ public class Score extends Activity implements OnClickListener{
 			this.gamePlayed = (GamePlayed) getIntent().getExtras().get(Constant.SCORE_INTENT);
 		}
 		
-		((Button)findViewById(R.id.jaivu)).setOnClickListener(this);
+		((Button)findViewById(R.id.saw)).setOnClickListener(this);
 		
 	}
 	
@@ -41,7 +41,7 @@ public class Score extends Activity implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		if (v.getId()==R.id.jaivu) {
+		if (v.getId()==R.id.saw) {
 			finish();
 		}
 		
