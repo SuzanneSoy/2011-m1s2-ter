@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/widget29"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:orientation="vertical"
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<LinearLayout android:id="@+id/widget40"
 		android:layout_width="fill_parent" android:layout_height="fill_parent"
@@ -15,27 +15,33 @@
 			android:layout_height="wrap_content" android:text="currentWord"
 			android:textStyle="bold" android:gravity="center">
 		</TextView>
-		
+
 
 	</LinearLayout>
 
-	<LinearLayout android:id="@+id/widget44"
-		android:orientation="horizontal" android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_weight="9">
+	<LinearLayout android:orientation="horizontal"
+		android:layout_height="fill_parent" android:layout_width="fill_parent"
+		android:layout_weight="9">
 
-		<Button android:id="@+id/relation1"
-			android:text="relation1" android:layout_height="wrap_content" android:layout_weight="1" android:layout_width="fill_parent" android:layout_gravity="bottom">
+		<Button android:id="@+id/relation1" android:text="relation1"
+			android:layout_height="wrap_content" android:layout_weight="1"
+			android:layout_width="fill_parent" android:layout_gravity="bottom">
 		</Button>
-		<Button android:id="@+id/relation2"
-			android:text="relation2" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:layout_gravity="bottom">
+		<Button android:id="@+id/relation2" android:text="relation2"
+			android:layout_height="wrap_content" android:layout_width="fill_parent"
+			android:layout_weight="1" android:layout_gravity="bottom">
 		</Button>
-		<Button android:id="@+id/poubelle"
-			android:text="poubelle" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:layout_gravity="bottom">
+		<Button android:id="@+id/trash" android:text="trash"
+			android:layout_height="wrap_content" android:layout_width="fill_parent"
+			android:layout_weight="1" android:layout_gravity="bottom">
 		</Button>
-		<Button android:id="@+id/relation3"
-			android:text="relation3" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:layout_gravity="bottom">
+		<Button android:id="@+id/relation3" android:text="relation3"
+			android:layout_height="wrap_content" android:layout_width="fill_parent"
+			android:layout_weight="1" android:layout_gravity="bottom">
 		</Button>
-		<Button android:id="@+id/relation4"
-			android:text="relation4" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:layout_gravity="bottom">
+		<Button android:id="@+id/relation4" android:text="relation4"
+			android:layout_height="wrap_content" android:layout_width="fill_parent"
+			android:layout_weight="1" android:layout_gravity="bottom">
 		</Button>
 
 	</LinearLayout>
