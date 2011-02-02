@@ -4,10 +4,10 @@ import org.pticlic.R;
 import org.pticlic.Score;
 import org.pticlic.model.Constant;
 import org.pticlic.model.DownloadedGame;
-import org.pticlic.model.GamePlayed;
+import org.pticlic.model.Match;
 import org.pticlic.model.Network;
-import org.pticlic.model.Relation;
 import org.pticlic.model.Network.Mode;
+import org.pticlic.model.Relation;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -41,7 +41,7 @@ public class BaseGame extends Activity implements OnClickListener {
 	private int 		currentWord = 0;
 	private int 		nbWord = 0;
 	private DownloadedGame 		game;
-	private GamePlayed 	gamePlayed;
+	private Match 	gamePlayed;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -54,7 +54,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		String serverURL = sp.getString(Constant.SERVER_URL, "http://dumbs.fr/~bbrun/pticlic.json"); // TODO : Mettre comme valeur par defaut l'adresse reel du serveur
 		String id = sp.getString(Constant.USER_ID, "joueur");
 		String passwd = sp.getString(Constant.USER_PASSWD, "");
-				
+
 		// On initialise la classe permettant la communication avec le serveur.
 		Network network = new Network(serverURL, Mode.SIMPLE_GAME, id, passwd);
 		game = network.getGames(1);
@@ -62,9 +62,9 @@ public class BaseGame extends Activity implements OnClickListener {
 		nbWord = game.getNbWord();
 
 		// On initialise la partie.
-		gamePlayed = new GamePlayed();
+		gamePlayed = new Match();
 		gamePlayed.setGame(game);
-		
+
 		Relation r = Relation.getInstance();
 
 		// Boutons des relations
@@ -72,9 +72,11 @@ public class BaseGame extends Activity implements OnClickListener {
 		Button r2 = ((Button)findViewById(R.id.relation2));
 		Button r3 = ((Button)findViewById(R.id.relation3));
 		Button r4 = ((Button)findViewById(R.id.relation4));
-		
+
 		// TODO : Pour l'instant la poubelle ne fait rien. Il faudra certainement la ranger dans un categorie dans GamePlayed pour calculer le score.
-		((Button)findViewById(R.id.poubelle)).setText("Poubelle");
+		Button trash = ((Button)findViewById(R.id.trash));
+		trash.setOnClickListener(this);
+		trash.setText("poubelle");
 
 		// Écoute des clics sur les relations
 		if (nbrel > 0) { r1.setOnClickListener(this); r1.setText(r.getRelationName(game.getCat1())); } else { r1.setVisibility(View.GONE); }
@@ -82,7 +84,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		if (nbrel > 2) { r3.setOnClickListener(this); r3.setText(r.getRelationName(game.getCat3()));} else { r3.setVisibility(View.GONE); }
 		if (nbrel > 3) { r4.setOnClickListener(this); r4.setText(r.getRelationName(game.getCat4()));} else { r4.setVisibility(View.GONE); }
 
-		
+
 		((TextView)findViewById(R.id.mainWord)).setText(DownloadedGame.getName(game.getCentre()));
 	}
 
@@ -151,7 +153,7 @@ public class BaseGame extends Activity implements OnClickListener {
 			Intent intent = new Intent(this, Score.class);
 			intent.putExtra(Constant.SCORE_GAMEPLAYED, gamePlayed);
 			intent.putExtra(Constant.SCORE_MODE, Mode.SIMPLE_GAME);
-			
+
 			startActivityForResult(intent, 0x100);
 		}
 	}
@@ -161,12 +163,13 @@ public class BaseGame extends Activity implements OnClickListener {
 	 */
 	@Override
 	public void onClick(View v) {
-		CharSequence currentWord = ((TextView)findViewById(R.id.currentWord)).getText();
+		int currentWord = game.getWordInCloud(this.currentWord).getId();
 		switch (v.getId()) {
 		case (R.id.relation1) : gamePlayed.add(1, currentWord); next();	break;
 		case (R.id.relation2) : gamePlayed.add(2, currentWord); next(); break;
 		case (R.id.relation3) : gamePlayed.add(3, currentWord); next(); break;
 		case (R.id.relation4) : gamePlayed.add(4, currentWord); next(); break;
+		case (R.id.trash) : gamePlayed.add(0, currentWord); next(); break;
 		}
 	}
 }
