@@ -158,6 +158,13 @@ function create_game($cloudSize) {
 create_game(10);
 echo 'ok';
 
+function selectGame($gId)
+{
+	echo "id: ".$gid.',';
+
+	$req = "select eid_central_word, (select name from node where eid=eid_central_word limit 1)";
+}
+
 // // Sinon tout est bon on effectu l'opération correspondant à la commande passée.
 // if($action == 0)						// "Get partie" 
 // {
