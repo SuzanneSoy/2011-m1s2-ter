@@ -82,7 +82,7 @@ public class Network {
 			reader.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			
+
 			return null;
 		}
 		
@@ -147,6 +147,20 @@ public class Network {
 			connection.addRequestProperty("user", this.id);
 			connection.addRequestProperty("passwd", this.passwd);
 			connection.addRequestProperty("mode", mode.value());
+			
+			if (game.getGame().getCat1() != -1) {
+//				for (game.getRelation1())
+//				connection.addRequestProperty("cat1[]", newValue);
+			}
+			if (game.getGame().getCat2() != -1) {
+				
+			}
+			if (game.getGame().getCat3() != -1) {
+				
+			}
+			if (game.getGame().getCat4() != -1) {
+				
+			}
 			
 			Gson gson = new Gson();
 			String json = gson.toJson(game);
