@@ -7,6 +7,8 @@ echo "  La progression est affichée avec pv. Si vous n'avez pas pv, supprimez l
 echo "  Et c'est parti !" >&2
 echo >&2
 
+# Played_game(type) : 0 => partie de référence, 1 => joueur
+
 cat <<EOF
 begin transaction;
 create table node(eid integer primary key autoincrement, name, type, weight);
@@ -14,9 +16,10 @@ create table relation(rid integer primary key autoincrement, start, end, type, w
 create table type_node(name, num);
 create table type_relation(name, num, extended_name, info);
 create table user(login primary key, mail, hash_passwd);
-create table game(gid integer primary key autoincrement, eid_central_word, relation_1, relation_2, relation_3, relation_4, reference_played_game);
-create table game_cloud(gid, num, difficulty, eid_word);
-create table played_game(gid, type, num, relation, weight);
+create table game(gid integer primary key autoincrement, eid_central_word, relation_1, relation_2);
+create table game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash);
+create table played_game(pgid integer primary key autoincrement, gid, login);
+create table played_game_cloud(pgid, gid, type, num, relation, weight, score);
 EOF
 
 # tr : pour virer le CRLF qui traîne
