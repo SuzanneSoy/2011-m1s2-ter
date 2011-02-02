@@ -14,19 +14,19 @@ import java.util.ArrayList;
 public class GamePlayed implements Serializable {
 
 	private static final long 	serialVersionUID = 1L;
-	private ArrayList<String>	relation1;
-	private ArrayList<String>	relation2;
-	private ArrayList<String>	relation3;
-	private ArrayList<String> 	relation4;
-	private ArrayList<String> 	trash;
+	private ArrayList<Integer>	relation1;
+	private ArrayList<Integer>	relation2;
+	private ArrayList<Integer>	relation3;
+	private ArrayList<Integer> 	relation4;
+	private ArrayList<Integer> 	trash;
 	private DownloadedGame		game;
 
 	public GamePlayed() {
-		relation1 = new ArrayList<String>();
-		relation2 = new ArrayList<String>();
-		relation3 = new ArrayList<String>();
-		relation4 = new ArrayList<String>();
-		trash = new ArrayList<String>();
+		relation1 = new ArrayList<Integer>();
+		relation2 = new ArrayList<Integer>();
+		relation3 = new ArrayList<Integer>();
+		relation4 = new ArrayList<Integer>();
+		trash = new ArrayList<Integer>();
 	}
 
 	public void setGame(DownloadedGame game) {
@@ -37,7 +37,7 @@ public class GamePlayed implements Serializable {
 		return game;
 	}
 
-	public void add(int relation, String word) {
+	public void add(int relation, int word) {
 		switch (relation) {
 		case 1:		relation1.add(word); break;
 		case 2: 	relation2.add(word); break;
@@ -50,72 +50,36 @@ public class GamePlayed implements Serializable {
 	/**
 	 * @return the relation1
 	 */
-	public ArrayList<String> getRelation1() {
+	public ArrayList<Integer> getRelation1() {
 		return relation1;
 	}
 
 	/**
 	 * @return the relation2
 	 */
-	public ArrayList<String> getRelation2() {
+	public ArrayList<Integer> getRelation2() {
 		return relation2;
 	}
 
 	/**
 	 * @return the relation3
 	 */
-	public ArrayList<String> getRelation3() {
+	public ArrayList<Integer> getRelation3() {
 		return relation3;
 	}
 
 	/**
 	 * @return the relation4
 	 */
-	public ArrayList<String> getRelation4() {
+	public ArrayList<Integer> getRelation4() {
 		return relation4;
 	}
 
 	/**
 	 * @return the trash
 	 */
-	public ArrayList<String> getTrash() {
+	public ArrayList<Integer> getTrash() {
 		return trash;
 	}
-
-	/**
-	 * @param relation1 the relation1 to set
-	 */
-	public void setRelation1(ArrayList<String> relation1) {
-		this.relation1 = relation1;
-	}
-
-	/**
-	 * @param relation2 the relation2 to set
-	 */
-	public void setRelation2(ArrayList<String> relation2) {
-		this.relation2 = relation2;
-	}
-
-	/**
-	 * @param relation3 the relation3 to set
-	 */
-	public void setRelation3(ArrayList<String> relation3) {
-		this.relation3 = relation3;
-	}
-
-	/**
-	 * @param relation4 the relation4 to set
-	 */
-	public void setRelation4(ArrayList<String> relation4) {
-		this.relation4 = relation4;
-	}
-
-	/**
-	 * @param trash the trash to set
-	 */
-	public void setTrash(ArrayList<String> trash) {
-		this.trash = trash;
-	}
-	
 	
 }
