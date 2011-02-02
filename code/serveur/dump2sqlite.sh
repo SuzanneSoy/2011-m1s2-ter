@@ -36,6 +36,7 @@ cat <<EOF
 create index i_relation_start on relation(start);
 create index i_relation_end on relation(end);
 create index i_relation_type on relation(type);
+create index i_relation_start_type on relation(start,type);
 create index i_relation_end_type on relation(end,type);
 commit;
 EOF
