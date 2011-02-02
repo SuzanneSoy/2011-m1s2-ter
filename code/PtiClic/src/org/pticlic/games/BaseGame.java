@@ -74,7 +74,9 @@ public class BaseGame extends Activity implements OnClickListener {
 		Button r4 = ((Button)findViewById(R.id.relation4));
 		
 		// TODO : Pour l'instant la poubelle ne fait rien. Il faudra certainement la ranger dans un categorie dans GamePlayed pour calculer le score.
-		((Button)findViewById(R.id.poubelle)).setText("Poubelle");
+		Button trash = ((Button)findViewById(R.id.trash));
+		trash.setOnClickListener(this);
+		trash.setText("poubelle");
 
 		// Écoute des clics sur les relations
 		if (nbrel > 0) { r1.setOnClickListener(this); r1.setText(r.getRelationName(game.getCat1())); } else { r1.setVisibility(View.GONE); }
@@ -167,6 +169,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		case (R.id.relation2) : gamePlayed.add(2, currentWord); next(); break;
 		case (R.id.relation3) : gamePlayed.add(3, currentWord); next(); break;
 		case (R.id.relation4) : gamePlayed.add(4, currentWord); next(); break;
+		case (R.id.trash) : gamePlayed.add(0, currentWord); next(); break;
 		}
 	}
 }
