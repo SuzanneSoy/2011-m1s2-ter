@@ -4,7 +4,7 @@ import org.pticlic.R;
 import org.pticlic.Score;
 import org.pticlic.model.Constant;
 import org.pticlic.model.DownloadedGame;
-import org.pticlic.model.GamePlayed;
+import org.pticlic.model.Match;
 import org.pticlic.model.Network;
 import org.pticlic.model.Relation;
 import org.pticlic.model.Network.Mode;
@@ -41,7 +41,7 @@ public class BaseGame extends Activity implements OnClickListener {
 	private int 		currentWord = 0;
 	private int 		nbWord = 0;
 	private DownloadedGame 		game;
-	private GamePlayed 	gamePlayed;
+	private Match 	gamePlayed;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -62,7 +62,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		nbWord = game.getNbWord();
 
 		// On initialise la partie.
-		gamePlayed = new GamePlayed();
+		gamePlayed = new Match();
 		gamePlayed.setGame(game);
 		
 		Relation r = Relation.getInstance();
@@ -74,7 +74,9 @@ public class BaseGame extends Activity implements OnClickListener {
 		Button r4 = ((Button)findViewById(R.id.relation4));
 		
 		// TODO : Pour l'instant la poubelle ne fait rien. Il faudra certainement la ranger dans un categorie dans GamePlayed pour calculer le score.
-		((Button)findViewById(R.id.poubelle)).setText("Poubelle");
+		Button trash = ((Button)findViewById(R.id.trash));
+		trash.setOnClickListener(this);
+		trash.setText("poubelle");
 
 		// Écoute des clics sur les relations
 		if (nbrel > 0) { r1.setOnClickListener(this); r1.setText(r.getRelationName(game.getCat1())); } else { r1.setVisibility(View.GONE); }
@@ -167,6 +169,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		case (R.id.relation2) : gamePlayed.add(2, currentWord); next(); break;
 		case (R.id.relation3) : gamePlayed.add(3, currentWord); next(); break;
 		case (R.id.relation4) : gamePlayed.add(4, currentWord); next(); break;
+		case (R.id.trash) : gamePlayed.add(0, currentWord); next(); break;
 		}
 	}
 }
