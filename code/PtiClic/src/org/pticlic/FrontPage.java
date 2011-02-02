@@ -35,7 +35,6 @@ public class FrontPage extends Activity implements OnClickListener{
 		String loginPref = sp.getString("login", "joueur");
 		// On l'ajoute dans le TextView prévu à cet effet
 		((TextView)findViewById(R.id.login)).setText("Login : " + loginPref);
-		System.out.println("FrontPage.onStart()");
 	}
 
 	/* (non-Javadoc)
