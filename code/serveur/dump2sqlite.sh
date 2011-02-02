@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# TODO : sed -E sur certaines machines, sed -r sur d'autres.
+
 echo "  dump2sql.sh : conversion des dumps de JeuxDeMots vers du sql (sqlite3)." >&2
 echo "  La progression est affichée avec pv. Si vous n'avez pas pv, supprimez la ligne correspondante dans ce script." >&2
 echo "  Et c'est parti !" >&2

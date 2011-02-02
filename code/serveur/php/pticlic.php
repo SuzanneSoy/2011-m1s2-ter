@@ -69,23 +69,27 @@ function cg_build_result_sets($cloudSize, $centerEid, $r1, $r2) {
 		// Ce n'est toujours pas ça… : "select eid from (select B.start as eid from relation as A, relation as B where A.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and A.start = $centerEid and B.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and B.end = A.end limit 1) order by random();"
 		// Tordu, mais ça marche \o/ . En fait il faut empêcher l'optimiseur de ramener le random avant le limit (et l'optimiseur est malin… :)
 		array('w'=>10, 'd'=>8, 's'=>"select x as eid, -0.1 as r1, -0.1 as r2 from (select x from (select X.eid + Y.dumb as x from (select B.start as eid from relation as A, relation as B where A.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and A.start = 74860 and B.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and B.end = A.end limit $cloudSize) as X, (select 0 as dumb) as Y)) order by random();"),
-		array('w'=>10, 's'=>false) // random. Le r1 et r2 de random sont juste en-dessous
+		'rand' => array('w'=>10, 's'=>false) // random. Le r1 et r2 de random sont juste en-dessous
 	);
 
 	$sumWeights = 0;
 	foreach ($sources as $k => $x) {
 		$sumWeights += $x['w'];
+		$sources[$k]['rsPos'] = 0;
+		$sources[$k]['rsSize'] = 0;
 		if ($x['s'] !== false) {
 			$sources[$k]['resultSet'] = array();
 			$res = $db->query($x['s']);
 			$i = 0;
 			while ($i < 10 && $sources[$k]['resultSet'][] = $res->fetchArray()) {
 				$i++;
+				$sources[$k]['rsSize']++;
 			}
 		} else {
 			$sources[$k]['resultSet'] = array();
 			for ($i = 0; $i < 10; $i++) {
 				$sources[$k]['resultSet'][] = array('eid'=>random_node(), 'r1'=>-1, 'r2'=>-1);
+				$sources[$k]['rsSize']++;
 			}
 		}
 	}
@@ -107,31 +111,45 @@ function cg_build_cloud($cloudSize, $sources, $sumWeights) {
 	$cloud = array();
 	$nbFailed = 0;
 	$i = 0;
-	while ($i < $cloudSize && $nbFailed < 50) {
+	while ($i < $cloudSize && $nbFailed < 5*$cloudSize) {
 		// On choisit une source aléatoire en tennant compte des poids.
 		$rands = rand(1,$sumWeights);
 		$sumw = 0;
-		$res = false; // TODO
+		$src = $sources['rand'];
 		foreach ($sources as $x) {
 			$sumw += $x['w'];
 			if ($rands < $sumw) {
-				$res = $x['resultSet'];
+				$src = $x;
 				break;
 			}
 		}
-		if (/* dépassé la fin de ce set */) {
+		if ($src['rsPos'] >= $src['rsSize']) {
 			$nbFailed++;
 			continue;
 		}
-		$res = $res['eid'];
-		if (in_array($res, $cloud)) {
+		$res = $src['resultSet'][$src['rsPos']++];
+		if (in_array($res['eid'], $cloud)) {
 			$nbFailed++;
 			continue;
 		}
-		$cloud[] = $res;
-		$i++;
+		// position dans le nuage, difficulté, eid, probaR1, probaR2
+		$cloud[$i] = array('pos'=>$i++, 'd'=>$src['d'], 'eid'=>$res['eid'], 'probaR1'=>$res['r1'], 'probaR2'=>$res['r2']);
+	}
+	while ($i < $cloudSize) {
+		$cloud[$i] = array('pos'=>$i++, 'd'=>$sources['rand']['d'], 'eid'=>random_node(), 'probaR1'=>$sources['rand']['resultSet'][0]['r1'], 'probaR2'=>$sources['rand']['resultSet'][0]['r2']);
 	}
 	return $cloud;
+}
+
+function cg_insert($centerEid, $cloud, $r1, $r2) {
+	$db->exec("begin transaction;");
+	$db->exec("insert into game(gid, eid_central_word, relation_1, relation_2) values (null, $centerEid, $r1, $r2);");
+	$gid = $db->lastInsertRowID();
+	foreach ($cloud as $c) {
+	    $db->exec("insert into game_cloud(gid, num, difficulty, probaR1, probaR2, eid_word) values($gid, ".$c['pos'].", ".$c['d'].", ".$c['probaR1'].', '.$c['probaR2'].', '.$c['eid'].");");
+	}
+	// TODO : insert into game_played une partie de référence.
+	$db->exec("commit;");
 }
 
 function create_game($cloudSize) {
@@ -141,19 +159,10 @@ function create_game($cloudSize) {
 	$r1 = cg_choose_relations(); $r2 = $r1[1]; $r1 = $r1[0];
 	$sources = cg_build_result_sets($cloudSize, $centerEid, $r1, $r2); $sumWeights = $sources[1]; $sources = $sources[0];
 	$cloud = cg_build_cloud($cloudSize, $sources, $sumWeights);
+	cg_insert($centerEid, $cloud);
 	
 	var_dump($cloud);
-	exit;
-	
-	$db->exec("begin transaction;");
-	$db->exec("insert into game(gid, eid_central_word, relation_1, relation_2, relation_3, relation_4, reference_played_game) values (null, ".$centerEid.", 1,2,3,4,null);");
-	$gid = $db->lastInsertRowID();
-	foreach ($cloud as $eid) {
-	    $db->exec("insert into game_cloud(gid, num, difficulty, eid_word) values(".$gid.", ".$i.", ".$difficulty.", ".$eid.");");
-	}
-	// TODO : insert into game_played une partie de référence.
-	$db->exec("commit;");
-}
+	exit;}
 
 create_game(10);
 echo 'ok';
