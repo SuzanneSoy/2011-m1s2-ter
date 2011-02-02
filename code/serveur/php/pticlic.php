@@ -162,7 +162,7 @@ function create_game($cloudSize) {
 	cg_insert($centerEid, $cloud);
 	
 	var_dump($cloud);
-	exit;}
+	exit;}
 
 create_game(10);
 echo 'ok';
