@@ -138,8 +138,8 @@ public class Network {
 	 * @param game La partie jouee par l'utilisateur 
 	 * @return Le score sous forme JSON.
 	 */
-	public DownloadedScore sendGame(GamePlayed game) {
-		DownloadedScore score = null;
+	public TotalScore sendGame(Match game) {
+		TotalScore score = null;
 		try {
 			URL url = new URL(this.serverURL);
 			URLConnection connection = url.openConnection();
@@ -174,8 +174,8 @@ public class Network {
 			
 			Gson gson = new Gson();
 			JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-			
-			score = gson.fromJson(reader, DownloadedScore.class);
+
+			score = gson.fromJson(reader, TotalScore.class);
 			
 
 		} catch (IOException e) {

@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * puisse calculer le score obtenue.
  *
  */
-public class GamePlayed implements Serializable {
+public class Match implements Serializable {
 
 	private static final long 	serialVersionUID = 1L;
 	private ArrayList<Integer>	relation1;
@@ -21,7 +21,7 @@ public class GamePlayed implements Serializable {
 	private ArrayList<Integer> 	trash;
 	private DownloadedGame		game;
 
-	public GamePlayed() {
+	public Match() {
 		relation1 = new ArrayList<Integer>();
 		relation2 = new ArrayList<Integer>();
 		relation3 = new ArrayList<Integer>();

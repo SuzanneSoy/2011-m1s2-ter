@@ -4,12 +4,10 @@ import org.pticlic.R;
 import org.pticlic.Score;
 import org.pticlic.model.Constant;
 import org.pticlic.model.DownloadedGame;
-import org.pticlic.model.GamePlayed;
+import org.pticlic.model.Match;
 import org.pticlic.model.Network;
-import org.pticlic.model.Relation;
 import org.pticlic.model.Network.Mode;
-
-import com.google.gson.Gson;
+import org.pticlic.model.Relation;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -43,7 +41,7 @@ public class BaseGame extends Activity implements OnClickListener {
 	private int 		currentWord = 0;
 	private int 		nbWord = 0;
 	private DownloadedGame 		game;
-	private GamePlayed 	gamePlayed;
+	private Match 	gamePlayed;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -64,7 +62,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		nbWord = game.getNbWord();
 
 		// On initialise la partie.
-		gamePlayed = new GamePlayed();
+		gamePlayed = new Match();
 		gamePlayed.setGame(game);
 
 		Relation r = Relation.getInstance();
