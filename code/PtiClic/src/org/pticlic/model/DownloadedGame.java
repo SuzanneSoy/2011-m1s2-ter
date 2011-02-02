@@ -1,10 +1,15 @@
 package org.pticlic.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 
-public class Game implements Serializable {
+/**
+ * @author Bertrand BRUN
+ * 
+ * Classe metier reprensentant le jeu telecharger du serveur.
+ *
+ */
+public class DownloadedGame implements Serializable {
 
 	private static final long 	serialVersionUID = 1L;
 	
@@ -43,7 +48,7 @@ public class Game implements Serializable {
 	
 	
 
-	public Game(int id, int cat1, int cat2, int cat3, int cat4, Word center,
+	public DownloadedGame(int id, int cat1, int cat2, int cat3, int cat4, Word center,
 			Word[] cloud) {
 		super();
 		this.id = id;
@@ -55,6 +60,11 @@ public class Game implements Serializable {
 		this.cloud = cloud;
 	}
 
+	/**
+	 * Permet de recupere le nombre de relation que l'on va utiliser.
+	 * 
+	 * @return le nombre de relation
+	 */
 	public int getNbRelation() {
 		int res = 0;
 		

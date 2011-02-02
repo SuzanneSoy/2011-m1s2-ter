@@ -36,16 +36,22 @@ public class Network {
 	
 	private Mode mode;
 	private String serverURL;
+	private String id;
+	private String passwd;
 	
 	/**
 	 * Constructeur
 	 * 
 	 * @param serverURL Chaine de caractères représentant l'URL où se situe le serveur.
 	 * @param mode Le type de partie que l'on veut récupérer.
+	 * @param id L'indentifiant du joueur.
+	 * @param passwd Le mot de passe de l'utilisateur.
 	 */
-	public Network(String serverURL, Mode mode) {
+	public Network(String serverURL, Mode mode, String id, String passwd) {
 		this.mode = mode;
 		this.serverURL = serverURL;
+		this.id = id;
+		this.passwd = passwd;
 	}
 	
 	/**
@@ -53,12 +59,14 @@ public class Network {
 	 * @param nbGames Le nombre de parties que l'on veut récupérer.
 	 * @return
 	 */
-	public Game getGames(int nbGames) {
-		Game game = null;
+	public DownloadedGame getGames(int nbGames) {
+		DownloadedGame game = null;
 		try {
 			URL url = new URL(this.serverURL);
 			URLConnection connection = url.openConnection();
 			connection.addRequestProperty("action", "getparties");
+			connection.addRequestProperty("user", this.id);
+			connection.addRequestProperty("passwd", this.passwd);
 			connection.addRequestProperty("nb", String.valueOf(nbGames));
 			connection.addRequestProperty("mode", mode.value());
 			
@@ -89,14 +97,14 @@ public class Network {
 	 * @return Une nouvelle instance de Game.
 	 * @throws IOException
 	 */
-	private Game makeGame(JsonReader reader, Gson gson) throws IOException {
+	private DownloadedGame makeGame(JsonReader reader, Gson gson) throws IOException {
 		int 		id = -1;
 		int 		cat1 = -1;
 		int 		cat2 = -1;
 		int 		cat3 = -1;
 		int 		cat4 = -1;
-		Game.Word 	center = null;
-		Game.Word[]	cloud = null;
+		DownloadedGame.Word 	center = null;
+		DownloadedGame.Word[]	cloud = null;
 		
 		reader.beginObject();
 		while (reader != null && reader.hasNext()) {
@@ -112,15 +120,15 @@ public class Network {
 			} else if (name.equals("cat4")) {
 				cat4 = reader.nextInt();
 			} else if (name.equals("center")) {
-				center = gson.fromJson(reader, Game.Word.class);
+				center = gson.fromJson(reader, DownloadedGame.Word.class);
 			} else if (name.equals("cloud")) {
-				cloud = gson.fromJson(reader, Game.Word[].class);
+				cloud = gson.fromJson(reader, DownloadedGame.Word[].class);
 			} else {
 				reader.skipValue();
 			}
 		}
 		reader.endObject();
-		return new Game(id, cat1, cat2, cat3, cat4, center, cloud);
+		return new DownloadedGame(id, cat1, cat2, cat3, cat4, center, cloud);
 	}
 	
 	
@@ -128,25 +136,30 @@ public class Network {
 	 * Cette méthode permet d'envoyer les parties au serveur pour qu'il puisse les 
 	 * rajouter à la base de données, et calculer le score.
 	 * @param game La partie jouee par l'utilisateur 
-	 * @return <code>true</code> si on a pu envoyer la partie au serveur <code>false</code> sinon.
+	 * @return Le score sous forme JSON.
 	 */
-	public boolean sendGame(GamePlayed game) {
+	public DownloadedScore sendGame(GamePlayed game) {
+		DownloadedScore score = null;
 		try {
 			URL url = new URL(this.serverURL);
 			URLConnection connection = url.openConnection();
 			connection.addRequestProperty("action", "sendpartie");
+			connection.addRequestProperty("user", this.id);
+			connection.addRequestProperty("passwd", this.passwd);
 			connection.addRequestProperty("mode", mode.value());
 			
 			Gson gson = new Gson();
 			String json = gson.toJson(game);
 			
 			connection.addRequestProperty("json", json);
+			JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
 			
-			// TODO : Regarder si il ne faudrait pas que le serveur renvoie une valeur indiquant si l'action c'est bien derouler.
-			connection.connect();
+			// TODO : A changer lorsque je serais exactement ce que renvoie le serveur.
+			score = gson.fromJson(reader, DownloadedScore.class);
+			
 		} catch (IOException e) {
-			return false;
+			return score;
 		}
-		return true;
+		return score;
 	}
 }
