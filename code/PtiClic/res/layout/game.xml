@@ -4,45 +4,38 @@
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:orientation="vertical"
-		android:layout_weight="1">
+		android:layout_height="fill_parent" android:orientation="vertical" android:layout_weight="2">
 
 		<TextView android:id="@+id/mainWord" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:text="mainWord"
 			android:textStyle="bold" android:gravity="center" android:textSize="30dip">
 		</TextView>
 		<TextView android:id="@+id/currentWord" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:text="currentWord"
-			android:textStyle="bold" android:gravity="center" android:textSize="20dip">
+			android:text="currentWord"
+			android:textStyle="bold" android:textSize="20dip" android:layout_height="fill_parent" android:gravity="top|center">
 		</TextView>
 
 
 	</LinearLayout>
 
 	<LinearLayout android:orientation="horizontal"
-		android:layout_height="fill_parent" android:layout_width="fill_parent"
-		android:layout_weight="9">
+		android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_weight="10">
 
-		<Button android:id="@+id/relation1" android:text="relation1"
-			android:layout_height="wrap_content" android:layout_weight="1"
-			android:layout_width="fill_parent" android:layout_gravity="bottom">
-		</Button>
-		<Button android:id="@+id/relation2" android:text="relation2"
-			android:layout_height="wrap_content" android:layout_width="fill_parent"
-			android:layout_weight="1" android:layout_gravity="bottom">
-		</Button>
-		<Button android:id="@+id/trash" android:text="trash"
-			android:layout_width="fill_parent"
-			android:layout_weight="1" android:layout_gravity="bottom" android:layout_height="fill_parent">
-		</Button>
-		<Button android:id="@+id/relation3" android:text="relation3"
-			android:layout_height="wrap_content" android:layout_width="fill_parent"
-			android:layout_weight="1" android:layout_gravity="bottom">
-		</Button>
-		<Button android:id="@+id/relation4" android:text="relation4"
-			android:layout_height="wrap_content" android:layout_width="fill_parent"
-			android:layout_weight="1" android:layout_gravity="bottom">
-		</Button>
+		<ImageView android:id="@+id/relation1" 
+			android:src="@drawable/contenant" android:layout_weight="1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_gravity="center">
+		</ImageView>
+		<ImageView android:id="@+id/relation2"
+			android:src="@drawable/contenu" android:layout_weight="1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_gravity="center">
+		</ImageView>
+		<ImageView android:id="@+id/trash"
+			android:src="@android:drawable/ic_menu_delete" android:layout_weight="1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_gravity="center">
+		</ImageView>
+		<ImageView android:id="@+id/relation3"
+			android:src="@drawable/contraire" android:layout_weight="1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_gravity="center">
+		</ImageView>
+		<ImageView android:id="@+id/relation4"
+			android:src="@drawable/synonyme" android:layout_weight="1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_gravity="center">
+		</ImageView>
 
 	</LinearLayout>
 
