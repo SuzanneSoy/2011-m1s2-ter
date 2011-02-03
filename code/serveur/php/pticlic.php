@@ -229,16 +229,26 @@ function main($action) {
 	} else if($action == 1) { // "Set partie"
 		// Requête sql d'ajout d'informations (et calcul de résultat).
 		// TODO : nettoyer, finir
-		$gid = $_GET['gid']; // TODO : vérifier qu'on a bien distribué cette partie à cet utilisateur, et qu'il n'y a pas déjà répondu (répercuter ça sur le random_game).
-		$userReputation = 5; // TODO : un nombre entre 0 et 5 environ. Par ex. log(pointsUtilisateur) est un bon choix.
+		
+		$gid = $_GET['gid'];
+		
+		if(ĝid != $db->querySingle("SELECT gid FROM played_game WHERE login='".$user."'"))
+			mdie(3,"Cette partie n'est associée à votre nom d'utilisateur");
+
+		$userReputation = log($db->querySingle("SELECT score FROM user WHERE  login='".$user."'"));
+
 		$db->exec("begin transaction;");
-		$db->exec("insert into played_game(pgid, gid, login) values (null, $gid, null);");
+		$db->exec("INSERT INTO played_game(pgid, gid, login) VALUES (null, $gid, null);");
 		$pgid = $db->lastInsertRowID();
-		for ($i=0; $i < 10; $i++) {
+		
+		for($i=0; $i < 10; $i++)
+		{
 			$x = $_GET['$i'];
+			
 			// TODO : calculer le score. Score = proba[réponse de l'utilisateur]*coeff - proba[autres reponses]*coeff
 			// TODO : adapter le score en fonction de la réputation de l'utilisateur (plus quand il est jeune, pour le motiver, par ex. avec un terme constant qu'on ajoute).
 			$score = 1;
+
 			$db->exec("insert into played_game_cloud(pgid, gid, type, num, relation, weight, score) values($pgid, $gid, 1, ".$c['pos'].", $r1, ".($x*$userReputation).", ".$score.");");
 			// TODO : game_cloud(probaR_x_) += $réputationJoueur * $coeff
 			// TODO : game_cloud(totalWeight) += $réputationJoueur * $coeff (NOTE : même coeff que pour game_cloud(probaR_x_))
