@@ -65,6 +65,5 @@ public class Score extends Activity implements OnClickListener{
 		if (v.getId()==R.id.saw) {
 			finish();
 		}
-		
 	}
 }

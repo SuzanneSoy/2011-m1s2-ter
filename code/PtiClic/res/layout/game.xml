@@ -3,17 +3,17 @@
 	android:layout_height="fill_parent" android:orientation="vertical"
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<LinearLayout android:id="@+id/widget40"
-		android:layout_width="fill_parent" android:layout_height="fill_parent"
-		android:orientation="vertical" android:layout_weight="1">
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:orientation="vertical"
+		android:layout_weight="1">
 
 		<TextView android:id="@+id/mainWord" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:text="mainWord"
-			android:textSize="30sp" android:textStyle="bold" android:gravity="center">
+			android:textStyle="bold" android:gravity="center" android:textSize="30dip">
 		</TextView>
 		<TextView android:id="@+id/currentWord" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:text="currentWord"
-			android:textStyle="bold" android:gravity="center">
+			android:textStyle="bold" android:gravity="center" android:textSize="20dip">
 		</TextView>
 
 
@@ -32,8 +32,8 @@
 			android:layout_weight="1" android:layout_gravity="bottom">
 		</Button>
 		<Button android:id="@+id/trash" android:text="trash"
-			android:layout_height="wrap_content" android:layout_width="fill_parent"
-			android:layout_weight="1" android:layout_gravity="bottom">
+			android:layout_width="fill_parent"
+			android:layout_weight="1" android:layout_gravity="bottom" android:layout_height="fill_parent">
 		</Button>
 		<Button android:id="@+id/relation3" android:text="relation3"
 			android:layout_height="wrap_content" android:layout_width="fill_parent"

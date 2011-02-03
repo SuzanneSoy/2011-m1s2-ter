@@ -19,11 +19,17 @@ public class FrontPage extends Activity implements OnClickListener{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.frontpage);
+		
 		// Écoute des clics sur les différents boutons
 		((ImageView)findViewById(R.id.prefs)).setOnClickListener(this);
 		((ImageView)findViewById(R.id.play)).setOnClickListener(this);
 		((ImageView)findViewById(R.id.infoButton)).setOnClickListener(this);
-
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
 		// On récupère le nom du joueur des préférences.
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		String loginPref = sp.getString("login", "joueur");

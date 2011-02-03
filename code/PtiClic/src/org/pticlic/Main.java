@@ -29,5 +29,12 @@ public class Main extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 		
 	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+
+		finish();
+	}
 
 }
