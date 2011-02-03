@@ -1,8 +1,7 @@
 package org.pticlic;
 
 import org.pticlic.model.Constant;
-import org.pticlic.model.DownloadedScore;
-import org.pticlic.model.GamePlayed;
+import org.pticlic.model.Match;
 import org.pticlic.model.Network;
 import org.pticlic.model.Network.Mode;
 
@@ -21,7 +20,7 @@ import android.widget.Button;
  */
 public class Score extends Activity implements OnClickListener{
 	
-	private GamePlayed 	gamePlayed;
+	private Match 	gamePlayed;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +35,7 @@ public class Score extends Activity implements OnClickListener{
 		
 		if (getIntent().getExtras() != null) {
 			// Pour JC : GamePlayed contient toutes les infos sur la partie jouee
-			this.gamePlayed = (GamePlayed) getIntent().getExtras().get(Constant.SCORE_GAMEPLAYED);
+			this.gamePlayed = (Match) getIntent().getExtras().get(Constant.SCORE_GAMEPLAYED);
 			mode = (Mode) getIntent().getExtras().get(Constant.SCORE_MODE);
 		}
 
@@ -66,6 +65,5 @@ public class Score extends Activity implements OnClickListener{
 		if (v.getId()==R.id.saw) {
 			finish();
 		}
-		
 	}
 }

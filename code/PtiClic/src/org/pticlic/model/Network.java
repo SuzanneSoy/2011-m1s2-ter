@@ -21,24 +21,24 @@ public class Network {
 	public enum Action {
 		GET_GAMES
 	}
-	
+
 	public enum Mode {
 		SIMPLE_GAME("normal");
-		
+
 		private final String value;
-		
+
 		Mode(String value) {
 			this.value = value;
 		}
-		
+
 		private String value() { return value; }
 	}
-	
+
 	private Mode mode;
 	private String serverURL;
 	private String id;
 	private String passwd;
-	
+
 	/**
 	 * Constructeur
 	 * 
@@ -53,7 +53,7 @@ public class Network {
 		this.id = id;
 		this.passwd = passwd;
 	}
-	
+
 	/**
 	 * Cette méthode permet de récupérer du serveur un certain nombre de parties.
 	 * @param nbGames Le nombre de parties que l'on veut récupérer.
@@ -69,10 +69,10 @@ public class Network {
 			connection.addRequestProperty("passwd", this.passwd);
 			connection.addRequestProperty("nb", String.valueOf(nbGames));
 			connection.addRequestProperty("mode", mode.value());
-			
+
 			Gson gson = new Gson();
 			JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-			
+
 			// FIXME : Attention lorsque l'on pourra vraiment recupere plusieur partie, il faudra changer ce qui suit.
 			reader.beginArray();
 			while (reader.hasNext()) {
@@ -82,13 +82,13 @@ public class Network {
 			reader.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			
+
 			return null;
 		}
-		
+
 		return game;
 	}
-	
+
 	/**
 	 * Permet la transformation du Json en une instance de Game.
 	 * 
@@ -105,7 +105,7 @@ public class Network {
 		int 		cat4 = -1;
 		DownloadedGame.Word 	center = null;
 		DownloadedGame.Word[]	cloud = null;
-		
+
 		reader.beginObject();
 		while (reader != null && reader.hasNext()) {
 			String name = reader.nextName();
@@ -130,16 +130,16 @@ public class Network {
 		reader.endObject();
 		return new DownloadedGame(id, cat1, cat2, cat3, cat4, center, cloud);
 	}
-	
-	
+
+
 	/**
 	 * Cette méthode permet d'envoyer les parties au serveur pour qu'il puisse les 
 	 * rajouter à la base de données, et calculer le score.
 	 * @param game La partie jouee par l'utilisateur 
 	 * @return Le score sous forme JSON.
 	 */
-	public DownloadedScore sendGame(GamePlayed game) {
-		DownloadedScore score = null;
+	public TotalScore sendGame(Match game) {
+		TotalScore score = null;
 		try {
 			URL url = new URL(this.serverURL);
 			URLConnection connection = url.openConnection();
@@ -147,16 +147,37 @@ public class Network {
 			connection.addRequestProperty("user", this.id);
 			connection.addRequestProperty("passwd", this.passwd);
 			connection.addRequestProperty("mode", mode.value());
+
+			if (game.getGame().getCat1() != -1) {
+				for (Integer i : game.getRelation1()) {
+					connection.addRequestProperty("cat1[]", i.toString());
+				}
+			}
+			if (game.getGame().getCat2() != -1) {
+				for (Integer i : game.getRelation2()) {
+					connection.addRequestProperty("cat2[]", i.toString());
+				}
+			}
+			if (game.getGame().getCat3() != -1) {
+				for (Integer i : game.getRelation3()) {
+					connection.addRequestProperty("cat3[]", i.toString());
+				}
+			}
+			if (game.getGame().getCat4() != -1) {
+				for (Integer i : game.getRelation4()) {
+					connection.addRequestProperty("cat4[]", i.toString());
+				}
+			}
+			for (Integer i : game.getTrash()) {
+				connection.addRequestProperty("trash[]", i.toString());
+			}
 			
 			Gson gson = new Gson();
-			String json = gson.toJson(game);
-			
-			connection.addRequestProperty("json", json);
 			JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+
+			score = gson.fromJson(reader, TotalScore.class);
 			
-			// TODO : A changer lorsque je serais exactement ce que renvoie le serveur.
-			score = gson.fromJson(reader, DownloadedScore.class);
-			
+
 		} catch (IOException e) {
 			return score;
 		}
