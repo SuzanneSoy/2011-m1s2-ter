@@ -18,8 +18,7 @@ if (!$db = new SQlite3($SQL_DBNAME)) {
 
 function initdb() {
 	global $db;
-	$db->exec("insert into user(login, mail, hash_passwd) values('foo', 'foo@isp.com', '".md5('bar')."');");
-	echo "INIT DB";
+	$db->exec("insert into user(login, mail, hash_passwd, score) values('foo', 'foo@isp.com', '".md5('bar')."', 0);");
 }
 
 if ($do_initdb) { initdb(); }
