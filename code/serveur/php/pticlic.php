@@ -12,16 +12,17 @@ function mDie($err,$msg)
 	exit;
 }
 
-if (!$db = new SQLite3('db')) {
+if (!$db = new SQlite3($SQL_DBNAME)) {
 	mDie(1,"Erreur lors de l'ouverture de la base de données SQLite3");
 }
 
 function initdb() {
 	global $db;
 	$db->exec("insert into user(login, mail, hash_passwd) values('foo', 'foo@isp.com', '".md5('bar')."');");
+	echo "INIT DB";
 }
 
-if ($do_initdb) initdb();
+if ($do_initdb) { initdb(); }
 
 if(!isset($_GET['action']) || !isset($_GET['user']) || !isset($_GET['passwd']))
 	mDie(2,"La requête est incomplète");
@@ -179,8 +180,6 @@ function create_game($cloudSize) {
 	cg_insert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
 }
 
-//create_game(10);
-
 function random_game() {
 	global $db;
 	return $db->querySingle("select gid from game where gid = (abs(random()) % (select max(gid) from game))+1 or gid = (select max(gid) from game where gid > 0) order by gid limit 1;");
@@ -196,15 +195,26 @@ function game2json($game_id) {
 	echo "cloudsize:10,cloud:["; // TODO ! compter dynamiquement.
 	
 	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word from game_cloud where gid = ".$game['gid'].";");
+	$notfirst = false;
 	while ($x = $res->fetchArray()) {
-		echo "{id:".$x['eid_word'].",name:".$x['name_word']."}\n";
+		if ($notfirst) { echo ","; } else { $notfirst=true; }
+		echo "{id:".$x['eid_word'].",name:".$x['name_word']."}";
 	}
 	echo "]}";
 }
 
-function main() {
+function main($action) {
 	// Sinon tout est bon on effectu l'opération correspondant à la commande passée.
-	if($action == 0) { // "Get partie"
+	// TODO : en production, utiliser : header("Content-Type: application/json; charset=utf-8");
+	header("Content-Type: text/plain; charset=utf-8");
+	if  ($action == 2) { // "Create partie"
+		if(!isset($_GET['nb']) || !isset($_GET['mode']))
+			mDie(2,"La requête est incomplète");
+		$nbParties = intval($_GET['nb']);
+		for ($i = 0; $i < $nbParties; $i++) {
+			create_game(10);
+		}
+	} else if ($action == 0) { // "Get partie"
 		if(!isset($_GET['nb']) || !isset($_GET['mode']))
 			mDie(2,"La requête est incomplète");
 		$nbGames = intval($_GET['nb']);
@@ -241,5 +251,7 @@ function main() {
 		die("Commande inconnue");
 	}
 }
-	
+
+main($action);
+
 ?>
