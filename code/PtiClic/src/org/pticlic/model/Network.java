@@ -5,6 +5,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
@@ -52,6 +55,15 @@ public class Network {
 		this.serverURL = serverURL;
 		this.id = id;
 		this.passwd = passwd;
+	}
+
+	public static boolean isConnected(Context context) {
+		ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);		
+		if (cm != null && (cm.getActiveNetworkInfo() == null 
+				|| !cm.getActiveNetworkInfo().isConnected())) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -171,12 +183,12 @@ public class Network {
 			for (Integer i : game.getTrash()) {
 				connection.addRequestProperty("trash[]", i.toString());
 			}
-			
+
 			Gson gson = new Gson();
 			JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
 
 			score = gson.fromJson(reader, TotalScore.class);
-			
+
 
 		} catch (IOException e) {
 			return score;

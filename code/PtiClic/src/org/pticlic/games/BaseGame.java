@@ -11,6 +11,8 @@ import org.pticlic.model.Relation;
 
 import android.R.anim;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -41,12 +43,14 @@ import android.widget.TextView;
  * proposer celle qui lui semble le mieux approprier.
  *
  */
+
 public class BaseGame extends Activity implements OnClickListener, AnimationListener {
 	private int 			currentWord = 0;
 	private TextView 		currentWordTextView;
 	private int 			nbWord = 0;
 	private DownloadedGame	game;
 	private Match 			match;
+	private Network 		network;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -62,6 +66,7 @@ public class BaseGame extends Activity implements OnClickListener, AnimationList
 
 		// On initialise la classe permettant la communication avec le serveur.
 		Network network = new Network(serverURL, Mode.SIMPLE_GAME, id, passwd);
+
 		game = network.getGames(1);
 		int nbrel = game.getNbRelation();
 		nbWord = game.getNbWord();
@@ -70,14 +75,14 @@ public class BaseGame extends Activity implements OnClickListener, AnimationList
 		match = new Match();
 		match.setGame(game);
 
-		Relation r = Relation.getInstance();
-		
 		// Boutons des relations
 		ImageView r1 = ((ImageView)findViewById(R.id.relation1));
 		ImageView r2 = ((ImageView)findViewById(R.id.relation2));
 		ImageView r3 = ((ImageView)findViewById(R.id.relation3));
 		ImageView r4 = ((ImageView)findViewById(R.id.relation4));
-		
+
+		Relation r = Relation.getInstance();
+
 		// TODO : Pour l'instant la poubelle ne fait rien. Il faudra certainement la ranger dans un categorie dans GamePlayed pour calculer le score.
 		ImageView trash = ((ImageView)findViewById(R.id.trash));
 		trash.setOnClickListener(this);
@@ -122,7 +127,7 @@ public class BaseGame extends Activity implements OnClickListener, AnimationList
 		//On recupere le centre de mainWord pour l'animation de translation.
 		TextView mainWord = (TextView)findViewById(R.id.mainWord);
 		currentWordTextView = (TextView)findViewById(R.id.currentWord);
-		
+
 		// On defini un ensemble d'animation
 		AnimationSet set = new AnimationSet(true);
 		set.setDuration(1000);
@@ -189,18 +194,18 @@ public class BaseGame extends Activity implements OnClickListener, AnimationList
 
 	@Override
 	public void onAnimationEnd(Animation animation) {
-		
+
 	}
 
 	@Override
 	public void onAnimationRepeat(Animation animation) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onAnimationStart(Animation animation) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
