@@ -113,6 +113,7 @@ function cg_build_cloud($cloudSize, $sources, $sumWeights) {
 	$cloud = array();
 	$nbFailed = 0;
 	$i = 0;
+	$totalDifficulty = 0;
 	while ($i < $cloudSize && $nbFailed < 5*$cloudSize) {
 		// On choisit une source aléatoire en tennant compte des poids.
 		$rands = rand(1,$sumWeights);
@@ -141,20 +142,22 @@ function cg_build_cloud($cloudSize, $sources, $sumWeights) {
 			continue;
 		}
 		// position dans le nuage, difficulté, eid, probaR1, probaR2
+		$totalDifficulty += $src['d'];
 		$cloud[$i] = array('pos'=>$i++, 'd'=>$src['d'], 'eid'=>$res['eid'], 'probaR1'=>$res['r1'], 'probaR2'=>$res['r2'], 'probaR0'=>$res['r0'], 'probaTrash'=>$res['trash']);
 	}
 	$res = $sources['rand']['resultSet'][0];
 	while ($i < $cloudSize) {
+		$totalDifficulty += $sources['rand']['d'];
 		$cloud[$i] = array('pos'=>$i++, 'd'=>$sources['rand']['d'], 'eid'=>random_node(), 'probaR1'=>$res['r1'], 'probaR2'=>$res['r2'], 'probaR0'=>$res['r0'], 'probaTrash'=>$res['trash']);
 	}
-	return $cloud;
+	return array($cloud, $totalDifficulty);
 }
 
-function cg_insert($centerEid, $cloud, $r1, $r2) {
+function cg_insert($centerEid, $cloud, $r1, $r2, $totalDifficulty) {
 	// Insère dans la base une partie avec le mot central $centerEid, le nuage $cloud et les relations $r1 et $r2
 	global $db;
 	$db->exec("begin transaction;");
-	$db->exec("insert into game(gid, eid_central_word, relation_1, relation_2) values (null, $centerEid, $r1, $r2);");
+	$db->exec("insert into game(gid, eid_central_word, relation_1, relation_2, difficulty) values (null, $centerEid, $r1, $r2, $totalDifficulty);");
 	$gid = $db->lastInsertRowID();
 	$db->exec("insert into played_game(pgid, gid, login) values (null, $gid, null);");
 	$pgid = $db->lastInsertRowID();
@@ -172,64 +175,71 @@ function create_game($cloudSize) {
 	$centerEid = random_node();
 	$r1 = cg_choose_relations(); $r2 = $r1[1]; $r1 = $r1[0];
 	$sources = cg_build_result_sets($cloudSize, $centerEid, $r1, $r2); $sumWeights = $sources[1]; $sources = $sources[0];
-	$cloud = cg_build_cloud($cloudSize, $sources, $sumWeights);
-	cg_insert($centerEid, $cloud, $r1, $r2);
+	$cloud = cg_build_cloud($cloudSize, $sources, $sumWeights); $totalDifficulty = $cloud[1]; $cloud = $cloud[0];
+	cg_insert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
 }
 
-create_game(10);
-echo "ok\n";
-exit;
+//create_game(10);
 
-// // Sinon tout est bon on effectu l'opération correspondant à la commande passée.
-// if($action == 0)						// "Get partie" 
-// {
-// 	// Requête sql de création de partie.
-// 	$req = "...";
-	
-// 	$sql = sqlConnect();
-// 	$resp = mysql_query($req);
-	
-// 	if(mysql_num_rows($resp) == 0)
-// 		echo mysql_error();
-// 	else
-// 	{
-// 		$sequence = "...";
-// 		echo $sequence;
-// 	}
-	
-// 	mysql_close($sql);
-// }
-// else if($action == 1)					// "Set partie"
-// {
-// 	// Requête sql d'ajout d'informations (et calcul de résultat).
-// 	$req = "...";
-	
-// 	$sql = sqlConnect();
-// 	$resp = mysql_query($req);
-	
-// 	if(mysql_num_rows($resp) == 0)
-// 		echo mysql_error();
-// 	else
-// 	{
-// 		$sequence = "...";
-// 		echo $sequence;
-// 	}
-	
-// 	mysql_close($sql);
-// }
-// else if($action == 2)
-// {
+function random_game() {
+	global $db;
+	return $db->querySingle("select gid from game where gid = (abs(random()) % (select max(gid) from game))+1 or gid = (select max(gid) from game where gid > 0) order by gid limit 1;");
+}
 
-// }
-// else if($action == 3)
-// {
+function game2json($game_id) {
+	global $db;
+	// TODO Yoann : faire des tests d'erreur pour ces select ?
+	$game = $db->query("select gid, (select name from node where eid = eid_central_word) as name_central_word, eid_central_word, relation_1, relation_2 from game where gid = ".$game_id.";");
+	$game = $game->fetchArray();
+	echo "{id:".$game['gid'].",cat1:".$game['relation_1'].",cat2:".$game['relation_2'].",cat3:0,cat4:-1,";
+	echo "center:{id:".$game['eid_central_word'].",name:".json_encode("".$game['name_central_word'])."},";
+	echo "cloudsize:10,cloud:["; // TODO ! compter dynamiquement.
+	
+	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word from game_cloud where gid = ".$game['gid'].";");
+	while ($x = $res->fetchArray()) {
+		echo "{id:".$x['eid_word'].",name:".$x['name_word']."}\n";
+	}
+	echo "]}";
+}
 
-// }
-// else if($action == 4)
-// {
-
-// }
-// else
-// 	die("Commande inconnue");
+function main() {
+	// Sinon tout est bon on effectu l'opération correspondant à la commande passée.
+	if($action == 0) { // "Get partie"
+		if(!isset($_GET['nb']) || !isset($_GET['mode']))
+			mDie(2,"La requête est incomplète");
+		$nbGames = intval($_GET['nb']);
+	
+		echo "[";
+		for ($i=0; $i < $nbGames; $i) {
+			game2json(random_game());
+			if ((++$i) < $nbGames) {
+				echo ",";
+			}
+		}
+		echo "]";
+	} else if($action == 1) { // "Set partie"
+		// Requête sql d'ajout d'informations (et calcul de résultat).
+		// TODO : nettoyer, finir
+		$gid = $_GET['gid']; // TODO : vérifier qu'on a bien distribué cette partie à cet utilisateur, et qu'il n'y a pas déjà répondu (répercuter ça sur le random_game).
+		$userReputation = 5; // TODO : un nombre entre 0 et 5 environ. Par ex. log(pointsUtilisateur) est un bon choix.
+		$db->exec("begin transaction;");
+		$db->exec("insert into played_game(pgid, gid, login) values (null, $gid, null);");
+		$pgid = $db->lastInsertRowID();
+		for ($i=0; $i < 10; $i++) {
+			$x = $_GET['$i'];
+			// TODO : calculer le score. Score = proba[réponse de l'utilisateur]*coeff - proba[autres reponses]*coeff
+			// TODO : adapter le score en fonction de la réputation de l'utilisateur (plus quand il est jeune, pour le motiver, par ex. avec un terme constant qu'on ajoute).
+			$score = 1;
+			$db->exec("insert into played_game_cloud(pgid, gid, type, num, relation, weight, score) values($pgid, $gid, 1, ".$c['pos'].", $r1, ".($x*$userReputation).", ".$score.");");
+			// TODO : game_cloud(probaR_x_) += $réputationJoueur * $coeff
+			// TODO : game_cloud(totalWeight) += $réputationJoueur * $coeff (NOTE : même coeff que pour game_cloud(probaR_x_))
+		}
+		$db->exec("commit;");
+		// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
+		game2json(random_game());
+	} else {
+		die("Commande inconnue");
+	}
+}
 	
 ?>
