@@ -60,6 +60,47 @@ Un grand nombre de développeurs ont créés des applications pour étendre la f
 
 \section{Conception}
 
+NODE(EID integer primary key autoincrement, name string, #type (ref TYPE_NODE.num), weight);
+
+RELATION(RID integer primary key autoincrement, #start (ref NODE.eid), #end (ref NODE.eid), #type (ref TYPE_RELATION.num), weight);
+
+TYPE_NODE(NUM, name string);
+
+TYPE_RELATION(NUM, name string, extended_name string, info string);
+
+USER(LOGIN string primary key, mail string, hash_passwd string (md5sum du password), #score (contrainte : somme de tous les scores des PLAYED_GAME_CLOUD);
+
+GAME(GID integer primary key autoincrement, #eid_central_word (ref NODE.eid, #relation_1 (ref RELATION.rid), #relation_2 ( (ref RELATION.rid), difficulty);
+
+GAME_CLOUD(GID, NUM, difficulty, #eid_word(ref NODE.eid), totalWeight (contrainte : = somme des probas), probaR1 (contrainte : = somme des probas des PLAYED_GAME_CLOUD.weight avec la bonne relation et la même gid et num), probaR2 (idem), probaR0 (idem), probaTrash (idem));
+
+PLAYED_GAME(PGID integer primary key autoincrement, #gid (ref GAME.gid), #login (ref USER.login);
+
+PLAYED_GAME_CLOUD(#PGID (ref PLAYED_GAME.pgid), #GID (ref PLAYED_GAME.gid), NUM, type (contrainte : 0 = partie de référence, 1 = réponse d'un joueur), #relation (ref RELATION.rid), weight (contrainte : probabilité estimée de cette réponse pour les bots (robots), réputation du joueur sinon), score (score donné au joueur, 0 pour les bots);
+
+**INT unless otherwise marked
+
+
+create table node(eid integer primary key autoincrement, name, type, weight);
+create table relation(rid integer primary key autoincrement, start, end, type, weight);
+create table type_node(name, num);
+create table type_relation(name, num, extended_name, info);
+create table user(login primary key, mail, hash_passwd, score);
+create table game(gid integer primary key autoincrement, eid_central_word, relation_1, relation_2, difficulty);
+create table game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash);
+create table played_game(pgid integer primary key autoincrement, gid, login);
+create table played_game_cloud(pgid, gid, type, num, relation, weight, score);
+
+
+
+
+create index i_relation_start on relation(start);
+create index i_relation_end on relation(end);
+create index i_relation_type on relation(type);
+create index i_relation_start_type on relation(start,type);
+create index i_relation_end_type on relation(end,type);
+
+
 TODO: UML, diagrammes de classes, Use cases, etc...
 
 
