@@ -9,18 +9,22 @@ import org.pticlic.model.Network;
 import org.pticlic.model.Network.Mode;
 import org.pticlic.model.Relation;
 
+import android.R.anim;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -37,11 +41,12 @@ import android.widget.TextView;
  * proposer celle qui lui semble le mieux approprier.
  *
  */
-public class BaseGame extends Activity implements OnClickListener {
-	private int 		currentWord = 0;
-	private int 		nbWord = 0;
-	private DownloadedGame 		game;
-	private Match 	gamePlayed;
+public class BaseGame extends Activity implements OnClickListener, AnimationListener {
+	private int 			currentWord = 0;
+	private TextView 		currentWordTextView;
+	private int 			nbWord = 0;
+	private DownloadedGame	game;
+	private Match 			match;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -62,28 +67,27 @@ public class BaseGame extends Activity implements OnClickListener {
 		nbWord = game.getNbWord();
 
 		// On initialise la partie.
-		gamePlayed = new Match();
-		gamePlayed.setGame(game);
+		match = new Match();
+		match.setGame(game);
 
 		Relation r = Relation.getInstance();
-
+		
 		// Boutons des relations
-		Button r1 = ((Button)findViewById(R.id.relation1));
-		Button r2 = ((Button)findViewById(R.id.relation2));
-		Button r3 = ((Button)findViewById(R.id.relation3));
-		Button r4 = ((Button)findViewById(R.id.relation4));
-
+		ImageView r1 = ((ImageView)findViewById(R.id.relation1));
+		ImageView r2 = ((ImageView)findViewById(R.id.relation2));
+		ImageView r3 = ((ImageView)findViewById(R.id.relation3));
+		ImageView r4 = ((ImageView)findViewById(R.id.relation4));
+		
 		// TODO : Pour l'instant la poubelle ne fait rien. Il faudra certainement la ranger dans un categorie dans GamePlayed pour calculer le score.
-		Button trash = ((Button)findViewById(R.id.trash));
+		ImageView trash = ((ImageView)findViewById(R.id.trash));
 		trash.setOnClickListener(this);
-		trash.setText("poubelle");
+		trash.setImageResource(android.R.drawable.ic_menu_delete);
 
 		// Écoute des clics sur les relations
-		if (nbrel > 0) { r1.setOnClickListener(this); r1.setText(r.getRelationName(game.getCat1())); } else { r1.setVisibility(View.GONE); }
-		if (nbrel > 1) { r2.setOnClickListener(this); r2.setText(r.getRelationName(game.getCat2()));} else { r2.setVisibility(View.GONE); }
-		if (nbrel > 2) { r3.setOnClickListener(this); r3.setText(r.getRelationName(game.getCat3()));} else { r3.setVisibility(View.GONE); }
-		if (nbrel > 3) { r4.setOnClickListener(this); r4.setText(r.getRelationName(game.getCat4()));} else { r4.setVisibility(View.GONE); }
-
+		if (nbrel > 0) { r1.setOnClickListener(this); r1.setImageResource(r.getRelationImage(game.getCat1())); } else { r1.setVisibility(View.GONE); }
+		if (nbrel > 1) { r2.setOnClickListener(this); r2.setImageResource(r.getRelationImage(game.getCat2()));} else { r2.setVisibility(View.GONE); }
+		if (nbrel > 2) { r3.setOnClickListener(this); r3.setImageResource(r.getRelationImage(game.getCat3()));} else { r3.setVisibility(View.GONE); }
+		if (nbrel > 3) { r4.setOnClickListener(this); r4.setImageResource(r.getRelationImage(game.getCat4()));} else { r4.setVisibility(View.GONE); }		
 
 		((TextView)findViewById(R.id.mainWord)).setText(DownloadedGame.getName(game.getCentre()));
 	}
@@ -117,22 +121,31 @@ public class BaseGame extends Activity implements OnClickListener {
 
 		//On recupere le centre de mainWord pour l'animation de translation.
 		TextView mainWord = (TextView)findViewById(R.id.mainWord);
-
+		currentWordTextView = (TextView)findViewById(R.id.currentWord);
+		
 		// On defini un ensemble d'animation
 		AnimationSet set = new AnimationSet(true);
-		set.setFillAfter(true);
 		set.setDuration(1000);
+		set.setFillAfter(true);
+		set.setAnimationListener(this);
 
 		TranslateAnimation translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 2);
-		translate.setDuration(1000);
+		translate.setDuration(500);
 		set.addAnimation(translate);
 
-		AlphaAnimation alpha = new AlphaAnimation(.1f, 1);
+		AlphaAnimation alpha = new AlphaAnimation(0, 1);
 		alpha.setDuration(1000);
 		set.addAnimation(alpha);
 
 		// Que l'on rajoute a notre vue.
-		findViewById(R.id.currentWord).startAnimation(set);
+		currentWordTextView.startAnimation(set);
+	}
+
+	/**
+	 *  
+	 */
+	private void leaveView() {
+		currentWordTextView.clearAnimation();
 	}
 
 	/**
@@ -148,10 +161,11 @@ public class BaseGame extends Activity implements OnClickListener {
 	 */
 	private void next() {
 		if (++currentWord < nbWord) {
+			leaveView();
 			start();
 		} else {
 			Intent intent = new Intent(this, Score.class);
-			intent.putExtra(Constant.SCORE_GAMEPLAYED, gamePlayed);
+			intent.putExtra(Constant.SCORE_GAMEPLAYED, match);
 			intent.putExtra(Constant.SCORE_MODE, Mode.SIMPLE_GAME);
 
 			startActivityForResult(intent, 0x100);
@@ -165,11 +179,28 @@ public class BaseGame extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		int currentWord = game.getWordInCloud(this.currentWord).getId();
 		switch (v.getId()) {
-		case (R.id.relation1) : gamePlayed.add(1, currentWord); next();	break;
-		case (R.id.relation2) : gamePlayed.add(2, currentWord); next(); break;
-		case (R.id.relation3) : gamePlayed.add(3, currentWord); next(); break;
-		case (R.id.relation4) : gamePlayed.add(4, currentWord); next(); break;
-		case (R.id.trash) : gamePlayed.add(0, currentWord); next(); break;
+		case (R.id.relation1) : match.add(1, currentWord); next();	break;
+		case (R.id.relation2) : match.add(2, currentWord); next(); break;
+		case (R.id.relation3) : match.add(3, currentWord); next(); break;
+		case (R.id.relation4) : match.add(4, currentWord); next(); break;
+		case (R.id.trash) : match.add(0, currentWord); next(); break;
 		}
+	}
+
+	@Override
+	public void onAnimationEnd(Animation animation) {
+		
+	}
+
+	@Override
+	public void onAnimationRepeat(Animation animation) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAnimationStart(Animation animation) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -2,7 +2,7 @@ package org.pticlic.model;
 
 import java.util.HashMap;
 
-import android.widget.ImageView;
+import org.pticlic.R;
 
 /**
  * @author Bertrand BRUN
@@ -16,9 +16,15 @@ public class Relation {
 	private static Relation instance = null;
 	
 	HashMap<Integer, String> stringRelations;
-	HashMap<Integer, ImageView> imageRelations;
+	HashMap<Integer, Integer> imageRelations;
 	
 	private Relation() {
+		imageRelations = new HashMap<Integer, Integer>();
+		imageRelations.put(5, R.drawable.synonyme);
+		imageRelations.put(7, R.drawable.contraire);
+		imageRelations.put(9, R.drawable.contenu);
+		imageRelations.put(10, R.drawable.contenant);
+		
 		stringRelations = new HashMap<Integer, String>();
 		stringRelations.put(-1, "");
 		stringRelations.put(0, "idée");
@@ -71,5 +77,9 @@ public class Relation {
 	
 	public String getRelationName(int id) {
 		return stringRelations.get(id);
+	}
+	
+	public Integer getRelationImage(int id) {
+		return imageRelations.get(id);
 	}
 }

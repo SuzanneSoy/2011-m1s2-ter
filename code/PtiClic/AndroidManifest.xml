@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.pticlic"
       android:versionCode="1" android:versionName="@string/version">
-    <application android:icon="@drawable/icon" android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar">
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar" android:debuggable="true">
         <activity android:name=".Main" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -10,11 +10,11 @@
             </intent-filter>
         </activity>
 
-    <activity android:name=".Preference" android:label="Préférence" android:screenOrientation="portrait"></activity>
-    <activity android:name=".games.BaseGame" android:screenOrientation="portrait"></activity>
-    <activity android:label="Information" android:name=".Information" android:screenOrientation="portrait"></activity>
-    <activity android:name=".Score" android:label="Score" android:screenOrientation="portrait"></activity>
-<activity android:name=".FrontPage" android:screenOrientation="portrait"></activity>
+    <activity android:name=".Preference" android:label="Préférence"></activity>
+    <activity android:name=".games.BaseGame"></activity>
+    <activity android:label="Information" android:name=".Information"></activity>
+    <activity android:name=".Score" android:label="Score"></activity>
+<activity android:name=".FrontPage"></activity>
 </application>
 
 
