@@ -7,7 +7,6 @@
 		android:layout_height="fill_parent" android:orientation="vertical"
 		android:layout_weight="2">
 
-
 		<AbsoluteLayout android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:paddingTop="10px">
 
@@ -17,22 +16,16 @@
 				android:paddingTop="10px" android:layout_height="fill_parent"
 				android:layout_width="fill_parent">
 			</TextView>
-
-
-
-
-
-
+			
 			<LinearLayout android:layout_width="fill_parent"
 				android:layout_height="fill_parent" android:gravity="right">
 
-				<ImageView android:src="@drawable/aide"
-					android:id="@+id/aideBaseGame" android:paddingRight="10px"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"></ImageView>
+				<ImageView android:src="@drawable/aide" android:id="@+id/aideBaseGame"
+					android:paddingRight="10px" android:layout_width="wrap_content"
+					android:layout_height="wrap_content"></ImageView>
 
 			</LinearLayout>
-
-
+			
 		</AbsoluteLayout>
 
 		<TextView android:id="@+id/currentWord" android:layout_width="fill_parent"
@@ -40,35 +33,87 @@
 			android:layout_height="fill_parent" android:gravity="top|center">
 		</TextView>
 
+	</LinearLayout>
 
-	
-</LinearLayout>
+	<LinearLayout android:layout_height="fill_parent"
+		android:layout_width="fill_parent" android:layout_weight="10"
+		android:orientation="horizontal" android:id="@+id/menuLayout">
 
-	<LinearLayout android:orientation="horizontal"
-		android:layout_height="fill_parent" android:layout_width="fill_parent"
-		android:layout_weight="10">
-
-		<ImageView android:id="@+id/relation1" android:src="@drawable/contenant"
-			android:layout_weight="1" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:layout_gravity="center">
-		</ImageView>
-		<ImageView android:id="@+id/relation2" android:src="@drawable/contenu"
-			android:layout_weight="1" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:layout_gravity="center">
-		</ImageView>
-		<ImageView android:id="@+id/relation3" android:src="@drawable/contraire"
-			android:layout_weight="1" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:layout_gravity="center">
-		</ImageView>
-		<ImageView android:id="@+id/relation4" android:src="@drawable/synonyme"
-			android:layout_weight="1" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:layout_gravity="center">
-		</ImageView>
-		<ImageView android:id="@+id/trash" android:src="@android:drawable/ic_menu_delete"
-			android:layout_weight="1" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:layout_gravity="center">
-		</ImageView>
-
+		<LinearLayout android:layout_height="wrap_content"
+			android:layout_width="fill_parent" android:orientation="horizontal"
+			android:id="@+id/relation1Layout" android:layout_weight="1" android:layout_gravity="center">
+			<ImageView android:id="@+id/relation1" android:src="@drawable/contenant"
+				android:layout_weight="1" android:layout_height="wrap_content"
+				android:layout_width="wrap_content">
+			</ImageView>
+			<TextView android:id="@+id/relation1Name"
+				android:layout_width="wrap_content" android:text="contenant"
+				android:textStyle="bold" android:textSize="15dip"
+				android:layout_height="wrap_content" android:layout_weight="3"
+				android:layout_gravity="center_vertical" android:visibility="gone">
+			</TextView>
+		</LinearLayout>
+		
+		<LinearLayout android:layout_height="wrap_content"
+			android:layout_width="fill_parent" android:orientation="horizontal"
+			android:id="@+id/relation2Layout" android:layout_weight="1"  android:layout_gravity="center">
+			<ImageView android:id="@+id/relation2" android:src="@drawable/contenu"
+				android:layout_weight="1" android:layout_height="wrap_content"
+				android:layout_width="wrap_content">
+			</ImageView>
+			<TextView android:id="@+id/relation2Name"
+				android:layout_width="wrap_content" android:text="contenu"
+				android:textStyle="bold" android:textSize="15dip"
+				android:layout_height="wrap_content" android:layout_weight="3"
+				android:layout_gravity="center_vertical" android:visibility="gone">
+			</TextView>
+		</LinearLayout>
+		
+		<LinearLayout android:layout_height="wrap_content"
+			android:layout_width="fill_parent" android:orientation="horizontal"
+			android:id="@+id/relation3Layout" android:layout_weight="1"  android:layout_gravity="center">
+			<ImageView android:id="@+id/relation3" android:src="@drawable/contraire"
+				android:layout_weight="1" android:layout_height="wrap_content"
+				android:layout_width="wrap_content">
+			</ImageView>
+			<TextView android:id="@+id/relation3Name"
+				android:layout_width="wrap_content" android:text="contraire"
+				android:textStyle="bold" android:textSize="15dip"
+				android:layout_height="wrap_content" android:layout_weight="3"
+				android:layout_gravity="center_vertical" android:visibility="gone">
+			</TextView>
+		</LinearLayout>
+		
+		<LinearLayout android:layout_height="wrap_content"
+			android:layout_width="fill_parent" android:orientation="horizontal"
+			android:id="@+id/relation4Layout" android:layout_weight="1"  android:layout_gravity="center">
+			<ImageView android:id="@+id/relation4" android:src="@drawable/synonyme"
+				android:layout_weight="1" android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:layout_gravity="center">
+			</ImageView>
+			<TextView android:id="@+id/relation4Name"
+				android:layout_width="wrap_content" android:text="synonyme"
+				android:textStyle="bold" android:textSize="15dip"
+				android:layout_height="wrap_content" android:layout_weight="3"
+				android:layout_gravity="center_vertical" android:visibility="gone">
+			</TextView>
+		</LinearLayout>
+		
+		<LinearLayout android:layout_height="wrap_content"
+			android:layout_width="fill_parent" android:orientation="horizontal"
+			android:id="@+id/trashLayout" android:layout_weight="1"  android:layout_gravity="center">
+			
+			<ImageView android:id="@+id/trash" android:src="@android:drawable/ic_menu_delete"
+				android:layout_weight="1" android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:layout_gravity="center">
+			</ImageView>
+			<TextView android:id="@+id/trashName" android:layout_width="wrap_content"
+				android:text="poubelle" android:textStyle="bold" android:textSize="15dip"
+				android:layout_height="wrap_content" android:layout_weight="3"
+				android:layout_gravity="center_vertical" android:visibility="gone">
+			</TextView>
+		</LinearLayout>
+		
 	</LinearLayout>
 
 </LinearLayout>
