@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="PticClic" company="" webLink="pticlic.org" view-date="2011-01-10" view-index="0" gantt-divider-location="425" resource-divider-location="302" version="2.0">
+<project name="PticClic" company="" webLink="pticlic.org" view-date="2011-01-17" view-index="0" gantt-divider-location="425" resource-divider-location="302" version="2.0">
     <description/>
     <view zooming-state="default:3" id="gantt-chart"/>
     <view id="resource-table">
@@ -36,11 +36,11 @@
             <depend id="6" type="2" difference="0" hardness="Rubber"/>
         </task>
         <task id="1" name="Recherche de beta-testeurs" meeting="false" start="2011-01-15" duration="28" complete="10" priority="1" expand="true"/>
-        <task id="2" name="Iteration 1" meeting="false" start="2011-01-17" duration="27" complete="36" priority="1" expand="true">
+        <task id="2" name="Iteration 1" meeting="false" start="2011-01-17" duration="27" complete="63" priority="1" expand="true">
             <depend id="16" type="2" difference="0" hardness="Rubber"/>
             <depend id="17" type="2" difference="0" hardness="Rubber"/>
             <depend id="18" type="2" difference="0" hardness="Rubber"/>
-            <task id="5" name="Serveur &amp; SQL" meeting="false" start="2011-01-17" duration="7" complete="80" priority="1" expand="true">
+            <task id="5" name="Serveur &amp; SQL" meeting="false" start="2011-01-17" duration="7" complete="95" priority="1" expand="true">
                 <depend id="7" type="2" difference="0" hardness="Strong"/>
                 <depend id="8" type="2" difference="0" hardness="Strong"/>
                 <depend id="9" type="2" difference="0" hardness="Strong"/>
@@ -50,19 +50,19 @@
                 <depend id="8" type="2" difference="0" hardness="Strong"/>
                 <depend id="9" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="7" name="Fenetre de score" meeting="false" start="2011-01-24" duration="7" complete="20" priority="1" expand="true">
+            <task id="7" name="Fenetre de score" meeting="false" start="2011-01-24" duration="7" complete="50" priority="1" expand="true">
                 <depend id="10" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="8" name="Reseau client Android" meeting="false" start="2011-01-24" duration="7" complete="30" priority="1" expand="true">
+            <task id="8" name="Reseau client Android" meeting="false" start="2011-01-24" duration="7" complete="90" priority="1" expand="true">
                 <depend id="10" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="9" name="Fenetre de jeu" meeting="false" start="2011-01-24" duration="7" complete="20" priority="1" expand="true">
+            <task id="9" name="Fenetre de jeu" meeting="false" start="2011-01-24" duration="7" complete="85" priority="1" expand="true">
                 <depend id="10" type="2" difference="0" hardness="Strong"/>
             </task>
             <task id="10" name="Intégration client &amp; serveur" meeting="false" start="2011-01-31" duration="1" complete="0" priority="1" expand="true">
                 <depend id="11" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="11" name="Amelioration" meeting="false" start="2011-02-01" duration="6" complete="0" priority="1" expand="true">
+            <task id="11" name="Amelioration" meeting="false" start="2011-02-01" duration="6" complete="20" priority="1" expand="true">
                 <depend id="12" type="2" difference="0" hardness="Strong"/>
             </task>
             <task id="12" name="Test et debogage" meeting="false" start="2011-02-07" duration="5" complete="0" priority="1" expand="true">
@@ -172,51 +172,51 @@
     </resources>
     <allocations>
         <allocation task-id="0" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
-        <allocation task-id="0" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="0" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="0" resource-id="0" function="Default:1" responsible="false" load="100.0"/>
+        <allocation task-id="0" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="1" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="25.0"/>
-        <allocation task-id="1" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="25.0"/>
         <allocation task-id="1" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="25.0"/>
         <allocation task-id="1" resource-id="0" function="Default:1" responsible="false" load="25.0"/>
-        <allocation task-id="5" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
+        <allocation task-id="1" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="25.0"/>
         <allocation task-id="5" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
+        <allocation task-id="5" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="6" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="6" resource-id="0" function="Default:1" responsible="false" load="75.0"/>
         <allocation task-id="7" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="8" resource-id="0" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
-        <allocation task-id="9" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="9" resource-id="0" function="Default:1" responsible="false" load="25.0"/>
+        <allocation task-id="9" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="10" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
-        <allocation task-id="10" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="10" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="10" resource-id="0" function="Default:1" responsible="false" load="75.0"/>
+        <allocation task-id="10" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="11" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
-        <allocation task-id="11" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="11" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="11" resource-id="0" function="Default:1" responsible="false" load="75.0"/>
+        <allocation task-id="11" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="12" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
-        <allocation task-id="12" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="12" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="12" resource-id="0" function="Default:1" responsible="false" load="75.0"/>
+        <allocation task-id="12" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="14" resource-id="4" function="SoftwareDevelopment:4" responsible="false" load="100.0"/>
         <allocation task-id="16" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="25.0"/>
         <allocation task-id="17" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="17" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
-        <allocation task-id="18" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="18" resource-id="0" function="Default:1" responsible="false" load="100.0"/>
+        <allocation task-id="18" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="75.0"/>
         <allocation task-id="19" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
-        <allocation task-id="19" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="19" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="19" resource-id="0" function="Default:1" responsible="false" load="50.0"/>
+        <allocation task-id="19" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="20" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
-        <allocation task-id="20" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="20" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="20" resource-id="0" function="Default:1" responsible="false" load="50.0"/>
+        <allocation task-id="20" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="21" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
-        <allocation task-id="21" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="21" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="21" resource-id="0" function="Default:1" responsible="false" load="100.0"/>
+        <allocation task-id="21" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="23" resource-id="4" function="SoftwareDevelopment:4" responsible="false" load="100.0"/>
         <allocation task-id="25" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="25" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
@@ -225,21 +225,21 @@
         <allocation task-id="27" resource-id="0" function="Default:1" responsible="false" load="100.0"/>
         <allocation task-id="28" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="29" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
-        <allocation task-id="29" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="29" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="29" resource-id="0" function="Default:1" responsible="false" load="50.0"/>
+        <allocation task-id="29" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="30" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
-        <allocation task-id="30" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="30" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="30" resource-id="0" function="Default:1" responsible="false" load="50.0"/>
+        <allocation task-id="30" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="31" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
-        <allocation task-id="31" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="31" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="31" resource-id="0" function="Default:1" responsible="false" load="100.0"/>
+        <allocation task-id="31" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="32" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="25.0"/>
-        <allocation task-id="32" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="25.0"/>
         <allocation task-id="32" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="25.0"/>
         <allocation task-id="32" resource-id="0" function="Default:1" responsible="true" load="25.0"/>
+        <allocation task-id="32" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="25.0"/>
         <allocation task-id="33" resource-id="4" function="SoftwareDevelopment:4" responsible="false" load="100.0"/>
         <allocation task-id="35" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="36" resource-id="0" function="Default:1" responsible="false" load="100.0"/>
@@ -248,17 +248,17 @@
         <allocation task-id="38" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="38" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="39" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
-        <allocation task-id="39" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="39" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="39" resource-id="0" function="Default:1" responsible="false" load="50.0"/>
+        <allocation task-id="39" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="40" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
-        <allocation task-id="40" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="40" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="40" resource-id="0" function="Default:1" responsible="false" load="50.0"/>
+        <allocation task-id="40" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="50.0"/>
         <allocation task-id="41" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
-        <allocation task-id="41" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="41" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="41" resource-id="0" function="Default:1" responsible="false" load="100.0"/>
+        <allocation task-id="41" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
     </allocations>
     <vacations/>
     <taskdisplaycolumns>
