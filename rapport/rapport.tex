@@ -60,6 +60,7 @@ Un grand nombre de développeurs ont créés des applications pour étendre la f
 
 \section{Conception}
 
+\begin{verbatim}
 NODE(EID integer primary key autoincrement, name string, #type (ref TYPE_NODE.num), weight);
 
 RELATION(RID integer primary key autoincrement, #start (ref NODE.eid), #end (ref NODE.eid), #type (ref TYPE_RELATION.num), weight);
@@ -79,8 +80,8 @@ PLAYED_GAME(PGID integer primary key autoincrement, #gid (ref GAME.gid), #login 
 PLAYED_GAME_CLOUD(#PGID (ref PLAYED_GAME.pgid), #GID (ref PLAYED_GAME.gid), NUM, type (contrainte : 0 = partie de référence, 1 = réponse d'un joueur), #relation (ref RELATION.rid), weight (contrainte : probabilité estimée de cette réponse pour les bots (robots), réputation du joueur sinon), score (score donné au joueur, 0 pour les bots);
 
 **INT unless otherwise marked
-
-
+\end{verbatim}
+\begin{verbatim}
 create table node(eid integer primary key autoincrement, name, type, weight);
 create table relation(rid integer primary key autoincrement, start, end, type, weight);
 create table type_node(name, num);
@@ -91,15 +92,12 @@ create table game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, pr
 create table played_game(pgid integer primary key autoincrement, gid, login);
 create table played_game_cloud(pgid, gid, type, num, relation, weight, score);
 
-
-
-
 create index i_relation_start on relation(start);
 create index i_relation_end on relation(end);
 create index i_relation_type on relation(type);
 create index i_relation_start_type on relation(start,type);
 create index i_relation_end_type on relation(end,type);
-
+\end{verbatim}
 
 TODO: UML, diagrammes de classes, Use cases, etc...
 
@@ -128,6 +126,22 @@ TODO: UML, diagrammes de classes, Use cases, etc...
 \item Caractères non échappés dans le dump de la base.% gd
 \end{itemize}
 
+\subsubsection{Itération 1, semaine 3}
+\begin{itemize}
+\item SQLite3 n'est pas capable d'utiliser un index pour la requête extérieure sur une requête du type
+\begin{verbatim}
+select * from (select * from table where condition) where condition
+\end{verbatim}
+Donc nécessité de ré-écrire certaines requêtes avec des jointures à priori beaucoup moins efficaces, mais qui le sont plus grâce aux index.
+\item SQLite3 tranforme les requêtes de la forme~:
+\begin{verbatim}
+select * from table limit 100 order by random();
+\end{verbatim}
+  en une requête qui récupère tout le set de résultats, ajoute une colonne random(), prend les 100 premiers résultats et les trie. Mais cela
+  l'oblige à récupérer tout le set de résultats, et calculer le random() pour chaque ligne, pour ensuite jeter tout ce qui dépasse la ligne
+  100. Cela est évidemment très coûteux dans le cadre de requêtes avec beaucoup de résultats, et nous avons donc dû isoler la requête avec
+  \verb!limit! de son \verb!order by! avec des «hacks» assez tordus.
+\end{itemize}
 
 \section{Conclusions}
 
