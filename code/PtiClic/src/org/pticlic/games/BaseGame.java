@@ -15,14 +15,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 /**
@@ -40,13 +41,14 @@ import android.widget.TextView;
  *
  */
 
-public class BaseGame extends Activity implements OnClickListener, AnimationListener {
+public class BaseGame extends Activity implements OnClickListener {
 	private int 			currentWord = 0;
 	private TextView 		currentWordTextView;
 	private int 			nbWord = 0;
 	private DownloadedGame	game;
 	private Match 			match;
 	private Network 		network;
+	private boolean			help = false;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -77,6 +79,23 @@ public class BaseGame extends Activity implements OnClickListener, AnimationList
 		ImageView r3 = ((ImageView)findViewById(R.id.relation3));
 		ImageView r4 = ((ImageView)findViewById(R.id.relation4));
 
+
+		// Layout des relations
+		TextView rn1 = ((TextView)findViewById(R.id.relation1Name));
+		TextView rn2 = ((TextView)findViewById(R.id.relation2Name));
+		TextView rn3 = ((TextView)findViewById(R.id.relation3Name));
+		TextView rn4 = ((TextView)findViewById(R.id.relation4Name));
+
+		// Layout des relations
+		LinearLayout rl1 = ((LinearLayout)findViewById(R.id.relation1Layout));
+		LinearLayout rl2 = ((LinearLayout)findViewById(R.id.relation2Layout));
+		LinearLayout rl3 = ((LinearLayout)findViewById(R.id.relation3Layout));
+		LinearLayout rl4 = ((LinearLayout)findViewById(R.id.relation4Layout));
+
+		// Bouton d'aide
+		ImageView aide = ((ImageView)findViewById(R.id.aideBaseGame));
+		aide.setOnClickListener(this);
+
 		Relation r = Relation.getInstance();
 
 		// TODO : Pour l'instant la poubelle ne fait rien. Il faudra certainement la ranger dans un categorie dans GamePlayed pour calculer le score.
@@ -85,12 +104,38 @@ public class BaseGame extends Activity implements OnClickListener, AnimationList
 		trash.setImageResource(android.R.drawable.ic_menu_delete);
 
 		// Écoute des clics sur les relations
-		if (nbrel > 0) { r1.setOnClickListener(this); r1.setImageResource(r.getRelationImage(game.getCat1())); } else { r1.setVisibility(View.GONE); }
-		if (nbrel > 1) { r2.setOnClickListener(this); r2.setImageResource(r.getRelationImage(game.getCat2()));} else { r2.setVisibility(View.GONE); }
-		if (nbrel > 2) { r3.setOnClickListener(this); r3.setImageResource(r.getRelationImage(game.getCat3()));} else { r3.setVisibility(View.GONE); }
-		if (nbrel > 3) { r4.setOnClickListener(this); r4.setImageResource(r.getRelationImage(game.getCat4()));} else { r4.setVisibility(View.GONE); }		
+		if (nbrel > 0) { 
+			r1.setOnClickListener(this); 
+			r1.setImageResource(r.getRelationImage(game.getCat1()));
+			rn1.setText(r.getRelationName(game.getCat1()));
+		} else {
+			rl1.setVisibility(View.GONE); 
+		}
+		if (nbrel > 1) { 
+			r2.setOnClickListener(this); 
+			r2.setImageResource(r.getRelationImage(game.getCat2()));
+			rn2.setText(r.getRelationName(game.getCat2()));
+		} else { 
+			rl2.setVisibility(View.GONE); 
+		}
+		if (nbrel > 2) { 
+			r3.setOnClickListener(this); 
+			r3.setImageResource(r.getRelationImage(game.getCat3()));
+			rn3.setText(r.getRelationName(game.getCat3()));
+		} else { 
+			rl3.setVisibility(View.GONE);
+		}
+		if (nbrel > 3) {
+			r4.setOnClickListener(this);
+			r4.setImageResource(r.getRelationImage(game.getCat4()));
+			rn4.setText(r.getRelationName(game.getCat4()));
+		} else {
+			rl4.setVisibility(View.GONE); 
+		}		
 
 		((TextView)findViewById(R.id.mainWord)).setText(DownloadedGame.getName(game.getCentre()));
+
+		//this.helpMode();
 	}
 
 	/* (non-Javadoc)
@@ -128,9 +173,12 @@ public class BaseGame extends Activity implements OnClickListener, AnimationList
 		AnimationSet set = new AnimationSet(true);
 		set.setDuration(1000);
 		set.setFillAfter(true);
-		set.setAnimationListener(this);
 
-		TranslateAnimation translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 2);
+		TranslateAnimation translate;
+		if (isInHelpMode())
+			translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 4);
+		else
+			translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 2);
 		translate.setDuration(500);
 		set.addAnimation(translate);
 
@@ -173,6 +221,141 @@ public class BaseGame extends Activity implements OnClickListener, AnimationList
 		}
 	}
 
+	/**
+	 * Cette methode est appeler lorsque l'utilisateur appuie sur le bouton d'aide.
+	 * Elle change la disposition des elements de maniere a afficher la description
+	 * de l'icone a cote de l'icone.
+	 */
+	private void helpMode() {
+		if (!isInHelpMode()) {
+			help = true;
+
+			LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 2);
+
+			// On modifie l'affichage du layout
+			LinearLayout menuLayout = ((LinearLayout)findViewById(R.id.menuLayout));
+			menuLayout.setOrientation(LinearLayout.VERTICAL);
+			menuLayout.setLayoutParams(layoutParams);
+
+			// Puis on modifie l'affichage des relations
+			//relation1
+			LinearLayout relationLayout = ((LinearLayout)findViewById(R.id.relation1Layout));
+			relationLayout.setGravity(Gravity.LEFT);
+
+			TextView relationName = ((TextView)findViewById(R.id.relation1Name));
+			relationName.setVisibility(View.VISIBLE);
+
+			//relation2
+			relationLayout = ((LinearLayout)findViewById(R.id.relation2Layout));
+			relationLayout.setGravity(Gravity.LEFT);
+
+			relationName = ((TextView)findViewById(R.id.relation2Name));
+			relationName.setVisibility(View.VISIBLE);
+
+			//relation3
+			relationLayout = ((LinearLayout)findViewById(R.id.relation3Layout));
+			relationLayout.setGravity(Gravity.LEFT);
+
+			relationName = ((TextView)findViewById(R.id.relation3Name));
+			relationName.setVisibility(View.VISIBLE);
+
+			//relation4
+			relationLayout = ((LinearLayout)findViewById(R.id.relation4Layout));
+			relationLayout.setGravity(Gravity.LEFT);
+
+			relationName = ((TextView)findViewById(R.id.relation4Name));
+			relationName.setVisibility(View.VISIBLE);
+
+			//trash
+			relationLayout = ((LinearLayout)findViewById(R.id.trashLayout));
+			relationLayout.setGravity(Gravity.LEFT);
+
+			relationName = ((TextView)findViewById(R.id.trashName));
+			relationName.setVisibility(View.VISIBLE);
+
+
+			// On met le mot courant au bon endroit dans la fenetre
+			// On recupere la largueur de l'ecran.
+			Display display = getWindowManager().getDefaultDisplay(); 
+			int width = display.getWidth();
+
+			//On recupere le centre de mainWord pour l'animation de translation.
+			TextView mainWord = (TextView)findViewById(R.id.mainWord);
+			currentWordTextView = (TextView)findViewById(R.id.currentWord);
+
+			TranslateAnimation translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 4);
+			translate.setDuration(0);
+			translate.setFillAfter(true);
+
+			currentWordTextView.setAnimation(translate);
+
+		} else {
+			help = false;
+
+			LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 10);
+
+			// On modifie l'affichage du layout
+			LinearLayout menuLayout = ((LinearLayout)findViewById(R.id.menuLayout));
+			menuLayout.setOrientation(LinearLayout.HORIZONTAL);
+			menuLayout.setLayoutParams(layoutParams);
+
+			// Puis on modifie l'affichage des relations
+			//relation1
+			LinearLayout relationLayout = ((LinearLayout)findViewById(R.id.relation1Layout));
+			relationLayout.setGravity(Gravity.CENTER);
+
+			TextView relationName = ((TextView)findViewById(R.id.relation1Name));
+			relationName.setVisibility(View.GONE);
+
+			//relation2
+			relationLayout = ((LinearLayout)findViewById(R.id.relation2Layout));
+			relationLayout.setGravity(Gravity.CENTER);
+
+			relationName = ((TextView)findViewById(R.id.relation2Name));
+			relationName.setVisibility(View.GONE);
+
+			//relation3
+			relationLayout = ((LinearLayout)findViewById(R.id.relation3Layout));
+			relationLayout.setGravity(Gravity.CENTER);
+
+			relationName = ((TextView)findViewById(R.id.relation3Name));
+			relationName.setVisibility(View.GONE);
+
+			//relation4
+			relationLayout = ((LinearLayout)findViewById(R.id.relation4Layout));
+			relationLayout.setGravity(Gravity.CENTER);
+
+			relationName = ((TextView)findViewById(R.id.relation4Name));
+			relationName.setVisibility(View.GONE);
+
+			//trash
+			relationLayout = ((LinearLayout)findViewById(R.id.trashLayout));
+			relationLayout.setGravity(Gravity.CENTER);
+
+			relationName = ((TextView)findViewById(R.id.trashName));
+			relationName.setVisibility(View.GONE);
+			
+			// On met le mot courant au bon endroit dans la fenetre
+			// On recupere la largueur de l'ecran.
+			Display display = getWindowManager().getDefaultDisplay(); 
+			int width = display.getWidth();
+
+			//On recupere le centre de mainWord pour l'animation de translation.
+			TextView mainWord = (TextView)findViewById(R.id.mainWord);
+			currentWordTextView = (TextView)findViewById(R.id.currentWord);
+
+			TranslateAnimation translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 2);
+			translate.setDuration(0);
+			translate.setFillAfter(true);
+
+			currentWordTextView.setAnimation(translate);
+		}
+	}
+
+	private boolean isInHelpMode() {
+		return help;
+	}
+
 	/* (non-Javadoc)
 	 * @see android.view.View.OnClickListener#onClick(android.view.View)
 	 */
@@ -185,23 +368,7 @@ public class BaseGame extends Activity implements OnClickListener, AnimationList
 		case (R.id.relation3) : match.add(3, currentWord); next(); break;
 		case (R.id.relation4) : match.add(4, currentWord); next(); break;
 		case (R.id.trash) : match.add(0, currentWord); next(); break;
+		case (R.id.aideBaseGame) : helpMode(); break;
 		}
-	}
-
-	@Override
-	public void onAnimationEnd(Animation animation) {
-
-	}
-
-	@Override
-	public void onAnimationRepeat(Animation animation) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onAnimationStart(Animation animation) {
-		// TODO Auto-generated method stub
-
 	}
 }
