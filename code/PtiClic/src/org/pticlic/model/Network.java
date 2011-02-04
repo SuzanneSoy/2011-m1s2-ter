@@ -1,9 +1,17 @@
 package org.pticlic.model;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -52,6 +60,55 @@ public class Network {
 		this.serverURL = serverURL;
 		this.id = id;
 		this.passwd = passwd;
+	}
+
+	/**
+	 * Permet de savoir si l'application a access a internet ou non
+	 * 
+	 * @param context l'activite permettant de tester l'access a internet
+	 * @return <code>true</code> si on a access a internet <code>false</code> sinon
+	 */
+	public static boolean isConnected(Context context) {
+		ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);		
+		if (cm != null && (cm.getActiveNetworkInfo() == null 
+				|| !cm.getActiveNetworkInfo().isConnected())) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Permet de verifier que la combinaison login/mdp est correct
+	 * 
+	 * @param context l'activite permettant de tester l'access a internet
+	 * @param id l'identifiant de l'utilisateur
+	 * @param passwd le mot de passe de l'utilisateur
+	 * @return <code>true</code> si la combinaison login/mdp est correct <code>false</code> sinon
+	 */
+	public static boolean isLoginCorrect(Context context, String id, String passwd) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		String serverURL = sp.getString(Constant.SERVER_URL, "http://dumbs.fr/~bbrun/pticlic.json");
+
+		URL url;
+		boolean res = false;
+		try {
+			url = new URL(serverURL);
+			URLConnection connection = url.openConnection();
+			connection.addRequestProperty("action", "verifyAccess");
+			connection.addRequestProperty("user", id);
+			connection.addRequestProperty("passwd", passwd);
+
+			InputStream in = connection.getInputStream();
+			BufferedReader buf = new BufferedReader(new InputStreamReader(in));
+			res = Boolean.getBoolean(buf.readLine());
+
+		} catch (MalformedURLException e) {
+			return false;
+		} catch (IOException e) {
+			return false;
+		}
+
+		return res;
 	}
 
 	/**
@@ -171,12 +228,12 @@ public class Network {
 			for (Integer i : game.getTrash()) {
 				connection.addRequestProperty("trash[]", i.toString());
 			}
-			
+
 			Gson gson = new Gson();
 			JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
 
 			score = gson.fromJson(reader, TotalScore.class);
-			
+
 
 		} catch (IOException e) {
 			return score;

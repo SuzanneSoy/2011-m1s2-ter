@@ -12,16 +12,16 @@ function mDie($err,$msg)
 	exit;
 }
 
-if (!$db = new SQLite3('db')) {
+if (!$db = new SQlite3($SQL_DBNAME)) {
 	mDie(1,"Erreur lors de l'ouverture de la base de données SQLite3");
 }
 
 function initdb() {
 	global $db;
-	$db->exec("insert into user(login, mail, hash_passwd) values('foo', 'foo@isp.com', '".md5('bar')."');");
+	$db->exec("insert into user(login, mail, hash_passwd, score) values('foo', 'foo@isp.com', '".md5('bar')."', 0);");
 }
 
-if ($do_initdb) initdb();
+if ($do_initdb) { initdb(); }
 
 if(!isset($_GET['action']) || !isset($_GET['user']) || !isset($_GET['passwd']))
 	mDie(2,"La requête est incomplète");
@@ -179,8 +179,6 @@ function create_game($cloudSize) {
 	cg_insert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
 }
 
-//create_game(10);
-
 function random_game() {
 	global $db;
 	return $db->querySingle("select gid from game where gid = (abs(random()) % (select max(gid) from game))+1 or gid = (select max(gid) from game where gid > 0) order by gid limit 1;");
@@ -196,15 +194,26 @@ function game2json($game_id) {
 	echo "cloudsize:10,cloud:["; // TODO ! compter dynamiquement.
 	
 	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word from game_cloud where gid = ".$game['gid'].";");
+	$notfirst = false;
 	while ($x = $res->fetchArray()) {
-		echo "{id:".$x['eid_word'].",name:".$x['name_word']."}\n";
+		if ($notfirst) { echo ","; } else { $notfirst=true; }
+		echo "{id:".$x['eid_word'].",name:".$x['name_word']."}";
 	}
 	echo "]}";
 }
 
-function main() {
+function main($action) {
 	// Sinon tout est bon on effectu l'opération correspondant à la commande passée.
-	if($action == 0) { // "Get partie"
+	// TODO : en production, utiliser : header("Content-Type: application/json; charset=utf-8");
+	header("Content-Type: text/plain; charset=utf-8");
+	if  ($action == 2) { // "Create partie"
+		if(!isset($_GET['nb']) || !isset($_GET['mode']))
+			mDie(2,"La requête est incomplète");
+		$nbParties = intval($_GET['nb']);
+		for ($i = 0; $i < $nbParties; $i++) {
+			create_game(10);
+		}
+	} else if ($action == 0) { // "Get partie"
 		if(!isset($_GET['nb']) || !isset($_GET['mode']))
 			mDie(2,"La requête est incomplète");
 		$nbGames = intval($_GET['nb']);
@@ -220,16 +229,26 @@ function main() {
 	} else if($action == 1) { // "Set partie"
 		// Requête sql d'ajout d'informations (et calcul de résultat).
 		// TODO : nettoyer, finir
-		$gid = $_GET['gid']; // TODO : vérifier qu'on a bien distribué cette partie à cet utilisateur, et qu'il n'y a pas déjà répondu (répercuter ça sur le random_game).
-		$userReputation = 5; // TODO : un nombre entre 0 et 5 environ. Par ex. log(pointsUtilisateur) est un bon choix.
+		
+		$gid = $_GET['gid'];
+		
+		if(ĝid != $db->querySingle("SELECT gid FROM played_game WHERE login='".$user."'"))
+			mdie(3,"Cette partie n'est associée à votre nom d'utilisateur");
+
+		$userReputation = log($db->querySingle("SELECT score FROM user WHERE  login='".$user."'"));
+
 		$db->exec("begin transaction;");
-		$db->exec("insert into played_game(pgid, gid, login) values (null, $gid, null);");
+		$db->exec("INSERT INTO played_game(pgid, gid, login) VALUES (null, $gid, null);");
 		$pgid = $db->lastInsertRowID();
-		for ($i=0; $i < 10; $i++) {
+		
+		for($i=0; $i < 10; $i++)
+		{
 			$x = $_GET['$i'];
+			
 			// TODO : calculer le score. Score = proba[réponse de l'utilisateur]*coeff - proba[autres reponses]*coeff
 			// TODO : adapter le score en fonction de la réputation de l'utilisateur (plus quand il est jeune, pour le motiver, par ex. avec un terme constant qu'on ajoute).
 			$score = 1;
+
 			$db->exec("insert into played_game_cloud(pgid, gid, type, num, relation, weight, score) values($pgid, $gid, 1, ".$c['pos'].", $r1, ".($x*$userReputation).", ".$score.");");
 			// TODO : game_cloud(probaR_x_) += $réputationJoueur * $coeff
 			// TODO : game_cloud(totalWeight) += $réputationJoueur * $coeff (NOTE : même coeff que pour game_cloud(probaR_x_))
@@ -241,5 +260,7 @@ function main() {
 		die("Commande inconnue");
 	}
 }
-	
+
+main($action);
+
 ?>
