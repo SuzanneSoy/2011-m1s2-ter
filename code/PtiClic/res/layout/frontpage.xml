@@ -34,7 +34,7 @@
 			android:id="@+id/login"></TextView>
 		<ImageView android:layout_height="wrap_content" android:id="@+id/infoButton"
 			android:layout_width="wrap_content" android:layout_gravity="right"
-			android:layout_weight="5" android:clickable="true" android:src="@drawable/aide" />
+			android:layout_weight="5" android:clickable="true" android:src="@drawable/aide" android:paddingRight="10px"/>
 
 	</LinearLayout>
 

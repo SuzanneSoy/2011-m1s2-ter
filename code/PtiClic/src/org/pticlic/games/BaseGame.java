@@ -10,8 +10,6 @@ import org.pticlic.model.Network.Mode;
 import org.pticlic.model.Relation;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
