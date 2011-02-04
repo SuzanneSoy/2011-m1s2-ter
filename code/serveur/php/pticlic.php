@@ -274,9 +274,9 @@ function main($action) {
 			// ici, -0.7 <= score <= 4
 
 			$db->exec("insert into played_game_cloud(pgid, gid, type, num, relation, weight, score) values($pgid, $gid, 1, $num, $r1, ".$userReputation.", ".$score.");");
-			$db->exec("update game_cloud set $probaRx = $probaRx + ".max($réputationJoueur,1)." where gid = $gid;";
-			$db->exec("update game_cloud set totalWeight = totalWeight + ".max($réputationJoueur,1)." where gid = $gid;";
-			$db->exec("update user set score = score + ".$score." where login = $user;";
+			$db->exec("update game_cloud set $probaRx = $probaRx + ".max($réputationJoueur,1)." where gid = $gid;");
+			$db->exec("update game_cloud set totalWeight = totalWeight + ".max($réputationJoueur,1)." where gid = $gid;");
+			$db->exec("update user set score = score + ".$score." where login = $user;");
 		}
 		$db->exec("commit;");
 		// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
