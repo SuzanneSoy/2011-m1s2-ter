@@ -159,7 +159,7 @@ function cg_insert($centerEid, $cloud, $r1, $r2, $totalDifficulty) {
 	$db->exec("begin transaction;");
 	$db->exec("insert into game(gid, eid_central_word, relation_1, relation_2, difficulty) values (null, $centerEid, $r1, $r2, $totalDifficulty);");
 	$gid = $db->lastInsertRowID();
-	$db->exec("insert into played_game(pgid, gid, login) values (null, $gid, null);");
+	$db->exec("insert into played_game(pgid, gid, login, played) values (null, $gid, null, true);");
 	$pgid = $db->lastInsertRowID();
 	foreach ($cloud as $c) {
 	    $db->exec("insert into game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash) values($gid, ".$c['pos'].", ".$c['d'].", ".$c['eid'].", 2, ".$c['probaR1'].", ".$c['probaR2'].", ".$c['probaR0'].", ".$c['probaTrash'].");");
@@ -186,14 +186,16 @@ function random_game() {
 
 function game2json($game_id) {
 	global $db;
+	$db->exec("INSERT INTO played_game(pgid, gid, login, played) VALUES (null, $game_id, ".SQLite3::escapeString($user).", false);");
+	$pgid = $db->lastInsertRowID();
 	// TODO Yoann : faire des tests d'erreur pour ces select ?
 	$game = $db->query("select gid, (select name from node where eid = eid_central_word) as name_central_word, eid_central_word, relation_1, relation_2 from game where gid = ".$game_id.";");
 	$game = $game->fetchArray();
-	echo "{id:".$game['gid'].",cat1:".$game['relation_1'].",cat2:".$game['relation_2'].",cat3:0,cat4:-1,";
+	echo "{gid:".$gid.",pgid:$pgid,cat1:".$game['relation_1'].",cat2:".$game['relation_2'].",cat3:0,cat4:-1,";
 	echo "center:{id:".$game['eid_central_word'].",name:".json_encode("".$game['name_central_word'])."},";
 	echo "cloudsize:10,cloud:["; // TODO ! compter dynamiquement.
 	
-	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word from game_cloud where gid = ".$game['gid'].";");
+	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word from game_cloud where gid = ".$game_id.";");
 	$notfirst = false;
 	while ($x = $res->fetchArray()) {
 		if ($notfirst) { echo ","; } else { $notfirst=true; }
@@ -207,6 +209,7 @@ function main($action) {
 	// TODO : en production, utiliser : header("Content-Type: application/json; charset=utf-8");
 	header("Content-Type: text/plain; charset=utf-8");
 	if  ($action == 2) { // "Create partie"
+		// Requête POST : http://serveur/pticlic.php?action=2&nb=2&mode=normal&user=foo&passwd=bar
 		if(!isset($_GET['nb']) || !isset($_GET['mode']))
 			mDie(2,"La requête est incomplète");
 		$nbParties = intval($_GET['nb']);
@@ -214,6 +217,7 @@ function main($action) {
 			create_game(10);
 		}
 	} else if ($action == 0) { // "Get partie"
+		// Requête POST : http://serveur/pticlic.php?action=0&nb=2&mode=normal&user=foo&passwd=bar
 		if(!isset($_GET['nb']) || !isset($_GET['mode']))
 			mDie(2,"La requête est incomplète");
 		$nbGames = intval($_GET['nb']);
@@ -227,31 +231,52 @@ function main($action) {
 		}
 		echo "]";
 	} else if($action == 1) { // "Set partie"
-		// Requête sql d'ajout d'informations (et calcul de résultat).
-		// TODO : nettoyer, finir
+		if (!isset($_GET['pgid']))
+			mDie(2,"La requête est incomplète");
+		$pgid = intval($_GET['pgid']);
+		$gid = intval($_GET['gid']);
 		
-		$gid = $_GET['gid'];
+		if ($user != $db->querySingle("SELECT login FROM played_game WHERE pgid = $pgid and $gid = $gid and played = false;"))
+			mDie(4,"Cette partie n'est associée à votre nom d'utilisateur, ou bien vous l'avez déjà jouée.");
 		
-		if(ĝid != $db->querySingle("SELECT gid FROM played_game WHERE login='".$user."'"))
-			mdie(3,"Cette partie n'est associée à votre nom d'utilisateur");
-
-		$userReputation = log($db->querySingle("SELECT score FROM user WHERE  login='".$user."'"));
-
+		$userReputation = log($db->querySingle("SELECT score FROM user WHERE login='".SQLite3::escapeString($user)."';"));
+		
 		$db->exec("begin transaction;");
-		$db->exec("INSERT INTO played_game(pgid, gid, login) VALUES (null, $gid, null);");
-		$pgid = $db->lastInsertRowID();
-		
-		for($i=0; $i < 10; $i++)
-		{
-			$x = $_GET['$i'];
-			
-			// TODO : calculer le score. Score = proba[réponse de l'utilisateur]*coeff - proba[autres reponses]*coeff
-			// TODO : adapter le score en fonction de la réputation de l'utilisateur (plus quand il est jeune, pour le motiver, par ex. avec un terme constant qu'on ajoute).
-			$score = 1;
+		$db->exec("update played_game set played = true where pgid = $pgid;");
 
-			$db->exec("insert into played_game_cloud(pgid, gid, type, num, relation, weight, score) values($pgid, $gid, 1, ".$c['pos'].", $r1, ".($x*$userReputation).", ".$score.");");
-			// TODO : game_cloud(probaR_x_) += $réputationJoueur * $coeff
-			// TODO : game_cloud(totalWeight) += $réputationJoueur * $coeff (NOTE : même coeff que pour game_cloud(probaR_x_))
+		$r0 = 0;
+		$trash = -1;
+		$r1 = $db->querySingle("SELECT relation_1, relation_2 FROM game WHERE gid = $gid;", true);
+		$r2 = $r1['relation_2'];
+		$r1 = $r1['relation_1'];
+		$res = $db->query("SELECT num, difficulty, totalWeight, probaR1, probaR2, probaR0, probaTrash FROM game_cloud WHERE gid = $gid;");
+		while ($row = $res->fetchArray()) {
+			$num = $row['num'];
+			$relanswer = intval($_GET['$i']);
+			switch ($relanswer) {
+				case $r1:    $answer = 0; $probaRx = "probaR1"; break;
+				case $r2:    $answer = 1; $probaRx = "probaR2"; break;
+				case $r0:    $answer = 2; $probaRx = "probaR3"; break;
+				case $trash: $answer = 3; $probaRx = "probaTrash"; break;
+				default: mDie(5, "Réponse invalide pour le mot $num.");
+			}
+			
+			$probas = array($row['probaR1']/$row['totalWeight'], $row['probaR2']/$row['totalWeight'], $row['probaR0']/$row['totalWeight'], $row['probaTrash']/$row['totalWeight']);
+			// Calcul du score. Score = proba[réponse de l'utilisateur]*coeff1 - proba[autres reponses]*coeff2
+			// score = - proba[autres reponses]*coeff2
+			$score = -0.7 * (($probas[0] + $probas[1] + $probas[2] + $probas[3]) - $probas[$answer]);
+			// ici, -0.7 <= score <= 0
+			// score = proba[réponse de l'utilisateur]*coeff1 - proba[autres reponses]*coeff2
+			$score += ($row['difficulty']/5) * $probas[$answer];
+			// ici, -0.7 <= score <= 2
+			// Adapter le score en fonction de la réputation de l'utilisateur (quand il est jeune, augmenter le score pour le motiver).
+			$score += min(2 - max(0, ($userReputation / 4) - 1), 2);
+			// ici, -0.7 <= score <= 4
+
+			$db->exec("insert into played_game_cloud(pgid, gid, type, num, relation, weight, score) values($pgid, $gid, 1, $num, $r1, ".$userReputation.", ".$score.");");
+			$db->exec("update game_cloud set $probaRx = $probaRx + ".max($réputationJoueur,1)." where gid = $gid;";
+			$db->exec("update game_cloud set totalWeight = totalWeight + ".max($réputationJoueur,1)." where gid = $gid;";
+			$db->exec("update user set score = score + ".$score." where login = $user;";
 		}
 		$db->exec("commit;");
 		// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.

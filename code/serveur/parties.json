@@ -1,7 +1,8 @@
 // Requête : http://serveur/pticlic.php?action=getparties&nb=2&mode=normal&user=foo&passwd=bar
 [
 	{
-		id: 1234,
+		gid: 1234,
+		pgid: 157963,
 		cat1: 11,
 		cat2: 23,
 		cat3: 35,
