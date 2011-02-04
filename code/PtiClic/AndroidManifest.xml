@@ -10,11 +10,11 @@
             </intent-filter>
         </activity>
 
-    <activity android:name=".Preference" android:label="Préférence"></activity>
-    <activity android:name=".games.BaseGame"></activity>
-    <activity android:label="Information" android:name=".Information"></activity>
-    <activity android:name=".Score" android:label="Score"></activity>
-<activity android:name=".FrontPage"></activity>
+    <activity android:name=".Preference" android:label="Préférence" android:screenOrientation="portrait"></activity>
+    <activity android:name=".games.BaseGame" android:screenOrientation="portrait"></activity>
+    <activity android:label="Information" android:name=".Information" android:screenOrientation="portrait"></activity>
+    <activity android:name=".Score" android:label="Score" android:screenOrientation="portrait"></activity>
+<activity android:name=".FrontPage" android:screenOrientation="portrait"></activity>
 </application>
 
 

@@ -9,13 +9,11 @@ import org.pticlic.model.Network;
 import org.pticlic.model.Network.Mode;
 import org.pticlic.model.Relation;
 
-import android.R.anim;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Display;
