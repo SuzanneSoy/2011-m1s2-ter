@@ -18,8 +18,9 @@ create table type_relation(name, num, extended_name, info);
 create table user(login primary key, mail, hash_passwd, score);
 create table game(gid integer primary key autoincrement, eid_central_word, relation_1, relation_2, difficulty);
 create table game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash);
-create table played_game(pgid integer primary key autoincrement, gid, login);
+create table played_game(pgid integer primary key autoincrement, gid, login, played);
 create table played_game_cloud(pgid, gid, type, num, relation, weight, score);
+insert into user(login, mail, hash_passwd, score) values('foo', 'foo@isp.com', '$(echo -n 'bar' | md5sum | cut -d ' ' -f 1)', 0);
 EOF
 
 # tr : pour virer le CRLF qui traîne
