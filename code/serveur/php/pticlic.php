@@ -300,9 +300,9 @@ function game2json($game_id)
 	$game = $db->query("select gid, (select name from node where eid = eid_central_word) as name_central_word, eid_central_word, relation_1, relation_2 from game where gid = ".$game_id.";");
 	$game = $game->fetchArray();
 	
-	echo "{gid:".$game_id.",pgid:$pgid,cat1:".$game['relation_1'].",cat2:".$game['relation_2'].",cat3:0,cat4:-1,";
-	echo "center:{id:".$game['eid_central_word'].",name:".json_encode("".$game['name_central_word'])."},";
-	echo "cloudsize:10,cloud:["; // TODO ! compter dynamiquement.
+	echo '{"gid":'.$game_id.',"pgid":'.$pgid.',"cat1":'.$game['relation_1'].',"cat2":'.$game['relation_2'].',"cat3":0,"cat4":-1,';
+	echo '"center":{"id":'.$game['eid_central_word'].',"name":'.json_encode(''.$game['name_central_word']).'},';
+	echo '"cloudsize":10,"cloud":['; // TODO ! compter dynamiquement.
 	
 	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word from game_cloud where gid = ".$game_id.";");
 	$notfirst = false;
@@ -314,7 +314,7 @@ function game2json($game_id)
 		else
 			$notfirst=true;
 
-		echo "{id:".$x['eid_word'].",name:".json_encode("".$x['name_word'])."}";
+		echo '{"id":'.$x['eid_word'].',"name":'.json_encode("".$x['name_word']).'}';
 	}
 
 	echo "]}";
