@@ -352,6 +352,11 @@ public class BaseGame extends Activity implements OnClickListener {
 		}
 	}
 
+	/**
+	 * Permet de savoir si l'on se trouve ou non dans le mode d'aide
+	 * 
+	 * @return <code>true</code> si l'on ce trouve dans le mode d'aide <code>false</code> sinon
+	 */
 	private boolean isInHelpMode() {
 		return help;
 	}
