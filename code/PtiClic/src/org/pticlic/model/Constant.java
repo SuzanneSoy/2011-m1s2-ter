@@ -1,7 +1,7 @@
 package org.pticlic.model;
 
 public class Constant {
-	public static final String SERVER_URL = "SERVER_URL";
+	public static final String SERVER_URL = "server";
 	
 	public static final String SERVER_AUTH = "SERVER_AUTH";
 	

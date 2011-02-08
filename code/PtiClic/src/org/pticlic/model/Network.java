@@ -29,7 +29,7 @@ public class Network {
 	public enum Action {
 		GET_GAMES(0),
 		SEND_GAME(1);
-		
+
 		private final int value;
 
 		Action(int value) {
@@ -95,29 +95,32 @@ public class Network {
 	 * @return <code>true</code> si la combinaison login/mdp est correct <code>false</code> sinon
 	 */
 	public static boolean isLoginCorrect(Context context, String id, String passwd) {
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-		String serverURL = sp.getString(Constant.SERVER_URL, "http://dumbs.fr/~bbrun/pticlic.json");
-
-		URL url;
-		boolean res = false;
-		try {
-			url = new URL(serverURL);
-			URLConnection connection = url.openConnection();
-			connection.addRequestProperty("action", "verifyAccess");
-			connection.addRequestProperty("user", id);
-			connection.addRequestProperty("passwd", passwd);
-
-			InputStream in = connection.getInputStream();
-			BufferedReader buf = new BufferedReader(new InputStreamReader(in));
-			res = Boolean.getBoolean(buf.readLine());
-
-		} catch (MalformedURLException e) {
-			return false;
-		} catch (IOException e) {
-			return false;
-		}
-
-		return res;
+		
+		//TODO : A decommenter le jour ou ce sera implemente cote serveur
+//		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+//		String serverURL = sp.getString(Constant.SERVER_URL, "http://dumbs.fr/~bbrun/pticlic.json");
+//
+//		URL url;
+//		boolean res = false;
+//		try {
+//			url = new URL(serverURL);
+//			URLConnection connection = url.openConnection();
+//			connection.addRequestProperty("action", "verifyAccess");
+//			connection.addRequestProperty("user", id);
+//			connection.addRequestProperty("passwd", passwd);
+//
+//			InputStream in = connection.getInputStream();
+//			BufferedReader buf = new BufferedReader(new InputStreamReader(in));
+//			res = Boolean.getBoolean(buf.readLine());
+//
+//		} catch (MalformedURLException e) {
+//			return false;
+//		} catch (IOException e) {
+//			return false;
+//		}
+//
+//		return res;
+		return true;
 	}
 
 	/**
@@ -128,53 +131,27 @@ public class Network {
 	public DownloadedGame getGames(int nbGames) {
 		DownloadedGame game = null;
 		try {
-			//URL url = new URL(this.serverURL);
+			// TODO : ne restera le temps que les requete du serveur passe du GET au POST
+			String urlS = this.serverURL+"/pticlic.php?"
+			+ "action=" + Action.GET_GAMES.value()
+			+ "&user=" + this.id
+			+ "&passwd=" + this.passwd
+			+ "&nb=" + String.valueOf(nbGames)
+			+ "&mode="+mode.value();
 			
-			
-			URL url = new URL("http://dumbs.fr/~bbrun/pticlic/pticlic.php?"
-					+ "action=" + Action.GET_GAMES.value()
-					+ "&user=" + this.id
-					+ "&passwd=" + this.passwd
-					+ "&nb=" + String.valueOf(nbGames)
-					+ "&mode="+mode.value());
-			
-			
-			URLConnection connection = url.openConnection();
-			connection.addRequestProperty("action", Action.GET_GAMES.value());
-			connection.addRequestProperty("user", this.id);
-			connection.addRequestProperty("passwd", this.passwd);
-			connection.addRequestProperty("nb", String.valueOf(nbGames));
-			connection.addRequestProperty("mode", mode.value());
+			URL url = new URL(urlS);			
+
+//			URLConnection connection = url.openConnection();
+//			connection.addRequestProperty("action", Action.GET_GAMES.value());
+//			connection.addRequestProperty("user", this.id);
+//			connection.addRequestProperty("passwd", this.passwd);
+//			connection.addRequestProperty("nb", String.valueOf(nbGames));
+//			connection.addRequestProperty("mode", mode.value());
 
 			Gson gson = new Gson();
 			//JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
 			JsonReader reader = new JsonReader(new InputStreamReader(url.openStream(), "UTF-8"));
-			
-//			//[
-//				{
-//					gid:2,
-//					pgid:117,
-//					cat1:10,
-//					cat2:5,
-//					cat3:0,
-//					cat4:-1,
-//					center:{id:173311, name:"nordafricain"},
-//					cloudsize:10,
-//					cloud:[
-//					       {id:9894,name:"g\u00e9ographie"},
-//					       {id:110821,name:"cannibale"},
-//					       {id:131053,name:"motricit\u00e9"},
-//					       {id:110821,name:"cannibale"},
-//					       {id:110821,name:"cannibale"},
-//					       {id:151567,name:"_FL:3"},
-//					       {id:9894,name:"g\u00e9ographie"},
-//					       {id:9894,name:"g\u00e9ographie"},
-//					       {id:9894,name:"g\u00e9ographie"},
-//					       {id:131053,name:"motricit\u00e9"}
-//					      ]
-//				}
-//			]
-			
+
 			// FIXME : Attention lorsque l'on pourra vraiment recupere plusieur partie, il faudra changer ce qui suit.
 			reader.beginArray();
 			while (reader.hasNext()) {

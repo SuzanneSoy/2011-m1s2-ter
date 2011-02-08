@@ -98,7 +98,6 @@ public class BaseGame extends Activity implements OnClickListener {
 
 		Relation r = Relation.getInstance();
 
-		// TODO : Pour l'instant la poubelle ne fait rien. Il faudra certainement la ranger dans un categorie dans GamePlayed pour calculer le score.
 		ImageView trash = ((ImageView)findViewById(R.id.trash));
 		trash.setOnClickListener(this);
 		trash.setImageResource(android.R.drawable.ic_menu_delete);
