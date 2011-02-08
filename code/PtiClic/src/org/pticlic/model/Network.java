@@ -27,7 +27,16 @@ import com.google.gson.stream.JsonReader;
 public class Network {
 
 	public enum Action {
-		GET_GAMES
+		GET_GAMES(0),
+		SEND_GAME(1);
+		
+		private final int value;
+
+		Action(int value) {
+			this.value = value;
+		}
+
+		private String value() { return String.valueOf(value); }
 	}
 
 	public enum Mode {
@@ -121,7 +130,7 @@ public class Network {
 		try {
 			URL url = new URL(this.serverURL);
 			URLConnection connection = url.openConnection();
-			connection.addRequestProperty("action", "getparties");
+			connection.addRequestProperty("action", Action.GET_GAMES.value());
 			connection.addRequestProperty("user", this.id);
 			connection.addRequestProperty("passwd", this.passwd);
 			connection.addRequestProperty("nb", String.valueOf(nbGames));
@@ -200,10 +209,11 @@ public class Network {
 		try {
 			URL url = new URL(this.serverURL);
 			URLConnection connection = url.openConnection();
-			connection.addRequestProperty("action", "sendpartie");
+			connection.addRequestProperty("action", Action.SEND_GAME.value());
 			connection.addRequestProperty("user", this.id);
 			connection.addRequestProperty("passwd", this.passwd);
 			connection.addRequestProperty("mode", mode.value());
+			connection.addRequestProperty("pgid", String.valueOf(game.getGame().getId()));
 
 			if (game.getGame().getCat1() != -1) {
 				for (Integer i : game.getRelation1()) {
