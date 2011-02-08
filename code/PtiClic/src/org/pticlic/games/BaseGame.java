@@ -64,8 +64,23 @@ public class BaseGame extends Activity implements OnClickListener {
 
 		// On initialise la classe permettant la communication avec le serveur.
 		network = new Network(serverURL, Mode.SIMPLE_GAME, id, passwd);
+	}
+
+
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStart()
+	 */
+	@Override
+	protected void onStart() {
+		super.onStart();
 
 		game = network.getGames(1);
+		runMatch();
+		start();
+	}
+
+	private void runMatch() {
 		int nbrel = game.getNbRelation();
 		nbWord = game.getNbWord();
 
@@ -106,9 +121,9 @@ public class BaseGame extends Activity implements OnClickListener {
 		if (nbrel > 0) {
 			// TODO : A enlever lorsque l'on aura toutes les images des relations.
 			try {
-			r1.setOnClickListener(this); 
-			rn1.setText(r.getRelationName(game.getCat1()));
-			r1.setImageResource(r.getRelationImage(game.getCat1()));
+				r1.setOnClickListener(this); 
+				rn1.setText(r.getRelationName(game.getCat1()));
+				r1.setImageResource(r.getRelationImage(game.getCat1()));
 			} catch (Exception e) {
 				r1.setImageResource(R.drawable.icon);
 			}
@@ -118,9 +133,9 @@ public class BaseGame extends Activity implements OnClickListener {
 		if (nbrel > 1) {
 			// TODO : A enlever lorsque l'on aura toutes les images des relations.
 			try {
-			r2.setOnClickListener(this); 
-			rn2.setText(r.getRelationName(game.getCat2()));
-			r2.setImageResource(r.getRelationImage(game.getCat2()));
+				r2.setOnClickListener(this); 
+				rn2.setText(r.getRelationName(game.getCat2()));
+				r2.setImageResource(r.getRelationImage(game.getCat2()));
 			} catch (Exception e) {
 				r2.setImageResource(R.drawable.icon);
 			}
@@ -130,9 +145,9 @@ public class BaseGame extends Activity implements OnClickListener {
 		if (nbrel > 2) {
 			// TODO : A enlever lorsque l'on aura toutes les images des relations.
 			try {
-			r3.setOnClickListener(this); 
-			rn3.setText(r.getRelationName(game.getCat3()));
-			r3.setImageResource(r.getRelationImage(game.getCat3()));
+				r3.setOnClickListener(this); 
+				rn3.setText(r.getRelationName(game.getCat3()));
+				r3.setImageResource(r.getRelationImage(game.getCat3()));
 			} catch (Exception e) {
 				r3.setImageResource(R.drawable.icon);
 			}
@@ -142,9 +157,9 @@ public class BaseGame extends Activity implements OnClickListener {
 		if (nbrel > 3) {
 			// TODO : A enlever lorsque l'on aura toutes les images des relations.
 			try {
-			r4.setOnClickListener(this);
-			rn4.setText(r.getRelationName(game.getCat4()));
-			r4.setImageResource(r.getRelationImage(game.getCat4()));
+				r4.setOnClickListener(this);
+				rn4.setText(r.getRelationName(game.getCat4()));
+				r4.setImageResource(r.getRelationImage(game.getCat4()));
 			} catch (Exception e) {
 				r4.setImageResource(R.drawable.icon);
 			}
@@ -153,20 +168,8 @@ public class BaseGame extends Activity implements OnClickListener {
 		}		
 
 		((TextView)findViewById(R.id.mainWord)).setText(DownloadedGame.getName(game.getCentre()));
-
-		//this.helpMode();
 	}
-
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onStart()
-	 */
-	@Override
-	protected void onStart() {
-		super.onStart();
-
-		start();
-	}
-
+	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
 	 */
@@ -353,7 +356,7 @@ public class BaseGame extends Activity implements OnClickListener {
 
 			relationName = ((TextView)findViewById(R.id.trashName));
 			relationName.setVisibility(View.GONE);
-			
+
 			// On met le mot courant au bon endroit dans la fenetre
 			// On recupere la largueur de l'ecran.
 			Display display = getWindowManager().getDefaultDisplay(); 
