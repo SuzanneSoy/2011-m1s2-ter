@@ -33,10 +33,10 @@ if(!isset($_GET['action']) || !isset($_GET['user']) || !isset($_GET['passwd']))
 
 // Login
 $action = $_GET['action'];
-$user = $_GET['user'];
+$user = SQLite3::escapeString($_GET['user']);
 $hash_passwd = md5($_GET['passwd']);
 
-if ($hash_passwd !== $db->querySingle("SELECT hash_passwd FROM user WHERE login='".SQLite3::escapeString($user)."';"))
+if ($hash_passwd !== $db->querySingle("SELECT hash_passwd FROM user WHERE login='$user';"))
 	mDie(3,"Utilisateur non enregistré ou mauvais mot de passe");
 
 
@@ -229,7 +229,7 @@ function cg_build_cloud($cloudSize, $sources, $sumWeights)
 */
 function cg_insert($centerEid, $cloud, $r1, $r2, $totalDifficulty)
 {
-	global $db, $user;
+	global $db;
 
 	// Insère dans la base une partie avec le mot central $centerEid, le nuage $cloud et les relations $r1 et $r2
 	$db->exec("begin transaction;");
@@ -292,7 +292,8 @@ function game2json($game_id)
 {
 	global $db, $user;
 	
-	$db->exec("INSERT INTO played_game(pgid, gid, login, played) VALUES (null, $game_id, '".SQLite3::escapeString($user)."', 0);");
+	// TODO : planter si la requête suivante échoue pour quelque raison que ce soit.
+	$db->exec("INSERT INTO played_game(pgid, gid, login, played) VALUES (null, $game_id, '$user', 0);");
 	$pgid = $db->lastInsertRowID();
 	
 	// TODO Yoann : faire des tests d'erreur pour ces select ?
@@ -324,9 +325,7 @@ function game2json($game_id)
 * @param action : Un identifiant d'action.
 */
 function main($action)
-{
-	global $db, $user;
-	
+{	
 	// Sinon tout est bon on effectu l'opération correspondant à la commande passée.
 	// TODO : en production, utiliser : header("Content-Type: application/json; charset=utf-8");
 	header("Content-Type: text/plain; charset=utf-8");
@@ -393,10 +392,11 @@ function setGame()
 	$pgid = intval($_GET['pgid']);
 	$gid = intval($_GET['gid']);
 		
-	if ($user != $db->querySingle("SELECT login FROM played_game WHERE pgid = $pgid and $gid = $gid and played = 0;"))
+	if ('t' !== $db->querySingle("SELECT 't' FROM played_game WHERE pgid = $pgid and $gid = $gid and played = 0 and login = '$user';"))
 		mDie(4,"Cette partie n'est associée à votre nom d'utilisateur, ou bien vous l'avez déjà jouée.");
 		
-	$userReputation = log($db->querySingle("SELECT score FROM user WHERE login='".SQLite3::escapeString($user)."';"));
+	$userReputation = $db->querySingle("SELECT score FROM user WHERE login='$user';");
+	$userReputation = ($userReputation > 0) ? log($userReputation) : 0;
 		
 	$db->exec("begin transaction;");
 	$db->exec("update played_game set played = 1 where pgid = $pgid;");
@@ -411,13 +411,16 @@ function setGame()
 	while ($row = $res->fetchArray())
 	{
 		$num = $row['num'];
-		$relanswer = intval($_GET[$row['num']]);
+		if (!isset($_GET[$num])) {
+			mDie(5,"Pas de réponse pour le mot $num de cette partie.");
+		}
+		$relanswer = intval($_GET[$num]);
 
 		switch ($relanswer) 
 		{
 			case $r1:    $answer = 0; $probaRx = "probaR1"; break;
 			case $r2:    $answer = 1; $probaRx = "probaR2"; break;
-			case $r0:    $answer = 2; $probaRx = "probaR3"; break;
+			case $r0:    $answer = 2; $probaRx = "probaR0"; break;
 			case $trash: $answer = 3; $probaRx = "probaTrash"; break;
 			default: mDie(5, "Réponse invalide pour le mot $num.");
 		}
@@ -435,9 +438,9 @@ function setGame()
 		// ici, -0.7 <= score <= 4
 
 		$db->exec("insert into played_game_cloud(pgid, gid, type, num, relation, weight, score) values($pgid, $gid, 1, $num, $r1, ".$userReputation.", ".$score.");");
-		$db->exec("update game_cloud set $probaRx = $probaRx + ".max($réputationJoueur,1)." where gid = $gid;");
-		$db->exec("update game_cloud set totalWeight = totalWeight + ".max($réputationJoueur,1)." where gid = $gid;");
-		$db->exec("update user set score = score + ".$score." where login = $user;");
+		$db->exec("update game_cloud set $probaRx = $probaRx + ".max($userReputation,1)." where gid = $gid;");
+		$db->exec("update game_cloud set totalWeight = totalWeight + ".max($userReputation,1)." where gid = $gid;");
+		$db->exec("update user set score = score + ".$score." where login = '$user';");
 	}
 
 	$db->exec("commit;");
