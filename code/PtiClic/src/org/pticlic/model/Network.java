@@ -128,7 +128,17 @@ public class Network {
 	public DownloadedGame getGames(int nbGames) {
 		DownloadedGame game = null;
 		try {
-			URL url = new URL(this.serverURL);
+			//URL url = new URL(this.serverURL);
+			
+			
+			URL url = new URL("http://dumbs.fr/~bbrun/pticlic/pticlic.php?"
+					+ "action=" + Action.GET_GAMES.value()
+					+ "&user=" + this.id
+					+ "&passwd=" + this.passwd
+					+ "&nb=" + String.valueOf(nbGames)
+					+ "&mode="+mode.value());
+			
+			
 			URLConnection connection = url.openConnection();
 			connection.addRequestProperty("action", Action.GET_GAMES.value());
 			connection.addRequestProperty("user", this.id);
@@ -137,8 +147,34 @@ public class Network {
 			connection.addRequestProperty("mode", mode.value());
 
 			Gson gson = new Gson();
-			JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-
+			//JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+			JsonReader reader = new JsonReader(new InputStreamReader(url.openStream(), "UTF-8"));
+			
+//			//[
+//				{
+//					gid:2,
+//					pgid:117,
+//					cat1:10,
+//					cat2:5,
+//					cat3:0,
+//					cat4:-1,
+//					center:{id:173311, name:"nordafricain"},
+//					cloudsize:10,
+//					cloud:[
+//					       {id:9894,name:"g\u00e9ographie"},
+//					       {id:110821,name:"cannibale"},
+//					       {id:131053,name:"motricit\u00e9"},
+//					       {id:110821,name:"cannibale"},
+//					       {id:110821,name:"cannibale"},
+//					       {id:151567,name:"_FL:3"},
+//					       {id:9894,name:"g\u00e9ographie"},
+//					       {id:9894,name:"g\u00e9ographie"},
+//					       {id:9894,name:"g\u00e9ographie"},
+//					       {id:131053,name:"motricit\u00e9"}
+//					      ]
+//				}
+//			]
+			
 			// FIXME : Attention lorsque l'on pourra vraiment recupere plusieur partie, il faudra changer ce qui suit.
 			reader.beginArray();
 			while (reader.hasNext()) {
@@ -164,6 +200,8 @@ public class Network {
 	 * @throws IOException
 	 */
 	private DownloadedGame makeGame(JsonReader reader, Gson gson) throws IOException {
+		int			gid = -1;
+		int 		pgid = -1;
 		int 		id = -1;
 		int 		cat1 = -1;
 		int 		cat2 = -1;
@@ -173,10 +211,14 @@ public class Network {
 		DownloadedGame.Word[]	cloud = null;
 
 		reader.beginObject();
-		while (reader != null && reader.hasNext()) {
+		while (reader.hasNext()) {
 			String name = reader.nextName();
 			if (name.equals("id")) {
 				id = reader.nextInt();
+			} else if (name.equals("gid")) {
+				gid = reader.nextInt();
+			} else if (name.equals("pgid")) {
+				pgid = reader.nextInt();
 			} else if (name.equals("cat1")) {
 				cat1 = reader.nextInt();
 			} else if (name.equals("cat2")) {
@@ -194,7 +236,7 @@ public class Network {
 			}
 		}
 		reader.endObject();
-		return new DownloadedGame(id, cat1, cat2, cat3, cat4, center, cloud);
+		return new DownloadedGame(id, gid, pgid, cat1, cat2, cat3, cat4, center, cloud);
 	}
 
 

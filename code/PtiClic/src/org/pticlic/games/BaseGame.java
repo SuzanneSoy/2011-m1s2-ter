@@ -63,7 +63,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		String passwd = sp.getString(Constant.USER_PASSWD, "");
 
 		// On initialise la classe permettant la communication avec le serveur.
-		Network network = new Network(serverURL, Mode.SIMPLE_GAME, id, passwd);
+		network = new Network(serverURL, Mode.SIMPLE_GAME, id, passwd);
 
 		game = network.getGames(1);
 		int nbrel = game.getNbRelation();
@@ -104,31 +104,51 @@ public class BaseGame extends Activity implements OnClickListener {
 		trash.setImageResource(android.R.drawable.ic_menu_delete);
 
 		// Écoute des clics sur les relations
-		if (nbrel > 0) { 
+		if (nbrel > 0) {
+			// TODO : A enlever lorsque l'on aura toutes les images des relations.
+			try {
 			r1.setOnClickListener(this); 
-			r1.setImageResource(r.getRelationImage(game.getCat1()));
 			rn1.setText(r.getRelationName(game.getCat1()));
+			r1.setImageResource(r.getRelationImage(game.getCat1()));
+			} catch (Exception e) {
+				r1.setImageResource(R.drawable.icon);
+			}
 		} else {
 			rl1.setVisibility(View.GONE); 
 		}
-		if (nbrel > 1) { 
+		if (nbrel > 1) {
+			// TODO : A enlever lorsque l'on aura toutes les images des relations.
+			try {
 			r2.setOnClickListener(this); 
-			r2.setImageResource(r.getRelationImage(game.getCat2()));
 			rn2.setText(r.getRelationName(game.getCat2()));
+			r2.setImageResource(r.getRelationImage(game.getCat2()));
+			} catch (Exception e) {
+				r2.setImageResource(R.drawable.icon);
+			}
 		} else { 
 			rl2.setVisibility(View.GONE); 
 		}
-		if (nbrel > 2) { 
+		if (nbrel > 2) {
+			// TODO : A enlever lorsque l'on aura toutes les images des relations.
+			try {
 			r3.setOnClickListener(this); 
-			r3.setImageResource(r.getRelationImage(game.getCat3()));
 			rn3.setText(r.getRelationName(game.getCat3()));
+			r3.setImageResource(r.getRelationImage(game.getCat3()));
+			} catch (Exception e) {
+				r3.setImageResource(R.drawable.icon);
+			}
 		} else { 
 			rl3.setVisibility(View.GONE);
 		}
 		if (nbrel > 3) {
+			// TODO : A enlever lorsque l'on aura toutes les images des relations.
+			try {
 			r4.setOnClickListener(this);
-			r4.setImageResource(r.getRelationImage(game.getCat4()));
 			rn4.setText(r.getRelationName(game.getCat4()));
+			r4.setImageResource(r.getRelationImage(game.getCat4()));
+			} catch (Exception e) {
+				r4.setImageResource(R.drawable.icon);
+			}
 		} else {
 			rl4.setVisibility(View.GONE); 
 		}		

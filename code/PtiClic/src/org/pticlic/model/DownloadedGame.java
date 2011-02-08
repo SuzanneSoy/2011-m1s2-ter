@@ -1,6 +1,7 @@
 package org.pticlic.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 
 /**
@@ -38,6 +39,8 @@ public class DownloadedGame implements Serializable {
 		}
 	}
 	
+	private int					gid;
+	private int					pgid;
 	private int 				id;
 	private int 				cat1;
 	private int 				cat2;
@@ -47,11 +50,14 @@ public class DownloadedGame implements Serializable {
 	private Word[]				cloud;
 	
 	
+	public DownloadedGame() {}	
 
-	public DownloadedGame(int id, int cat1, int cat2, int cat3, int cat4, Word center,
+	public DownloadedGame(int id, int gid, int pgid, int cat1, int cat2, int cat3, int cat4, Word center,
 			Word[] cloud) {
 		super();
 		this.id = id;
+		this.gid = gid;
+		this.pgid = pgid;
 		this.cat1 = cat1;
 		this.cat2 = cat2;
 		this.cat3 = cat3;
@@ -88,6 +94,24 @@ public class DownloadedGame implements Serializable {
 		return word.getName();
 	}
 	
+	
+	
+	public int getGid() {
+		return gid;
+	}
+
+	public void setGid(int gid) {
+		this.gid = gid;
+	}
+
+	public int getPgid() {
+		return pgid;
+	}
+
+	public void setPgid(int pgid) {
+		this.pgid = pgid;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -146,8 +170,10 @@ public class DownloadedGame implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Game [id=" + id + ", cat1=" + cat1 + ", cat2=" + cat2
-				+ ", cat3=" + cat3 + ", cat4=" + cat4 + ", center=" + center
-				+ ", cloud=" + cloud + "]";
-	}	
+		return "DownloadedGame [gid=" + gid + ", pgid=" + pgid + ", id=" + id
+				+ ", cat1=" + cat1 + ", cat2=" + cat2 + ", cat3=" + cat3
+				+ ", cat4=" + cat4 + ", center=" + center + ", cloud="
+				+ Arrays.toString(cloud) + "]";
+	}
+	
 }
