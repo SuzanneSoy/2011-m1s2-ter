@@ -169,7 +169,8 @@ function cg_build_cloud($cloudSize, $sources, $sumWeights)
 		$sumw = 0;
 		$src = $sources['rand'];
 		$srck = null;
-		
+
+		// Sélection d'une source aléatoire
 		foreach ($sources as $k => $x)
 		{
 			$sumw += $x['w'];
@@ -182,6 +183,7 @@ function cg_build_cloud($cloudSize, $sources, $sumWeights)
 			}
 		}
 		
+		// Vérification si on est à la fin du ResultSet de cette source.
 		if ($src['rsPos'] >= $src['rsSize'])
 		{
 			$nbFailed++;
@@ -194,13 +196,17 @@ function cg_build_cloud($cloudSize, $sources, $sumWeights)
 
 			continue;
 		}
-
-		$res = $src['resultSet'][$src['rsPos']++];
 		
-		if (in_array($res['eid'], $cloud))
-		{
-			$nbFailed++;
-			continue;
+		// On récupère un résultat de cette source.
+		// TODO : vérifier que $src['rsPos']++ fait ce que l'on veut
+		$res = $src['resultSet'][$src['rsPos']++];
+
+		// TODO (FAIT) : vérifier si $res['eid'] est présent dans un des $cloud[*]['eid'], car la condition qui suit est fausse.
+		foreach ($c in $cloud) {
+			if ($c['eid'] == $res['eid']) {
+				$nbFailed++;
+				continue;
+			}
 		}
 
 		// position dans le nuage, difficulté, eid, probaR1, probaR2
@@ -321,31 +327,10 @@ function game2json($game_id)
 }
 
 
-/** La fonction principale.
-* @param action : Un identifiant d'action.
-*/
-function main($action)
-{	
-	// Sinon tout est bon on effectu l'opération correspondant à la commande passée.
-	// TODO : en production, utiliser : header("Content-Type: application/json; charset=utf-8");
-	header("Content-Type: text/plain; charset=utf-8");
-	
-	if  ($action == 2)				// "Create partie"
-		createGame();
-	else if($action == 0)				// "Get partie"
-		getGame();
-	else if($action == 1)				// "Set partie"
-		setGame();
-	else
-		mDie(2,"Commande inconnue");
-}
-
-
 /** Création d'une partie.
 */
 function createGame()
 {
-	// Requête POST : http://serveur/pticlic.php?action=2&nb=2&mode=normal&user=foo&passwd=bar
 	if(!isset($_GET['nb']) || !isset($_GET['mode']))
 		mDie(2,"La requête est incomplète");
 
@@ -360,7 +345,6 @@ function createGame()
 */
 function getGame()
 {
-	// Requête POST : http://serveur/pticlic.php?action=0&nb=2&mode=normal&user=foo&passwd=bar
 	if(!isset($_GET['nb']) || !isset($_GET['mode']))
 		mDie(2,"La requête est incomplète");
 
@@ -446,6 +430,28 @@ function setGame()
 	$db->exec("commit;");
 	// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
 	game2json(random_game());
+}
+
+/** La fonction principale.
+* @param action : Un identifiant d'action.
+*/
+function main($action)
+{	
+	// Sinon tout est bon on effectu l'opération correspondant à la commande passée.
+	// TODO : en production, utiliser : header("Content-Type: application/json; charset=utf-8");
+	header("Content-Type: text/plain; charset=utf-8");
+	
+	if  ($action == 2)				// "Create partie"
+		// Requête POST : http://serveur/pticlic.php?action=2&nb=2&mode=normal&user=foo&passwd=bar
+		createGame();
+	else if($action == 0)				// "Get partie"
+		// Requête POST : http://serveur/pticlic.php?action=0&nb=2&mode=normal&user=foo&passwd=bar
+		getGame();
+	else if($action == 1)				// "Set partie"
+		// Requête POST : http://serveur/pticlic.php?action=1&mode=normal&user=foo&passwd=bar&gid=1234&pgid=12357&0=0&1=-1&2=22&3=13&9=-1
+		setGame();
+	else
+		mDie(2,"Commande inconnue");
 }
 
 main($action);
