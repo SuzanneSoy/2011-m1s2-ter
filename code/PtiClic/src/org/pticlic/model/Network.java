@@ -124,7 +124,16 @@ public class Network {
 	 * @return
 	 */
 	public DownloadedGame getGames(int nbGames) {
-		DownloadedGame game = null;
+		switch (mode) {
+		case SIMPLE_GAME:
+			return DownloadBaseGame(nbGames);
+		default:
+			return null;
+		}
+	}
+
+	private DownloadedBaseGame DownloadBaseGame(int nbGames) {
+		DownloadedBaseGame game = null;
 		try {
 			// TODO : ne restera le temps que les requete du serveur passe du GET au POST
 			String urlS = this.serverURL+"/pticlic.php?"
@@ -150,7 +159,7 @@ public class Network {
 			// FIXME : Attention lorsque l'on pourra vraiment recupere plusieur partie, il faudra changer ce qui suit.
 			reader.beginArray();
 			while (reader.hasNext()) {
-				game = makeGame(reader, gson);
+				game = makeBaseGame(reader, gson);
 			}
 			reader.endArray();
 			reader.close();
@@ -171,7 +180,7 @@ public class Network {
 	 * @return Une nouvelle instance de Game.
 	 * @throws IOException
 	 */
-	private DownloadedGame makeGame(JsonReader reader, Gson gson) throws IOException {
+	private DownloadedBaseGame makeBaseGame(JsonReader reader, Gson gson) throws IOException {
 		int			gid = -1;
 		int 		pgid = -1;
 		int 		id = -1;
