@@ -55,7 +55,7 @@ public class BaseGame extends Activity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.game);
+		setContentView(R.layout.basegame);
 
 		// On recupere du PreferenceManager les differentes information dont on a besoin
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
