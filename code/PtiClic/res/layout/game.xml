@@ -7,8 +7,15 @@
 		android:layout_height="fill_parent" android:orientation="vertical"
 		android:layout_weight="2">
 
-		<AbsoluteLayout android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:paddingTop="10px">
+		<LinearLayout android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:paddingTop="10px"
+			android:orientation="horizontal">
+
+			<TextView android:id="@+id/wordRemaining" android:text="0/10"
+				android:textStyle="bold" android:paddingTop="10px"
+				android:paddingLeft="20px" android:layout_height="wrap_content"
+				android:layout_width="wrap_content">
+			</TextView>
 
 			<TextView android:id="@+id/mainWord" android:text="mainWord"
 				android:textStyle="bold" android:textSize="30dip"
@@ -16,17 +23,12 @@
 				android:paddingTop="10px" android:layout_height="fill_parent"
 				android:layout_width="fill_parent">
 			</TextView>
-			
-			<LinearLayout android:layout_width="fill_parent"
-				android:layout_height="fill_parent" android:gravity="right">
 
-				<ImageView android:src="@drawable/aide" android:id="@+id/aideBaseGame"
-					android:paddingRight="10px" android:layout_width="wrap_content"
-					android:layout_height="wrap_content"></ImageView>
+			<ImageView android:src="@drawable/aide" android:id="@+id/aideBaseGame"
+				android:paddingRight="10px" android:layout_width="wrap_content"
+				android:layout_height="wrap_content"></ImageView>
 
-			</LinearLayout>
-			
-		</AbsoluteLayout>
+		</LinearLayout>
 
 		<TextView android:id="@+id/currentWord" android:layout_width="fill_parent"
 			android:text="currentWord" android:textStyle="bold" android:textSize="20dip"
@@ -41,7 +43,8 @@
 
 		<LinearLayout android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:orientation="horizontal"
-			android:id="@+id/relation1Layout" android:layout_weight="1" android:layout_gravity="center">
+			android:id="@+id/relation1Layout" android:layout_weight="1"
+			android:layout_gravity="center">
 			<ImageView android:id="@+id/relation1" android:src="@drawable/contenant"
 				android:layout_weight="1" android:layout_height="wrap_content"
 				android:layout_width="wrap_content">
@@ -53,10 +56,11 @@
 				android:layout_gravity="center_vertical" android:visibility="gone">
 			</TextView>
 		</LinearLayout>
-		
+
 		<LinearLayout android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:orientation="horizontal"
-			android:id="@+id/relation2Layout" android:layout_weight="1"  android:layout_gravity="center">
+			android:id="@+id/relation2Layout" android:layout_weight="1"
+			android:layout_gravity="center">
 			<ImageView android:id="@+id/relation2" android:src="@drawable/contenu"
 				android:layout_weight="1" android:layout_height="wrap_content"
 				android:layout_width="wrap_content">
@@ -68,10 +72,11 @@
 				android:layout_gravity="center_vertical" android:visibility="gone">
 			</TextView>
 		</LinearLayout>
-		
+
 		<LinearLayout android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:orientation="horizontal"
-			android:id="@+id/relation3Layout" android:layout_weight="1"  android:layout_gravity="center">
+			android:id="@+id/relation3Layout" android:layout_weight="1"
+			android:layout_gravity="center">
 			<ImageView android:id="@+id/relation3" android:src="@drawable/contraire"
 				android:layout_weight="1" android:layout_height="wrap_content"
 				android:layout_width="wrap_content">
@@ -83,10 +88,11 @@
 				android:layout_gravity="center_vertical" android:visibility="gone">
 			</TextView>
 		</LinearLayout>
-		
+
 		<LinearLayout android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:orientation="horizontal"
-			android:id="@+id/relation4Layout" android:layout_weight="1"  android:layout_gravity="center">
+			android:id="@+id/relation4Layout" android:layout_weight="1"
+			android:layout_gravity="center">
 			<ImageView android:id="@+id/relation4" android:src="@drawable/synonyme"
 				android:layout_weight="1" android:layout_height="wrap_content"
 				android:layout_width="wrap_content" android:layout_gravity="center">
@@ -98,11 +104,12 @@
 				android:layout_gravity="center_vertical" android:visibility="gone">
 			</TextView>
 		</LinearLayout>
-		
+
 		<LinearLayout android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:orientation="horizontal"
-			android:id="@+id/trashLayout" android:layout_weight="1"  android:layout_gravity="center">
-			
+			android:id="@+id/trashLayout" android:layout_weight="1"
+			android:layout_gravity="center">
+
 			<ImageView android:id="@+id/trash" android:src="@android:drawable/ic_menu_delete"
 				android:layout_weight="1" android:layout_height="wrap_content"
 				android:layout_width="wrap_content" android:layout_gravity="center">
@@ -113,7 +120,7 @@
 				android:layout_gravity="center_vertical" android:visibility="gone">
 			</TextView>
 		</LinearLayout>
-		
+
 	</LinearLayout>
 
 </LinearLayout>

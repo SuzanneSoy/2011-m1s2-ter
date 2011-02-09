@@ -3,7 +3,7 @@ package org.pticlic.games;
 import org.pticlic.R;
 import org.pticlic.Score;
 import org.pticlic.model.Constant;
-import org.pticlic.model.DownloadedGame;
+import org.pticlic.model.DownloadedBaseGame;
 import org.pticlic.model.Match;
 import org.pticlic.model.Network;
 import org.pticlic.model.Network.Mode;
@@ -42,13 +42,14 @@ import android.widget.TextView;
  */
 
 public class BaseGame extends Activity implements OnClickListener {
-	private int 			currentWord = 0;
-	private TextView 		currentWordTextView;
-	private int 			nbWord = 0;
-	private DownloadedGame	game;
-	private Match 			match;
-	private Network 		network;
-	private boolean			help = false;
+	private int 				currentWord = 0;
+	private TextView 			currentWordTextView;
+	private TextView			wordRemaining;
+	private int 				nbWord = 0;
+	private DownloadedBaseGame	game;
+	private Match 				match;
+	private Network 			network;
+	private boolean				help = false;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -75,7 +76,7 @@ public class BaseGame extends Activity implements OnClickListener {
 	protected void onStart() {
 		super.onStart();
 
-		game = network.getGames(1);
+		game = (DownloadedBaseGame)network.getGames(1);
 		runMatch();
 		start();
 	}
@@ -83,7 +84,10 @@ public class BaseGame extends Activity implements OnClickListener {
 	private void runMatch() {
 		int nbrel = game.getNbRelation();
 		nbWord = game.getNbWord();
-
+		
+		wordRemaining = (TextView)findViewById(R.id.wordRemaining);
+		wordRemaining.setText((currentWord + 1) + "/" + nbWord);
+		
 		// On initialise la partie.
 		match = new Match();
 		match.setGame(game);
@@ -167,7 +171,7 @@ public class BaseGame extends Activity implements OnClickListener {
 			rl4.setVisibility(View.GONE); 
 		}		
 
-		((TextView)findViewById(R.id.mainWord)).setText(DownloadedGame.getName(game.getCentre()));
+		((TextView)findViewById(R.id.mainWord)).setText(DownloadedBaseGame.getName(game.getCentre()));
 	}
 	
 	/* (non-Javadoc)
@@ -223,7 +227,7 @@ public class BaseGame extends Activity implements OnClickListener {
 	 * Cette methode permet de passer au mot courant suivant et de lancer l'animation. 
 	 */
 	private void start() {
-		((TextView)findViewById(R.id.currentWord)).setText(DownloadedGame.getName(game.getWordInCloud(currentWord)));
+		((TextView)findViewById(R.id.currentWord)).setText(DownloadedBaseGame.getName(game.getWordInCloud(currentWord)));
 		arrivalView();
 	}
 
@@ -232,6 +236,7 @@ public class BaseGame extends Activity implements OnClickListener {
 	 */
 	private void next() {
 		if (++currentWord < nbWord) {
+			wordRemaining.setText((currentWord + 1) + "/" + nbWord);
 			leaveView();
 			start();
 		} else {

@@ -179,8 +179,8 @@ public class Network {
 		int 		cat2 = -1;
 		int 		cat3 = -1;
 		int 		cat4 = -1;
-		DownloadedGame.Word 	center = null;
-		DownloadedGame.Word[]	cloud = null;
+		DownloadedBaseGame.Word 	center = null;
+		DownloadedBaseGame.Word[]	cloud = null;
 
 		reader.beginObject();
 		while (reader.hasNext()) {
@@ -200,15 +200,15 @@ public class Network {
 			} else if (name.equals("cat4")) {
 				cat4 = reader.nextInt();
 			} else if (name.equals("center")) {
-				center = gson.fromJson(reader, DownloadedGame.Word.class);
+				center = gson.fromJson(reader, DownloadedBaseGame.Word.class);
 			} else if (name.equals("cloud")) {
-				cloud = gson.fromJson(reader, DownloadedGame.Word[].class);
+				cloud = gson.fromJson(reader, DownloadedBaseGame.Word[].class);
 			} else {
 				reader.skipValue();
 			}
 		}
 		reader.endObject();
-		return new DownloadedGame(id, gid, pgid, cat1, cat2, cat3, cat4, center, cloud);
+		return new DownloadedBaseGame(id, gid, pgid, cat1, cat2, cat3, cat4, center, cloud);
 	}
 
 
@@ -229,22 +229,22 @@ public class Network {
 			connection.addRequestProperty("mode", mode.value());
 			connection.addRequestProperty("pgid", String.valueOf(game.getGame().getId()));
 
-			if (game.getGame().getCat1() != -1) {
+			if (((DownloadedBaseGame)game.getGame()).getCat1() != -1) {
 				for (Integer i : game.getRelation1()) {
 					connection.addRequestProperty("cat1[]", i.toString());
 				}
 			}
-			if (game.getGame().getCat2() != -1) {
+			if (((DownloadedBaseGame)game.getGame()).getCat2() != -1) {
 				for (Integer i : game.getRelation2()) {
 					connection.addRequestProperty("cat2[]", i.toString());
 				}
 			}
-			if (game.getGame().getCat3() != -1) {
+			if (((DownloadedBaseGame)game.getGame()).getCat3() != -1) {
 				for (Integer i : game.getRelation3()) {
 					connection.addRequestProperty("cat3[]", i.toString());
 				}
 			}
-			if (game.getGame().getCat4() != -1) {
+			if (((DownloadedBaseGame)game.getGame()).getCat4() != -1) {
 				for (Integer i : game.getRelation4()) {
 					connection.addRequestProperty("cat4[]", i.toString());
 				}
