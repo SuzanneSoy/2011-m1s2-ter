@@ -104,22 +104,6 @@
 			</TextView>
 		</LinearLayout>
 
-		<LinearLayout android:layout_height="wrap_content"
-			android:layout_width="fill_parent" android:orientation="horizontal"
-			android:id="@+id/trashLayout" android:layout_weight="1"
-			android:layout_gravity="center">
-
-			<ImageView android:id="@+id/trash" android:src="@android:drawable/ic_menu_delete"
-				android:layout_weight="1" android:layout_height="wrap_content"
-				android:layout_width="wrap_content" android:layout_gravity="center">
-			</ImageView>
-			<TextView android:id="@+id/trashName" android:layout_width="wrap_content"
-				android:text="poubelle" android:textStyle="bold" android:textSize="15dip"
-				android:layout_height="wrap_content" android:layout_weight="3"
-				android:layout_gravity="center_vertical" android:visibility="gone">
-			</TextView>
-		</LinearLayout>
-
 	</LinearLayout>
 
 </LinearLayout>

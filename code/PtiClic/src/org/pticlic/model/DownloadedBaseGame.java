@@ -64,30 +64,6 @@ public class DownloadedBaseGame extends DownloadedGame {
 		this.center = center;
 		this.cloud = cloud;
 	}
-
-	/**
-	 * Permet de recupere le nombre de relation que l'on va utiliser.
-	 * 
-	 * @return le nombre de relation
-	 */
-	public int getNbRelation() {
-		int res = 0;
-		
-		if (cat1 != -1) {
-			res++;
-		}
-		if (cat2 != -1) {
-			res++;
-		}
-		if (cat3 != -1) {
-			res++;
-		}
-		if (cat4 != -1) {
-			res++;
-		}
-		
-		return res;
-	}
 	
 	public static String getName(Word word) {
 		return word.getName();

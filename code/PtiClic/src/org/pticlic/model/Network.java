@@ -1,7 +1,11 @@
 package org.pticlic.model;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
 import android.content.Context;
@@ -9,6 +13,8 @@ import android.net.ConnectivityManager;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+
+import exception.PtiClicException;
 
 /**
  * @author Bertrand BRUN
@@ -124,7 +130,7 @@ public class Network {
 	 * @param nbGames Le nombre de parties que l'on veut récupérer.
 	 * @return
 	 */
-	public DownloadedGame getGames(int nbGames) {
+	public DownloadedGame getGames(int nbGames) throws PtiClicException {
 		switch (mode) {
 		case SIMPLE_GAME:
 			return DownloadBaseGame(nbGames);
@@ -133,18 +139,21 @@ public class Network {
 		}
 	}
 
-	private DownloadedBaseGame DownloadBaseGame(int nbGames) {
+	private DownloadedBaseGame DownloadBaseGame(int nbGames) throws PtiClicException {
 		DownloadedBaseGame game = null;
+		URL url = null;
+		Gson gson = null;
+		BufferedReader reader = null;
 		try {
 			// TODO : ne restera le temps que les requete du serveur passe du GET au POST
 			String urlS = this.serverURL+"/pticlic.php?"
 			+ "action=" + Action.GET_GAMES.value()
 			+ "&user=" + this.id
 			+ "&passwd=" + this.passwd
-			+ "&nb=" + String.valueOf(nbGames)
+			//+ "&nb=" + String.valueOf(nbGames)
 			+ "&mode="+mode.value();
 			
-			URL url = new URL(urlS);
+			url = new URL(urlS);
 
 //			URLConnection connection = url.openConnection();
 //			connection.addRequestProperty("action", Action.GET_GAMES.value());
@@ -152,22 +161,29 @@ public class Network {
 //			connection.addRequestProperty("passwd", this.passwd);
 //			connection.addRequestProperty("nb", String.valueOf(nbGames));
 //			connection.addRequestProperty("mode", mode.value());
-
-			Gson gson = new Gson();
+			reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+			String json = reader.readLine();
+			
+			gson = new Gson();
 			//JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-			JsonReader reader = new JsonReader(new InputStreamReader(url.openStream(), "UTF-8"));
+			InputStream in = new ByteArrayInputStream(json.getBytes("UTF-8"));
+			JsonReader jsonReader = new JsonReader(new InputStreamReader(in));
 
 			// FIXME : Attention lorsque l'on pourra vraiment recupere plusieur partie, il faudra changer ce qui suit.
-			reader.beginArray();
-			while (reader.hasNext()) {
-				game = makeBaseGame(reader, gson);
+			jsonReader.beginArray();
+			while (jsonReader.hasNext()) {
+				game = makeBaseGame(jsonReader, gson);
 			}
-			reader.endArray();
-			reader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-
-			return null;
+			jsonReader.endArray();
+			jsonReader.close();
+		} catch (Exception e) {
+				try {
+					throw new PtiClicException(reader.readLine());
+				} catch (UnsupportedEncodingException e1) {
+					throw new PtiClicException(0, "Impossible de recuperer l'erreur, nous avons pris note de cette erreur");
+				} catch (IOException e1) {
+					throw new PtiClicException(0, "Impossible de recuperer l'erreur, nous avons pris note de cette erreur");
+				}
 		}
 
 		return game;
@@ -262,9 +278,7 @@ public class Network {
 			for (Integer i : game.getRelation4()) {
 				urlS += "&" + i + "=" + ((DownloadedBaseGame)game.getGame()).getCat4();
 			}
-//			for (Integer i : game.getRelation4()) {
-//				urlS += "&" + ((DownloadedBaseGame)game.getGame()).getCat4() + "=" + i;
-//			}
+			
 			URL url = new URL(urlS);
 
 //			URL url = new URL(this.serverURL);
