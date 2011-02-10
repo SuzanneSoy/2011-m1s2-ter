@@ -1,32 +1,56 @@
 <?php
 // Requête : http://serveur/pticlic.php?action=getparties&nb=2&mode=normal&user=foo&passwd=bar
+ob_start();
 
-$do_initdb = false;
 $email_admin = '';              // Adresse e-mail Administrateur.
-
 $SQL_DBNAME = (dirname(__FILE__) . "/db");
 
+
+/** Enregistre une erreur et quitte le programme.
+* @param err : Numéro de l'erreur.
+* @param msg : Description de l'erreur.
+*/
 function mDie($err,$msg)
 {
-	echo "{ error:".json_encode("".$err).", msg:".json_encode("".$msg)."}";
+	global $db;
+
+	ob_end_clean();
+	echo "{\"error\":".$err.",\"msg\":".json_encode("".$msg)."}";
+
+	log_error($err,$msg);
+
+	$db->close();
 	exit;
 }
+
+
+/** Ecrit un rapport d'erreur dans un fichier.
+* @param errNum : Numéro de l'erreur.
+* @param msg : Description de l'erreur.
+* @param [other] : (Optionnel) Complément d'information.
+*/
+function log_error($errNum, $msg, $other="")
+{
+	$file = fopen("./log.txt","a+");
+
+	// Met en forme la chaine contenant les paramètres de la requête.
+	$dump_parameters = str_replace("(\n","",print_r($_GET,true));
+	$dump_parameters = str_replace(")\n","",$dump_parameters);
+
+	fwrite($file,"\nErreur n° ".$errNum);
+	fwrite($file," : ".$msg);
+	if(!empty($other))	
+		fwrite($file,"\n ".$other);
+	fwrite($file,"\n  ".$dump_parameters);
+
+	fclose($file);
+}
+
+
 
 if (!$db = new SQlite3($SQL_DBNAME))
 	mDie(1,"Erreur lors de l'ouverture de la base de données SQLite3");
 
-
-/** Initialise la base de données avec un nom d'utilisateur et un mot de passe
-*/
-function initdb()
-{
-	global $db;
-
-	$db->exec("insert into user(login, mail, hash_passwd, score) values('foo', 'foo@isp.com', '".md5('bar')."', 0);");
-}
-
-if ($do_initdb) 
-	initdb();
 
 if(!isset($_GET['action']) || !isset($_GET['user']) || !isset($_GET['passwd']))
 	mDie(2,"La requête est incomplète");
@@ -50,7 +74,7 @@ function random_node()
 }
 
 
-// TODO : Yoann : peut-être faire une classe create_game avec les fonctions ci-dessous comme méthodes ?
+// TODO : Yoann : peut-être faire une classe GameCreator avec les fonctions ci-dessous comme méthodes ?
 
 /**
 * @param cloudSize : Taille du nuage.
@@ -162,13 +186,16 @@ function cg_build_cloud($cloudSize, $sources, $sumWeights)
 	$i = 0;
 	$totalDifficulty = 0;
 	
-	while ($i < $cloudSize && $nbFailed < 5*$cloudSize)
+	while ($i < $cloudSize && $nbFailed < 10*$cloudSize)
 	{
 		// On choisit une source aléatoire en tennant compte des poids.
 		$rands = rand(1,$sumWeights);
 		$sumw = 0;
+		if (!isset($sources['rand'])) {
+			break;
+		}
 		$src = $sources['rand'];
-		$srck = null;
+		$srck = 'rand';
 
 		// Sélection d'une source aléatoire
 		foreach ($sources as $k => $x)
@@ -188,26 +215,25 @@ function cg_build_cloud($cloudSize, $sources, $sumWeights)
 		{
 			$nbFailed++;
 
-			if ($srck !== null)
-			{
-				$sumWeights -= $src['w'];
-				unset($sources[$srck]);
-			}
+			$sumWeights -= $src['w'];
+			unset($sources[$srck]);
 
 			continue;
 		}
 		
 		// On récupère un résultat de cette source.
-		// TODO : vérifier que $src['rsPos']++ fait ce que l'on veut
-		$res = $src['resultSet'][$src['rsPos']++];
+		$res = $src['resultSet'][$src['rsPos']];
+		$sources[$srck]['rsPos']++;
 
-		// TODO (FAIT) : vérifier si $res['eid'] est présent dans un des $cloud[*]['eid'], car la condition qui suit est fausse.
-		foreach ($c in $cloud) {
+		// On vérifie si le mot n'a pas déjà été sélectionné.
+		$rejected = false;
+		foreach ($cloud as $c) {
 			if ($c['eid'] == $res['eid']) {
 				$nbFailed++;
-				continue;
+				$rejected = true;
 			}
 		}
+		if ($rejected) { continue; }
 
 		// position dans le nuage, difficulté, eid, probaR1, probaR2
 		$totalDifficulty += $src['d'];
@@ -262,32 +288,28 @@ function cg_insert($centerEid, $cloud, $r1, $r2, $totalDifficulty)
 	$db->exec("commit;");
 }
 
-
-/** Génère une partie pour une certaine taille de nuage.
-* @param cloudSize : Taille du nuage.
-*/
-function create_game($cloudSize)
-{
-	global $db;
-
-	// select random node
-	$centerEid = random_node();
-
-	$r1 = cg_choose_relations(); $r2 = $r1[1]; $r1 = $r1[0];
-	$sources = cg_build_result_sets($cloudSize, $centerEid, $r1, $r2); $sumWeights = $sources[1]; $sources = $sources[0];
-	$cloud = cg_build_cloud($cloudSize, $sources, $sumWeights); $totalDifficulty = $cloud[1]; $cloud = $cloud[0];
-	cg_insert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
-}
-
-
 /** Retourne un identifiant de partie aléatoire de la liste de parties jouables
 * @return gid : Identifiant de partie.
 */
-function random_game()
-{
+function randomGameCore() {
 	global $db;
-
 	return $db->querySingle("select gid from game where gid = (abs(random()) % (select max(gid) from game))+1 or gid = (select max(gid) from game where gid > 0) order by gid limit 1;");
+}
+
+function randomGame()
+{
+	$gid = randomGameCore();
+	if ($gid === null) {
+		// TODO : séparer ces créations de parties dans une fonction qui détecte le mode toussa.
+		for ($i = 0; $i < 100; $i++) {
+			createGameCore(10);
+		}
+		$gid = randomGameCore();
+		if ($gid === null) {
+			mDie(6, "Erreur lors de la récupération de la partie. Vérifiez qu'il y a au moins une partie.");
+		}
+	}
+	return $gid;
 }
 
 
@@ -331,15 +353,34 @@ function game2json($game_id)
 */
 function createGame()
 {
-	if(!isset($_GET['nb']) || !isset($_GET['mode']))
+	if (!isset($_GET['nb']) || !isset($_GET['mode']))
 		mDie(2,"La requête est incomplète");
 
 	$nbParties = intval($_GET['nb']);
 
 	for ($i = 0; $i < $nbParties; $i++)
-		create_game(10);
+		createGameCore(10);
+	
+	echo '{"success":1}';
 }
 
+/** Génère une partie (mode normal pour l'instant) pour une certaine taille de nuage.
+* @param cloudSize : Taille du nuage.
+*
+* Est appelée par randomGame(), donc il faudra adapter quand on aura plusieurs modes, par exemple en ayant une fonction intermédiaire qui puisse être appelée par createGame et randomGame.
+*/
+function createGameCore($cloudSize)
+{
+	global $db;
+
+	// select random node
+	$centerEid = random_node();
+
+	$r1 = cg_choose_relations(); $r2 = $r1[1]; $r1 = $r1[0];
+	$sources = cg_build_result_sets($cloudSize, $centerEid, $r1, $r2); $sumWeights = $sources[1]; $sources = $sources[0];
+	$cloud = cg_build_cloud($cloudSize, $sources, $sumWeights); $totalDifficulty = $cloud[1]; $cloud = $cloud[0];
+	cg_insert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
+}
 
 /** Récupération d'une partie.
 */
@@ -354,7 +395,7 @@ function getGame()
 
 	for ($i=0; $i < $nbGames; $i)
 	{
-		game2json(random_game());
+		game2json(randomGame());
 
 		if ((++$i) < $nbGames)
 			echo ",";
@@ -396,7 +437,7 @@ function setGame()
 	{
 		$num = $row['num'];
 		if (!isset($_GET[$num])) {
-			mDie(5,"Pas de réponse pour le mot $num de cette partie.");
+			mDie(5,"Cette requête set_partie ne donne pas de réponse (une relation) pour le mot numéro $num de la partie.");
 		}
 		$relanswer = intval($_GET[$num]);
 
@@ -429,7 +470,9 @@ function setGame()
 
 	$db->exec("commit;");
 	// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
-	game2json(random_game());
+	echo "{score:$score,newGame:";
+	game2json(randomGame());
+	echo "}";
 }
 
 /** La fonction principale.
@@ -455,5 +498,7 @@ function main($action)
 }
 
 main($action);
+
+ob_end_flush();
 
 ?>
