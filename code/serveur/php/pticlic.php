@@ -1,20 +1,52 @@
 <?php
 // Requête : http://serveur/pticlic.php?action=getparties&nb=2&mode=normal&user=foo&passwd=bar
-
 ob_start();
 
 $email_admin = '';              // Adresse e-mail Administrateur.
-
 $SQL_DBNAME = (dirname(__FILE__) . "/db");
 
+
+/** Enregistre une erreur et quitte le programme.
+* @param err : Numéro de l'erreur.
+* @param msg : Description de l'erreur.
+*/
 function mDie($err,$msg)
 {
 	global $db;
+
 	ob_end_clean();
 	echo "{\"error\":".$err.",\"msg\":".json_encode("".$msg)."}";
+
+	log_error($err,$msg);
+
 	$db->close();
 	exit;
 }
+
+
+/** Ecrit un rapport d'erreur dans un fichier.
+* @param errNum : Numéro de l'erreur.
+* @param msg : Description de l'erreur.
+* @param [other] : (Optionnel) Complément d'information.
+*/
+function log_error($errNum, $msg, $other="")
+{
+	$file = fopen("./log.txt","a+");
+
+	// Met en forme la chaine contenant les paramètres de la requête.
+	$dump_parameters = str_replace("(\n","",print_r($_GET,true));
+	$dump_parameters = str_replace(")\n","",$dump_parameters);
+
+	fwrite($file,"\nErreur n° ".$errNum);
+	fwrite($file," : ".$msg);
+	if(!empty($other))	
+		fwrite($file,"\n ".$other);
+	fwrite($file,"\n  ".$dump_parameters);
+
+	fclose($file);
+}
+
+
 
 if (!$db = new SQlite3($SQL_DBNAME))
 	mDie(1,"Erreur lors de l'ouverture de la base de données SQLite3");
