@@ -144,13 +144,14 @@ public class Network {
 		URL url = null;
 		Gson gson = null;
 		BufferedReader reader = null;
+		String json = null;
 		try {
 			// TODO : ne restera le temps que les requete du serveur passe du GET au POST
 			String urlS = this.serverURL+"/pticlic.php?"
 			+ "action=" + Action.GET_GAMES.value()
 			+ "&user=" + this.id
 			+ "&passwd=" + this.passwd
-			//+ "&nb=" + String.valueOf(nbGames)
+			+ "&nb=" + String.valueOf(nbGames)
 			+ "&mode="+mode.value();
 			
 			url = new URL(urlS);
@@ -162,7 +163,7 @@ public class Network {
 //			connection.addRequestProperty("nb", String.valueOf(nbGames));
 //			connection.addRequestProperty("mode", mode.value());
 			reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-			String json = reader.readLine();
+			json = reader.readLine();
 			
 			gson = new Gson();
 			//JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
@@ -176,14 +177,12 @@ public class Network {
 			}
 			jsonReader.endArray();
 			jsonReader.close();
+		} catch (UnsupportedEncodingException e1) {
+			throw new PtiClicException(0, "Impossible de recuperer l'erreur, nous avons pris note de cette erreur.\n Merci");
+		} catch (IOException e1) {
+			throw new PtiClicException(0, "Impossible de recuperer l'erreur, nous avons pris note de cette erreur.\n Merci");
 		} catch (Exception e) {
-				try {
-					throw new PtiClicException(reader.readLine());
-				} catch (UnsupportedEncodingException e1) {
-					throw new PtiClicException(0, "Impossible de recuperer l'erreur, nous avons pris note de cette erreur");
-				} catch (IOException e1) {
-					throw new PtiClicException(0, "Impossible de recuperer l'erreur, nous avons pris note de cette erreur");
-				}
+			throw new PtiClicException(json);
 		}
 
 		return game;
