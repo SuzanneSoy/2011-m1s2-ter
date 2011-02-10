@@ -93,11 +93,11 @@ public class BaseGame extends Activity implements OnClickListener {
 			.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					dialog.cancel();
+					finish();
 				}
 			});
 			AlertDialog alert = builder.create();
 			alert.show();
-			finish();
 		}
 
 	}
