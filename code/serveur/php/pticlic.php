@@ -1,7 +1,7 @@
 <?php
 // Requête : http://serveur/pticlic.php?action=getparties&nb=2&mode=normal&user=foo&passwd=bar
 ob_start();
-
+date_default_timezone_set('Europe/Paris');
 $email_admin = '';              // Adresse e-mail Administrateur.
 $SQL_DBNAME = (dirname(__FILE__) . "/db");
 
@@ -17,7 +17,7 @@ function mDie($err,$msg)
 	ob_end_clean();
 	echo "{\"error\":".$err.",\"msg\":".json_encode("".$msg)."}";
 
-	log_error($err,$msg);
+	log_error($err,$msg, date("c"));
 
 	$db->close();
 	exit;
