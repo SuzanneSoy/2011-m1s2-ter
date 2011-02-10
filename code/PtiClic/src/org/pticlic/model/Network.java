@@ -3,7 +3,6 @@ package org.pticlic.model;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.net.URLConnection;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -21,6 +20,8 @@ import com.google.gson.stream.JsonReader;
  */
 public class Network {
 
+	// TODO : Penser a gere les erreurs renvoyer par le serveur.
+	
 	public enum Action {
 		GET_GAMES(0),
 		SEND_GAME(1);
@@ -143,7 +144,7 @@ public class Network {
 			+ "&nb=" + String.valueOf(nbGames)
 			+ "&mode="+mode.value();
 			
-			URL url = new URL(urlS);			
+			URL url = new URL(urlS);
 
 //			URLConnection connection = url.openConnection();
 //			connection.addRequestProperty("action", Action.GET_GAMES.value());
@@ -220,6 +221,14 @@ public class Network {
 		return new DownloadedBaseGame(id, gid, pgid, cat1, cat2, cat3, cat4, center, cloud);
 	}
 
+	public TotalScore sendGame(Match game) {
+		switch (mode) {
+		case SIMPLE_GAME:
+			return sendBaseGame(game);
+		default:
+			return null;
+		}
+	}
 
 	/**
 	 * Cette méthode permet d'envoyer les parties au serveur pour qu'il puisse les 
@@ -227,43 +236,48 @@ public class Network {
 	 * @param game La partie jouee par l'utilisateur 
 	 * @return Le score sous forme JSON.
 	 */
-	public TotalScore sendGame(Match game) {
+	public TotalScore sendBaseGame(Match game) {
 		TotalScore score = null;
 		try {
-			URL url = new URL(this.serverURL);
-			URLConnection connection = url.openConnection();
-			connection.addRequestProperty("action", Action.SEND_GAME.value());
-			connection.addRequestProperty("user", this.id);
-			connection.addRequestProperty("passwd", this.passwd);
-			connection.addRequestProperty("mode", mode.value());
-			connection.addRequestProperty("pgid", String.valueOf(game.getGame().getId()));
+			
+			// TODO : ne restera le temps que les requete du serveur passe du GET au POST
+			String urlS = this.serverURL+"/pticlic.php?"
+			+ "action=" + Action.SEND_GAME.value()
+			+ "&user=" + this.id
+			+ "&passwd=" + this.passwd
+			+ "&pgid=" + game.getGame().getPgid()
+			+ "&gid=" + game.getGame().getGid()
+			+ "&mode="+mode.value();
+			
+			// TODO : faut gere le mode
+			for (Integer i : game.getRelation1()) {
+				urlS += "&" + i + "=" + ((DownloadedBaseGame)game.getGame()).getCat1() ;
+			}
+			for (Integer i : game.getRelation2()) {
+				urlS += "&" +  i + "=" + ((DownloadedBaseGame)game.getGame()).getCat2();
+			}
+			for (Integer i : game.getRelation3()) {
+				urlS += "&" +  i + "=" + ((DownloadedBaseGame)game.getGame()).getCat3();
+			}
+			for (Integer i : game.getRelation4()) {
+				urlS += "&" + i + "=" + ((DownloadedBaseGame)game.getGame()).getCat4();
+			}
+//			for (Integer i : game.getRelation4()) {
+//				urlS += "&" + ((DownloadedBaseGame)game.getGame()).getCat4() + "=" + i;
+//			}
+			URL url = new URL(urlS);
 
-			if (((DownloadedBaseGame)game.getGame()).getCat1() != -1) {
-				for (Integer i : game.getRelation1()) {
-					connection.addRequestProperty("cat1[]", i.toString());
-				}
-			}
-			if (((DownloadedBaseGame)game.getGame()).getCat2() != -1) {
-				for (Integer i : game.getRelation2()) {
-					connection.addRequestProperty("cat2[]", i.toString());
-				}
-			}
-			if (((DownloadedBaseGame)game.getGame()).getCat3() != -1) {
-				for (Integer i : game.getRelation3()) {
-					connection.addRequestProperty("cat3[]", i.toString());
-				}
-			}
-			if (((DownloadedBaseGame)game.getGame()).getCat4() != -1) {
-				for (Integer i : game.getRelation4()) {
-					connection.addRequestProperty("cat4[]", i.toString());
-				}
-			}
-			for (Integer i : game.getTrash()) {
-				connection.addRequestProperty("trash[]", i.toString());
-			}
+//			URL url = new URL(this.serverURL);
+//			URLConnection connection = url.openConnection();
+//			connection.addRequestProperty("action", Action.SEND_GAME.value());
+//			connection.addRequestProperty("user", this.id);
+//			connection.addRequestProperty("passwd", this.passwd);
+//			connection.addRequestProperty("mode", mode.value());
+//			connection.addRequestProperty("pgid", String.valueOf(game.getGame().getId()));
 
 			Gson gson = new Gson();
-			JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+//			JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+			JsonReader reader = new JsonReader(new InputStreamReader(url.openStream(), "UTF-8"));
 
 			score = gson.fromJson(reader, TotalScore.class);
 
