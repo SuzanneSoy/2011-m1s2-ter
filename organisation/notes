@@ -32,3 +32,26 @@ Pour BERTRAND
 
 Mercredi 16
 Réflexion sur les modes & options.
+
+
+Jeudi 10 férier 2011
+- demander les identifiants ssh à Lafourcade
+
+
+*******LES NOTES QUI SUIVENT SONT PAR JOHN ET POUR JOHN*****************
+
+Jeudi 10 février 2011
+Site BETA TESTERS
+- table userinfo OR user_info à créer dans dump2sqlite.sh
+- Pas de clés étrangères en sqlite
+- refais les instructions dans README
+- create table user(login primary key, fname, lname, age, sex);
+- on peut donner 0 comme score de début ou bien quelques points pour encourager les utilisateurs
+- phpbb : topics bogues, suggestions (debug button on Android) 
+- Pages : info, inscription, forum...
+- pas de page "éditer profile", mais par contre la possibilité de supprimer le compte, 
+par contre on supprime tout sauf le login et le score lors de la suppression de compte (raisons légales)
+- différence entre MySQL et SQLite : 
+  MySQL a host, port, user, passwd, database
+  SQLite a un fichier que l'on nomme lorsque l'on fait sqlite3 nomfichier (pas vraiment le nom de bd)
+
