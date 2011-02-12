@@ -159,7 +159,7 @@ function cg_build_result_sets($cloudSize, $centerEid, $r1, $r2)
 */
 function cg_choose_relations()
 {
-	$relations = array(5, 7, 9, 10, /* Pas d'icônes pour celles-ci. */ 13, 14, 22);
+	$relations = array(5, 7, 9, 10);// /* Pas d'icônes pour celles-ci. */ 13, 14, 22);
 	$r1 = rand(0,count($relations)-1);
 	$r2 = rand(0,count($relations)-2);
 

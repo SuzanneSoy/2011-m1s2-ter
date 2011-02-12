@@ -8,6 +8,7 @@ echo "  Et c'est parti !" >&2
 echo >&2
 
 # Played_game(type) : 0 => partie de référence, 1 => joueur
+# Note : l'index i_played_game_all sert à la vérification lors du set_partie.
 
 cat <<EOF
 begin transaction;
@@ -20,7 +21,15 @@ create table game(gid integer primary key autoincrement, eid_central_word, relat
 create table game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash);
 create table played_game(pgid integer primary key autoincrement, gid, login, timestamp);
 create table played_game_cloud(pgid, gid, type, num, relation, weight, score);
+
 insert into user(login, mail, hash_passwd, score) values('foo', 'foo@isp.com', '$(echo -n 'bar' | md5sum | cut -d ' ' -f 1)', 0);
+
+create index i_relation_start on relation(start);
+create index i_relation_end on relation(end);
+create index i_relation_type on relation(type);
+create index i_relation_start_type on relation(start,type);
+create index i_relation_end_type on relation(end,type);
+create index i_played_game_all on played_game(pgid, gid, login, timestamp);
 EOF
 
 # tr : pour virer le CRLF qui traîne
@@ -38,13 +47,4 @@ cat "$1" \
 | grep -v '^//' \
 | grep -v '^$'
 
-# Note : l'index i_played_game_all sert à la vérification lors du set_partie.
-cat <<EOF
-create index i_relation_start on relation(start);
-create index i_relation_end on relation(end);
-create index i_relation_type on relation(type);
-create index i_relation_start_type on relation(start,type);
-create index i_relation_end_type on relation(end,type);
-create index i_played_game_all on played_game(pgid, gid, login, timestamp);
-commit;
-EOF
+echo "commit;"

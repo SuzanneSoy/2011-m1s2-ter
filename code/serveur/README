@@ -1,6 +1,0 @@
-cat dump.url
-# Aller à cette adresse, et télécharger le dernier dump
-./dump2sqlite.sh 01232011-LEXICALNET-JEUXDEMOTS-FR-NOHTML.txt > sql
-pv sql | sqlite3 php/db
-sudo chown -R user.www-data php
-chmod 664 php/db
