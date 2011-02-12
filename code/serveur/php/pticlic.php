@@ -487,7 +487,7 @@ function setGame()
 
 	$db->exec("commit;");
 	// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
-	echo "{score:$score,newGame:";
+	echo "{\"score\":$score,\"newGame\":";
 	game2json(randomGame());
 	echo "}";
 }
