@@ -8,13 +8,14 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
+import org.pticlic.exception.PtiClicException;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
-import exception.PtiClicException;
 
 /**
  * @author Bertrand BRUN
@@ -235,8 +236,14 @@ public class Network {
 		reader.endObject();
 		return new DownloadedBaseGame(id, gid, pgid, cat1, cat2, cat3, cat4, center, cloud);
 	}
-
-	public TotalScore sendGame(Match game) {
+	
+	/**
+	 * Cette méthode permet d'envoyer les parties au serveur pour qu'il puisse les 
+	 * rajouter à la base de données, et calculer le score.
+	 * @param game La partie jouee par l'utilisateur 
+	 * @return Le score sous forme JSON.
+	 */
+	public TotalScore sendGame(Match game) throws PtiClicException  {
 		switch (mode) {
 		case SIMPLE_GAME:
 			return sendBaseGame(game);
@@ -244,15 +251,14 @@ public class Network {
 			return null;
 		}
 	}
-
-	/**
-	 * Cette méthode permet d'envoyer les parties au serveur pour qu'il puisse les 
-	 * rajouter à la base de données, et calculer le score.
-	 * @param game La partie jouee par l'utilisateur 
-	 * @return Le score sous forme JSON.
-	 */
-	public TotalScore sendBaseGame(Match game) {
+	
+	
+	public TotalScore sendBaseGame(Match game) throws PtiClicException {
 		TotalScore score = null;
+		URL url = null;
+		Gson gson = null;
+		BufferedReader reader = null;
+		String json = null;
 		try {
 			
 			// TODO : ne restera le temps que les requete du serveur passe du GET au POST
@@ -278,7 +284,7 @@ public class Network {
 				urlS += "&" + i + "=" + ((DownloadedBaseGame)game.getGame()).getCat4();
 			}
 			
-			URL url = new URL(urlS);
+			url = new URL(urlS);
 
 //			URL url = new URL(this.serverURL);
 //			URLConnection connection = url.openConnection();
@@ -288,16 +294,30 @@ public class Network {
 //			connection.addRequestProperty("mode", mode.value());
 //			connection.addRequestProperty("pgid", String.valueOf(game.getGame().getId()));
 
-			Gson gson = new Gson();
-//			JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-			JsonReader reader = new JsonReader(new InputStreamReader(url.openStream(), "UTF-8"));
+			reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+			json = reader.readLine();
+			
+			gson = new Gson();
+			//JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+			InputStream in = new ByteArrayInputStream(json.getBytes("UTF-8"));
+			JsonReader jsonReader = new JsonReader(new InputStreamReader(in));
 
-			score = gson.fromJson(reader, TotalScore.class);
+			// Comme gson ne renvoie pas une erreur si l'objet qui recupere ne correspond pas a la classe qu'il attends.
+			// On creer tout d'abord une objet error et si celui-ci est vide on creer l'objet score, sinon on lance
+			// une exception.
+			PtiClicException.Error error = gson.fromJson(json, PtiClicException.Error.class);
+			if (error.getMsg() == null) {
+				score = gson.fromJson(jsonReader, TotalScore.class);
+			} else {
+				throw new PtiClicException(error);
+			}
 
-
-		} catch (IOException e) {
-			return score;
+		} catch (UnsupportedEncodingException e1) {
+			throw new PtiClicException(0, "Impossible de recuperer l'erreur, nous avons pris note de cette erreur.\n Merci");
+		} catch (IOException e1) {
+			throw new PtiClicException(0, "Impossible de recuperer l'erreur, nous avons pris note de cette erreur.\n Merci");
 		}
+		
 		return score;
 	}
 }
