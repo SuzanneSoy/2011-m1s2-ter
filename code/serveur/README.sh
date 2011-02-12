@@ -7,7 +7,7 @@ latest="$(wget 'http://www.lirmm.fr/~lafourcade/JDM-LEXICALNET-FR/?C=M;O=D' -O- 
 wget 'http://www.lirmm.fr/~lafourcade/JDM-LEXICALNET-FR/'"$latest"
 
 echo "Étape 2/3 : Conversion vers sql"
-./dump2sqlite.sh 01232011-LEXICALNET-JEUXDEMOTS-FR-NOHTML.txt > sql
+./dump2sqlite.sh "$latest" > sql
 
 echo "Étape 3/3 : Insertion dans la bdd"
 mv php/db php/db.old
