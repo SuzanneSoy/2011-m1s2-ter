@@ -5,6 +5,11 @@
 user="foo"
 passwd="bar"
 
+if ! [ -e "$1" ]; then
+	echo "Le fichier $1 n'existe pas !"
+	exit 1
+fi
+
 echo "  dump2sql.sh : conversion des dumps de JeuxDeMots vers du sql (sqlite3)." >&2
 echo "  La progression est affichée avec pv. Si vous n'avez pas pv, supprimez la ligne correspondante dans ce script." >&2
 echo "  Et c'est parti !" >&2
@@ -42,7 +47,7 @@ cat "$1" \
 | iconv -f iso-8859-1 -t utf-8 \
 | tr '\r' ' ' \
 | sed -e 's/X/XX/g' | sed -e 's/A/Xa/g' | tr '\n' 'A' | sed -e 's/A")/")/g' | tr 'A' '\n' | sed -e 's/Xa/A/g' | sed -e 's/XX/X/g' \
-| pv -s "0$(wc -c < "$1")" \
+| pv -s "$(wc -c "$1" | sed -E -e 's/^ *([0-9]*) .*$/\1/')" \
 | sed -E -e "s#'#''#g" \
   -e 's#^/?// [0-9]+ occurrences of relations ([a-z_]+) \(t=([0-9]+) nom_etendu="([^"]+)" info="([^"]+)"\)$#insert into type_relation(name, num, extended_name, info) values('\''\1'\'', \2, '\''\3'\'', '\''\4'\'');#' \
   -e 's#^/?// [0-9]+ occurrences of nodes ([a-z_]+) \(t=([0-9]+)\)$#insert into type_node(name, num) values('\''\1'\'', \2);#' \
