@@ -5,7 +5,7 @@
 echo
 echo "Étape 1/3 : Téléchargement"
 echo "=========================="
-latest="$(wget 'http://www.lirmm.fr/~lafourcade/JDM-LEXICALNET-FR/?C=M;O=D' -O- | grep '\-LEXICALNET\-JEUXDEMOTS\-FR\-\(NOHTML\)\?\.txt' | head -n 1 | sed -E -e 's/^.*<a href="([0-9]*-LEXICALNET-JEUXDEMOTS-FR-(NOHTML)?\.txt)">.*$/\1/')"
+latest="$(wget -c 'http://www.lirmm.fr/~lafourcade/JDM-LEXICALNET-FR/?C=M;O=D' -O- | grep '\-LEXICALNET\-JEUXDEMOTS\-FR\-\(NOHTML\)\?\.txt' | head -n 1 | sed -E -e 's/^.*<a href="([0-9]*-LEXICALNET-JEUXDEMOTS-FR-(NOHTML)?\.txt)">.*$/\1/')"
 wget -c 'http://www.lirmm.fr/~lafourcade/JDM-LEXICALNET-FR/'"$latest"
 
 echo
