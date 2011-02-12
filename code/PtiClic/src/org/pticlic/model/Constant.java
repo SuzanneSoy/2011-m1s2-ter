@@ -2,8 +2,10 @@ package org.pticlic.model;
 
 public class Constant {
 	public static final String SERVER_URL = "server";
-	
 	public static final String SERVER_AUTH = "SERVER_AUTH";
+	
+	// Constant pour les parties en cache
+	public static final String NEW_BASE_GAME = "NEW_BASE_GAME";
 	
 	// Constant pour les information de l'utilisateur.
 	public static final String USER_ID = "login";

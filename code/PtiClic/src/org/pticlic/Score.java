@@ -6,10 +6,8 @@ import org.pticlic.model.Match;
 import org.pticlic.model.Network;
 import org.pticlic.model.Network.Mode;
 
-
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * @author John CHARRON
@@ -48,7 +47,9 @@ public class Score extends Activity implements OnClickListener{
 		
 		// FIXME : Pour l'instant ne marche pas, attend de savoir comment est formater le score que l'on recois.
 		try {
-			network.sendGame(gamePlayed);
+			Double score = network.sendGame(gamePlayed);
+			((TextView)findViewById(R.id.total)).setText(String.valueOf(score.floatValue()));
+			sp.edit().putString(Constant.NEW_BASE_GAME, network.getNewGame()).commit();			
 		} catch (PtiClicException e) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle(getString(R.string.app_name))

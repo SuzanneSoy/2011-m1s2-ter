@@ -10,7 +10,6 @@ import org.pticlic.model.Network;
 import org.pticlic.model.Network.Mode;
 import org.pticlic.model.Relation;
 
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -29,6 +28,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 /**
  * @author Bertrand BRUN et Georges DUPÉRON
@@ -54,6 +55,7 @@ public class BaseGame extends Activity implements OnClickListener {
 	private Match 				match;
 	private Network 			network;
 	private boolean				help = false;
+	private String 				gameJson;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -66,6 +68,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		String serverURL = sp.getString(Constant.SERVER_URL, "http://dumbs.fr/~bbrun/pticlic.json"); // TODO : Mettre comme valeur par defaut l'adresse reel du serveur
 		String id = sp.getString(Constant.USER_ID, "joueur");
 		String passwd = sp.getString(Constant.USER_PASSWD, "");
+		gameJson = sp.getString(Constant.NEW_BASE_GAME, null); 
 
 		// On initialise la classe permettant la communication avec le serveur.
 		network = new Network(serverURL, Mode.SIMPLE_GAME, id, passwd);
@@ -80,7 +83,9 @@ public class BaseGame extends Activity implements OnClickListener {
 	protected void onStart() {
 		super.onStart();
 		try {
-			game = (DownloadedBaseGame)network.getGames(1);
+			Gson gson = new Gson();
+			if (gameJson == null) game = (DownloadedBaseGame)network.getGames(1);
+			else game = gson.fromJson(gameJson, DownloadedBaseGame.class);
 			runMatch();
 			start();
 		} catch (PtiClicException e) {

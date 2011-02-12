@@ -27,6 +27,8 @@ import com.google.gson.stream.JsonReader;
  */
 public class Network {
 	
+	String	 	newGameJson = null;
+	
 	public enum Action {
 		GET_GAMES(0),
 		SEND_GAME(1);
@@ -241,18 +243,18 @@ public class Network {
 	 * @param game La partie jouee par l'utilisateur 
 	 * @return Le score sous forme JSON.
 	 */
-	public TotalScore sendGame(Match game) throws PtiClicException  {
+	public double sendGame(Match game) throws PtiClicException  {
 		switch (mode) {
 		case SIMPLE_GAME:
 			return sendBaseGame(game);
 		default:
-			return null;
+			return -1;
 		}
 	}
 	
 	
-	public TotalScore sendBaseGame(Match game) throws PtiClicException {
-		TotalScore score = null;
+	public double sendBaseGame(Match game) throws PtiClicException {
+		double score = -1;
 		URL url = null;
 		Gson gson = null;
 		BufferedReader reader = null;
@@ -305,7 +307,7 @@ public class Network {
 			// une exception.
 			PtiClicException.Error error = gson.fromJson(json, PtiClicException.Error.class);
 			if (error.getMsg() == null) {
-				score = gson.fromJson(jsonReader, TotalScore.class);
+				score = getScore(jsonReader, gson);
 			} else {
 				throw new PtiClicException(error);
 			}
@@ -317,5 +319,28 @@ public class Network {
 		}
 		
 		return score;
+	}
+	
+	private double getScore(JsonReader reader, Gson gson) throws IOException {
+		double					score = -1;
+		
+		reader.beginObject();
+		while (reader.hasNext()) {
+			String name = reader.nextName();
+			if (name.equals("score")) {
+				score = reader.nextDouble();
+			} else if (name.equals("newGame")) {
+				DownloadedBaseGame newGame = gson.fromJson(reader, DownloadedBaseGame.class);
+				newGameJson = gson.toJson(newGame);
+			} else {
+				reader.skipValue();
+			}
+		}
+		reader.endObject();
+		return score;	
+	}
+	
+	public String getNewGame() {
+		return this.newGameJson;
 	}
 }
