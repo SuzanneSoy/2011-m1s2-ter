@@ -2,6 +2,7 @@ package org.pticlic.games;
 
 import org.pticlic.R;
 import org.pticlic.Score;
+import org.pticlic.exception.PtiClicException;
 import org.pticlic.model.Constant;
 import org.pticlic.model.DownloadedBaseGame;
 import org.pticlic.model.Match;
@@ -9,7 +10,6 @@ import org.pticlic.model.Network;
 import org.pticlic.model.Network.Mode;
 import org.pticlic.model.Relation;
 
-import exception.PtiClicException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -234,7 +234,6 @@ public class BaseGame extends Activity implements OnClickListener {
 			leaveView();
 			start();
 		} else {
-			network.sendGame(match);
 			Intent intent = new Intent(this, Score.class);
 			intent.putExtra(Constant.SCORE_GAMEPLAYED, match);
 			intent.putExtra(Constant.SCORE_MODE, Mode.SIMPLE_GAME);

@@ -1,11 +1,16 @@
 package org.pticlic;
 
+import org.pticlic.exception.PtiClicException;
 import org.pticlic.model.Constant;
 import org.pticlic.model.Match;
 import org.pticlic.model.Network;
 import org.pticlic.model.Network.Mode;
 
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -20,7 +25,7 @@ import android.widget.Button;
  */
 public class Score extends Activity implements OnClickListener{
 	
-	private Match 	gamePlayed;
+	private Match 			gamePlayed;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +47,23 @@ public class Score extends Activity implements OnClickListener{
 		Network network = new Network(serverURL, mode, id, passwd);
 		
 		// FIXME : Pour l'instant ne marche pas, attend de savoir comment est formater le score que l'on recois.
-		//DownloadedScore score = network.sendGame(gamePlayed);
+		try {
+			network.sendGame(gamePlayed);
+		} catch (PtiClicException e) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(getString(R.string.app_name))
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setMessage(e.getMessage())
+			.setCancelable(false)
+			.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+					finish();
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
 		
 		((Button)findViewById(R.id.saw)).setOnClickListener(this);
 		

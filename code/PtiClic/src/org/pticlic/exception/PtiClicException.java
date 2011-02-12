@@ -1,4 +1,4 @@
-package exception;
+package org.pticlic.exception;
 
 import java.io.Serializable;
 
@@ -9,7 +9,7 @@ public class PtiClicException extends Exception {
 	private static final long serialVersionUID = 1L;
 	private Error error;
 	
-	private static class Error implements Serializable {
+	public static class Error implements Serializable {
 		
 		private static final long serialVersionUID = 1L;
 		private int num;
@@ -29,6 +29,10 @@ public class PtiClicException extends Exception {
 		public String getMsg() {
 			return msg;
 		}
+	}
+	
+	public PtiClicException(Error error) {
+		this.error = error;
 	}
 	
 	public PtiClicException(int num, String msg) {
