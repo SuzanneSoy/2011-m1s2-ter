@@ -20,7 +20,8 @@ public class Relation {
 	
 	private Relation() {
 		imageRelations = new HashMap<Integer, Integer>();
-		imageRelations.put(-1, android.R.drawable.ic_menu_delete);
+		imageRelations.put(-1, R.drawable.corbeille);
+		imageRelations.put(0, R.drawable.rapport);
 		imageRelations.put(5, R.drawable.synonyme);
 		imageRelations.put(7, R.drawable.contraire);
 		imageRelations.put(9, R.drawable.contenu);
