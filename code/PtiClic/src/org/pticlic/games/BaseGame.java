@@ -46,7 +46,6 @@ import android.widget.TextView;
  */
 
 public class BaseGame extends Activity implements OnClickListener {
-	// TODO : mettre la poubelle comme categorie -1
 	private int 				currentWord = 0;
 	private TextView 			currentWordTextView;
 	private TextView			wordRemaining;
