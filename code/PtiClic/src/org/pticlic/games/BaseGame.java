@@ -200,9 +200,9 @@ public class BaseGame extends Activity implements OnClickListener {
 
 		TranslateAnimation translate;
 		if (isInHelpMode())
-			translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 4);
+			translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 8);
 		else
-			translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 2);
+			translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 4);
 		translate.setDuration(500);
 		set.addAnimation(translate);
 
@@ -301,7 +301,7 @@ public class BaseGame extends Activity implements OnClickListener {
 			TextView mainWord = (TextView)findViewById(R.id.mainWord);
 			currentWordTextView = (TextView)findViewById(R.id.currentWord);
 
-			TranslateAnimation translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 4);
+			TranslateAnimation translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 8);
 			translate.setDuration(0);
 			translate.setFillAfter(true);
 
@@ -355,7 +355,7 @@ public class BaseGame extends Activity implements OnClickListener {
 			TextView mainWord = (TextView)findViewById(R.id.mainWord);
 			currentWordTextView = (TextView)findViewById(R.id.currentWord);
 
-			TranslateAnimation translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 2);
+			TranslateAnimation translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 4);
 			translate.setDuration(0);
 			translate.setFillAfter(true);
 
