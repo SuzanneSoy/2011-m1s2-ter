@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # TODO : sed -E sur certaines machines, sed -r sur d'autres.
 

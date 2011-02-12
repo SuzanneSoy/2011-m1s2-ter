@@ -26,8 +26,6 @@ import com.google.gson.stream.JsonReader;
  * puisse insérer la contribution de l'utilisateur, mais aussi pouvoir calculer le score de celui-ci.
  */
 public class Network {
-
-	// TODO : Penser a gere les erreurs renvoyer par le serveur.
 	
 	public enum Action {
 		GET_GAMES(0),

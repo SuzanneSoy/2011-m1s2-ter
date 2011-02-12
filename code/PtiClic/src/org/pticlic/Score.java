@@ -33,7 +33,7 @@ public class Score extends Activity implements OnClickListener{
 		setContentView(R.layout.score);
 		
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		String serverURL = sp.getString(Constant.SERVER_URL, "http://dumbs.fr/~bbrun/pticlic.json"); // TODO : Mettre comme valeur par defaut l'adresse reel du serveur
+		String serverURL = sp.getString(Constant.SERVER_URL, "http://dumbs.fr/~bbrun/pticlic/pticlic.php"); // TODO : Mettre comme valeur par defaut l'adresse reel du serveur
 		String id = sp.getString(Constant.USER_ID, "joueur");
 		String passwd = sp.getString(Constant.USER_PASSWD, "");
 		Mode mode = null;
