@@ -3,6 +3,8 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 	<head>
+		<title>Titre</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />		
 		<link rel="stylesheet" href="simple.css" />
 	</head>
 	<body>
@@ -11,7 +13,7 @@
 		</div>
 		<div class="content">
 			Le contenu.
-		<div>
+		</div>
 		<div class="footer">
 			<?php include("footer.html"); ?>
 		</div>
