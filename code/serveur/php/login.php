@@ -1,23 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-	<head>
-		<title>Titre</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />		
-		<link rel="stylesheet" href="simple.css" />
-	</head>
+<?php>
+    include("_head.php");
+?>
 	<body>
 		<div class="menu">
 			<?php include("menu.html"); ?>	
 		</div>
 		<div class="content">
-			Le contenu.
+                    <p>Vous êtes déjà inscrit&nbsp;? Authentifiez-vous&nbsp;:</p>
+                    <form name="loginform" method="post" action="loginaction.php">
+                        <p> Identifiant&nbsp;: <input name="loginid" type="text" /></p>
+                        <p> Mot de passe&nbsp;: <input name="loginpswd" type="password" /></p>
+                        <p> <input type="submit" name="loginsubmit" value="Valider" />
+                    </form>
 		</div>
+
 		<div class="footer">
 			<?php include("footer.html"); ?>
 		</div>
 	</body>
-</html><?php
-
-?>
+        </html>
