@@ -1,3 +1,4 @@
+rm php/db
 cat dump.url
 # Aller à cette adresse, et télécharger le dernier dump
 ./dump2sqlite.sh 01232011-LEXICALNET-JEUXDEMOTS-FR-NOHTML.txt > sql
