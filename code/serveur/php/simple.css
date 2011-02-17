@@ -1,4 +1,4 @@
-#entete {
+#menu {
 	margin: 0;
 }
 
@@ -6,7 +6,7 @@
 	display: block;
 }
 
-#liens, #pied {
+#liens, #footer {
 	background-color: #efd;
 	border-bottom: thin solid #8a8;
 }
@@ -20,7 +20,7 @@ h1 {
 	margin-top: 0;
 }
 
-#pied {
+#footer {
 	margin: 0;
 	padding: 0.5em;
 	border-top: thin solid #8a8;
@@ -38,7 +38,7 @@ img#logo-grunt {
 	margin-right: 0.5em;
 }
 
-#liens a,  #pied a {
+#liens a,  #footer a {
 	color: #242;
 }
 
@@ -48,11 +48,11 @@ img#logo-grunt {
 	margin: auto 1em;
 }
 
-#liens a:hover, #pied a:hover {
+#liens a:hover, #footer a:hover {
 	color: #8a4;
 }
 
-#pied {
+#footer {
 	text-align: center;
 	font-size: small;
 }
@@ -78,7 +78,7 @@ img#logo-grunt {
 
 
 
-#contenu {
+#content {
 	margin: 0;
 	padding: 0.3em;
 }
