@@ -1,10 +1,13 @@
 .menu {
-	margin: 0;
+	margin: 10px;
+	border-bottom : 1px solid grey; 
 }
 
-#liens {
-	display: block;
+.menu a
+{
+	margin-left : 20px;
 }
+
 
 #liens, .footer {
 	background-color: #efd;
@@ -117,7 +120,7 @@ hr {
 }
 
 a {
-	color: #975;
+	color: black;
 }
 
 a:visited {
