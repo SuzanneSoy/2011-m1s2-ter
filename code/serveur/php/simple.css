@@ -35,6 +35,14 @@
 	padding-bottom : 4em;
 }
 
+.content p {
+	margin-left : 2%;
+}
+
+.content p:first-letter {
+	margin-left : 2%;
+}
+
 html, body {
 	padding: 0;
 	margin: 0;

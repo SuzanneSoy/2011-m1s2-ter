@@ -12,7 +12,10 @@
 			<?php include("menu.html"); ?>	
 		</div>
 		<div class="content">
-			<p>Page d'accueil.</p>
+			<h2>Le projet</h2>
+			<p> Le projet...</p>
+			<h2>La beta</h2>
+			<p> La version beta de PtiClic...</h2>
 		</div>
 		<div class="footer">
 			<?php include("footer.html"); ?>
