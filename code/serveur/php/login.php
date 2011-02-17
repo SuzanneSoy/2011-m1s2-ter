@@ -8,9 +8,29 @@
 		<div class="content">
                     <p>Vous êtes déjà inscrit&nbsp;? Authentifiez-vous&nbsp;:</p>
                     <form name="loginform" method="post" action="loginaction.php">
-                        <p> Identifiant&nbsp;: <input name="loginid" type="text" /></p>
-                        <p> Mot de passe&nbsp;: <input name="loginpswd" type="password" /></p>
-                        <p> <input type="submit" name="loginsubmit" value="Valider" />
+                        <table class="logintbl">
+				<tr>
+					<td>
+						<label for="loginid"> Identifiant&nbsp;:</label> 
+					</td>
+					<td>
+						<input name="loginid" type="text" /><br />
+					</td>
+				</tr>
+                        	<tr>
+					<td>
+						<label for="loginpswd"> Mot de passe&nbsp;: </label>
+					</td>
+					<td>
+						<input name="loginpswd" type="password" />
+	                        	</td>
+				</tr>
+				<tr>
+					<td  colspan="2">
+						<p> <input type="submit" name="loginsubmit" value="Valider" />
+					</td>
+				</tr>
+			</table>
                     </form>
 		</div>
 
@@ -18,4 +38,4 @@
 			<?php include("footer.html"); ?>
 		</div>
 	</body>
-        </html>
+ </html>
