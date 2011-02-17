@@ -20,13 +20,15 @@ public class Relation {
 	
 	private Relation() {
 		imageRelations = new HashMap<Integer, Integer>();
+		imageRelations.put(-1, R.drawable.corbeille);
+		imageRelations.put(0, R.drawable.rapport);
 		imageRelations.put(5, R.drawable.synonyme);
 		imageRelations.put(7, R.drawable.contraire);
 		imageRelations.put(9, R.drawable.contenu);
 		imageRelations.put(10, R.drawable.contenant);
 		
 		stringRelations = new HashMap<Integer, String>();
-		stringRelations.put(-1, "");
+		stringRelations.put(-1, "poubelle");
 		stringRelations.put(0, "idée");
 		stringRelations.put(1, "raffinement sémantique");
 		stringRelations.put(2, "raffinement morphologique");

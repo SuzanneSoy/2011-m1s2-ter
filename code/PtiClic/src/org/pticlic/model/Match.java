@@ -18,7 +18,6 @@ public class Match implements Serializable {
 	private ArrayList<Integer>	relation2;
 	private ArrayList<Integer>	relation3;
 	private ArrayList<Integer> 	relation4;
-	private ArrayList<Integer> 	trash;
 	private DownloadedGame		game;
 
 	public Match() {
@@ -26,7 +25,6 @@ public class Match implements Serializable {
 		relation2 = new ArrayList<Integer>();
 		relation3 = new ArrayList<Integer>();
 		relation4 = new ArrayList<Integer>();
-		trash = new ArrayList<Integer>();
 	}
 
 	public void setGame(DownloadedGame game) {
@@ -43,7 +41,6 @@ public class Match implements Serializable {
 		case 2: 	relation2.add(word); break;
 		case 3:		relation3.add(word); break;
 		case 4:		relation4.add(word); break;
-		default:	trash.add(word); break;
 		}
 	}
 
@@ -74,12 +71,4 @@ public class Match implements Serializable {
 	public ArrayList<Integer> getRelation4() {
 		return relation4;
 	}
-
-	/**
-	 * @return the trash
-	 */
-	public ArrayList<Integer> getTrash() {
-		return trash;
-	}
-	
 }

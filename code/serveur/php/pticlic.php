@@ -1,32 +1,56 @@
 <?php
 // Requête : http://serveur/pticlic.php?action=getparties&nb=2&mode=normal&user=foo&passwd=bar
-
-$do_initdb = false;
+ob_start();
+date_default_timezone_set('Europe/Paris');
 $email_admin = '';              // Adresse e-mail Administrateur.
-
 $SQL_DBNAME = (dirname(__FILE__) . "/db");
 
+
+/** Enregistre une erreur et quitte le programme.
+* @param err : Numéro de l'erreur.
+* @param msg : Description de l'erreur.
+*/
 function mDie($err,$msg)
 {
-	echo "{ error:".json_encode("".$err).", msg:".json_encode("".$msg)."}";
+	global $db;
+
+	ob_end_clean();
+	echo "{\"error\":".$err.",\"msg\":".json_encode("".$msg)."}";
+
+	log_error($err,$msg, date("c"));
+
+	$db->close();
 	exit;
 }
+
+
+/** Ecrit un rapport d'erreur dans un fichier.
+* @param errNum : Numéro de l'erreur.
+* @param msg : Description de l'erreur.
+* @param [other] : (Optionnel) Complément d'information.
+*/
+function log_error($errNum, $msg, $other="")
+{
+	$file = fopen("./log.txt","a+");
+
+	// Met en forme la chaine contenant les paramètres de la requête.
+	$dump_parameters = str_replace("(\n","",print_r($_GET,true));
+	$dump_parameters = str_replace(")\n","",$dump_parameters);
+
+	fwrite($file,"\nErreur n° ".$errNum);
+	fwrite($file," : ".$msg);
+	if(!empty($other))	
+		fwrite($file,"\n ".$other);
+	fwrite($file,"\n  ".$dump_parameters);
+
+	fclose($file);
+}
+
+
 
 if (!$db = new SQlite3($SQL_DBNAME))
 	mDie(1,"Erreur lors de l'ouverture de la base de données SQLite3");
 
-
-/** Initialise la base de données avec un nom d'utilisateur et un mot de passe
-*/
-function initdb()
-{
-	global $db;
-
-	$db->exec("insert into user(login, mail, hash_passwd, score) values('foo', 'foo@isp.com', '".md5('bar')."', 0);");
-}
-
-if ($do_initdb) 
-	initdb();
 
 if(!isset($_GET['action']) || !isset($_GET['user']) || !isset($_GET['passwd']))
 	mDie(2,"La requête est incomplète");
@@ -36,9 +60,18 @@ $action = $_GET['action'];
 $user = SQLite3::escapeString($_GET['user']);
 $hash_passwd = md5($_GET['passwd']);
 
-if ($hash_passwd !== $db->querySingle("SELECT hash_passwd FROM user WHERE login='$user';"))
+$login_is_ok = ($hash_passwd == $db->querySingle("SELECT hash_passwd FROM user WHERE login='$user';"));
+if ($action != "check_login" && (!$login_is_ok)) {
 	mDie(3,"Utilisateur non enregistré ou mauvais mot de passe");
-
+}
+if ($action = "check_login") {
+	if ($login_is_ok) {
+		echo '{"login_ok":true}';
+	} else {
+		echo '{"login_ok":false}';
+	}
+	exit;
+}
 
 /** Selectionne aléatoirement un noeud.
 */
@@ -50,7 +83,7 @@ function random_node()
 }
 
 
-// TODO : Yoann : peut-être faire une classe create_game avec les fonctions ci-dessous comme méthodes ?
+// TODO : Yoann : peut-être faire une classe GameCreator avec les fonctions ci-dessous comme méthodes ?
 
 /**
 * @param cloudSize : Taille du nuage.
@@ -74,23 +107,23 @@ function cg_build_result_sets($cloudSize, $centerEid, $r1, $r2)
 		// Voisins 1 saut via r_associated (0), donc qu'on voudrait spécifier si possible.
 		array('w'=>40, 'd'=>2, 's'=>"select end as eid, 0.25 as r1, 0.25 as r2, 0.5 as r0, 0 as trash from relation where start = $centerEid and type = 0 order by random();"),
 		// Voisins 1 saut via les autres relations
-		// TODO ! certains de ces select pourraient renvoyer des mots de types systèmes (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001), il faut les éliminer.
-		array('w'=>20, 'd'=>3, 's'=>"select end as eid, 0.1 as r1, 0.1 as r2, 0.8 as r0, 0 as trash from relation where start = $centerEid and type not in (0, $r1, $r2) order by random();"),
+		array('w'=>20, 'd'=>3, 's'=>"select end as eid, 0.1 as r1, 0.1 as r2, 0.8 as r0, 0 as trash from relation where start = $centerEid and type not in (0, $r1, $r2, 4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) order by random();"),
 		// Voisins 2 sauts, avec un mix de R1 et R2 pour les liens. Par ex [ A -R1-> B -R2-> C ] ou bien [ A -R2-> B -R2-> C ]
 		// Version optimisée de : "select end as eid from relation where $typer1r2 and start in oneHopWithType order by random();"
 		array('w'=>30, 'd'=>3, 's'=>"select B.end as eid, ((A.type = $r1) + (B.type = $r1)) / 3 as r1, ((A.type = $r2) + (B.type = $r2)) / 3 as r2, 1/6 as r0, 1/6 as trash from relation as A, relation as B where A.start = $centerEid and A.$typer1r2 and B.start = A.end and B.$typer1r2 order by random();"),
 		// Voisins 1 saut r1/r2 + 1 saut synonyme
-		// Version optimisée de : "select end as eid from relation where start in oneHopWithType and type = 5 order by random();"
+		// Version optimisée de : "select end as eid from relation where start in oneHopWithType and type = 5 order by random()";
 		array('w'=>20, 'd'=>5, 's'=>"select B.end as eid, (A.type = $r1) * 0.75 as r1, (A.type = $r2) * 0.75 as r2, 0.25 as r0, 0 as trash from relation as A, relation as B where A.start = $centerEid and A.$typer1r2 and B.start = A.end and B.type = 5 order by random();"),
 		// Version optimisée de : "select end as eid from relation where start in (select end from relation where start = $centerEid and type = 5) and $typer1r2 order by random();"
 		array('w'=>20, 'd'=>6, 's'=>"select B.end as eid, (B.type = $r1) * 0.75 as r1, (B.type = $r2) * 0.75 as r2, 0.25 as r0, 0 as trash from relation as A, relation as B where A.start = $centerEid and A.type = 5 and B.start = A.end and B.$typer1r2 order by random();"),
 		// Voisins 2 sauts (tous)
-		array('w'=>10, 'd'=>7, 's'=>"select end as eid, 0.1 as r1, 0.1 as r2, 0.3 as r0, 0.5 as trash from relation where start in (select end from relation where start = $centerEid) order by random();"),
+		// Version optimisée de : "select end as eid, 0.1 as r1, 0.1 as r2, 0.3 as r0, 0.5 as trash from relation where start in (select end from relation where start = $centerEid and type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001)) and type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) order by random();"
+		array('w'=>10, 'd'=>8, 's'=>"select x as eid, 0.1 as r1, 0.1 as r2, 0.3 as r0, 0.5 as trash from (select x from (select X.eid + Y.dumb as x from (select B.end as eid from relation as A, relation as B where A.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and A.start = $centerEid and B.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and B.start = A.end limit ".($cloudSize*4).") as X, (select 0 as dumb) as Y)) order by random();"),
 		// Centre pointe vers X, M pointe vers X aussi, on prend M.
 		// Version optimisée de : "select start as eid from relation where end in (select end from relation where start = $centerEid) and type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) order by random();"
 		// Ce n'est toujours pas ça… : "select eid from (select B.start as eid from relation as A, relation as B where A.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and A.start = $centerEid and B.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and B.end = A.end limit 1) order by random();"
 		// Tordu, mais ça marche \o/ . En fait il faut empêcher l'optimiseur de ramener le random avant le limit (et l'optimiseur est malin… :)
-		array('w'=>10, 'd'=>8, 's'=>"select x as eid, 0.1 as r1, 0.1 as r2, 0.2 as r0, 0.6 as trash from (select x from (select X.eid + Y.dumb as x from (select B.start as eid from relation as A, relation as B where A.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and A.start = 74860 and B.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and B.end = A.end limit $cloudSize) as X, (select 0 as dumb) as Y)) order by random();"),
+		array('w'=>10, 'd'=>8, 's'=>"select x as eid, 0.1 as r1, 0.1 as r2, 0.2 as r0, 0.6 as trash from (select x from (select X.eid + Y.dumb as x from (select B.start as eid from relation as A, relation as B where A.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and A.start = $centerEid and B.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and B.end = A.end limit ".($cloudSize*4).") as X, (select 0 as dumb) as Y)) order by random();"),
 		'rand' => array('w'=>5, 'd'=>10, 's'=>false) // random. Le r1 et r2 de random sont juste en-dessous
 	);
 
@@ -135,7 +168,7 @@ function cg_build_result_sets($cloudSize, $centerEid, $r1, $r2)
 */
 function cg_choose_relations()
 {
-	$relations = array(5, 7, 9, 10, /* Pas d'icônes pour celles-ci. */ 13, 14, 22);
+	$relations = array(5, 7, 9, 10);// /* Pas d'icônes pour celles-ci. */ 13, 14, 22);
 	$r1 = rand(0,count($relations)-1);
 	$r2 = rand(0,count($relations)-2);
 
@@ -162,13 +195,16 @@ function cg_build_cloud($cloudSize, $sources, $sumWeights)
 	$i = 0;
 	$totalDifficulty = 0;
 	
-	while ($i < $cloudSize && $nbFailed < 5*$cloudSize)
+	while ($i < $cloudSize && $nbFailed < 10*$cloudSize)
 	{
 		// On choisit une source aléatoire en tennant compte des poids.
 		$rands = rand(1,$sumWeights);
 		$sumw = 0;
+		if (!isset($sources['rand'])) {
+			break;
+		}
 		$src = $sources['rand'];
-		$srck = null;
+		$srck = 'rand';
 
 		// Sélection d'une source aléatoire
 		foreach ($sources as $k => $x)
@@ -188,26 +224,25 @@ function cg_build_cloud($cloudSize, $sources, $sumWeights)
 		{
 			$nbFailed++;
 
-			if ($srck !== null)
-			{
-				$sumWeights -= $src['w'];
-				unset($sources[$srck]);
-			}
+			$sumWeights -= $src['w'];
+			unset($sources[$srck]);
 
 			continue;
 		}
 		
 		// On récupère un résultat de cette source.
-		// TODO : vérifier que $src['rsPos']++ fait ce que l'on veut
-		$res = $src['resultSet'][$src['rsPos']++];
+		$res = $src['resultSet'][$src['rsPos']];
+		$sources[$srck]['rsPos']++;
 
-		// TODO (FAIT) : vérifier si $res['eid'] est présent dans un des $cloud[*]['eid'], car la condition qui suit est fausse.
-		foreach ($c in $cloud) {
+		// On vérifie si le mot n'a pas déjà été sélectionné.
+		$rejected = false;
+		foreach ($cloud as $c) {
 			if ($c['eid'] == $res['eid']) {
 				$nbFailed++;
-				continue;
+				$rejected = true;
 			}
 		}
+		if ($rejected) { continue; }
 
 		// position dans le nuage, difficulté, eid, probaR1, probaR2
 		$totalDifficulty += $src['d'];
@@ -242,52 +277,65 @@ function cg_insert($centerEid, $cloud, $r1, $r2, $totalDifficulty)
 	$db->exec("INSERT INTO game(gid, eid_central_word, relation_1, relation_2, difficulty)
 		   VALUES (null, $centerEid, $r1, $r2, $totalDifficulty);");
 	$gid = $db->lastInsertRowID();
+	
+	$t = time();
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)
+		   VALUES (null, $gid, null, $t);");
+	$pgid1 = $db->lastInsertRowID();
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)
+		   VALUES (null, $gid, null, $t);");
+	$pgid2 = $db->lastInsertRowID();
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)
+		   VALUES (null, $gid, null, $t);");
+	$pgid0 = $db->lastInsertRowID();
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)
+		   VALUES (null, $gid, null, $t);");
+	$pgidT = $db->lastInsertRowID();
 
-	$db->exec("INSERT INTO played_game(pgid, gid, login, played)
-		   VALUES (null, $gid, null, 1);");
-	$pgid = $db->lastInsertRowID();
-
+	// TODO : R0 et Trash + corrections
 	foreach ($cloud as $c)
 	{
 		$db->exec("INSERT INTO game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash)
 			   VALUES ($gid, ".$c['pos'].", ".$c['d'].", ".$c['eid'].", 2, ".$c['probaR1'].", ".$c['probaR2'].", ".$c['probaR0'].", ".$c['probaTrash'].");");
 		
 		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
-			   VALUES ($pgid, $gid, 0, ".$c['pos'].", $r1, ".$c['probaR1'].", 0);");
+			   VALUES ($pgid1, $gid, 0, ".$c['pos'].", $r1, ".$c['probaR1'].", 0);");
 
 		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
-			   VALUES ($pgid, $gid, 0, ".$c['pos'].", $r1, ".$c['probaR1'].", 0);");
+			   VALUES ($pgid2, $gid, 0, ".$c['pos'].", $r2, ".$c['probaR2'].", 0);");
+
+		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
+			   VALUES ($pgid0, $gid, 0, ".$c['pos'].", 0, ".$c['probaR0'].", 0);");
+
+		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
+			   VALUES ($pgidT, $gid, 0, ".$c['pos'].", -1, ".$c['probaTrash'].", 0);");
 	}
 
 	$db->exec("commit;");
 }
 
-
-/** Génère une partie pour une certaine taille de nuage.
-* @param cloudSize : Taille du nuage.
-*/
-function create_game($cloudSize)
-{
-	global $db;
-
-	// select random node
-	$centerEid = random_node();
-
-	$r1 = cg_choose_relations(); $r2 = $r1[1]; $r1 = $r1[0];
-	$sources = cg_build_result_sets($cloudSize, $centerEid, $r1, $r2); $sumWeights = $sources[1]; $sources = $sources[0];
-	$cloud = cg_build_cloud($cloudSize, $sources, $sumWeights); $totalDifficulty = $cloud[1]; $cloud = $cloud[0];
-	cg_insert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
-}
-
-
 /** Retourne un identifiant de partie aléatoire de la liste de parties jouables
 * @return gid : Identifiant de partie.
 */
-function random_game()
-{
+function randomGameCore() {
 	global $db;
-
 	return $db->querySingle("select gid from game where gid = (abs(random()) % (select max(gid) from game))+1 or gid = (select max(gid) from game where gid > 0) order by gid limit 1;");
+}
+
+function randomGame()
+{
+	$gid = randomGameCore();
+	if ($gid === null) {
+		// TODO : séparer ces créations de parties dans une fonction qui détecte le mode toussa.
+		for ($i = 0; $i < 100; $i++) {
+			createGameCore(10);
+		}
+		$gid = randomGameCore();
+		if ($gid === null) {
+			mDie(6, "Erreur lors de la récupération de la partie. Vérifiez qu'il y a au moins une partie.");
+		}
+	}
+	return $gid;
 }
 
 
@@ -299,7 +347,7 @@ function game2json($game_id)
 	global $db, $user;
 	
 	// TODO : planter si la requête suivante échoue pour quelque raison que ce soit.
-	$db->exec("INSERT INTO played_game(pgid, gid, login, played) VALUES (null, $game_id, '$user', 0);");
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp) VALUES (null, $game_id, '$user', -1);");
 	$pgid = $db->lastInsertRowID();
 	
 	// TODO Yoann : faire des tests d'erreur pour ces select ?
@@ -331,15 +379,34 @@ function game2json($game_id)
 */
 function createGame()
 {
-	if(!isset($_GET['nb']) || !isset($_GET['mode']))
+	if (!isset($_GET['nb']) || !isset($_GET['mode']))
 		mDie(2,"La requête est incomplète");
 
 	$nbParties = intval($_GET['nb']);
 
 	for ($i = 0; $i < $nbParties; $i++)
-		create_game(10);
+		createGameCore(10);
+	
+	echo '{"success":1}';
 }
 
+/** Génère une partie (mode normal pour l'instant) pour une certaine taille de nuage.
+* @param cloudSize : Taille du nuage.
+*
+* Est appelée par randomGame(), donc il faudra adapter quand on aura plusieurs modes, par exemple en ayant une fonction intermédiaire qui puisse être appelée par createGame et randomGame.
+*/
+function createGameCore($cloudSize)
+{
+	global $db;
+
+	// select random node
+	$centerEid = random_node();
+
+	$r1 = cg_choose_relations(); $r2 = $r1[1]; $r1 = $r1[0];
+	$sources = cg_build_result_sets($cloudSize, $centerEid, $r1, $r2); $sumWeights = $sources[1]; $sources = $sources[0];
+	$cloud = cg_build_cloud($cloudSize, $sources, $sumWeights); $totalDifficulty = $cloud[1]; $cloud = $cloud[0];
+	cg_insert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
+}
 
 /** Récupération d'une partie.
 */
@@ -354,7 +421,7 @@ function getGame()
 
 	for ($i=0; $i < $nbGames; $i)
 	{
-		game2json(random_game());
+		game2json(randomGame());
 
 		if ((++$i) < $nbGames)
 			echo ",";
@@ -376,14 +443,14 @@ function setGame()
 	$pgid = intval($_GET['pgid']);
 	$gid = intval($_GET['gid']);
 		
-	if ('t' !== $db->querySingle("SELECT 't' FROM played_game WHERE pgid = $pgid and $gid = $gid and played = 0 and login = '$user';"))
+	if ('ok' !== $db->querySingle("SELECT 'ok' FROM played_game WHERE pgid = $pgid and $gid = $gid and login = '$user' and timestamp = -1;"))
 		mDie(4,"Cette partie n'est associée à votre nom d'utilisateur, ou bien vous l'avez déjà jouée.");
 		
 	$userReputation = $db->querySingle("SELECT score FROM user WHERE login='$user';");
 	$userReputation = ($userReputation > 0) ? log($userReputation) : 0;
 		
 	$db->exec("begin transaction;");
-	$db->exec("update played_game set played = 1 where pgid = $pgid;");
+	$db->exec("update played_game set timestamp = ".time()." where pgid = $pgid;");
 
 	$r0 = 0;
 	$trash = -1;
@@ -396,7 +463,7 @@ function setGame()
 	{
 		$num = $row['num'];
 		if (!isset($_GET[$num])) {
-			mDie(5,"Pas de réponse pour le mot $num de cette partie.");
+			mDie(5,"Cette requête set_partie ne donne pas de réponse (une relation) pour le mot numéro $num de la partie.");
 		}
 		$relanswer = intval($_GET[$num]);
 
@@ -429,7 +496,9 @@ function setGame()
 
 	$db->exec("commit;");
 	// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
-	game2json(random_game());
+	echo "{\"score\":$score,\"newGame\":";
+	game2json(randomGame());
+	echo "}";
 }
 
 /** La fonction principale.
@@ -455,5 +524,7 @@ function main($action)
 }
 
 main($action);
+
+ob_end_flush();
 
 ?>

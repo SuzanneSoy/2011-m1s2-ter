@@ -2,6 +2,7 @@ package org.pticlic.games;
 
 import org.pticlic.R;
 import org.pticlic.Score;
+import org.pticlic.exception.PtiClicException;
 import org.pticlic.model.Constant;
 import org.pticlic.model.DownloadedBaseGame;
 import org.pticlic.model.Match;
@@ -10,6 +11,8 @@ import org.pticlic.model.Network.Mode;
 import org.pticlic.model.Relation;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,6 +28,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 /**
  * @author Bertrand BRUN et Georges DUPÉRON
@@ -50,6 +55,7 @@ public class BaseGame extends Activity implements OnClickListener {
 	private Match 				match;
 	private Network 			network;
 	private boolean				help = false;
+	private String 				gameJson;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -59,9 +65,10 @@ public class BaseGame extends Activity implements OnClickListener {
 
 		// On recupere du PreferenceManager les differentes information dont on a besoin
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		String serverURL = sp.getString(Constant.SERVER_URL, "http://dumbs.fr/~bbrun/pticlic.json"); // TODO : Mettre comme valeur par defaut l'adresse reel du serveur
+		String serverURL = sp.getString(Constant.SERVER_URL, Constant.SERVER); // TODO : Mettre comme valeur par defaut l'adresse reel du serveur
 		String id = sp.getString(Constant.USER_ID, "joueur");
 		String passwd = sp.getString(Constant.USER_PASSWD, "");
+		gameJson = sp.getString(Constant.NEW_BASE_GAME, null); 
 
 		// On initialise la classe permettant la communication avec le serveur.
 		network = new Network(serverURL, Mode.SIMPLE_GAME, id, passwd);
@@ -75,19 +82,36 @@ public class BaseGame extends Activity implements OnClickListener {
 	@Override
 	protected void onStart() {
 		super.onStart();
+		try {
+			Gson gson = new Gson();
+			if (gameJson == null) game = (DownloadedBaseGame)network.getGames(1);
+			else game = gson.fromJson(gameJson, DownloadedBaseGame.class);
+			runMatch();
+			start();
+		} catch (PtiClicException e) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(getString(R.string.app_name))
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setMessage(e.getMessage())
+			.setCancelable(false)
+			.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+					finish();
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
 
-		game = (DownloadedBaseGame)network.getGames(1);
-		runMatch();
-		start();
 	}
 
 	private void runMatch() {
-		int nbrel = game.getNbRelation();
 		nbWord = game.getNbWord();
-		
+
 		wordRemaining = (TextView)findViewById(R.id.wordRemaining);
 		wordRemaining.setText((currentWord + 1) + "/" + nbWord);
-		
+
 		// On initialise la partie.
 		match = new Match();
 		match.setGame(game);
@@ -105,75 +129,49 @@ public class BaseGame extends Activity implements OnClickListener {
 		TextView rn3 = ((TextView)findViewById(R.id.relation3Name));
 		TextView rn4 = ((TextView)findViewById(R.id.relation4Name));
 
-		// Layout des relations
-		LinearLayout rl1 = ((LinearLayout)findViewById(R.id.relation1Layout));
-		LinearLayout rl2 = ((LinearLayout)findViewById(R.id.relation2Layout));
-		LinearLayout rl3 = ((LinearLayout)findViewById(R.id.relation3Layout));
-		LinearLayout rl4 = ((LinearLayout)findViewById(R.id.relation4Layout));
-
 		// Bouton d'aide
 		ImageView aide = ((ImageView)findViewById(R.id.aideBaseGame));
 		aide.setOnClickListener(this);
 
 		Relation r = Relation.getInstance();
 
-		ImageView trash = ((ImageView)findViewById(R.id.trash));
-		trash.setOnClickListener(this);
-		trash.setImageResource(android.R.drawable.ic_menu_delete);
-
 		// Écoute des clics sur les relations
-		if (nbrel > 0) {
-			// TODO : A enlever lorsque l'on aura toutes les images des relations.
-			try {
-				r1.setOnClickListener(this); 
-				rn1.setText(r.getRelationName(game.getCat1()));
-				r1.setImageResource(r.getRelationImage(game.getCat1()));
-			} catch (Exception e) {
-				r1.setImageResource(R.drawable.icon);
-			}
-		} else {
-			rl1.setVisibility(View.GONE); 
+		// TODO : A enlever lorsque l'on aura toutes les images des relations.
+		try {
+			r1.setOnClickListener(this); 
+			rn1.setText(r.getRelationName(game.getCat1()));
+			r1.setImageResource(r.getRelationImage(game.getCat1()));
+		} catch (Exception e) {
+			r1.setImageResource(R.drawable.icon);
 		}
-		if (nbrel > 1) {
-			// TODO : A enlever lorsque l'on aura toutes les images des relations.
-			try {
-				r2.setOnClickListener(this); 
-				rn2.setText(r.getRelationName(game.getCat2()));
-				r2.setImageResource(r.getRelationImage(game.getCat2()));
-			} catch (Exception e) {
-				r2.setImageResource(R.drawable.icon);
-			}
-		} else { 
-			rl2.setVisibility(View.GONE); 
+		// TODO : A enlever lorsque l'on aura toutes les images des relations.
+		try {
+			r2.setOnClickListener(this); 
+			rn2.setText(r.getRelationName(game.getCat2()));
+			r2.setImageResource(r.getRelationImage(game.getCat2()));
+		} catch (Exception e) {
+			r2.setImageResource(R.drawable.icon);
 		}
-		if (nbrel > 2) {
-			// TODO : A enlever lorsque l'on aura toutes les images des relations.
-			try {
-				r3.setOnClickListener(this); 
-				rn3.setText(r.getRelationName(game.getCat3()));
-				r3.setImageResource(r.getRelationImage(game.getCat3()));
-			} catch (Exception e) {
-				r3.setImageResource(R.drawable.icon);
-			}
-		} else { 
-			rl3.setVisibility(View.GONE);
+		// TODO : A enlever lorsque l'on aura toutes les images des relations.
+		try {
+			r3.setOnClickListener(this); 
+			rn3.setText(r.getRelationName(game.getCat3()));
+			r3.setImageResource(r.getRelationImage(game.getCat3()));
+		} catch (Exception e) {
+			r3.setImageResource(R.drawable.icon);
 		}
-		if (nbrel > 3) {
-			// TODO : A enlever lorsque l'on aura toutes les images des relations.
-			try {
-				r4.setOnClickListener(this);
-				rn4.setText(r.getRelationName(game.getCat4()));
-				r4.setImageResource(r.getRelationImage(game.getCat4()));
-			} catch (Exception e) {
-				r4.setImageResource(R.drawable.icon);
-			}
-		} else {
-			rl4.setVisibility(View.GONE); 
-		}		
+		// TODO : A enlever lorsque l'on aura toutes les images des relations.
+		try {
+			r4.setOnClickListener(this);
+			rn4.setText(r.getRelationName(game.getCat4()));
+			r4.setImageResource(r.getRelationImage(game.getCat4()));
+		} catch (Exception e) {
+			r4.setImageResource(R.drawable.icon);
+		}
 
 		((TextView)findViewById(R.id.mainWord)).setText(DownloadedBaseGame.getName(game.getCentre()));
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
 	 */
@@ -202,9 +200,9 @@ public class BaseGame extends Activity implements OnClickListener {
 
 		TranslateAnimation translate;
 		if (isInHelpMode())
-			translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 4);
+			translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 8);
 		else
-			translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 2);
+			translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 4);
 		translate.setDuration(500);
 		set.addAnimation(translate);
 
@@ -293,13 +291,6 @@ public class BaseGame extends Activity implements OnClickListener {
 			relationName = ((TextView)findViewById(R.id.relation4Name));
 			relationName.setVisibility(View.VISIBLE);
 
-			//trash
-			relationLayout = ((LinearLayout)findViewById(R.id.trashLayout));
-			relationLayout.setGravity(Gravity.LEFT);
-
-			relationName = ((TextView)findViewById(R.id.trashName));
-			relationName.setVisibility(View.VISIBLE);
-
 
 			// On met le mot courant au bon endroit dans la fenetre
 			// On recupere la largueur de l'ecran.
@@ -310,7 +301,7 @@ public class BaseGame extends Activity implements OnClickListener {
 			TextView mainWord = (TextView)findViewById(R.id.mainWord);
 			currentWordTextView = (TextView)findViewById(R.id.currentWord);
 
-			TranslateAnimation translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 4);
+			TranslateAnimation translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 8);
 			translate.setDuration(0);
 			translate.setFillAfter(true);
 
@@ -355,13 +346,6 @@ public class BaseGame extends Activity implements OnClickListener {
 			relationName = ((TextView)findViewById(R.id.relation4Name));
 			relationName.setVisibility(View.GONE);
 
-			//trash
-			relationLayout = ((LinearLayout)findViewById(R.id.trashLayout));
-			relationLayout.setGravity(Gravity.CENTER);
-
-			relationName = ((TextView)findViewById(R.id.trashName));
-			relationName.setVisibility(View.GONE);
-
 			// On met le mot courant au bon endroit dans la fenetre
 			// On recupere la largueur de l'ecran.
 			Display display = getWindowManager().getDefaultDisplay(); 
@@ -371,7 +355,7 @@ public class BaseGame extends Activity implements OnClickListener {
 			TextView mainWord = (TextView)findViewById(R.id.mainWord);
 			currentWordTextView = (TextView)findViewById(R.id.currentWord);
 
-			TranslateAnimation translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 2);
+			TranslateAnimation translate = new TranslateAnimation(mainWord.getScrollX() / 2, mainWord.getScrollX() / 2, mainWord.getScrollY() / 2, width / 4);
 			translate.setDuration(0);
 			translate.setFillAfter(true);
 
@@ -393,13 +377,11 @@ public class BaseGame extends Activity implements OnClickListener {
 	 */
 	@Override
 	public void onClick(View v) {
-		int currentWord = game.getWordInCloud(this.currentWord).getId();
 		switch (v.getId()) {
 		case (R.id.relation1) : match.add(1, currentWord); next();	break;
 		case (R.id.relation2) : match.add(2, currentWord); next(); break;
 		case (R.id.relation3) : match.add(3, currentWord); next(); break;
 		case (R.id.relation4) : match.add(4, currentWord); next(); break;
-		case (R.id.trash) : match.add(0, currentWord); next(); break;
 		case (R.id.aideBaseGame) : helpMode(); break;
 		}
 	}
