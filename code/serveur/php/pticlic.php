@@ -60,9 +60,18 @@ $action = $_GET['action'];
 $user = SQLite3::escapeString($_GET['user']);
 $hash_passwd = md5($_GET['passwd']);
 
-if ($hash_passwd !== $db->querySingle("SELECT hash_passwd FROM user WHERE login='$user';"))
+$login_is_ok = ($hash_passwd == $db->querySingle("SELECT hash_passwd FROM user WHERE login='$user';"));
+if ($action != "check_login" && (!$login_is_ok)) {
 	mDie(3,"Utilisateur non enregistré ou mauvais mot de passe");
-
+}
+if ($action = "check_login") {
+	if ($login_is_ok) {
+		echo '{"login_ok":true}';
+	} else {
+		echo '{"login_ok":false}';
+	}
+	exit;
+}
 
 /** Selectionne aléatoirement un noeud.
 */
