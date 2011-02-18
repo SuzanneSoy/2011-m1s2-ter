@@ -1,9 +1,10 @@
 <?php>
-    include("_head.php");
+session_start();    
+include("_head.php");
 ?>
 	<body>
 		<div class="menu">
-			<?php include("menu.html"); ?>	
+			<?php include("ressources/menu.html"); ?>
 		</div>
 		<div class="content">
                     <p>Vous êtes déjà inscrit&nbsp;? Authentifiez-vous&nbsp;:</p>
@@ -35,7 +36,7 @@
 		</div>
 
 		<div class="footer">
-			<?php include("footer.html"); ?>
+			<?php include("ressources/footer.html"); ?>
 		</div>
 	</body>
  </html>

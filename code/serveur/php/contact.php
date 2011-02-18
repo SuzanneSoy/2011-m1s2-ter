@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -5,17 +9,17 @@
 	<head>
 		<title>Titre</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />		
-		<link rel="stylesheet" href="simple.css" />
+		<link rel="stylesheet" href="ressources/simple.css" />
 	</head>
 	<body>
 		<div class="menu">
-			<?php include("menu.html"); ?>	
+			<?php include("ressources/menu.html"); ?>
 		</div>
 		<div class="content">
 			Le contenu.
 		</div>
 		<div class="footer">
-			<?php include("footer.html"); ?>
+			<?php include("ressources/footer.html"); ?>
 		</div>
 	</body>
 </html><?php

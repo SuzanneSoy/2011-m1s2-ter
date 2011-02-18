@@ -1,12 +1,12 @@
 <?php>
     include("_head.php");
-    include("FormValidator.php");
+    include("ressources/FormValidator.php");
     $fv = new FormValidator("post");
 ?>
 	<body>
 		<div class="menu">
-			<?php include("menu.html"); ?>
-
+			<?php include("ressources/menu.html"); ?>
+		</div>
                 <p>Vous n'êtes pas encore inscrit&nbsp;? Inscrivez-vous&nbsp;:
                 <form name="signupform" method="post" >
 
@@ -58,7 +58,7 @@
 		</div>
 
 		<div class="footer">
-			<?php include("footer.html"); ?>
+			<?php include("ressources/footer.html"); ?>
 		</div>
 	</body>
         </html>

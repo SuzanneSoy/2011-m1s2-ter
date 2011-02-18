@@ -5,6 +5,6 @@
 	<head>
 		<title>Titre</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link rel="stylesheet" href="simple.css" />
+		<link rel="stylesheet" href="ressources/simple.css" />
 	</head>
     
