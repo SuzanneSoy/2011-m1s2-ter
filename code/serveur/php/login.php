@@ -1,6 +1,40 @@
-<?php>
+<?php
 session_start();    
 include("_head.php");
+
+if(isset($_POST['loginid']))
+	$user =  SQLite3::escapeString($_POST['loginid']);
+if(isset($_POST['loginpswd']))
+	$pswd = md5($_POST['loginpswd']);
+if(isset($_GET['return']))
+	$location = $_GET['return'];
+else
+	$location = "contact.php";
+
+if(isset($_GET['d']) && $_GET['d'] == "true") {
+	session_destroy();
+	header("location:index.php");
+}
+
+if(isset($user) && isset($pswd))
+{
+	$SQL_DBNAME = (dirname(__FILE__) . "/db");
+
+	if (!$db = new SQlite3($SQL_DBNAME))
+		mDie(1,"Erreur lors de l'ouverture de la base de données SQLite3");
+
+	if($pswd == ($db->querySingle("SELECT hash_passwd FROM user WHERE login='$user';"))) {
+		$_SESSION['userId'] = $user;
+		
+		header("location:".$location);
+	}
+	else
+		$msg = "Mauvais nom d'utilisateur ou mot de passe";
+}
+else if(isset($user) or isset($pswd))
+	$msg = "Veuillez remplir tous les champs";
+
+
 ?>
 	<body>
 		<div class="menu">
@@ -8,7 +42,7 @@ include("_head.php");
 		</div>
 		<div class="content">
                     <p>Vous êtes déjà inscrit&nbsp;? Authentifiez-vous&nbsp;:</p>
-                    <form name="loginform" method="post" action="loginaction.php">
+                    <form name="loginform" method="post" action="login.php?return=<?php echo $location; ?>">
                         <table class="logintbl">
 				<tr>
 					<td>
