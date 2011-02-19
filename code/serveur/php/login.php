@@ -2,9 +2,9 @@
 session_start();    
 include("_head.php");
 
-if(isset($_POST['loginid']))
+if(isset($_POST['loginid']) && !empty($_POST['loginid']))
 	$user =  SQLite3::escapeString($_POST['loginid']);
-if(isset($_POST['loginpswd']))
+if(isset($_POST['loginpswd']) && !empty($_POST['loginpswd']))
 	$pswd = md5($_POST['loginpswd']);
 if(isset($_GET['return']))
 	$location = $_GET['return'];
@@ -42,7 +42,11 @@ else if(isset($user) or isset($pswd))
 		</div>
 		<div class="content">
                     <p>Vous êtes déjà inscrit&nbsp;? Authentifiez-vous&nbsp;:</p>
-                    <form name="loginform" method="post" action="login.php?return=<?php echo $location; ?>">
+                    <?php
+			if(isset($msg))
+				echo '<span class="warning">'.$msg.'</span>';
+		    ?>
+		    <form name="loginform" method="post" action="login.php?return=<?php echo $location; ?>">
                         <table class="logintbl">
 				<tr>
 					<td>
