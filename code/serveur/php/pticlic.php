@@ -61,10 +61,10 @@ $user = SQLite3::escapeString($_GET['user']);
 $hash_passwd = md5($_GET['passwd']);
 
 $login_is_ok = ($hash_passwd == $db->querySingle("SELECT hash_passwd FROM user WHERE login='$user';"));
-if ($action != "check_login" && (!$login_is_ok)) {
+if ($action != 3 && (!$login_is_ok)) {
 	mDie(3,"Utilisateur non enregistré ou mauvais mot de passe");
 }
-if ($action = "check_login") {
+if ($action = 3) {
 	if ($login_is_ok) {
 		echo '{"login_ok":true}';
 	} else {

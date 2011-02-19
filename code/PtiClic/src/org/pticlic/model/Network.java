@@ -5,13 +5,17 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.pticlic.exception.PtiClicException;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -27,11 +31,26 @@ import com.google.gson.stream.JsonReader;
  */
 public class Network {
 	
+	public static class Check implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private boolean login_ok = false;
+		
+		public boolean isLogin_ok() {
+			return login_ok;
+		}
+		
+		public void setLogin_ok(boolean login_ok) {
+			this.login_ok = login_ok;
+		}
+	}
+	
 	String	 	newGameJson = null;
 	
 	public enum Action {
 		GET_GAMES(0),
-		SEND_GAME(1);
+		SEND_GAME(1),
+		CREATE_GAME(2),
+		CHECK_LOGIN(3);
 
 		private final int value;
 
@@ -97,33 +116,38 @@ public class Network {
 	 * @param passwd le mot de passe de l'utilisateur
 	 * @return <code>true</code> si la combinaison login/mdp est correct <code>false</code> sinon
 	 */
-	public static boolean isLoginCorrect(Context context, String id, String passwd) {
+	public static boolean isLoginCorrect(Context context) {
 		
-		//TODO : A decommenter le jour ou ce sera implemente cote serveur
-//		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-//		String serverURL = sp.getString(Constant.SERVER_URL, "http://dumbs.fr/~bbrun/pticlic.json");
-//
-//		URL url;
-//		boolean res = false;
-//		try {
-//			url = new URL(serverURL);
-//			URLConnection connection = url.openConnection();
-//			connection.addRequestProperty("action", "verifyAccess");
-//			connection.addRequestProperty("user", id);
-//			connection.addRequestProperty("passwd", passwd);
-//
-//			InputStream in = connection.getInputStream();
-//			BufferedReader buf = new BufferedReader(new InputStreamReader(in));
-//			res = Boolean.getBoolean(buf.readLine());
-//
-//		} catch (MalformedURLException e) {
-//			return false;
-//		} catch (IOException e) {
-//			return false;
-//		}
-//
-//		return res;
-		return true;
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		String serverURL = sp.getString(Constant.SERVER_URL, Constant.SERVER);
+		String id = sp.getString(Constant.USER_ID, "joueur");
+		String passwd = sp.getString(Constant.USER_PASSWD, "");
+
+		URL url = null;
+		Gson gson = null;
+		BufferedReader reader = null;
+		String json = null;
+		boolean res = false;
+		try {
+			String urlS = serverURL+"/pticlic.php?"
+			+ "action=" + Action.CHECK_LOGIN.value()
+			+ "&user=" + id
+			+ "&passwd=" + passwd;
+			
+			url = new URL(urlS);
+			gson = new Gson();
+			reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+			json = reader.readLine();
+
+			Check check = gson.fromJson(json, Check.class);
+			res = check.isLogin_ok();
+		} catch (MalformedURLException e) {
+			return false;
+		} catch (IOException e) {
+			return false;
+		}
+
+		return res;
 	}
 
 	/**

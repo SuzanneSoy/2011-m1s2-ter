@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -53,15 +54,39 @@ public class FrontPage extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case (R.id.prefs) : startActivity(new Intent(this, Preference.class)); break;
-		case (R.id.play) : checkNetworkConnection(BaseGame.class); break;
+		case (R.id.play) : checkAllIsOk(BaseGame.class); break;
 		case (R.id.infoButton) : startActivity(new Intent(this, Information.class)); break;
 		}
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void checkNetworkConnection(Class c) {
+	private void checkAllIsOk(Class c) {
 		if (Network.isConnected(this)) {
+			if (Network.isLoginCorrect(this)) {
 			startActivity(new Intent(this, c));
+			} else {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(getString(R.string.app_name))
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setMessage("Le couple login/mdp n'est pas bon. Veuillez les modifier ou vous inscrire sur le site")
+				.setCancelable(false)
+				.setNeutralButton("Inscription", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+						// TODO : Essayer de trouver comment mettre l'url qui est dans les preferences.
+						Uri uri = Uri.parse("http://dumbs.fr/~bbrun/pticlic/signup.php");
+						startActivity(new Intent(Intent.ACTION_VIEW, uri));
+					}
+				})
+				.setPositiveButton("Preferences", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+						startActivity(new Intent(getApplicationContext(), Preference.class));
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+			}
 		} else {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle(getString(R.string.app_name))

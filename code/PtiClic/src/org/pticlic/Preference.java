@@ -28,9 +28,7 @@ public class Preference extends PreferenceActivity implements OnSharedPreference
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("passwd")) {
 			if (Network.isConnected(this)) {
-				String id = sharedPreferences.getString("login", "");
-				String passwd = sharedPreferences.getString("passwd", "");
-				if (Network.isLoginCorrect(this, id, passwd)) {
+				if (Network.isLoginCorrect(this)) {
 					Toast.makeText(this,
 							"Couple login/mdp valide.",
 							Toast.LENGTH_LONG).show();
