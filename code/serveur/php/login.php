@@ -33,8 +33,6 @@ if(isset($user) && isset($pswd))
 }
 else if(isset($user) or isset($pswd))
 	$msg = "Veuillez remplir tous les champs";
-
-
 ?>
 	<body>
 		<div class="menu">
