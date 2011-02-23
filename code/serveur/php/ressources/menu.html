@@ -1,9 +1,8 @@
 <h1>PtiClic sous Android - Version Alpha</h1>
-
+<hr />
 
 <span id="links">
 	<a href="index.php">Accueil</a>
-	<a href="signup.php">S'incrire</a>
 	<a href="download.php">Téléchargement</a>
 	<!-- <a href=".php"> Créer des parties </a> -->
         <a href="contact.php">Contact</a>
@@ -11,6 +10,7 @@
 if(!isset($_SESSION['userId']))				// Menu hors connexion.
 {?>
         <a id="cnx" "href="login.php"> Se connecter </a>
+	<a id="cnx" href="signup.php">S'incrire</a>
 
 <?php }
 else							// Menu une fois connecté.

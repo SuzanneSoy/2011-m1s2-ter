@@ -14,6 +14,11 @@
 	margin-left : 2%;
 }
 
+.menu hr {
+	width : 94%;
+	border : thin solid grey;
+}
+
 #liens {
 	height: 1.3em;
 	padding : 0.3em 0.3em 0.1em;
@@ -49,7 +54,8 @@
 	margin-left : 4%;
 }
 
-.logintbl td, .contactbl td, .signuptbl  {
+.logintbl td, .contactbl td, .signuptbl td {
+	width : 50%;
 	text-align : right;
 	padding-left : 5px;
 	padding-right : 5px;
@@ -89,11 +95,6 @@ h4 {
 
 h5 {
 	color: #874;
-}
-
-
-hr {
-	display: none;
 }
 
 a {

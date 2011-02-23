@@ -3,6 +3,21 @@ session_start();
 
 $displayForm = true;
 $emailaddress = "";
+$mailfile = "mails.txt";
+
+function writemail($filename,$email,$subject,$message)
+{
+	$file = fopen($filename,"a+");
+	
+	if($file != -1) {
+		fprintf($file,"%s\n%s\n%s\n\n",$email,$subject,$message);
+	}
+	else
+		die("Erreur lors de l'ouverture du fichier d'enregistrement de mails");
+
+	fclose($file);
+}
+
 
 if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']))
 	if(!empty($_POST['email']) && !empty($_POST['subject']) && !empty($_POST['message']))
@@ -15,6 +30,8 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 			$dest = $emailaddress;
 			$message = str_replace("\r\n","\n",$_POST['message']);
 			
+			writemail($mailfile,$from,$subject,$message);
+
 			if(mail($dest,$subject,$message,$header))
 			{
 				$notif = "Votre email à été envoyé";
