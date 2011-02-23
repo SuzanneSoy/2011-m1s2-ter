@@ -20,8 +20,8 @@ session_start();
 			<p>Vous aimez les jeux de mots&nbsp;? Vous avez un smartphone sous Android&nbsp;?
                             PtiClic est pour vous&nbsp;!</p>
                         <p>Soyez parmi les tous premiers à télécharger cette application gratuitement
-                            en devenant Alpha-testeur. L'inscription est simple&nbsp;: Il suffit de fournir une adresse mail, de créer un
-                            identifiant et vous pourrez commencer à jouer !</p>
+                            en devenant Alpha-testeur. L'inscription est simple, il suffit de fournir une adresse mail, de créer un
+                            identifiant et vous pourrez commencer à jouer&nbsp;!</p>
                         <!-- <p>Il ne s'agit pas d'une version d'essai et l'application ne contient aucun
                             spyware.</p> -->
 
@@ -36,17 +36,12 @@ session_start();
 			<p>La version beta du jeu PtiClic sous Android est en cours de développement.
                         Le projet s'inscrit dans le cadre d'un TER de Master en informatique
                         à l'Université Montpellier II sous la direction de Mathieu LAFOURCADE. L'équipe
-                        de conception et de développement est composée de quatre étudiants&nbsp;:
-			<ul>
-				<li>Bertrand BRUN,</li>
-                        	<li>Yoann BONAVERO,</li>
-				<li>John CHARRON</li>
-				<li>Georges DUPERON.</li>
-			</ul>
+                        de conception et de développement est composée de quatre étudiants&nbsp;: Bertrand BRUN
+                        Yoann BONAVERO, John CHARRON et Georges DUPERON.
 			</p>
                         <h2>Votre rôle en tant qu'Alpha-testeur</h2>
                         <p>L'application étant en phase de développement et offerte gratuitement,
-                            nous serions reconnaissant si vous pourriez nous donner votre avis, vos suggestions,
+                            nous serions reconnaissant si vous pouviez nous donner votre avis, vos suggestions,
                             vos idées.</p>
 		</div>
 		<div class="footer">

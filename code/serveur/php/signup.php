@@ -4,23 +4,6 @@ $SQL_DBNAME = (dirname(__FILE__) . "/db");
     if (!$db = new SQlite3($SQL_DBNAME))
         mDie(1,"Erreur lors de l'ouverture de la base de données SQLite3");
 
-    /*
-     * TODO: afficher succès en une autre couleur
-     */ 
-    ?>
-
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-	<head>
-		<title>PtiClic sous Android - Version Alpha - Inscription</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link rel="stylesheet" href="ressources/simple.css" />
-	</head>
-
-<?php
 $newpage = true;
 if(!isset($msg)){
     $msg = array();
@@ -111,21 +94,20 @@ if(isset($_POST['signuppswd2'])){
     }
 }
 
-echo var_dump($msg);
-echo var_dump($_POST);
-if(isset($_GET['return']))
-	$location = $_GET['return'];
-else
-	$location = "contact.php";
-
-
-if(isset($_GET['d']) && $_GET['d'] == "true") {
-	session_destroy();
-	header("location:index.php");
-}
-
 ?>
-	<body>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+	<head>
+		<title>PtiClic sous Android - Version Alpha - Inscription</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="ressources/simple.css" />
+	</head>
+
+
+        <body>
 		<div class="menu">
 			<?php include("ressources/menu.html"); ?>
 		</div>
