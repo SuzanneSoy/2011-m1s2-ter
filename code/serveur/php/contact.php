@@ -2,6 +2,7 @@
 session_start();
 
 $displayForm = true;
+$emailaddress = "";
 
 if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']))
 	if(!empty($_POST['email']) && !empty($_POST['subject']) && !empty($_POST['message']))
@@ -11,7 +12,7 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 			$header = 'From: '.$from . "\r\n" .
 					 'Reply-To: '.$from . "\r\n" .
 					 'X-Mailer: PHP/' . phpversion();
-			$dest = $EmailAddress;
+			$dest = $emailaddress;
 			$message = str_replace("\r\n","\n",$_POST['message']);
 			
 			if(mail($dest,$subject,$message,$header))
@@ -42,17 +43,18 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 			<?php include("ressources/menu.html"); ?>
 		</div>
 		<div class="content">
+			<?php			
 			if(isset($notif))
-				if($dspForm == true)
-					echo '<span class="warning">'.$notif.'</span>';
+				if($displayForm == true)
+					echo '<span class="message warning">'.$notif.'</span>';
 				else
-					echo '<span class="notifOK">'.$notif.'</span>';
+					echo '<span class="message success">'.$notif.'</span>';
 			
-			if($dspForm == true)
+			if($displayForm == true)
 			{
 				?>
 				<form action="contact.php" method="POST">
-					<table class="formTbl1">
+					<table class="contacttbl">
 						<tr>
 							<td>
 								<label for="email">Votre e-mail : </label>
@@ -63,10 +65,10 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 						</tr>
 						<tr>
 							<td>
-								<label for="sujet">Objet du mail : </label>
+								<label for="subject">Objet du mail : </label>
 							</td>
 							<td>
-								<input type="text" id="sujet" name="sujet" />
+								<input type="text" id="subject" name="subject" />
 							</td>
 						</tr>
 						<tr>
@@ -86,6 +88,7 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 				</form>
 				<?php
 			}
+			?>
 		</div>
 		<div class="footer">
 			<?php include("ressources/footer.html"); ?>

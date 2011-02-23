@@ -43,19 +43,24 @@
 	margin-left : 2%;
 }
 
-.logintbl {
+.logintbl, .contacttbl {
 	margin-left : 4%;
 }
 
-.logintbl td {
+.logintbl td, .contactbl td {
 	text-align : right;
 	padding-left : 5px;
 	padding-right : 5px;
 }
 
-.logintbl input[type=submit]{
+.logintbl input[type=submit], .contacttbl input[type=submit]{
 	display : block;	
 	margin : auto;
+}
+
+.contacttbl textarea {
+	width : 200%;
+	height : 200px;
 }
 
 html, body {
