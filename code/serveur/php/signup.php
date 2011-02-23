@@ -144,8 +144,9 @@ if(isset($_GET['d']) && $_GET['d'] == "true") {
                         else if($newpage == false){
                             $ok = ($db->query("INSERT INTO user(mail, login, hash_passwd, score) VALUES ('" . SQLite3::escapeString($signupemail)
                                    . "', '" . SQLite3::escapeString($signupid)
-                                   . "', '" . SQLite3::escapeString($signuppswd1)
+                                   . "', '" . SQLite3::escapeString(md5($signuppswd1))
                                    . "', 0);"));
+
                             if($ok == true)
                                 echo "insertion worked!!!!!";
                             else
