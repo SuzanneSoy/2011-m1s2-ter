@@ -1,17 +1,26 @@
+<?php
+session_start();
+$SQL_DBNAME = (dirname(__FILE__) . "/db");
+    if (!$db = new SQlite3($SQL_DBNAME))
+        mDie(1,"Erreur lors de l'ouverture de la base de données SQLite3");
+
+    /*
+     * TODO: afficher succès en une autre couleur
+     */ 
+    ?>
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 	<head>
-		<title>Titre</title>
+		<title>PtiClic sous Android - Version Alpha - Inscription</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link rel="stylesheet" href="ressources/simple.css" />
 	</head>
 
 <?php
-session_start();
-
-
 $newpage = true;
 if(!isset($msg)){
     $msg = array();
@@ -20,6 +29,7 @@ if(isset($_POST['signupemail'])){
     $newpage = false;
     $signupemail = $_POST['signupemail'];
     $pattern = "/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/";
+    
     if(trim($signupemail) == ""){
         $msg[] = "Veuillez renseigner le champ 'Saisir votre adresse mail'.";
         unset($_POST['signupemail']);
@@ -32,8 +42,13 @@ if(isset($_POST['signupemail'])){
         unset($_POST['signupemail']);
         $signupemail = "";
     }
+    else if ($db->querySingle("SELECT mail FROM user WHERE mail='$signupemail'") != null){
+        $msg[] = "L'adresse mail saisie existe déjà ! Veuillez nous contacter si vous avez
+            oublier votre identifiant et/ou votre mot de passe.";
+        unset($_POST['signupemail']);
+        $signupemail = "";
+    }
 }
-
 
 if(isset($_POST['signupid'])){
     $newpage = false;
@@ -42,14 +57,19 @@ if(isset($_POST['signupid'])){
     if(trim($signupid) == ""){
         $msg[] = "Veuillez renseigner le champ 'Choisir un identifiant'.\n";
         unset($_POST['signupid']);
-        $signid = "";
+        $signupid = "";
     }
     else if (!preg_match($pattern, $signupemail)){
         $msg[] = "Identifiant invalid. Vous pouvez utiliser des lettres, des chiffres et
             les caractères spéciaux '-', '_' et '.'\n";
-	$signupemail =  $_POST['signupemail'];
+	$signupid =  $_POST['signupid'];
         unset($_POST['signupid']);
-        $signid = "";
+        $signupid = "";
+    }
+    else if ($db->querySingle("SELECT login FROM user WHERE login='$signupid'") != null){
+        $msg[] = "Identifiant déjà pris ! Veuillez choisir un autre identifiant.";
+        unset($_POST['signupid']);
+        $signupid = "";
     }
 }
 
@@ -59,16 +79,16 @@ if(isset($_POST['signuppswd1'])){
     if(trim($signuppswd1) == ""){
         $msg[] = "Veuillez renseigner le champ 'Mot de passe'.\n";
         unset($_POST['signuppswd1']);
-        $signid = "";
+        $signuppswd1 = "";
         unset($_POST['signuppswd2']);
-        $signid = "";
+        $signuppswd2 = "";
     }
-    else  if(strlen($signuppswd1) < 8){
-        $msg[] = "Mot de passe invalide. Votre mot de passe doit comporter au moins 8 caractères.\n";
+    else  if(strlen($signuppswd1) < 5){
+        $msg[] = "Mot de passe invalide. Votre mot de passe doit comporter au moins 5 caractères.\n";
         unset($_POST['signuppswd1']);
-        $signid = "";
+        $signuppswd1 = "";
         unset($_POST['signuppswd2']);
-        $signid = "";
+        $signuppswd2 = "";
     }
 }
 
@@ -78,21 +98,21 @@ if(isset($_POST['signuppswd2'])){
     if(trim($signuppswd2) == ""){
         $msg[] = "Veuillez renseigner le champ 'Resaisir le mot de passe'.\n";
         unset($_POST['signuppswd1']);
-        $signid = "";
+        $signuppswd1 = "";
         unset($_POST['signuppswd2']);
-        $signid = "";
+        $signuppswd2 = "";
     }
     if(strlen($signuppswd1 != $signuppswd2)){
         $msg[] = "Les deux mots de passe saisis ne sont pas identiques.\n";
-            unset($_POST['signuppswd1']);
-        $signid = "";
+        unset($_POST['signuppswd1']);
+        $signuppswd1 = "";
         unset($_POST['signuppswd2']);
-        $signid = "";
+        $signuppswd2 = "";
     }
 }
 
 echo var_dump($msg);
-
+echo var_dump($_POST);
 if(isset($_GET['return']))
 	$location = $_GET['return'];
 else
@@ -113,7 +133,7 @@ if(isset($_GET['d']) && $_GET['d'] == "true") {
                     <p>Vous n'êtes pas encore inscrit&nbsp;? Inscrivez-vous&nbsp;:</p>
                     <?php
 			if(sizeof($msg) > 0){
-				echo '<span class="warning">'.
+				echo '<span class="message warning">'.
                             "<b>Saisie invalide. Les erreurs sont les suivantes : </b> <p>".
                             "<ul>";
                             foreach ($msg as $m) {
@@ -122,29 +142,16 @@ if(isset($_GET['d']) && $_GET['d'] == "true") {
                             echo "</ul>";
                         } 
                         else if($newpage == false){
-                       
-                            $SQL_DBNAME = (dirname(__FILE__) . "/db");
-
-                            if (!$db = new SQlite3($SQL_DBNAME))
-                                    mDie(1,"Erreur lors de l'ouverture de la base de données SQLite3");
-
                             $ok = ($db->query("INSERT INTO user(mail, login, hash_passwd, score) VALUES ('" . SQLite3::escapeString($signupemail)
                                    . "', '" . SQLite3::escapeString($signupid)
                                    . "', '" . SQLite3::escapeString($signuppswd1)
                                    . "', 0);"));
-
-                          
                             if($ok == true)
                                 echo "insertion worked!!!!!";
                             else
                                 echo "insertion failed!!!";
                                     //header("location:".$location);
-                            
-                         
-                       
-
-// On mets les données dans la bd...
-                           echo '<span class="warning">'."Inscription s'est déroulée avec succès !";
+                           echo '<span class="message success">'."Inscription s'est déroulée avec succès !";
                            unset($_POST);
                            $newpage = true;
                         }
@@ -180,18 +187,13 @@ if(isset($_GET['d']) && $_GET['d'] == "true") {
                                                        ?>
                                                        />
 	                        	</td>
+                                </tr>
 				<tr>
                                 	<td>
 						<label for="signuppswd1">Choisir un mot de passe&nbsp;: </label>
 					</td>
 					<td>
-						<input name="signuppswd1" type="password"
-                                                       <?php
-                                                       if(isset($_POST['signuppswd1'])){
-                                                           echo "value='signuppswd1'";
-                                                       }
-                                                       ?>
-                                                       />
+						<input name="signuppswd1" type="password" />
 	                        	</td>
 				</tr>
                   		<tr>
@@ -199,18 +201,12 @@ if(isset($_GET['d']) && $_GET['d'] == "true") {
 						<label for="signuppswd2">Resaisir le mot de passe&nbsp;: </label>
 					</td>
 					<td>
-						<input name="signuppswd2" type="password"
-                                                       <?php
-                                                       if(isset($_POST['signuppswd2'])){
-                                                           echo "value='signuppswd2'";
-                                                       }
-                                                       ?>
-                                                       />
+						<input name="signuppswd2" type="password" />
 	                        	</td>
 				</tr>
 				<tr>
 					<td  colspan="2">
-						<p> <input type="submit" name="signupsubmit" value="Valider" />
+						<p> <input type="submit" name="signupsubmit" value="Valider" /></p>
 					</td>
 				</tr>
 			</table>
