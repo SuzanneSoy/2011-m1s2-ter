@@ -25,13 +25,15 @@
 	border-top: thin solid grey;
 	border-bottom: thin solid grey;
 	background-color : #FFFFE0;
+        font-size: x-small;
+        text-align: center
 }
 
 .content {
 	min-height : 80px;
 	margin: 0;
 	padding: 1em;
-	padding-top 4em;
+	padding-top: 4em;
 	padding-bottom : 4em;
 }
 
@@ -43,17 +45,17 @@
 	margin-left : 2%;
 }
 
-.logintbl, .contacttbl {
+.logintbl, .contacttbl, .signuptbl {
 	margin-left : 4%;
 }
 
-.logintbl td, .contactbl td {
+.logintbl td, .contactbl td, .signuptbl  {
 	text-align : right;
 	padding-left : 5px;
 	padding-right : 5px;
 }
 
-.logintbl input[type=submit], .contacttbl input[type=submit]{
+.logintbl input[type=submit], .contacttbl input[type=submit], .signuptbl input[type=submit]{
 	display : block;	
 	margin : auto;
 }
@@ -143,4 +145,26 @@ h2#tache-description {
 .success {
         border : 1px dashed red;
         background-color : #90FF90
+}
+
+#downloadlink {
+    border: medium solid blue;
+    border-radius: 1em;
+    -moz-border-radius: 1em;
+    -webkit-border-radius: 1em;
+    padding: 1em;
+    background-color: #8888ff;
+    margin: 2em;
+}
+
+#downloadlink:hover {
+    background-color: red;
+}
+
+#downloadp {
+    text-align: center;
+}
+
+#cnx {
+    float : right
 }

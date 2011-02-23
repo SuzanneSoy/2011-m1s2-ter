@@ -1,24 +1,20 @@
 <h1>PtiClic sous Android - Version Alpha</h1>
 
+
+<span id="links">
+	<a href="index.php">Accueil</a>
+	<a href="signup.php">S'incrire</a>
+	<a href="download.php">Téléchargement</a>
+	<!-- <a href=".php"> Créer des parties </a> -->
+        <a href="contact.php">Contact</a>
 <?php
 if(!isset($_SESSION['userId']))				// Menu hors connexion.
 {?>
-<span id="links">
-	<a href="index.php"> Accueil </a>
-	<a href="login.php"> Se connecter </a>
-	<a href="signup.php"> S'incrire </a>
-	<a href="download.php"> Téléchargement </a>
-	<a href="contact.php"> Contact </a>
-	<!-- <a href=".php"> Créer des parties </a> -->
-</span>
+        <a id="cnx" "href="login.php"> Se connecter </a>
+
 <?php }
 else							// Menu une fois connecté.
 {?>
-<span id="links">
-	<a href="index.php"> Accueil </a>
-	<a href="download.php"> Téléchargement </a>
-	<a href="contact.php"> Contact </a>
-	<!-- <a href=".php"> Créer des parties </a> -->
-	<a href="login.php?d=true"> Se deconnecter </a>
-</span>
+	<a id="cnx" href="login.php?d=true"> Se deconnecter </a>
 <?php } ?>
+</span

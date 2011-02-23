@@ -188,7 +188,7 @@ if(isset($_POST['signuppswd2'])){
 	                        	</td>
 				</tr>
 				<tr>
-					<td  colspan="2">
+					<td>
 						<p> <input type="submit" name="signupsubmit" value="Valider" /></p>
 					</td>
 				</tr>

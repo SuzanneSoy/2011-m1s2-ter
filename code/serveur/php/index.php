@@ -19,9 +19,10 @@ session_start();
 			<h2>Jeu PtiClic - Téléchargement gratuit</h2>
 			<p>Vous aimez les jeux de mots&nbsp;? Vous avez un smartphone sous Android&nbsp;?
                             PtiClic est pour vous&nbsp;!</p>
-                        <p>Soyez parmi les tous premiers à télécharger cette application gratuitement
-                            en devenant Alpha-testeur. L'inscription est simple, il suffit de fournir une adresse mail, de créer un
-                            identifiant et vous pourrez commencer à jouer&nbsp;!</p>
+                        <p>Soyez parmi les tous premiers à <a href="download.php">télécharger cette 
+                            application gratuitement</a> en devenant Alpha-testeur.
+                            L'<a href="signup.php">inscription</a> est simple, il suffit de fournir
+                            une adresse mail, de créer un identifiant et vous pourrez commencer à jouer&nbsp;!</p>
                         <!-- <p>Il ne s'agit pas d'une version d'essai et l'application ne contient aucun
                             spyware.</p> -->
 
@@ -41,8 +42,8 @@ session_start();
 			</p>
                         <h2>Votre rôle en tant qu'Alpha-testeur</h2>
                         <p>L'application étant en phase de développement et offerte gratuitement,
-                            nous serions reconnaissant si vous pouviez nous donner votre avis, vos suggestions,
-                            vos idées.</p>
+                            nous serions reconnaissant si vous pouviez nous donner votre avis, vos suggestions, 
+                            vos idées. <a href="contact.php">Envoyez-nous un message&nbsp;!</a></p>
 		</div>
 		<div class="footer">
 			<?php include("ressources/footer.html"); ?>

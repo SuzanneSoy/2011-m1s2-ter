@@ -20,8 +20,7 @@ if(!isset($_SESSION['userId']))
 	<?php include("ressources/menu.html"); ?>
 </div>
 <div class="content">
-	<h2>Téléchargez la dernière version :</h2>
-	> <a href="ressources/pticlic.apk" id="downloadlink">Télécharger</a>
+    <p id="downloadp"><a href="ressources/pticlic.apk" id="downloadlink">Télécharger</a></p>
 	<h2>Installation de l'application :</h2>
 			<h3> A partir du téléphone </h3>
 			<ul>			
