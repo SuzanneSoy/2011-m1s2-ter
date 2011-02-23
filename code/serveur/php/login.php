@@ -8,7 +8,7 @@ if(isset($_POST['loginpswd']) && !empty($_POST['loginpswd']))
 if(isset($_GET['return']))
 	$location = $_GET['return'];
 else
-	$location = "contact.php";
+	$location = "index.php";
 
 if(isset($_GET['d']) && $_GET['d'] == "true") {
 	session_destroy();
