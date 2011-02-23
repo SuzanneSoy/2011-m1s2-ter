@@ -1,5 +1,22 @@
 <?php
 session_start();
+
+$err = false;
+$msg = "";
+
+if(isset($_POST['nbcloudwords']))
+	$nbword = $_POST['nbcloudwords'];
+
+for($i = 0; $i < $nbword; $i++)
+	if(!isset($_POST['word'.$i]) || empty($_POST['word'.$i])) {
+		$err = true;
+		$msg = "Tous les mots du nage ne sont pas renseignés";
+	}
+
+if($err == false)
+
+
+$state = 0;
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -17,6 +34,21 @@ session_start();
 		</div>
 		<div class="content">
 			<form action="createGame.php" method="POST">
+			<?php
+			if(!isset($_POST["nbcloudwords"])) {
+				echo '<input type="text" name="nbcloudwords" />';
+				echo '<input type="submit" value="suivant" />';			
+			}
+			else {
+				echo '<input type="text" name="centralword" />';
+				
+				for($i = 0; $i < $_POST['nbcloudwords']; $i++)
+					echo '<input type="text" name="word'.$i.'" />';
+				
+				echo '<input type="submit" value="Enregistrer la partie" />';
+			}			
+			?>
+
 			</form>
 		</div>
 		<div class="footer">
