@@ -21,3 +21,4 @@ pv sql | sqlite3 php/db
 
 sudo chgrp -R www-data php || sudo chgrp -R www php
 chmod 664 php/db
+chmod 775 php
