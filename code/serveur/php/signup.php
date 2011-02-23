@@ -1,7 +1,26 @@
 <?php
 session_start();
-include("_head.php");
+$SQL_DBNAME = (dirname(__FILE__) . "/db");
+    if (!$db = new SQlite3($SQL_DBNAME))
+        mDie(1,"Erreur lors de l'ouverture de la base de données SQLite3");
 
+    /*
+     * TODO: afficher succès en une autre couleur
+     */ 
+    ?>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+	<head>
+		<title>PtiClic sous Android - Version Alpha - Inscription</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="ressources/simple.css" />
+	</head>
+
+<?php
 $newpage = true;
 if(!isset($msg)){
     $msg = array();
@@ -10,6 +29,7 @@ if(isset($_POST['signupemail'])){
     $newpage = false;
     $signupemail = $_POST['signupemail'];
     $pattern = "/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/";
+    
     if(trim($signupemail) == ""){
         $msg[] = "Veuillez renseigner le champ 'Saisir votre adresse mail'.";
         unset($_POST['signupemail']);
@@ -22,8 +42,13 @@ if(isset($_POST['signupemail'])){
         unset($_POST['signupemail']);
         $signupemail = "";
     }
+    else if ($db->querySingle("SELECT mail FROM user WHERE mail='$signupemail'") != null){
+        $msg[] = "L'adresse mail saisie existe déjà ! Veuillez nous contacter si vous avez
+            oublier votre identifiant et/ou votre mot de passe.";
+        unset($_POST['signupemail']);
+        $signupemail = "";
+    }
 }
-
 
 if(isset($_POST['signupid'])){
     $newpage = false;
@@ -32,14 +57,19 @@ if(isset($_POST['signupid'])){
     if(trim($signupid) == ""){
         $msg[] = "Veuillez renseigner le champ 'Choisir un identifiant'.\n";
         unset($_POST['signupid']);
-        $signid = "";
+        $signupid = "";
     }
     else if (!preg_match($pattern, $signupemail)){
         $msg[] = "Identifiant invalid. Vous pouvez utiliser des lettres, des chiffres et
             les caractères spéciaux '-', '_' et '.'\n";
-	$signupemail =  $_POST['signupemail'];
+	$signupid =  $_POST['signupid'];
         unset($_POST['signupid']);
-        $signid = "";
+        $signupid = "";
+    }
+    else if ($db->querySingle("SELECT login FROM user WHERE login='$signupid'") != null){
+        $msg[] = "Identifiant déjà pris ! Veuillez choisir un autre identifiant.";
+        unset($_POST['signupid']);
+        $signupid = "";
     }
 }
 
@@ -49,16 +79,16 @@ if(isset($_POST['signuppswd1'])){
     if(trim($signuppswd1) == ""){
         $msg[] = "Veuillez renseigner le champ 'Mot de passe'.\n";
         unset($_POST['signuppswd1']);
-        $signid = "";
+        $signuppswd1 = "";
         unset($_POST['signuppswd2']);
-        $signid = "";
+        $signuppswd2 = "";
     }
-    else  if(strlen($signuppswd1) < 8){
-        $msg[] = "Mot de passe invalide. Votre mot de passe doit comporter au moins 8 caractères.\n";
+    else  if(strlen($signuppswd1) < 5){
+        $msg[] = "Mot de passe invalide. Votre mot de passe doit comporter au moins 5 caractères.\n";
         unset($_POST['signuppswd1']);
-        $signid = "";
+        $signuppswd1 = "";
         unset($_POST['signuppswd2']);
-        $signid = "";
+        $signuppswd2 = "";
     }
 }
 
@@ -68,21 +98,21 @@ if(isset($_POST['signuppswd2'])){
     if(trim($signuppswd2) == ""){
         $msg[] = "Veuillez renseigner le champ 'Resaisir le mot de passe'.\n";
         unset($_POST['signuppswd1']);
-        $signid = "";
+        $signuppswd1 = "";
         unset($_POST['signuppswd2']);
-        $signid = "";
+        $signuppswd2 = "";
     }
     if(strlen($signuppswd1 != $signuppswd2)){
         $msg[] = "Les deux mots de passe saisis ne sont pas identiques.\n";
-            unset($_POST['signuppswd1']);
-        $signid = "";
+        unset($_POST['signuppswd1']);
+        $signuppswd1 = "";
         unset($_POST['signuppswd2']);
-        $signid = "";
+        $signuppswd2 = "";
     }
 }
 
 echo var_dump($msg);
-
+echo var_dump($_POST);
 if(isset($_GET['return']))
 	$location = $_GET['return'];
 else
@@ -94,28 +124,6 @@ if(isset($_GET['d']) && $_GET['d'] == "true") {
 	header("location:index.php");
 }
 
-
-
-/*
-if(isset($user) && isset($pswd))
-{
-	$SQL_DBNAME = (dirname(__FILE__) . "/db");
-
-	if (!$db = new SQlite3($SQL_DBNAME))
-		mDie(1,"Erreur lors de l'ouverture de la base de données SQLite3");
-
-	if($pswd == ($db->querySingle("SELECT hash_passwd FROM user WHERE login='$user';"))) {
-		$_SESSION['userId'] = $user;
-
-		header("location:".$location);
-	}
-	else
-		$msg = "Mauvais nom d'utilisateur ou mot de passe";
-}
-else if(isset($user) or isset($pswd))
-	$msg = "Veuillez remplir tous les champs";
-
-*/
 ?>
 	<body>
 		<div class="menu">
@@ -125,7 +133,7 @@ else if(isset($user) or isset($pswd))
                     <p>Vous n'êtes pas encore inscrit&nbsp;? Inscrivez-vous&nbsp;:</p>
                     <?php
 			if(sizeof($msg) > 0){
-				echo '<span class="warning">'.
+				echo '<span class="message warning">'.
                             "<b>Saisie invalide. Les erreurs sont les suivantes : </b> <p>".
                             "<ul>";
                             foreach ($msg as $m) {
@@ -134,8 +142,16 @@ else if(isset($user) or isset($pswd))
                             echo "</ul>";
                         } 
                         else if($newpage == false){
-                                                // On mets les données dans la bd...
-                           echo '<span class="warning">'."Inscription déroulée avec succès !";
+                            $ok = ($db->query("INSERT INTO user(mail, login, hash_passwd, score) VALUES ('" . SQLite3::escapeString($signupemail)
+                                   . "', '" . SQLite3::escapeString($signupid)
+                                   . "', '" . SQLite3::escapeString($signuppswd1)
+                                   . "', 0);"));
+                            if($ok == true)
+                                echo "insertion worked!!!!!";
+                            else
+                                echo "insertion failed!!!";
+                                    //header("location:".$location);
+                           echo '<span class="message success">'."Inscription s'est déroulée avec succès !";
                            unset($_POST);
                            $newpage = true;
                         }
@@ -171,18 +187,13 @@ else if(isset($user) or isset($pswd))
                                                        ?>
                                                        />
 	                        	</td>
+                                </tr>
 				<tr>
                                 	<td>
 						<label for="signuppswd1">Choisir un mot de passe&nbsp;: </label>
 					</td>
 					<td>
-						<input name="signuppswd1" type="password"
-                                                       <?php
-                                                       if(isset($_POST['signuppswd1'])){
-                                                           echo "value='signuppswd1'";
-                                                       }
-                                                       ?>
-                                                       />
+						<input name="signuppswd1" type="password" />
 	                        	</td>
 				</tr>
                   		<tr>
@@ -190,18 +201,12 @@ else if(isset($user) or isset($pswd))
 						<label for="signuppswd2">Resaisir le mot de passe&nbsp;: </label>
 					</td>
 					<td>
-						<input name="signuppswd2" type="password"
-                                                       <?php
-                                                       if(isset($_POST['signuppswd2'])){
-                                                           echo "value='signuppswd2'";
-                                                       }
-                                                       ?>
-                                                       />
+						<input name="signuppswd2" type="password" />
 	                        	</td>
 				</tr>
 				<tr>
 					<td  colspan="2">
-						<p> <input type="submit" name="signupsubmit" value="Valider" />
+						<p> <input type="submit" name="signupsubmit" value="Valider" /></p>
 					</td>
 				</tr>
 			</table>
@@ -213,79 +218,3 @@ else if(isset($user) or isset($pswd))
 		</div>
 	</body>
  </html>
-
-
-
-
-
-<?
-/*
- * php
-
-    include("_head.php");
-    include("ressources/FormValidator.php");
-    $fv = new FormValidator("post");
-?>
-	<body>
-		<div class="menu">
-			<?php include("ressources/menu.html"); ?>
-		</div>
-                <p>Vous n'êtes pas encore inscrit&nbsp;? Inscrivez-vous&nbsp;:
-                <form name="signupform" method="post" >
-
-                    <?php
-                    
-                    $error_email1 = "Tapez votre adresse mail.";
-                    $error_email2 = "L'adresse mail que vous avez fournie
-                        n'est pas valide. Veuillez saisir votre adresse mail.";
-                    if($fv->isEmpty("signupemail", $error_email1)){
-                        echo "<p>$error_email1</p>";
-                    }
-                    if(!$fv->isSafeValidEmail("signupemail", $error_email2)){
-                        echo "<p>$error_email2</p>";
-                    }
-                    ?>
-
-                    <p>Tapez votre adresse mail&nbsp;: <input name="signupemail" type="text" /></p>
-
-                    <?php
-                    $error_id1 = "Choisissez un identifiant";
-                    $error_id2 = "Votre identifant peut se composer de nombres, de lettres
-                        et des caractères '-', '_' et '.'. Veuillez resaisir un identifiant";
-                    if($fv->isEmpty("signupid", $error_id1))
-                        echo "<p>$error_id1</p>";
-                    if(!$fv->isSafeAlphaNumeric("signupid", $error_id2))
-                        echo "<p>$error_id2</p>";
-                    ?>
-                    <p>Choisir un identifiant&nbsp;: <input name="signupid" type="text" /></p>
-                        <!-- TODO: Tester pour voie si l'identifiant n'est pas déjà pris -->
-        
-                    <?php
-                    $error_pswd1_1 = "Choisissez un mot de passe";
-                    $error_pswd1_2 = "Votre mot de passe peut se composer de nombres, de lettres
-                        et des caractères '-', '_' et '.'. Veuillez resaisir un identifiant";
-                    if($fv->isEmpty("signuppswd1", $error_pswd1_1))
-                            echo "<p>$error_pswd1_1</p>";
-                    if(!$fv->isSafeAlphaNumeric("signuppswd1", $error_pswd1_2))
-                            echo "<p>$error_pswd1_2</p>";
-                    if(!$fv->getSimpleValue("signuppswd1") != $fv->getSimpleValue("signuppswd2"))
-                        echo "<p> Les deux mots de passe que vous avez saisis ne sont pas identiques</p>";
-                    ?>
-                    <p>Choisir un mot de passe&nbsp;: <input name="signuppswd1" type="password" /></p>
-
-                    
-                    
-                    <p>Retapez le mot de passe&nbsp;: <input name="signuppswd2" type="password" /></p>
-                    <p> <input type="submit" name="signupsubmit" value="Valider" />
-                </form>
-		</div>
-
-
-
-
-		<div class="footer">
-			<?php include("ressources/footer.html"); ?>
-		</div>
-	</body>
-        </html>
-*/

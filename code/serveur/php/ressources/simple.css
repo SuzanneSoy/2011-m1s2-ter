@@ -119,15 +119,37 @@ h2#tache-description {
 	clear:both;
 }
 
+
 .warning {
 	width : 40%;
 	display : block;
 	border : 1px dashed red;
-	background-color : #F0C060;
+
 	padding : 5px;
 	padding-left : 30px;
 	margin-top : 10px;
 	margin-bottom : 10px;
 	margin-right : 6%;
 	margin-left : 6%;
+}
+
+.message {
+	width : 40%;
+	display : block;
+	padding : 5px;
+	padding-left : 30px;
+	margin-top : 10px;
+	margin-bottom : 10px;
+	margin-right : 6%;
+	margin-left : 6%;
+}
+
+.message .warning {
+    	border : 1px dashed red;
+	background-color : #F0C060
+}
+
+.message .success {
+        border : 1px dashed red;
+        background-color : #90FF90
 }

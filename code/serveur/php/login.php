@@ -72,7 +72,7 @@ else if(isset($user) or isset($pswd))
 				</tr>
 				<tr>
 					<td  colspan="2">
-						<p> <input type="submit" name="loginsubmit" value="Valider" />
+						<p> <input type="submit" name="loginsubmit" value="Valider" /> </p>
 					</td>
 				</tr>
 			</table>
