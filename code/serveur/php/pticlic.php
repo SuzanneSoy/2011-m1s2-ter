@@ -64,7 +64,7 @@ $login_is_ok = ($hash_passwd == $db->querySingle("SELECT hash_passwd FROM user W
 if ($action != 3 && (!$login_is_ok)) {
 	mDie(3,"Utilisateur non enregistré ou mauvais mot de passe");
 }
-if ($action = 3) {
+if ($action == 3) {
 	if ($login_is_ok) {
 		echo '{"login_ok":true}';
 	} else {
