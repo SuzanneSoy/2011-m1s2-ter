@@ -109,7 +109,7 @@ if(isset($_POST['signuppswd2'])){
 
         <body>
 		<div class="menu">
-			<?php include("ressources/menu.html"); ?>
+			<?php include("ressources/menu.inc"); ?>
 		</div>
 		<div class="content">
                     <p>Vous n'êtes pas encore inscrit&nbsp;? Inscrivez-vous&nbsp;:</p>
@@ -200,7 +200,7 @@ if(isset($_POST['signuppswd2'])){
 		</div>
 
 		<div class="footer">
-			<?php include("ressources/footer.html"); ?>
+			<?php include("ressources/footer.inc"); ?>
 		</div>
 	</body>
  </html>

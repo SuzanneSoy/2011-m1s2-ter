@@ -59,7 +59,7 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 	</head>
 	<body>
 		<div class="menu">
-			<?php include("ressources/menu.html"); ?>
+			<?php include("ressources/menu.inc"); ?>
 		</div>
 		<div class="content">
 			<?php			
@@ -113,7 +113,7 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 			?>
 		</div>
 		<div class="footer">
-			<?php include("ressources/footer.html"); ?>
+			<?php include("ressources/footer.inc"); ?>
 		</div>
 	</body>
 </html><?php

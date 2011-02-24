@@ -44,7 +44,7 @@ else if(isset($user) or isset($pswd))
 	</head>
 	<body>
 		<div class="menu">
-			<?php include("ressources/menu.html"); ?>
+			<?php include("ressources/menu.inc"); ?>
 		</div>
 		<div class="content">
                     <p>Vous êtes déjà inscrit&nbsp;? Authentifiez-vous&nbsp;:</p>
@@ -83,7 +83,7 @@ else if(isset($user) or isset($pswd))
 		</div>
 
 		<div class="footer">
-			<?php include("ressources/footer.html"); ?>
+			<?php include("ressources/footer.inc"); ?>
 		</div>
 	</body>
  </html>

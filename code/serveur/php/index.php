@@ -13,7 +13,7 @@ session_start();
 	</head>
 	<body>
 		<div class="menu">
-			<?php include("ressources/menu.html"); ?>	
+			<?php include("ressources/menu.inc"); ?>	
 		</div>
 		<div class="content">
 			<h2>Jeu PtiClic - Téléchargement gratuit</h2>
@@ -46,7 +46,7 @@ session_start();
                             vos idées. <a href="contact.php">Envoyez-nous un message&nbsp;!</a></p>
 		</div>
 		<div class="footer">
-			<?php include("ressources/footer.html"); ?>
+			<?php include("ressources/footer.inc"); ?>
 		</div>
 	</body>
 </html>

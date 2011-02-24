@@ -30,7 +30,7 @@ $state = 0;
 	</head>
 	<body>
 		<div class="menu">
-			<?php include("ressources/menu.html"); ?>	
+			<?php include("ressources/menu.inc"); ?>	
 		</div>
 		<div class="content">
 			<form action="createGame.php" method="POST">
@@ -52,7 +52,7 @@ $state = 0;
 			</form>
 		</div>
 		<div class="footer">
-			<?php include("ressources/footer.html"); ?>
+			<?php include("ressources/footer.inc"); ?>
 		</div>
 	</body>
 </html>

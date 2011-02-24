@@ -17,7 +17,7 @@ if(!isset($_SESSION['userId']))
 	</head>
 	<body>
 		<div class="menu">
-		<?php include("ressources/menu.html"); ?>
+			<?php include("ressources/menu.inc"); ?>
 		</div>
 		<div class="content">
 			<span class="downloadarea"><a href="ressources/pticlic.apk" id="downloadlink">Télécharger</a></span>
@@ -41,7 +41,7 @@ if(!isset($_SESSION['userId']))
 			</ul>
 		</div>
 		<div class="footer">
-			<?php include("ressources/footer.html"); ?>
+			<?php include("ressources/footer.inc"); ?>
 		</div>
 	</body>
 </html>
