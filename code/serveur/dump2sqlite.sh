@@ -30,6 +30,8 @@ create table game(gid integer primary key autoincrement, eid_central_word, relat
 create table game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash);
 create table played_game(pgid integer primary key autoincrement, gid, login, timestamp);
 create table played_game_cloud(pgid, gid, type, num, relation, weight, score);
+create table random_cloud_node(eid,nbneighbors);
+create table random_center_node(eid);
 
 insert into user(login, mail, hash_passwd, score) values('$(echo "$user" | sed -e "s/'/''/g")', 'foo@isp.com', '$(echo "$passwd" | dd bs=1 count="${#passwd}" | (if which md5sum >/dev/null 2>&1; then md5sum; else md5; fi) | cut -d ' ' -f 1)', 0);
 EOF
@@ -56,5 +58,18 @@ create index i_relation_type on relation(type);
 create index i_relation_start_type on relation(start,type);
 create index i_relation_end_type on relation(end,type);
 create index i_played_game_all on played_game(pgid, gid, login, timestamp);
+insert into random_cloud_node(eid,nbneighbors) select eid,sum(nb) from (
+	select (select type from node where node.eid = relation.start) as type,
+		start as eid,
+		count(start) as nb from relation where type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001)
+		group by start
+	union
+	select (select type from node where node.eid = relation.start) as type,
+		end as eid,
+		count(end) as nb from relation where type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001)
+		group by end
+) where type = 1 group by eid;
+create index i_random_cloud_node_nbneighbors on random_cloud_node(nbneighbors);
+insert into random_center_node(eid) select eid from random_cloud_node where nbneighbors > 3;
 commit;
 EOF

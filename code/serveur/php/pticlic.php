@@ -75,11 +75,16 @@ if ($action == 3) {
 
 /** Selectionne aléatoirement un noeud.
 */
-function random_node()
+function random_center_node()
 {
 	global $db;
+	return $db->querySingle("select eid from random_center_node where rowid = (abs(random()) % (select max(rowid) from random_center_node))+1;");
+}
 
-	return $db->querySingle("select eid from node where eid = (abs(random()) % (select max(eid) from node))+1 or eid = (select max(eid) from node where eid > 0) order by eid limit 1;");
+function random_cloud_node()
+{
+	global $db;
+	return $db->querySingle("select eid from random_cloud_node where rowid = (abs(random()) % (select max(rowid) from random_cloud_node))+1;");
 }
 
 
@@ -99,7 +104,6 @@ function cg_build_result_sets($cloudSize, $centerEid, $r1, $r2)
 	// Le select doit ranvoyer trois colonnes :
 	//   eid => l'eid du mot à mettre dans le nuage,
 	//   r1 => la probabilité pour que le mot soit dans r1, entre -1 et 1 (négatif = ne devrait pas y être, positif = devrait y être à coup sûr, 0 = on sait pas).
-	// TODO : comment mettre un poids sur random, sachant qu'il ne peut / devrait pas être dans ces select, mais plutôt un appel à random_node() ?
 	$typer1r2 = "type in ($r1, $r2)";
 	$sources = array(
 		// Voisins 1 saut du bon type (= relations déjà existantes)
@@ -153,7 +157,7 @@ function cg_build_result_sets($cloudSize, $centerEid, $r1, $r2)
 			
 			for ($i = 0; $i < 10; $i++)
 			{
-				$sources[$k]['resultSet'][] = array('eid'=>random_node(), 'r1'=>0, 'r2'=>0, 'r0'=>0, 'trash'=>1);
+				$sources[$k]['resultSet'][] = array('eid'=>random_cloud_node(), 'r1'=>0, 'r2'=>0, 'r0'=>0, 'trash'=>1);
 				$sources[$k]['rsSize']++;
 			}
 		}
@@ -254,7 +258,7 @@ function cg_build_cloud($cloudSize, $sources, $sumWeights)
 	while ($i < $cloudSize)
 	{
 		$totalDifficulty += $sources['rand']['d'];
-		$cloud[$i] = array('pos'=>$i++, 'd'=>$sources['rand']['d'], 'eid'=>random_node(), 'probaR1'=>$res['r1'], 'probaR2'=>$res['r2'], 'probaR0'=>$res['r0'], 'probaTrash'=>$res['trash']);
+		$cloud[$i] = array('pos'=>$i++, 'd'=>$sources['rand']['d'], 'eid'=>random_cloud_node(), 'probaR1'=>$res['r1'], 'probaR2'=>$res['r2'], 'probaR0'=>$res['r0'], 'probaTrash'=>$res['trash']);
 	}
 
 	return array($cloud, $totalDifficulty);
@@ -400,7 +404,7 @@ function createGameCore($cloudSize)
 	global $db;
 
 	// select random node
-	$centerEid = random_node();
+	$centerEid = random_center_node();
 
 	$r1 = cg_choose_relations(); $r2 = $r1[1]; $r1 = $r1[0];
 	$sources = cg_build_result_sets($cloudSize, $centerEid, $r1, $r2); $sumWeights = $sources[1]; $sources = $sources[0];
