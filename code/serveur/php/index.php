@@ -37,7 +37,7 @@ session_start();
 			<p>La version beta du jeu PtiClic sous Android est en cours de développement.
                         Le projet s'inscrit dans le cadre d'un TER de Master en informatique
                         à l'Université Montpellier II sous la direction de Mathieu LAFOURCADE. L'équipe
-                        de conception et de développement est composée de quatre étudiants&nbsp;: Bertrand BRUN
+                        de conception et de développement est composée de quatre étudiants&nbsp;: Bertrand BRUN, 
                         Yoann BONAVERO, John CHARRON et Georges DUPERON.
 			</p>
                         <h2>Votre rôle en tant qu'Alpha-testeur</h2>

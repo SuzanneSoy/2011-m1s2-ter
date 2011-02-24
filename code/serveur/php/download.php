@@ -11,7 +11,7 @@ if(!isset($_SESSION['userId']))
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 	<head>
-	<title>PtiClic Android - Téléchargement</title>
+	<title>PtiClic sous Android, version Alpha - Téléchargement</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />		
 	<link rel="stylesheet" href="ressources/simple.css" />
 	</head>
@@ -20,25 +20,27 @@ if(!isset($_SESSION['userId']))
 	<?php include("ressources/menu.html"); ?>
 </div>
 <div class="content">
-    <p id="downloadp"><a href="ressources/pticlic.apk" id="downloadlink">Télécharger</a></p>
-	<h2>Installation de l'application :</h2>
-			<h3> A partir du téléphone </h3>
-			<ul>			
-				<li> Téléchargez l'application en cliquant sur le lien ci-dessus.</li>
-	<li> Un fois téléchargée, clique sur l'application dans la barre de notification d'Android et suivez les instructions d'installation. </li>
-				<li> Patientez quelques instant. Une fois l'installation terminée démarrez l'application.</li>
-				<li> Suivez les instructions pour le premier démarrage de l'application</li>
+	<h2>Installation de l'application</h2>
+        <h3> A partir de votre téléphone </h3>
+        <ul>
+            <li> <a href="ressources/pticlic.apk" />Téléchargez le fichier d'installation</a></li>
+            <li>Une fois téléchargé, cliquez sur le fichier dans la barre de notification d'Android et suivez
+            les instructions d'installation. Vous devrez patientez quelques instant pendant l'installation.</li>
+		<li>Une fois l'installation terminée, démarrez l'application</li>
+		<li> Suivez attentivement les instructions lors du premier démarrage de l'application</li>
 	</ul>
-	<h3> A partir d'un ordinateur </h3>
-			<ul>			
-				<li> Téléchargez sur votre ordinateur l'application en cliquant sur le lien ci-dessus. </li>
-	<li> Transférez le fichier ainsi téléchargé sur votre téléphone (par bluetooth, usb...)</li>
-	<li> Depuis votre téléphone allez cherchez sur votre carte mémoire l'application ainsi transférée.</li>
-				<li> Cliquez sur l'application et installé là sur le téléphone.</li>
-	<li> Démarrez l'application et suivez les instructions pour le premier démarrage.</li>
-			</ul>
-		</div>
-		<div class="footer">
+	<h3> A partir de votre ordinateur </h3>
+        <ul>
+            <li><a href="ressources/pticlic.apk">Téléchargez le fichier d'installation</a> </li>
+            <li>Transférez ce fichier sur votre téléphone à l'aide de bluetooth, une clé usb ou autre</li>
+            <li>Depuis votre téléphone, retrouvez sur votre carte mémoire l'application que vous
+            venez de transférer</li>
+            <li>Cliquez sur l'application afin de l'installer sur votre téléphone</li>
+            <li>Suivez attentivement les instructions lors du premier démarrage de l'application</li>
+        </ul>
+	</div>
+        <p id="downloadp"><a href="ressources/pticlic.apk" id="downloadlink">Télécharger</a></p>
+            <div class="footer">
 			<?php include("ressources/footer.html"); ?>
 		</div>
 	</body>
