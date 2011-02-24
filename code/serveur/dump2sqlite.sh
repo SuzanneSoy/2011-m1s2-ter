@@ -32,13 +32,6 @@ create table played_game(pgid integer primary key autoincrement, gid, login, tim
 create table played_game_cloud(pgid, gid, type, num, relation, weight, score);
 
 insert into user(login, mail, hash_passwd, score) values('$(echo "$user" | sed -e "s/'/''/g")', 'foo@isp.com', '$(echo "$passwd" | dd bs=1 count="${#passwd}" | (if which md5sum >/dev/null 2>&1; then md5sum; else md5; fi) | cut -d ' ' -f 1)', 0);
-
-create index i_relation_start on relation(start);
-create index i_relation_end on relation(end);
-create index i_relation_type on relation(type);
-create index i_relation_start_type on relation(start,type);
-create index i_relation_end_type on relation(end,type);
-create index i_played_game_all on played_game(pgid, gid, login, timestamp);
 EOF
 
 # tr : pour virer le CRLF qui traîne
@@ -56,4 +49,12 @@ cat "$1" \
 | grep -v '^//' \
 | grep -v '^$'
 
-echo "commit;"
+cat <<EOF
+create index i_relation_start on relation(start);
+create index i_relation_end on relation(end);
+create index i_relation_type on relation(type);
+create index i_relation_start_type on relation(start,type);
+create index i_relation_end_type on relation(end,type);
+create index i_played_game_all on played_game(pgid, gid, login, timestamp);
+commit;
+EOF
