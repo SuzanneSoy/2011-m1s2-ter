@@ -342,6 +342,26 @@ function randomGame()
 	return $gid;
 }
 
+function format_word($word) {
+	global $db;
+	
+	$res = "";
+	$stack = array();
+	while (($pos = strpos($word, ">")) !== false) {
+		$res .= substr($word,0,$pos) . " (";
+		$eid = intval(substr($word,$pos+1));
+		if ($eid == 0) mDie(7, "Erreur lors du suivi des pointeurs de spécialisation du mot $word.");
+		if (in_array($eid, $stack)) mDie(8, "Boucle rencontrée lors du suivi des pointeurs de spécialisation du mot $word.");
+		if (count($stack) > 10) mDie(9, "Trop de niveaux de récursions lors du suivi des pointeurs de spécialisation du mot $word.");
+		$stack[] = $eid;
+		$word = $db->querySingle("select name from node where eid = $eid");
+	}
+	$res .= $word;
+	for ($depth = count($stack); $depth > 0; $depth--) {
+		$res .= ')';
+	}
+	return $res;
+}
 
 /** Formate une partie en JSON en l'imprimant.
 * @param game_id : L'identifiant d'une partie.
@@ -359,7 +379,7 @@ function game2json($game_id)
 	$game = $game->fetchArray();
 	
 	echo '{"gid":'.$game_id.',"pgid":'.$pgid.',"cat1":'.$game['relation_1'].',"cat2":'.$game['relation_2'].',"cat3":0,"cat4":-1,';
-	echo '"center":{"id":'.$game['eid_central_word'].',"name":'.json_encode(''.$game['name_central_word']).'},';
+	echo '"center":{"id":'.$game['eid_central_word'].',"name":'.json_encode(''.format_word($game['name_central_word'])).'},';
 	echo '"cloudsize":10,"cloud":['; // TODO ! compter dynamiquement.
 	
 	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word from game_cloud where gid = ".$game_id.";");
@@ -372,7 +392,7 @@ function game2json($game_id)
 		else
 			$notfirst=true;
 
-		echo '{"id":'.$x['eid_word'].',"name":'.json_encode("".$x['name_word']).'}';
+		echo '{"id":'.$x['eid_word'].',"name":'.json_encode("".format_word($x['name_word'])).'}';
 	}
 
 	echo "]}";
