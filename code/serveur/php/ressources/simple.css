@@ -1,6 +1,7 @@
 .menu {
 	border-bottom : 1px solid grey;
 	background-color : #FFFFE0;
+	margin : 0px;
 }
 
 .menu #links {
@@ -34,8 +35,8 @@
 	min-height : 80px;
 	margin: 0;
 	padding: 1em;
-	padding-top: 4em;
-	padding-bottom : 4em;
+	padding-top: 1.2em;
+	padding-bottom : 1.2em;
 }
 
 .content p {
@@ -145,21 +146,27 @@ h2#tache-description {
 }
 
 #downloadlink {
-    border: medium solid blue;
-    border-radius: 1em;
-    -moz-border-radius: 1em;
-    -webkit-border-radius: 1em;
-    padding: 1em;
-    background-color: #8888ff;
-    margin: 2em;
+	color : black;
+	text-decoration : none;
+	font-size : 16pt;	
+	background-color: #8888ff;	
+	border: medium solid blue;
+	border-radius: 1em;
+	-moz-border-radius: 1em;
+	-webkit-border-radius: 1em;
+	padding: 0.5em;
+	padding-left : 2em;
+	padding-right : 2em;
 }
 
 #downloadlink:hover {
-    background-color: red;
+	background-color: red;
 }
 
-#downloadp {
-    text-align: center;
+.downloadarea {
+	display : block;
+	margin : 3em;
+	margin-top : 2em;
 }
 
 #cnx {

@@ -32,13 +32,15 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 			
 			writemail($mailfile,$from,$subject,$message);
 
-			if(mail($dest,$subject,$message,$header))
+			/*if(mail($dest,$subject,$message,$header))
 			{
 				$notif = "Votre email à été envoyé";
 				$displayForm = false;
 			}
 			else
-				$notif = "Une erreur s'est produite lors de l'envoi du message";
+				$notif = "Une erreur s'est produite lors de l'envoi du message";*/
+
+			$notif = "Votre email à été envoyé";
 		}
 	else
 		$notif = "Veuillez remplir tout les champs";
