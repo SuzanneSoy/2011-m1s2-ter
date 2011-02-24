@@ -2,7 +2,7 @@
 session_start();
 
 if(!isset($_SESSION['userId']))
-	header("location:login.php?return=download");
+	header("location:login.php?return=download&showmsg=err_download_notauth");
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
@@ -15,12 +15,13 @@ if(!isset($_SESSION['userId']))
 		<?php include("ressources/menu.inc"); ?>
 		<div class="content">
 			<?php include("ressources/showmsg.inc"); ?>
+			<h2>Téléchargement de l'application</h2>			
 			<span class="downloadarea"><a href="ressources/pticlic.apk" id="downloadlink">Télécharger</a></span>
 			<h2>Installation de l'application</h2>
 			<h3> A partir de votre téléphone </h3>
 			<ul>
 				<li><a href="ressources/pticlic.apk">Téléchargez le fichier d'installation</a></li>
-				<li>Une fois téléchargé, cliquez sur le fichier dans la barre de notification d'Android et suivez
+				<li>Une fois téléchargée, cliquez sur le fichier dans la barre de notification d'Android et suivez
 					les instructions d'installation. Vous devrez patientez quelques instant pendant l'installation.</li>
 				<li>Une fois l'installation terminée, démarrez l'application</li>
 				<li> Suivez attentivement les instructions lors du premier démarrage de l'application</li>

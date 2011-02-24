@@ -28,6 +28,8 @@ $strings['err_signup_invalid_passwd1'] = "Mot de passe invalide. Votre mot de pa
 $strings['err_signup_fill_passwd2'] = "Veuillez renseigner le champ 'Resaisir le mot de passe'.";
 $strings['err_signup_passwords_dont_match'] = "Les deux mots de passe saisis ne sont pas identiques.";
 $strings['ok_signup_registered'] = "L'inscription s'est déroulée avec succès.";
-$strings['err_signup_dbinsert'] = "Erreur lors de l'inscription, merci de nous signaler le problème.";
+$strings['err_signup_dbinsert'] = "Une erreur interne est survenue lors de l'inscription, merci de nous signaler le problème.";
+
+$strings['err_download_notauth'] = "Pour accéder à la page de téléchargement de l\'application vous devez être authentifié."
 
 ?>

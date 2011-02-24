@@ -53,7 +53,7 @@ else if(isset($user) or isset($pswd))
 				if($msg !== null)
 					echo '<p class="message warning">'.htmlspecialchars($msg).'</p>';
 			?>
-			<form name="loginform" method="post" action="login.php?return=<?php echo $location; ?>">
+			<form name="loginform" method="POST" action="login.php?return=<?php echo $location; ?>">
 				<table class="logintbl">
 					<tr>
 						<td>
@@ -73,7 +73,6 @@ else if(isset($user) or isset($pswd))
 					</tr>
 					<tr>
 						<td>
-
 						</td>
 						<td>
 							<input type="submit" name="loginsubmit" value="Valider" />
@@ -81,8 +80,8 @@ else if(isset($user) or isset($pswd))
 					</tr>
 				</table>
 			</form>
-			<h3>Vous n'avez pas encore de compte ?</h3>
-			<p><a href="signup.php?return=<?php echo $location; ?>">Inscrivez-vous !</a></p>
+			<h3>Vous ne disposez pas encore d'un compte ?</h3>
+			<p><a href="signup.php?return=<?php echo $location; ?>">Inscrivez-vous</a> dès maintenant !</p>
 		</div>
 		<?php include("ressources/footer.inc"); ?>
 	</body>

@@ -106,7 +106,13 @@ if(count($msg) == 0 && $newpage == false)
 			<h2>Inscription</h2>
 			<?php include("ressources/showmsg.inc"); ?>
 			<h3>Vous n'avez pas encore de compte ?</h3>
-			<p>Inscrivez-vous :</p>
+			<p>
+				Inscrivez-vous pour accéder l'ensemble du site et faire parti des alpha-testeurs ! <br />
+				Vous pourrez ainsi télécharger l'application la tester et nous faire part de vos remarques afin de l'améliorer.<br />
+			</p>
+			<p>
+				Pour vous inscrire maintenant veuillez remplir le formulaire qui suit :
+			</p>
 			<?php
 				if(count($msg) > 0)
 				{

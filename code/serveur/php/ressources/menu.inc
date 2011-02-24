@@ -1,5 +1,5 @@
 		<div class="menu">
-			<h1>PtiClic <span class="android">sous Android™</span> - Version 0.1 Alpha</h1>
+			<h1>PtiClic <span class="android">sous Android™</span> - Version 0.1 Alpha</h1>
 			
 			<span id="links">
 				<a href="index.php">Accueil</a>
