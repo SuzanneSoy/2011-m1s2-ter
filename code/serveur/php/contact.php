@@ -99,7 +99,10 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 							</td>
 						</tr>
 						<tr>
-							<td colspan="2">
+							<td>
+								
+							</td>							
+							<td>
 								<span class="btSubmit"><input type="submit" value="Envoyer le message" /></span>
 							</td>
 						</tr>

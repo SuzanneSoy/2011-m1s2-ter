@@ -10,6 +10,7 @@
 	border-top : 1px solid grey;
 	padding : 4px;
 	padding-left : 3%;
+	padding-right : 3%;
 }
 
 .menu #links a {
@@ -43,10 +44,6 @@
 	margin-left : 2%;
 }
 
-.content p:first-letter {
-	margin-left : 2%;
-}
-
 .logintbl, .contacttbl, .signuptbl {
 	margin-left : 4%;
 }
@@ -58,9 +55,9 @@
 	padding-right : 5px;
 }
 
-.logintbl input[type=submit], .contacttbl input[type=submit], .signuptbl input[type=submit]{
+.logintbl input[type=submit], .contacttbl input[type=submit], .signuptbl input[type=submit] {
 	display : block;	
-	margin : auto;
+	margin-left : 0px;
 }
 
 .contacttbl textarea {
@@ -171,4 +168,8 @@ h2#tache-description {
 
 #cnx {
     float : right
+}
+
+.android {
+    font-size: 70%;
 }

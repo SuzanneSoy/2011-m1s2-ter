@@ -180,7 +180,7 @@ if(isset($_POST['signuppswd2'])){
 	                        	</td>
 				</tr>
                   		<tr>
-                                		<td>
+                                	<td>
 						<label for="signuppswd2">Resaisir le mot de passe&nbsp;: </label>
 					</td>
 					<td>
@@ -189,7 +189,10 @@ if(isset($_POST['signuppswd2'])){
 				</tr>
 				<tr>
 					<td>
-						<p> <input type="submit" name="signupsubmit" value="Valider" /></p>
+
+					</td>					
+					<td>
+						<input type="submit" name="signupsubmit" value="Valider" />
 					</td>
 				</tr>
 			</table>

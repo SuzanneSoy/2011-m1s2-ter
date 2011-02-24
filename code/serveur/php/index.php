@@ -28,7 +28,7 @@ session_start();
 
                             <h2>Le principe du jeu</h2>
                         <p>Un mot central apparaît ainsi que quatre associations
-                            telles que "synonyme", "antonyme", "est une sorte de", "corbeille". L'idée est
+                            telles que "synonyme", "antonyme", "est une sorte de", "corbeille"... L'idée est
                             de lier de nouveaux mots au mot central à l'aide des associations.
                             Plus votre réponse est juste, plus vous gagnez de points.
                             Attention, vous pouvez aussi perdre des points&nbsp;!</p>
