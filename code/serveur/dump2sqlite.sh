@@ -31,7 +31,7 @@ create table game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, pr
 create table played_game(pgid integer primary key autoincrement, gid, login, timestamp);
 create table played_game_cloud(pgid, gid, type, num, relation, weight, score);
 
-insert into user(login, mail, hash_passwd, score) values('$(echo "$user" | sed -e "s/'/''/g")', 'foo@isp.com', '$(echo "$passwd" | dd bs=1 count="${#passwd}" | (if which md5sum; then md5sum; else md5; fi) | cut -d ' ' -f 1)', 0);
+insert into user(login, mail, hash_passwd, score) values('$(echo "$user" | sed -e "s/'/''/g")', 'foo@isp.com', '$(echo "$passwd" | dd bs=1 count="${#passwd}" | (if which md5sum >/dev/null 2>&1; then md5sum; else md5; fi) | cut -d ' ' -f 1)', 0);
 
 create index i_relation_start on relation(start);
 create index i_relation_end on relation(end);

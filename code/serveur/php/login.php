@@ -50,7 +50,7 @@ else if(isset($user) or isset($pswd))
                     <p>Vous êtes déjà inscrit&nbsp;? Authentifiez-vous&nbsp;:</p>
                     <?php
 			if(isset($msg))
-				echo '<span class="warning">'.$msg.'</span>';
+				echo '<span class="message warning">'.$msg.'</span>';
 		    ?>
 		    <form name="loginform" method="post" action="login.php?return=<?php echo $location; ?>">
                         <table class="logintbl">
