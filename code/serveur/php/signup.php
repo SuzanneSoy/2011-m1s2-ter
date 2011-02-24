@@ -112,7 +112,9 @@ if(isset($_POST['signuppswd2'])){
 			<?php include("ressources/menu.html"); ?>
 		</div>
 		<div class="content">
-                    <p>Vous n'êtes pas encore inscrit&nbsp;? Inscrivez-vous&nbsp;:</p>
+                    <p>Inscrivez-vous pour accéder l'ensemble du site et faire parti des alpha-testeurs ! <br />
+					Vous pourrez ainsi télécharger l'application la tester et nous faire part de vos remarques afin de l'améliorer.<br />
+					<br />Pour vous inscrire maintenant veuillez remplir le formulaire qui suit :</p><br />
                     <?php
 			if(sizeof($msg) > 0){
 				echo '<span class="message warning">'.
@@ -129,19 +131,20 @@ if(isset($_POST['signuppswd2'])){
                                    . "', '" . SQLite3::escapeString(md5($signuppswd1))
                                    . "', 0);"));
 
-                            if($ok == true)
-                                echo "insertion worked!!!!!";
+                            if($ok == true) {
+				$_SESSION['userId'] = $signupid;
+				echo '<span class="message success">'."L'inscription s'est déroulée avec succès !";
+			    }
                             else
-                                echo "insertion failed!!!";
-                                    //header("location:".$location);
-                           echo '<span class="message success">'."Inscription s'est déroulée avec succès !";
+				echo '<span class="message success">'."Une erreur interne est survenue lors de l'enregistrement !";
+
                            unset($_POST);
                            $newpage = true;
                         }
 
                             echo '</span>';
 		    ?>
-		    <form name="signupform" method="post" action="signup.php?return=<?php echo $location; ?>">
+		    <form name="signupform" method="post" action="signup.php">
                         <table class="signuptbl">
 				<tr>
 					<td>
@@ -154,7 +157,7 @@ if(isset($_POST['signuppswd2'])){
                                                            echo "value='$signupemail'";
                                                        }
                                                        ?>
-                                                       /><br />
+                                                       />
 					</td>
 				</tr>
                         	<tr>

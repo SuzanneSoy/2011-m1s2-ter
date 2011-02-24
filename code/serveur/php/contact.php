@@ -72,6 +72,8 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 			if($displayForm == true)
 			{
 				?>
+				<p>Vous souhaitez signaler un défaut dans l'application, ou bien vous avez des remarques, des suggestions ! <br />
+				Faites nous en part en nous envoyant un message par le biais du formulaire qui suit :</p>
 				<form action="contact.php" method="POST">
 					<table class="contacttbl">
 						<tr>

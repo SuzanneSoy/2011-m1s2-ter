@@ -20,12 +20,13 @@ if(!isset($_SESSION['userId']))
 		<?php include("ressources/menu.html"); ?>
 		</div>
 		<div class="content">
+			<h2>Téléchargement l'application</h2>			
 			<span class="downloadarea"><a href="ressources/pticlic.apk" id="downloadlink">Télécharger</a></span>
 			<h2>Installation de l'application</h2>
 			<h3> A partir de votre téléphone </h3>
 			<ul>
 			    <li> <a href="ressources/pticlic.apk" />Téléchargez le fichier d'installation</a></li>
-			    <li>Une fois téléchargé, cliquez sur le fichier dans la barre de notification d'Android et suivez
+			    <li>Une fois téléchargée, cliquez sur le fichier dans la barre de notification d'Android et suivez
 			    les instructions d'installation. Vous devrez patientez quelques instant pendant l'installation.</li>
 				<li>Une fois l'installation terminée, démarrez l'application</li>
 				<li> Suivez attentivement les instructions lors du premier démarrage de l'application</li>

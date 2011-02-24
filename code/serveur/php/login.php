@@ -47,12 +47,16 @@ else if(isset($user) or isset($pswd))
 			<?php include("ressources/menu.html"); ?>
 		</div>
 		<div class="content">
-                    <p>Vous êtes déjà inscrit&nbsp;? Authentifiez-vous&nbsp;:</p>
+			<?php
+				if(isset($_GET['return']) && $_GET['return'] == "download.php")
+					echo '<p>Pour accéder à la page de téléchargement de l\'application vous devez être authentifié !</p>';
+			?>
+		    <p>Vous êtes déjà inscrit ? Authentifiez-vous :</p>
                     <?php
 			if(isset($msg))
 				echo '<span class="message warning">'.$msg.'</span>';
 		    ?>
-		    <form name="loginform" method="post" action="login.php?return=<?php echo $location; ?>">
+		    <form name="loginform" method="POST" action="login.php?return=<?php echo $location; ?>">
                         <table class="logintbl">
 				<tr>
 					<td>
@@ -79,7 +83,9 @@ else if(isset($user) or isset($pswd))
 					</td>
 				</tr>
 			</table>
-                    </form>
+			</form>
+			<p>Vous ne disposez pas encore de compte ? <a href="signup.php">Inscrivez vous dès maintenant</a>.</p>
+			<h2>
 		</div>
 
 		<div class="footer">
