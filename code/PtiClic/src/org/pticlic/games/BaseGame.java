@@ -102,6 +102,20 @@ public class BaseGame extends Activity implements OnClickListener {
 			});
 			AlertDialog alert = builder.create();
 			alert.show();
+		} catch (Exception e) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(getString(R.string.app_name))
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setMessage(getString(R.string.server_down))
+			.setCancelable(false)
+			.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+					finish();
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
 		}
 
 	}

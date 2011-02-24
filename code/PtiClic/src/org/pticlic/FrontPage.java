@@ -1,6 +1,7 @@
 package org.pticlic;
 
 import org.pticlic.games.BaseGame;
+import org.pticlic.model.Constant;
 import org.pticlic.model.Network;
 
 import android.app.Activity;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 
 public class FrontPage extends Activity implements OnClickListener{
 
+	private Uri uri = null;
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,9 @@ public class FrontPage extends Activity implements OnClickListener{
 		((ImageView)findViewById(R.id.play)).setOnClickListener(this);
 		((ImageView)findViewById(R.id.infoButton)).setOnClickListener(this);
 
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+		String serverURL = sp.getString(Constant.SERVER_URL, Constant.SERVER);
+		Uri.parse(serverURL + "/signup.php");
 	}
 
 	@Override
@@ -74,7 +80,6 @@ public class FrontPage extends Activity implements OnClickListener{
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.dismiss();
 						// TODO : Essayer de trouver comment mettre l'url qui est dans les preferences.
-						Uri uri = Uri.parse("http://dumbs.fr/~bbrun/pticlic/signup.php");
 						startActivity(new Intent(Intent.ACTION_VIEW, uri));
 					}
 				})

@@ -155,7 +155,7 @@ public class Network {
 	 * @param nbGames Le nombre de parties que l'on veut récupérer.
 	 * @return
 	 */
-	public DownloadedGame getGames(int nbGames) throws PtiClicException {
+	public DownloadedGame getGames(int nbGames) throws PtiClicException, Exception {
 		switch (mode) {
 		case SIMPLE_GAME:
 			return DownloadBaseGame(nbGames);
@@ -164,7 +164,7 @@ public class Network {
 		}
 	}
 
-	private DownloadedBaseGame DownloadBaseGame(int nbGames) throws PtiClicException {
+	private DownloadedBaseGame DownloadBaseGame(int nbGames) throws PtiClicException, Exception {
 		DownloadedBaseGame game = null;
 		URL url = null;
 		Gson gson = null;
@@ -267,7 +267,7 @@ public class Network {
 	 * @param game La partie jouee par l'utilisateur 
 	 * @return Le score sous forme JSON.
 	 */
-	public double sendGame(Match game) throws PtiClicException  {
+	public double sendGame(Match game) throws PtiClicException, Exception  {
 		switch (mode) {
 		case SIMPLE_GAME:
 			return sendBaseGame(game);
@@ -277,7 +277,7 @@ public class Network {
 	}
 	
 	
-	public double sendBaseGame(Match game) throws PtiClicException {
+	public double sendBaseGame(Match game) throws PtiClicException, Exception {
 		double score = -1;
 		URL url = null;
 		Gson gson = null;

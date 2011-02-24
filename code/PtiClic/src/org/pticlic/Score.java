@@ -32,7 +32,7 @@ public class Score extends Activity implements OnClickListener{
 		setContentView(R.layout.score);
 		
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		String serverURL = sp.getString(Constant.SERVER_URL, "http://dumbs.fr/~bbrun/pticlic/pticlic.php"); // TODO : Mettre comme valeur par defaut l'adresse reel du serveur
+		String serverURL = sp.getString(Constant.SERVER_URL, Constant.SERVER);
 		String id = sp.getString(Constant.USER_ID, "joueur");
 		String passwd = sp.getString(Constant.USER_PASSWD, "");
 		Mode mode = null;
@@ -55,6 +55,20 @@ public class Score extends Activity implements OnClickListener{
 			builder.setTitle(getString(R.string.app_name))
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setMessage(e.getMessage())
+			.setCancelable(false)
+			.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+					finish();
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+		} catch (Exception e) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(getString(R.string.app_name))
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setMessage(R.string.server_down)
 			.setCancelable(false)
 			.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
