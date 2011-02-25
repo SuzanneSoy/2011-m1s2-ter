@@ -1,5 +1,5 @@
 		<div class="menu">
-			<h1>PtiClic <span class="android">sous Android™</span> - Version 0.1 Alpha</h1>
+			<h1>PtiClic <span class="android">sous Android™</span> - Version Alpha</h1>
 			
 			<span id="links">
 				<a href="index.php">Accueil</a>
@@ -10,7 +10,7 @@
 			if(!isset($_SESSION['userId']))				// Menu hors connexion.
 			{?>
 			        <a id="cnx" href="login.php">Se connecter</a>
-				<a id="cnx" href="signup.php">S'incrire</a>
+				<a id="cnx" href="signup.php">S'inscrire</a>
 			
 			<?php }
 			else							// Menu une fois connecté.

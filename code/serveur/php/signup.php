@@ -96,7 +96,7 @@ if(count($msg) == 0 && $newpage == false)
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 	<head>
-		<title>PtiClic sous Android - Version Alpha - Inscription</title>
+		<title>PtiClic sous Android™ - Version Alpha - S'inscrire</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link rel="stylesheet" href="ressources/simple.css" />
 	</head>
@@ -130,7 +130,7 @@ if(count($msg) == 0 && $newpage == false)
 				<table class="signuptbl">
 					<tr>
 						<td>
-							<label for="signupemail">Saisir votre adresse mail&nbsp;:</label>
+							<label for="signupemail">Saisissez votre adresse mail&nbsp;:</label>
 						</td>
 						<td>
 							<input name="signupemail" type="text"
@@ -144,7 +144,7 @@ if(count($msg) == 0 && $newpage == false)
 					</tr>
 					<tr>
 						<td>
-							<label for="signupid">Choisir un identifiant&nbsp;: </label>
+							<label for="signupid">Choisissez un identifiant&nbsp;: </label>
 						</td>
 						<td>
 							<input name="signupid" type="text"
@@ -158,7 +158,7 @@ if(count($msg) == 0 && $newpage == false)
 					</tr>
 					<tr>
 						<td>
-							<label for="signuppswd1">Choisir un mot de passe&nbsp;: </label>
+							<label for="signuppswd1">Choisissez un mot de passe&nbsp;: </label>
 						</td>
 						<td>
 							<input name="signuppswd1" type="password" />
@@ -166,7 +166,7 @@ if(count($msg) == 0 && $newpage == false)
 					</tr>
 					<tr>
 						<td>
-							<label for="signuppswd2">Resaisir le mot de passe&nbsp;: </label>
+							<label for="signuppswd2">Resaisissez le mot de passe&nbsp;: </label>
 						</td>
 						<td>
 							<input name="signuppswd2" type="password" />
@@ -182,8 +182,7 @@ if(count($msg) == 0 && $newpage == false)
 					</tr>
 				</table>
 			</form>
-			<h3>Vous êtes déjà inscrit ?</h3>
-			<p><a href="login.php?return=<?php echo $location; ?>">Connectez-vous !</a></p>
+			<h3>Vous êtes déjà inscrit&nbsp;? <a href="login.php?return=<?php echo $location; ?>">Connectez-vous&nbsp;!</a></h3>
 		</div>
 		<?php include("ressources/footer.inc"); ?>
 	</body>

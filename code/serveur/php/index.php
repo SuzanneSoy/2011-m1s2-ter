@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 	<head>
-		<title>PtiClic Android - Accueil</title>
+		<title>PtiClic sous Android™ - Version Alpha - Accueil</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link rel="stylesheet" href="ressources/simple.css" />
 	</head>
@@ -35,7 +35,7 @@
 
 			<h2>Le développement de l'application</h2>
 			<p>
-				La version beta du jeu PtiClic sous Android est en cours de développement.
+				La version alpha du jeu PtiClic sous Android est en cours de développement.
 				Le projet s'inscrit dans le cadre d'un TER de Master en informatique
 				à l'Université Montpellier II sous la direction de Mathieu LAFOURCADE. L'équipe
 				de conception et de développement est composée de quatre étudiants&nbsp;: Bertrand BRUN, 

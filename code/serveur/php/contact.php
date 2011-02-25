@@ -50,7 +50,7 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 	<head>
-		<title>Titre</title>
+		<title>PtiClic sous Android™ - Version Alpha - Contact</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />		
 		<link rel="stylesheet" href="ressources/simple.css" />
 	</head>
@@ -71,13 +71,13 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 			?>
 			<p>
 				Vous souhaitez signaler un défaut dans l'application, ou bien vous avez des remarques, des suggestions ?<br />
-				Faites nous en part en nous envoyant un message par le biais du formulaire qui suit :
+				Faites-nous-en part en nous envoyant un message&nbsp;:
 			</p>
 			<form action="contact.php" method="POST">
 				<table class="contacttbl">
 					<tr>
 						<td>
-							<label for="email">Votre e-mail : </label>
+							<label for="email">Votre mail&nbsp;: </label>
 						</td>
 						<td>
 							<input type="text" id="email" name="email" />
@@ -85,7 +85,7 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 					</tr>
 					<tr>
 						<td>
-							<label for="subject">Objet du mail : </label>
+							<label for="subject">Objet&nbsp;: </label>
 						</td>
 						<td>
 							<input type="text" id="subject" name="subject" />
@@ -93,7 +93,7 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 					</tr>
 					<tr>
 						<td>
-							<label for="message">Votre message : </label>
+							<label for="message">Message&nbsp;: </label>
 						</td>
 						<td>
 							<textarea class="txMessage" id="message" name="message"></textarea>
