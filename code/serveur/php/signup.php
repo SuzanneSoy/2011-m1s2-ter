@@ -130,7 +130,7 @@ if(count($msg) == 0 && $newpage == false)
 				<table class="signuptbl">
 					<tr>
 						<td>
-							<label for="signupemail">Saisir votre adresse mail&nbsp;:</label>
+							<label for="signupemail">Saisissez votre adresse mail&nbsp;:</label>
 						</td>
 						<td>
 							<input name="signupemail" type="text"
@@ -144,7 +144,7 @@ if(count($msg) == 0 && $newpage == false)
 					</tr>
 					<tr>
 						<td>
-							<label for="signupid">Choisir un identifiant&nbsp;: </label>
+							<label for="signupid">Choisissez un identifiant&nbsp;: </label>
 						</td>
 						<td>
 							<input name="signupid" type="text"
@@ -158,7 +158,7 @@ if(count($msg) == 0 && $newpage == false)
 					</tr>
 					<tr>
 						<td>
-							<label for="signuppswd1">Choisir un mot de passe&nbsp;: </label>
+							<label for="signuppswd1">Choisissez un mot de passe&nbsp;: </label>
 						</td>
 						<td>
 							<input name="signuppswd1" type="password" />
@@ -166,7 +166,7 @@ if(count($msg) == 0 && $newpage == false)
 					</tr>
 					<tr>
 						<td>
-							<label for="signuppswd2">Resaisir le mot de passe&nbsp;: </label>
+							<label for="signuppswd2">Resaisissez le mot de passe&nbsp;: </label>
 						</td>
 						<td>
 							<input name="signuppswd2" type="password" />
