@@ -65,7 +65,7 @@ public class BaseGame extends Activity implements OnClickListener {
 
 		// On recupere du PreferenceManager les differentes information dont on a besoin
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		String serverURL = sp.getString(Constant.SERVER_URL, Constant.SERVER); // TODO : Mettre comme valeur par defaut l'adresse reel du serveur
+		String serverURL = sp.getString(Constant.SERVER_URL, Constant.SERVER);
 		String id = sp.getString(Constant.USER_ID, "joueur");
 		String passwd = sp.getString(Constant.USER_PASSWD, "");
 		gameJson = sp.getString(Constant.NEW_BASE_GAME, null); 

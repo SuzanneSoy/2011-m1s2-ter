@@ -1,5 +1,7 @@
 package org.pticlic;
 
+import java.text.DecimalFormat;
+
 import org.pticlic.exception.PtiClicException;
 import org.pticlic.model.Constant;
 import org.pticlic.model.Match;
@@ -44,11 +46,11 @@ public class Score extends Activity implements OnClickListener{
 		}
 
 		Network network = new Network(serverURL, mode, id, passwd);
-		
-		// FIXME : Pour l'instant ne marche pas, attend de savoir comment est formater le score que l'on recois.
 		try {
+			// Permet de regler la precision : rajoute/enlever des # pour modifier la precision
+			DecimalFormat dfrmtr = new DecimalFormat("#.##");
 			Double score = network.sendGame(gamePlayed);
-			((TextView)findViewById(R.id.total)).setText(String.valueOf(score.floatValue()));
+			((TextView)findViewById(R.id.total)).setText(String.valueOf(dfrmtr.format(score)));
 			sp.edit().putString(Constant.NEW_BASE_GAME, network.getNewGame()).commit();			
 		} catch (PtiClicException e) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
