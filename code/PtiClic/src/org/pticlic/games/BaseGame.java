@@ -184,6 +184,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		}
 
 		((TextView)findViewById(R.id.mainWord)).setText(DownloadedBaseGame.getName(game.getCentre()));
+		this.helpMode();
 	}
 
 	/* (non-Javadoc)
