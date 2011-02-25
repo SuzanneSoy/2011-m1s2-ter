@@ -38,7 +38,7 @@ else if(isset($user) or isset($pswd))
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 	<head>
-		<title>Titre</title>
+		<title>PtiClic sous Android™ - Version Alpha - Se connecter</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link rel="stylesheet" href="ressources/simple.css" />
 	</head>
@@ -47,8 +47,7 @@ else if(isset($user) or isset($pswd))
 		<div class="content">
 			<h2>Connexion</h2>
 			<?php include("ressources/showmsg.inc"); ?>
-			<h3>Vous êtes déjà inscrit ?</h3>
-			<p>Authentifiez-vous :</p>
+			<h3>Vous êtes déjà inscrit&nbsp;? Authentifiez-vous.</h3>
 			<?php
 				if($msg !== null)
 					echo '<p class="message warning">'.htmlspecialchars($msg).'</p>';
@@ -80,8 +79,7 @@ else if(isset($user) or isset($pswd))
 					</tr>
 				</table>
 			</form>
-			<h3>Vous ne disposez pas encore d'un compte ?</h3>
-			<p><a href="signup.php?return=<?php echo $location; ?>">Inscrivez-vous</a> dès maintenant !</p>
+			<h3>Vous ne disposez pas encore d'un compte&nbsp;? <a href="signup.php?return=<?php echo $location; ?>">Inscrivez-vous</a> dès maintenant !</h3>
 		</div>
 		<?php include("ressources/footer.inc"); ?>
 	</body>
