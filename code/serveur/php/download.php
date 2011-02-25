@@ -16,11 +16,11 @@ if(!isset($_SESSION['userId']))
 		<div class="content">
 			<?php include("ressources/showmsg.inc"); ?>
 			<h2>Téléchargement de l'application</h2>			
-			<span class="downloadarea"><a href="ressources/pticlic.apk" id="downloadlink">Télécharger</a></span>
+			<span class="downloadarea"><a href="ressources/pticlic-alpha-v0.1.apk" id="downloadlink">Téléchargement</a></span>
 			<h2>Installation de l'application</h2>
 			<h3> A partir de votre téléphone </h3>
 			<ul>
-				<li><a href="ressources/pticlic.apk">Téléchargez le fichier d'installation</a></li>
+				<li><a href="ressources/pticlic-alpha-v0.1.apk">Téléchargez le fichier d'installation</a></li>
 				<li>Une fois téléchargée, cliquez sur le fichier dans la barre de notification d'Android et suivez
 					les instructions d'installation. Vous devrez patientez quelques instant pendant l'installation.</li>
 				<li>Une fois l'installation terminée, démarrez l'application</li>
@@ -28,7 +28,7 @@ if(!isset($_SESSION['userId']))
 			</ul>
 			<h3> A partir de votre ordinateur </h3>
 			<ul>
-				<li><a href="ressources/pticlic.apk">Téléchargez le fichier d'installation</a> </li>
+				<li><a href="ressources/pticlic-alpha-v0.1.apk">Téléchargez le fichier d'installation</a> </li>
 				<li>Transférez ce fichier sur votre téléphone à l'aide de bluetooth, une clé usb ou autre</li>
 				<li>Depuis votre téléphone, retrouvez sur votre carte mémoire l'application que vous
 					venez de transférer</li>
