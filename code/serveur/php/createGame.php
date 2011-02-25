@@ -33,21 +33,44 @@ $state = 0;
 			<?php include("ressources/menu.html"); ?>	
 		</div>
 		<div class="content">
-			<form action="createGame.php" method="POST">
 			<?php
-			if(!isset($_POST["nbcloudwords"])) {
-				echo '<input type="text" name="nbcloudwords" />';
-				echo '<input type="submit" value="suivant" />';			
-			}
-			else {
-				echo '<input type="text" name="centralword" />';
-				
-				for($i = 0; $i < $_POST['nbcloudwords']; $i++)
-					echo '<input type="text" name="word'.$i.'" />';
-				
-				echo '<input type="submit" value="Enregistrer la partie" />';
-			}			
+				if(isset($_POST['nbcloudwords']) && $_POST['nbcloudwords'] > 0)
+					echo '<p>Remplissez le mot central ainsi que les différents mots du nuage pour réaliser un partie personalisée.<br />
+						Une fois satisfait de votre partie cliquez sur "Enregistrer la partie"';
+				else
+					echo '<p>Cette page vous permet de créer des parties personalisées en indiquant les mots qui seront affiché pour un mot central.<br /><br />
+						Veuillez entrer le nombre de mots composant le nuage dans le formulaire ci-dessous avant de continuer.</p>';
 			?>
+			<form action="createGame.php" method="POST">
+				<table class="creategametbl">
+					<?php
+					if(!isset($_POST["nbcloudwords"])) {
+						echo '<tr><td><label for="nbcloudwords"> Nombre de mots du nuage : </label></td>';
+						echo '<td><input type="text" name="nbcloudwords" /></td></tr>';
+						echo '<tr><td id="td2"></td><td><input type="submit" value="suivant" /></td></tr>';			
+					}
+					else {
+						echo '<tr><td colspan="2"><label for="centralword">Mot central : </label><br /><br /></td>';
+						echo '<td colspan="2" id="td2"><input type="text" name="centralword" /><br /><br /></td>';
+				
+						for($i = 0; $i < $_POST['nbcloudwords']; $i++) {
+							if($i % 2 == 0) {
+								echo '</tr><tr><td><label for="word'.$i.'">Mot '.($i+1).' : </label></td>';
+								echo '<td id="td2"><input type="text" name="word'.$i.'" /></td>';
+							}
+							else {
+								echo '<td><label for="word'.$i.'">Mot '.($i+1).' : </label></td>';
+								echo '<td id="td2"><input type="text" name="word'.$i.'" /></td>';
+							}
+						}
+				
+						if($_POST['nbcloudwords'] % 2 != 0)
+							echo '<td></td>';
+
+						echo '</tr><tr><td colspan="2"></td><td colspan="2" id="td2"><input type="submit" value="Enregistrer la partie" /></td></tr>';
+					}			
+					?>
+				</table>
 
 			</form>
 		</div>
