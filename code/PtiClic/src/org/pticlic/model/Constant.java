@@ -3,7 +3,7 @@ package org.pticlic.model;
 public class Constant {
 	public static final String SERVER_URL = "server";
 	public static final String SERVER_AUTH = "SERVER_AUTH";
-	public static final String SERVER = "http://pticlic.fr/";
+	public static final String SERVER = "http://www.pticlic.fr/";
 	
 	// Constant pour les parties en cache
 	public static final String NEW_BASE_GAME = "NEW_BASE_GAME";
