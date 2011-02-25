@@ -7,6 +7,7 @@ $strings['ok_contact_msg_sent'] = "Votre message à été envoyé, nous vous rem
 $strings['err_contact_fill_all'] = "Veuillez remplir tout les champs.";
 
 $strings['err_creategame_fill_all'] = "Tous les mots du nage ne sont pas renseignés.";
+$strings['err_creategame_nbwords_value'] = "Veuillez entrer une valeur supérieure à zéro.";
 
 $strings['err_index_invalid_msg'] = "Paramètre de la requête invalide. Merci de nous signaler le problème.";
 $strings['err_index_redirect'] = "Erreur de redirection. Merci de nous signaler le problème.";
