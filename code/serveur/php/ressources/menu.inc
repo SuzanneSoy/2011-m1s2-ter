@@ -10,7 +10,7 @@
 			if(!isset($_SESSION['userId']))				// Menu hors connexion.
 			{?>
 			        <a id="cnx" href="login.php">Se connecter</a>
-				<a id="cnx" href="signup.php">S'incrire</a>
+				<a id="cnx" href="signup.php">S'inscrire</a>
 			
 			<?php }
 			else							// Menu une fois connecté.

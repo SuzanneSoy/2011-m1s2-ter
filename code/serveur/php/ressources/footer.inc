@@ -7,6 +7,8 @@
                 <a href="http://www.lirmm.fr/jeuxdemots/jdm-accueil.php">Jeux de mots</a> - 
                 <a href="http://www.univ-montp2.fr/">Université Montpellier II</a> - 
                 <a href="http://www.lirmm.fr/">Laboratoire d'Informatique, de Robotique et de Microélectronique de Montpellier</a> - 
-                <a href="contact.php">Nous contacter</a>
+                <a href="contact.php">Nous contacter</a> -
+                Android is a trademark of Google Inc. Use of this trademark is subject to
+                <a href="http://www.google.com/permissions/index.html"> Google Permissions</a>
             </p>
 		</div>
