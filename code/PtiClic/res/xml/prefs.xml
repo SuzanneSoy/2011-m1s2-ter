@@ -9,7 +9,7 @@
 	</PreferenceCategory>
 	<PreferenceCategory android:title="Debug">
 	
-		<EditTextPreference android:title="Serveur" android:key="server"/>
+		<EditTextPreference android:title="Serveur" android:key="server" android:defaultValue="http://www.pticlic.fr"/>
 		
 	</PreferenceCategory>
 	
