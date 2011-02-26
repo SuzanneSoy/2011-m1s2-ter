@@ -43,9 +43,12 @@ public class FrontPage extends Activity implements OnClickListener{
 
 		// On récupère le nom du joueur des préférences.
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		String loginPref = sp.getString("login", "joueur");
-		// On l'ajoute dans le TextView prévu à cet effet
-		((TextView)findViewById(R.id.login)).setText("Login : " + loginPref);
+		Boolean connected = sp.getBoolean(Constant.SERVER_AUTH, false);
+		if (connected) {
+			((TextView)findViewById(R.id.login)).setText(R.string.frontpage_user_connected);	
+		} else {
+			((TextView)findViewById(R.id.login)).setText(R.string.frontpage_user_notconnected);
+		}
 	}
 
 	/* (non-Javadoc)
