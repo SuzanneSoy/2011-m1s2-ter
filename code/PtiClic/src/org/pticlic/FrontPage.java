@@ -41,11 +41,6 @@ public class FrontPage extends Activity implements OnClickListener{
 	protected void onStart() {
 		super.onStart();
 
-		if (Network.isConnected(this))
-			System.out.println("Connecter");
-		else
-			System.out.println("Non Connecter");
-
 		// On récupère le nom du joueur des préférences.
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		String loginPref = sp.getString("login", "joueur");
@@ -74,16 +69,16 @@ public class FrontPage extends Activity implements OnClickListener{
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				builder.setTitle(getString(R.string.app_name))
 				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setMessage("Le couple login/mdp n'est pas bon. Veuillez les modifier ou vous inscrire sur le site")
+				.setMessage(getString(R.string.frontpage_bad_loginmdp))
 				.setCancelable(false)
-				.setNeutralButton("Inscription", new DialogInterface.OnClickListener() {
+				.setNeutralButton(getString(R.string.frontpage_inscription_button), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.dismiss();
 						// TODO : Essayer de trouver comment mettre l'url qui est dans les preferences.
 						startActivity(new Intent(Intent.ACTION_VIEW, uri));
 					}
 				})
-				.setPositiveButton("Preferences", new DialogInterface.OnClickListener() {
+				.setPositiveButton(getString(R.string.frontpage_preference_button), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.dismiss();
 						startActivity(new Intent(getApplicationContext(), Preference.class));
@@ -96,7 +91,7 @@ public class FrontPage extends Activity implements OnClickListener{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle(getString(R.string.app_name))
 			.setIcon(android.R.drawable.ic_dialog_alert)
-			.setMessage("Problème de connexion au serveur. Vérifiez que vous êtes connecté au réseau.")
+			.setMessage(getString(R.string.frontpage_no_connection))
 			.setCancelable(false)
 			.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {

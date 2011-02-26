@@ -165,15 +165,18 @@ public class BaseGame extends Activity implements OnClickListener {
 		ImageView r4 = ((ImageView)findViewById(R.id.relation4));
 
 
-		// Layout des relations
+		// TextView des relations
 		TextView rn1 = ((TextView)findViewById(R.id.relation1Name));
 		TextView rn2 = ((TextView)findViewById(R.id.relation2Name));
 		TextView rn3 = ((TextView)findViewById(R.id.relation3Name));
 		TextView rn4 = ((TextView)findViewById(R.id.relation4Name));
-
+		
 		// Bouton d'aide
 		ImageView aide = ((ImageView)findViewById(R.id.aideBaseGame));
 		aide.setOnClickListener(this);
+		
+		// On met set le nom du mot central
+		((TextView)findViewById(R.id.mainWord)).setText(DownloadedBaseGame.getName(game.getCentre()));
 
 		Relation r = Relation.getInstance();
 
@@ -197,7 +200,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		// TODO : A enlever lorsque l'on aura toutes les images des relations.
 		try {
 			r3.setOnClickListener(this); 
-			rn3.setText(r.getRelationName(game.getCat3()));
+			rn3.setText(String.format(r.getRelationName(game.getCat3()), ((TextView)findViewById(R.id.mainWord)).getText()));
 			r3.setImageResource(r.getRelationImage(game.getCat3()));
 		} catch (Exception e) {
 			r3.setImageResource(R.drawable.icon);
@@ -210,8 +213,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		} catch (Exception e) {
 			r4.setImageResource(R.drawable.icon);
 		}
-
-		((TextView)findViewById(R.id.mainWord)).setText(DownloadedBaseGame.getName(game.getCentre()));
+		
 		this.helpMode();
 	}
 
@@ -232,7 +234,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		Display display = getWindowManager().getDefaultDisplay(); 
 		int width = display.getWidth();
 
-		//On recupere le centre de mainWord pour l'animation de translation.
+		// On recupere le centre de mainWord pour l'animation de translation.
 		TextView mainWord = (TextView)findViewById(R.id.mainWord);
 		currentWordTextView = (TextView)findViewById(R.id.currentWord);
 

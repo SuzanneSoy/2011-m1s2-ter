@@ -30,7 +30,7 @@ public class Preference extends PreferenceActivity implements OnSharedPreference
 			if (Network.isConnected(this)) {
 				if (Network.isLoginCorrect(this)) {
 					Toast.makeText(this,
-							"Couple login/mdp valide.",
+							getString(R.string.preferences_loginmdp_valid),
 							Toast.LENGTH_LONG).show();
 					
 					SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -38,7 +38,7 @@ public class Preference extends PreferenceActivity implements OnSharedPreference
 					editor.commit();
 				} else {
 					Toast.makeText(this,
-							"Couple login/mdp non valide.",
+							getString(R.string.preferences_loginmdp_notvalid),
 							Toast.LENGTH_LONG).show();
 					
 					SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -47,7 +47,7 @@ public class Preference extends PreferenceActivity implements OnSharedPreference
 				}
 			} else {
 				Toast.makeText(this,
-						"Pas connecter au reseau, verification du login/mdp impossible",
+						getString(R.string.preferences_nonetworks),
 						Toast.LENGTH_LONG).show();
 			}
 		}

@@ -8,4 +8,11 @@
 <string name="server_down">Il y a actuellement un probleme avec le serveur. Veuillez re-essayer dans quelque minutes.</string>
 <string name="basegame_title">Le principe du jeu</string>
 <string name="basegame_explication">Choisissez l\'association qui lie le plus convenablement les mots apparaissant successivement au mot cible en haut de l\'écran. Optez pour la poubelle si aucune relation vous convient.</string>
+<string name="preferences_nonetworks">Pas connecter au reseau, verification du login/mdp impossible</string>
+<string name="preferences_loginmdp_notvalid">Couple login/mdp non valide.</string>
+<string name="preferences_loginmdp_valid">Couple login/mdp valide.</string>
+<string name="frontpage_bad_loginmdp">Le couple login/mdp n\'est pas bon. Veuillez les modifier ou vous inscrire sur le site</string>
+<string name="frontpage_preference_button">Preferences</string>
+<string name="frontpage_inscription_button">Inscription</string>
+<string name="frontpage_no_connection">Problème de connexion au serveur. Vérifiez que vous êtes connecté au réseau.</string>
 </resources>

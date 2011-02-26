@@ -38,64 +38,64 @@
 		<LinearLayout android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:orientation="horizontal"
 			android:id="@+id/relation1Layout" android:layout_weight="1"
-			android:layout_gravity="center">
+			android:layout_gravity="center" android:clickable="true">
 			<ImageView android:id="@+id/relation1" android:src="@drawable/contenant"
 				android:layout_weight="1" android:layout_height="wrap_content"
-				android:layout_width="wrap_content">
+				android:layout_width="wrap_content" android:layout_marginLeft="10dip">
 			</ImageView>
 			<TextView android:id="@+id/relation1Name"
-				android:layout_width="wrap_content" android:text="contenant"
+				android:text="contenant"
 				android:textStyle="bold" android:textSize="15dip"
 				android:layout_height="wrap_content" android:layout_weight="3"
-				android:layout_gravity="center_vertical" android:visibility="gone">
+				android:layout_gravity="center_vertical" android:visibility="gone" android:layout_width="fill_parent" android:gravity="center">
 			</TextView>
 		</LinearLayout>
 
 		<LinearLayout android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:orientation="horizontal"
 			android:id="@+id/relation2Layout" android:layout_weight="1"
-			android:layout_gravity="center">
+			android:layout_gravity="center" android:clickable="true">
 			<ImageView android:id="@+id/relation2" android:src="@drawable/contenu"
 				android:layout_weight="1" android:layout_height="wrap_content"
-				android:layout_width="wrap_content">
+				android:layout_width="wrap_content" android:layout_marginLeft="10dip">
 			</ImageView>
 			<TextView android:id="@+id/relation2Name"
-				android:layout_width="wrap_content" android:text="contenu"
+				android:text="contenu"
 				android:textStyle="bold" android:textSize="15dip"
 				android:layout_height="wrap_content" android:layout_weight="3"
-				android:layout_gravity="center_vertical" android:visibility="gone">
+				android:layout_gravity="center_vertical" android:visibility="gone" android:layout_width="fill_parent" android:gravity="center">
 			</TextView>
 		</LinearLayout>
 
 		<LinearLayout android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:orientation="horizontal"
 			android:id="@+id/relation3Layout" android:layout_weight="1"
-			android:layout_gravity="center">
+			android:layout_gravity="center" android:clickable="true">
 			<ImageView android:id="@+id/relation3" android:src="@drawable/contraire"
 				android:layout_weight="1" android:layout_height="wrap_content"
-				android:layout_width="wrap_content">
+				android:layout_width="wrap_content" android:layout_marginLeft="10dip">
 			</ImageView>
 			<TextView android:id="@+id/relation3Name"
-				android:layout_width="wrap_content" android:text="contraire"
+				android:text="contraire"
 				android:textStyle="bold" android:textSize="15dip"
 				android:layout_height="wrap_content" android:layout_weight="3"
-				android:layout_gravity="center_vertical" android:visibility="gone">
+				android:layout_gravity="center_vertical" android:visibility="gone" android:layout_width="fill_parent" android:gravity="center">
 			</TextView>
 		</LinearLayout>
 
 		<LinearLayout android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:orientation="horizontal"
 			android:id="@+id/relation4Layout" android:layout_weight="1"
-			android:layout_gravity="center">
+			android:layout_gravity="center" android:clickable="true">
 			<ImageView android:id="@+id/relation4" android:src="@drawable/synonyme"
 				android:layout_weight="1" android:layout_height="wrap_content"
-				android:layout_width="wrap_content" android:layout_gravity="center">
+				android:layout_width="wrap_content" android:layout_gravity="center" android:layout_marginLeft="10dip">
 			</ImageView>
 			<TextView android:id="@+id/relation4Name"
-				android:layout_width="wrap_content" android:text="synonyme"
+				android:text="synonyme"
 				android:textStyle="bold" android:textSize="15dip"
 				android:layout_height="wrap_content" android:layout_weight="3"
-				android:layout_gravity="center_vertical" android:visibility="gone">
+				android:layout_gravity="center_vertical" android:visibility="gone" android:layout_width="fill_parent" android:gravity="center">
 			</TextView>
 		</LinearLayout>
 
