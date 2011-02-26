@@ -28,18 +28,18 @@ public class Relation {
 		imageRelations.put(10, R.drawable.contenant);
 		
 		stringRelations = new HashMap<Integer, String>();
-		stringRelations.put(-1, "poubelle");
-		stringRelations.put(0, "idée");
+		stringRelations.put(-1, "Mots non liés");
+		stringRelations.put(0, "...est en rapport avec...");
 		stringRelations.put(1, "raffinement sémantique");
 		stringRelations.put(2, "raffinement morphologique");
 		stringRelations.put(3, "domaine");
 		stringRelations.put(4, "r_pos");
-		stringRelations.put(5, "synonyme");
+		stringRelations.put(5, "Synonymes");
 		stringRelations.put(6, "générique");
-		stringRelations.put(7, "contraire");
+		stringRelations.put(7, "Contraires");
 		stringRelations.put(8, "spécifique");
-		stringRelations.put(9, "partie");
-		stringRelations.put(10, "tout");
+		stringRelations.put(9, "...fait partie d'un(e)...");
+		stringRelations.put(10, "...est une partie d'un(e)...");
 		stringRelations.put(11, "locution");
 		stringRelations.put(12, "potentiel de FL");
 		stringRelations.put(13, "action>agent");
