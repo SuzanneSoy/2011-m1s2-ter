@@ -5,16 +5,16 @@
 	<string name="play_label">Jouer</string>
 	<string name="textInfo"></string>
 <string name="version">0.1</string>
-<string name="server_down">Il y a actuellement un probleme avec le serveur. Veuillez re-essayer dans quelque minutes.</string>
+<string name="server_down">Problème de serveur. Veuillez réessayer ultérieurement.</string>
 <string name="basegame_title">Le principe du jeu</string>
 <string name="basegame_explication">Choisissez l\'association qui lie le plus convenablement les mots apparaissant successivement au mot cible en haut de l\'écran. Optez pour la poubelle si aucune relation vous convient.</string>
-<string name="preferences_nonetworks">Pas connecter au reseau, verification du login/mdp impossible</string>
-<string name="preferences_loginmdp_notvalid">Couple login/mdp non valide.</string>
-<string name="preferences_loginmdp_valid">Couple login/mdp valide.</string>
-<string name="frontpage_bad_loginmdp">Le couple login/mdp n\'est pas bon. Veuillez les modifier ou vous inscrire sur le site</string>
-<string name="frontpage_preference_button">Preferences</string>
+<string name="preferences_nonetworks">Vous n\'êtes pas connecté(e). Authentification impossible !</string>
+<string name="preferences_loginmdp_notvalid">Echec d\'authentification.</string>
+<string name="preferences_loginmdp_valid">Authentification réussie.</string>
+<string name="frontpage_bad_loginmdp">Echec d\'authentification. Réessayez ou inscrivez-vous sur http://pticlic.fr/</string>
+<string name="frontpage_preference_button">Préférences</string>
 <string name="frontpage_inscription_button">Inscription</string>
-<string name="frontpage_no_connection">Problème de connexion au serveur. Vérifiez que vous êtes connecté au réseau.</string>
-<string name="frontpage_user_connected">Vous ete connectez</string>
-<string name="frontpage_user_notconnected">Vous n\'ete pas connectez</string>
+<string name="frontpage_no_connection">Vous n\'êtes pas connecté(e). Vérifiez votre connexion réseau.</string>
+<string name="frontpage_user_connected">Vous êtes connecté(e)</string>
+<string name="frontpage_user_notconnected">Vous n\'êtes pas authentifié(e)</string>
 </resources>
