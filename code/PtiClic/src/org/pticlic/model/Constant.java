@@ -15,4 +15,7 @@ public class Constant {
 	// Constant pour les intents
 	public static final String SCORE_GAMEPLAYED = "SCORE_INTENT";
 	public static final String SCORE_MODE = "SCORE_MODE";
+	
+	// Constant pour BaseGame
+	public static final String FIRST_TIME = "FIRST_TIME";
 }

@@ -6,4 +6,6 @@
 	<string name="textInfo"></string>
 <string name="version">0.1</string>
 <string name="server_down">Il y a actuellement un probleme avec le serveur. Veuillez re-essayer dans quelque minutes.</string>
+<string name="basegame_title">Le principe du jeu</string>
+<string name="basegame_explication">Choisissez l\'association qui lie le plus convenablement les mots apparaissant successivement au mot cible en haut de l\'écran. Optez pour la poubelle si aucune relation vous convient.</string>
 </resources>

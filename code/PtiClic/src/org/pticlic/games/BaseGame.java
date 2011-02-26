@@ -86,8 +86,36 @@ public class BaseGame extends Activity implements OnClickListener {
 			Gson gson = new Gson();
 			if (gameJson == null) game = (DownloadedBaseGame)network.getGames(1);
 			else game = gson.fromJson(gameJson, DownloadedBaseGame.class);
-			runMatch();
-			start();
+			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+			Boolean first = sp.getBoolean(Constant.FIRST_TIME, true);
+			if (first) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(getString(R.string.basegame_title))
+				.setIcon(android.R.drawable.ic_dialog_info)
+				.setMessage(getString(R.string.basegame_explication))
+				.setCancelable(false)
+				.setNegativeButton("Fermez", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+						runMatch();
+						start();
+					}
+				})
+				.setPositiveButton("Ne plus afficher", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+						sp.edit().putBoolean(Constant.FIRST_TIME, false).commit();
+						dialog.cancel();
+						runMatch();
+						start();
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+			} else {
+				runMatch();
+				start();
+			}
 		} catch (PtiClicException e) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle(getString(R.string.app_name))
