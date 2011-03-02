@@ -71,7 +71,7 @@
 	padding-right : 5px;
 }
 
-.logintbl #td2, .contactbl #td2, .signuptbl #td2, .creategametbl #td2, .creategametbl25 #td2 {
+.logintbl .td2, .contactbl .td2, .signuptbl .td2, .creategametbl .td2, .creategametbl25 .td2 {
 	text-align : left;
 }
 

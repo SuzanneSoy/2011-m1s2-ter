@@ -62,30 +62,30 @@ if($err == false)
 					if($state == 0) {
 						echo '<table class="creategametbl">';
 						echo '<tr><td><label for="nbcloudwords"> Nombre de mots du nuage : </label></td>';
-						echo '<td id="td2" ><input type="text" name="nbcloudwords" /></td></tr>';
-						echo '<tr><td id="td2"></td><td><input type="submit" value="suivant" /></td></tr>';			
+						echo '<td class="td2"><input type="text" name="nbcloudwords" /></td></tr>';
+						echo '<tr><td class="td2"></td><td><input type="submit" value="suivant" /></td></tr>';			
 					}
 					else {
 						echo '<table class="creategametbl25">';
 						echo '<input type="hidden" name="nbcloudwords" value="'.$nbwords.'" />';
 						echo '<tr><td colspan="2"><label for="centralword">Mot central : </label><br /><br /></td>';
-						echo '<td colspan="2" id="td2"><input type="text" name="centralword" /><br /><br /></td>';
+						echo '<td colspan="2" class="td2"><input type="text" name="centralword" /><br /><br /></td>';
 				
 						for($i = 0; $i < $nbwords; $i++) {
 							if($i % 2 == 0) {
 								echo '</tr><tr><td><label for="word'.$i.'">Mot '.($i+1).' : </label></td>';
-								echo '<td id="td2"><input type="text" name="word'.$i.'" /></td>';
+								echo '<td class="td2"><input type="text" name="word'.$i.'" /></td>';
 							}
 							else {
 								echo '<td><label for="word'.$i.'">Mot '.($i+1).' : </label></td>';
-								echo '<td id="td2"><input type="text" name="word'.$i.'" /></td>';
+								echo '<td class="td2"><input type="text" name="word'.$i.'" /></td>';
 							}
 						}
 				
 						if($nbwords % 2 != 0)
 							echo '<td></td>';
 
-						echo '</tr><tr><td colspan="2"></td><td colspan="2" id="td2"><input type="submit" value="Enregistrer la partie" /></td></tr>';
+						echo '</tr><tr><td colspan="2"></td><td colspan="2" class="td2"><input type="submit" value="Enregistrer la partie" /></td></tr>';
 					}			
 					?>
 				</table>
