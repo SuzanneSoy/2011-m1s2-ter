@@ -191,7 +191,7 @@ function cg_choose_relations()
 * @param sumWeights La somme des poids.
 * @return array : Tableau avec comme premier élément le nuage et comme second élément le total de difficulté.
 */
-function cg_build_cloud($cloudSize, $sources, $sumWeights)
+function cg_build_cloud($centerEid, $cloudSize, $sources, $sumWeights)
 {
 	// On boucle tant qu'il n'y a pas eu au moins 2 sources épuisées
 	$cloud = array();
@@ -240,10 +240,13 @@ function cg_build_cloud($cloudSize, $sources, $sumWeights)
 
 		// On vérifie si le mot n'a pas déjà été sélectionné.
 		$rejected = false;
+		// Ne pas mettre le mot central dans le nuage.
+		if ($res['eid'] == $centerEid) { continue; }
 		foreach ($cloud as $c) {
 			if ($c['eid'] == $res['eid']) {
 				$nbFailed++;
 				$rejected = true;
+				break;
 			}
 		}
 		if ($rejected) { continue; }
@@ -428,7 +431,7 @@ function createGameCore($cloudSize)
 
 	$r1 = cg_choose_relations(); $r2 = $r1[1]; $r1 = $r1[0];
 	$sources = cg_build_result_sets($cloudSize, $centerEid, $r1, $r2); $sumWeights = $sources[1]; $sources = $sources[0];
-	$cloud = cg_build_cloud($cloudSize, $sources, $sumWeights); $totalDifficulty = $cloud[1]; $cloud = $cloud[0];
+	$cloud = cg_build_cloud($centerEid, $cloudSize, $sources, $sumWeights); $totalDifficulty = $cloud[1]; $cloud = $cloud[0];
 	cg_insert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
 }
 
