@@ -56,9 +56,11 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 	</head>
 	<body>
 		<?php include("ressources/menu.inc"); ?>
-		<div class="content">
+		<div class="content contact">
 			<?php include("ressources/showmsg.inc"); ?>
+
 			<h2>Contact</h2>
+
 			<?php			
 				if($msg != null)
 					if($displayForm == true)
@@ -74,7 +76,7 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 				Faites-nous-en part en nous envoyant un message&nbsp;:
 			</p>
 			<form action="contact.php" method="POST">
-				<table class="contacttbl">
+				<table>
 					<tr>
 						<td>
 							<label for="email">Votre mail&nbsp;: </label>

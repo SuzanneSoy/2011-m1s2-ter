@@ -42,7 +42,7 @@ if($err == false)
 	</head>
 	<body>
 		<?php include("ressources/menu.inc"); ?>	
-		<div class="content">
+		<div class="content creategame">
 			<h2>Création de parties</h2>
 			<?php
 				if(isset($_POST['nbcloudwords']) && $_POST['nbcloudwords'] > 0)
@@ -60,25 +60,25 @@ if($err == false)
 						echo '<span class="message success">'.$msg.'</span>';
 
 					if($state == 0) {
-						echo '<table class="creategametbl">';
+						echo '<table>';
 						echo '<tr><td><label for="nbcloudwords"> Nombre de mots du nuage : </label></td>';
-						echo '<td class="td2"><input type="text" name="nbcloudwords" /></td></tr>';
-						echo '<tr><td class="td2"></td><td><input type="submit" value="suivant" /></td></tr>';			
+						echo '<td><input type="text" name="nbcloudwords" /></td></tr>';
+						echo '<tr><td></td><td><input type="submit" value="suivant" /></td></tr>';			
 					}
 					else {
-						echo '<table class="creategametbl25">';
+						echo '<table class="wordsform">';
 						echo '<input type="hidden" name="nbcloudwords" value="'.$nbwords.'" />';
 						echo '<tr><td colspan="2"><label for="centralword">Mot central : </label><br /><br /></td>';
-						echo '<td colspan="2" class="td2"><input type="text" name="centralword" /><br /><br /></td>';
+						echo '<td colspan="2" class="inputcell"><input type="text" name="centralword" /><br /><br /></td>';
 				
 						for($i = 0; $i < $nbwords; $i++) {
 							if($i % 2 == 0) {
 								echo '</tr><tr><td><label for="word'.$i.'">Mot '.($i+1).' : </label></td>';
-								echo '<td class="td2"><input type="text" name="word'.$i.'" /></td>';
+								echo '<td class="inputcell"><input type="text" name="word'.$i.'" /></td>';
 							}
 							else {
 								echo '<td><label for="word'.$i.'">Mot '.($i+1).' : </label></td>';
-								echo '<td class="td2"><input type="text" name="word'.$i.'" /></td>';
+								echo '<td class="inputcell"><input type="text" name="word'.$i.'" /></td>';
 							}
 						}
 				

@@ -127,7 +127,7 @@ if(count($msg) == 0 && $newpage == false)
 				}
 			?>
 			<form name="signupform" method="post" action="signup.php?return=<?php echo $location; ?>">
-				<table class="signuptbl">
+				<table>
 					<tr>
 						<td>
 							<label for="signupemail">Saisissez votre adresse mail&nbsp;:</label>

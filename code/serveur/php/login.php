@@ -53,7 +53,7 @@ else if(isset($user) or isset($pswd))
 					echo '<p class="message warning">'.htmlspecialchars($msg).'</p>';
 			?>
 			<form name="loginform" method="POST" action="login.php?return=<?php echo $location; ?>">
-				<table class="logintbl">
+				<table>
 					<tr>
 						<td>
 							<label for="loginid"> Identifiant&nbsp;:</label> 

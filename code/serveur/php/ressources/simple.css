@@ -1,3 +1,10 @@
+
+/* Entête de la page. */
+/*********************/
+.android {
+	font-size: 70%;
+}
+
 .menu {
 	border-bottom : 1px solid grey;
 	background-color : #FFFFE0;
@@ -17,11 +24,30 @@
 	margin-left : 2%;
 }
 
-#liens {
-	height: 1.3em;
-	padding : 0.3em 0.3em 0.1em;
+.menu #cnx {
+	float : right
 }
 
+
+
+/* Contenu de la page */
+/*********************/
+.content {
+	min-height : 80px;
+	margin: 0;
+	padding: 1em;
+	padding-top: 1.2em;
+	padding-bottom : 1.2em;
+}
+
+.content p {
+	margin-left : 2%;
+}
+
+
+
+/* Pied de page. */
+/****************/
 .footer {
 	margin: 0;
 	padding: 0.7em;
@@ -41,58 +67,103 @@
 	color: black;
 }
 
-.content {
-	min-height : 80px;
-	margin: 0;
-	padding: 1em;
-	padding-top: 1.2em;
-	padding-bottom : 1.2em;
+.footer a:hover,
+a:hover {
+	color: #c86;
 }
 
-.content p {
-	margin-left : 2%;
+
+
+/* Formulaires. */
+/***************/
+form {
+	margin-left : 4em;
+	margin-top : 4ex;
+	margin-bottom : 4ex;
+	margin-right : 4em;
 }
 
-.logintbl, .contacttbl, .signuptbl, .creategametbl {
-	margin-left : 4%;
-}
-
-.logintbl td, .contacttbl td, .signuptbl td, .creategametbl td {
-	width : 50%;	
+form td:first-child {
+	vertical-align : top;
 	text-align : right;
-	padding-left : 5px;
-	padding-right : 5px;
+	padding-right : 1em;
 }
 
-.creategametbl25 td {
-	width : 25%;
-	text-align : right;
-	padding-left : 5px;
-	padding-right : 5px;
-}
-
-.logintbl .td2, .contacttbl .td2, .signuptbl .td2, .creategametbl .td2, .creategametbl25 .td2 {
+form td:last-child {
+	vertical-align : top;	
 	text-align : left;
+	padding-left : 1em;
 }
 
-.contacttbl td {
-	vertical-align: top;
-}
-
-.logintbl input[type=submit], .contacttbl input[type=submit], .signuptbl input[type=submit], .creategametbl input[type=submit], .creategametbl25 input[type=submit] {
+form input[type=submit] {
 	display : block;	
 	margin-left : 0px;
 	margin-top : 2em;
 }
 
-.contacttbl textarea {
+.contact form textarea {
 	width : 200%;
 	height : 200px;
 }
 
+.creategame td {
+	vertical-align : top;	
+	text-align : right;
+	padding-left : 3em;
+	padding-right : 1em;
+}
+
+.creategame .wordsform .inputcell {
+	vertical-align : top;	
+	text-align : left;
+	padding-left : 1em;
+	padding-right : 3em;
+}
+
+
+/* Téléchargement. */
+/******************/
+.downloadarea {
+	display : block;
+	margin : 3em;
+	margin-top : 2em;
+}
+
+#downloadlink {
+	color : black;
+	text-decoration : none;
+	font-size : 16pt;	
+	background-color: #ccccff;	
+	border: medium solid #5555ff;
+	border-radius: 1em;
+	-moz-border-radius: 1em;
+	-webkit-border-radius: 1em;
+	padding: 0.5em;
+	padding-left : 2em;
+	padding-right : 2em;
+}
+
+#downloadlink:hover {
+	background-color: #5555ff;
+	color: white;
+	border-color: #ccccff;
+}
+
+
+
+/* Autres. */
+/**********/
 html, body {
 	padding: 0;
 	margin: 0;
+}
+
+a {
+	color: darkgreen;
+}
+
+a:visited {
+	color: #765;
 }
 
 h1 {
@@ -117,37 +188,10 @@ h5 {
 	color: #874;
 }
 
-a {
-	color: darkgreen;
-}
-
-a:visited {
-	color: #765;
-}
-
-.footer a:hover,
-a:hover {
-	color: #c86;
-}
 
 
-
-dd {
-	float:left;
-	margin-left: 1em;
-}
-
-dt {
-	float: left;
-	clear: both;
-	font-weight: bold;
-}
-
-h2#tache-description {
-	padding-top: 0.3em;
-	clear:both;
-}
-
+/* Message d'informations (erreurs ou succès). */
+/**********************************************/
 .message {
 	display : inline-block;
 	padding : 5px 30px;
@@ -165,38 +209,4 @@ h2#tache-description {
 .success {
 	border : 1px dashed red;
 	background-color : #90FF90
-}
-
-#downloadlink {
-	color : black;
-	text-decoration : none;
-	font-size : 16pt;	
-	background-color: #ccccff;	
-	border: medium solid #5555ff;
-	border-radius: 1em;
-	-moz-border-radius: 1em;
-	-webkit-border-radius: 1em;
-	padding: 0.5em;
-	padding-left : 2em;
-	padding-right : 2em;
-}
-
-#downloadlink:hover {
-	background-color: #5555ff;
-	color: white;
-	border-color: #ccccff;
-}
-
-.downloadarea {
-	display : block;
-	margin : 3em;
-	margin-top : 2em;
-}
-
-#cnx {
-	float : right
-}
-
-.android {
-	font-size: 70%;
 }
