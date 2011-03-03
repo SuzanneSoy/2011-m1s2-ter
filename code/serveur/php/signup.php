@@ -7,7 +7,7 @@ $SQL_DBNAME = (dirname(__FILE__) . "/db");
 	if (!$db = new SQlite3($SQL_DBNAME))
 		die($strings['err_signup_dbopen']);
 
-$location = getlocation();
+$location = get_location();
 
 $newpage = true;
 $msg = array();
