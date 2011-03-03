@@ -14,7 +14,7 @@
 			<?php include("ressources/showmsg.inc"); ?>
 			<h2>Jeu PtiClic - Téléchargement gratuit</h2>
 			<p>
-				Vous aimez les jeux de mots&nbsp;? Vous avez un smartphone sous Android&nbsp;?
+				Vous aimez les jeux de mots&nbsp;? Vous avez un smartphone sous Android™&nbsp;?
 				PtiClic est pour vous&nbsp;!
 			</p>
 			<p>
@@ -35,7 +35,7 @@
 
 			<h2>Le développement de l'application</h2>
 			<p>
-				La version alpha du jeu PtiClic sous Android est en cours de développement.
+				La version alpha du jeu PtiClic sous Android™ est en cours de développement.
 				Le projet s'inscrit dans le cadre d'un TER de Master en informatique
 				à l'Université Montpellier II sous la direction de Mathieu LAFOURCADE. L'équipe
 				de conception et de développement est composée de quatre étudiants&nbsp;: Bertrand BRUN, 
@@ -45,7 +45,7 @@
 			<p>
 				L'application étant en phase de développement et offerte gratuitement,
 				nous serions reconnaissant si vous pouviez nous donner votre avis, vos suggestions, 
-				vos idées. <a href="contact.php">Envoyez-nous un message&nbsp;!</a>
+				vos idées. <a href="contact.php">Envoyez-nous un message</a>&nbsp;!
 			</p>
 		</div>
 		<?php include("ressources/footer.inc"); ?>

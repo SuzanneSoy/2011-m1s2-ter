@@ -41,7 +41,7 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 		}
 		else
 			$msg = "Une erreur s'est produite lors de l'envoi du message";*/
-		$msg = $strings['ok_msg_sent'];
+		$msg = $strings['ok_contact_msg_sent'];
 	}
 	else
 		$msg = $strings['err_contact_fill_all'];
