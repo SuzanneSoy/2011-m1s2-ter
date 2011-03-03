@@ -16,12 +16,12 @@
 	background-color : #F0F0D0;
 	border-top : 1px solid grey;
 	padding : 4px;
-	padding-left : 3%;
-	padding-right : 3%;
+	padding-left : 2.2%;
+	padding-right : 1%;
 }
 
 .menu #links a {
-	margin-left : 2%;
+	margin-right : 2em;
 }
 
 .menu #cnx {
@@ -41,7 +41,11 @@
 }
 
 .content p {
-	margin-left : 2%;
+	margin-left : 3em;
+}
+
+.content ul {
+	margin-left : 1.5em;
 }
 
 
@@ -169,23 +173,27 @@ a:visited {
 h1 {
 	color: #8b4;
 	margin : 0;
-	padding: 0.2em 0.5em;
+	margin : 0.5ex 2em 0.5ex 0.5em;
 }
 
 h2 {
 	color: #4a4;
+	margin : 1.5ex 2em 0 0;
 }
 
 h3 {
 	color: #484;
+	margin : 1.5ex 2em 0 1em;
 }
 
 h4 {
 	color: #784;
+	margin : 1.5ex 2em 0 1.5em;
 }
 
 h5 {
 	color: #874;
+	margin : 1.5ex 2em 0 1.8em;
 }
 
 
@@ -194,7 +202,7 @@ h5 {
 /**********************************************/
 .message {
 	display : inline-block;
-	padding : 5px 30px;
+	padding : 2ex 6em 2ex 2em;
 	margin-top : 10px;
 	margin-bottom : 10px;
 	margin-right : 6%;
@@ -203,10 +211,15 @@ h5 {
 
 .warning {
 	border : 1px dashed red;
-	background-color : #F0C060
+	background-color : #F0C060;
 }
 
 .success {
 	border : 1px dashed red;
-	background-color : #90FF90
+	background-color : #90FF90;
+}
+
+.other {
+	border : 1px solid yellow;
+	background-color : #FFFFE0;
 }

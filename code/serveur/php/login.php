@@ -10,11 +10,11 @@ if(isset($_POST['loginid']) && !empty($_POST['loginid']))
 if(isset($_POST['loginpswd']) && !empty($_POST['loginpswd']))
 	$pswd = md5($_POST['loginpswd']);
 
-$location = getlocation();
+$location = get_location();
 
 if(isset($_GET['d']) && $_GET['d'] == "true") {
 	session_destroy();
-	return_to($location, "?show_msg=ok_login_disconnect");
+	return_to($location, "?showmsg=ok_login_disconnect");
 }
 
 if(isset($user) && isset($pswd))
@@ -27,7 +27,7 @@ if(isset($user) && isset($pswd))
 	if($pswd == ($db->querySingle("SELECT hash_passwd FROM user WHERE login='$user';"))) {
 		$_SESSION['userId'] = $user; // Le login se fait aussi dans signup.
 		
-		return_to($location);
+		return_to($location,"?showmsg=ok_login_connect");
 	}
 	else
 		$msg = $strings['err_login_bad_user_pass'];
@@ -47,6 +47,7 @@ else if(isset($user) or isset($pswd))
 		<div class="content">
 			<h2>Connexion</h2>
 			<?php include("ressources/showmsg.inc"); ?>
+
 			<h3>Vous êtes déjà inscrit&nbsp;? Authentifiez-vous.</h3>
 			<?php
 				if($msg !== null)
