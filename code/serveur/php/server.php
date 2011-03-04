@@ -3,6 +3,28 @@
 require_once("pticlic.php");
 require_once("db.php");
 
+/** Ecrit un rapport d'erreur dans un fichier.
+* @param errNum : Numéro de l'erreur.
+* @param msg : Description de l'erreur.
+* @param [other] : (Optionnel) Complément d'information.
+*/
+function logError($errNum, $msg, $other="")
+{
+	$file = fopen("./log.txt","a+");
+
+	// Met en forme la chaine contenant les paramètres de la requête.
+	$dumpParameters = str_replace("(\n","",print_r($_GET,true));
+	$dumpParameters = str_replace(")\n","",$dumpParameters);
+
+	fwrite($file,"\nErreur n° ".$errNum);
+	fwrite($file," : ".$msg);
+	if(!empty($other))	
+		fwrite($file,"\n ".$other);
+	fwrite($file,"\n  ".$dumpParameters);
+
+	fclose($file);
+}
+
 /** La fonction principale.
 * @param action : Un identifiant d'action.
 */

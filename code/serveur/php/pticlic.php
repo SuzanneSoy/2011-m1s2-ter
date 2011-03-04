@@ -6,29 +6,6 @@ function checkLogin($db, $user, $passwd) {
 	return $loginIsOk;
 }
 
-/** Ecrit un rapport d'erreur dans un fichier.
-* @param errNum : Numéro de l'erreur.
-* @param msg : Description de l'erreur.
-* @param [other] : (Optionnel) Complément d'information.
-*/
-function logError($errNum, $msg, $other="")
-{
-	$file = fopen("./log.txt","a+");
-
-	// Met en forme la chaine contenant les paramètres de la requête.
-	$dumpParameters = str_replace("(\n","",print_r($_GET,true));
-	$dumpParameters = str_replace(")\n","",$dumpParameters);
-
-	fwrite($file,"\nErreur n° ".$errNum);
-	fwrite($file," : ".$msg);
-	if(!empty($other))	
-		fwrite($file,"\n ".$other);
-	fwrite($file,"\n  ".$dumpParameters);
-
-	fclose($file);
-}
-
-
 /** Selectionne aléatoirement un noeud.
 */
 function randomCenterNode($db)
