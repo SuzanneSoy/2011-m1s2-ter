@@ -26,7 +26,8 @@ public class Relation {
 		imageRelations.put(7, R.drawable.contraire);
 		imageRelations.put(9, R.drawable.contenu);
 		imageRelations.put(10, R.drawable.contenant);
-		
+
+		// ATTENTION ! Tout ce qui est ci-dessous est en double dans relations.php .
 		stringRelations = new HashMap<Integer, String>();
 		stringRelations.put(-1, "Mots non liés");
 		stringRelations.put(0, "...est en rapport avec...");

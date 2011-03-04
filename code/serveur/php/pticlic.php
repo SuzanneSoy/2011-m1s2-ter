@@ -1,6 +1,9 @@
 <?php
 
-function checkLogin($db, $user, $passwd) {
+require_once("db.php");
+
+function checkLogin($user, $passwd) {
+	$db = getDB();
 	$hashPasswd = md5($passwd);
 	$loginIsOk = ($hashPasswd == $db->querySingle("SELECT hash_passwd FROM user WHERE login='".$user."';"));
 	return $loginIsOk;
@@ -8,13 +11,15 @@ function checkLogin($db, $user, $passwd) {
 
 /** Selectionne aléatoirement un noeud.
 */
-function randomCenterNode($db)
+function randomCenterNode()
 {
+	$db = getDB();
 	return $db->querySingle("select eid from random_center_node where rowid = (abs(random()) % (select max(rowid) from random_center_node))+1;");
 }
 
-function randomCloudNode($db)
+function randomCloudNode()
 {
+	$db = getDB();
 	return $db->querySingle("select eid from random_cloud_node where rowid = (abs(random()) % (select max(rowid) from random_cloud_node))+1;");
 }
 
@@ -27,8 +32,9 @@ function randomCloudNode($db)
 * @param r1 Type de la relation 1.
 * @param r2 Type de la relation 2.
 */
-function cgBuildResultSets($db, $cloudSize, $centerEid, $r1, $r2)
+function cgBuildResultSets($cloudSize, $centerEid, $r1, $r2)
 {
+	$db = getDB();
 	// 'w' => weight (poids), 'd' => difficulté, 's' => select
 	// Le select doit ranvoyer trois colonnes :
 	//   eid => l'eid du mot à mettre dans le nuage,
@@ -86,7 +92,7 @@ function cgBuildResultSets($db, $cloudSize, $centerEid, $r1, $r2)
 			
 			for ($i = 0; $i < 10; $i++)
 			{
-				$sources[$k]['resultSet'][] = array('eid'=>randomCloudNode($db), 'r1'=>0, 'r2'=>0, 'r0'=>0, 'trash'=>1);
+				$sources[$k]['resultSet'][] = array('eid'=>randomCloudNode(), 'r1'=>0, 'r2'=>0, 'r0'=>0, 'trash'=>1);
 				$sources[$k]['rsSize']++;
 			}
 		}
@@ -120,7 +126,7 @@ function cgChooseRelations()
 * @param sumWeights La somme des poids.
 * @return array : Tableau avec comme premier élément le nuage et comme second élément le total de difficulté.
 */
-function cgBuildCloud($db, $centerEid, $cloudSize, $sources, $sumWeights)
+function cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights)
 {
 	// On boucle tant qu'il n'y a pas eu au moins 2 sources épuisées
 	$cloud = array();
@@ -190,7 +196,7 @@ function cgBuildCloud($db, $centerEid, $cloudSize, $sources, $sumWeights)
 	while ($i < $cloudSize)
 	{
 		$totalDifficulty += $sources['rand']['d'];
-		$cloud[$i] = array('pos'=>$i++, 'd'=>$sources['rand']['d'], 'eid'=>randomCloudNode($db), 'probaR1'=>$res['r1'], 'probaR2'=>$res['r2'], 'probaR0'=>$res['r0'], 'probaTrash'=>$res['trash']);
+		$cloud[$i] = array('pos'=>$i++, 'd'=>$sources['rand']['d'], 'eid'=>randomCloudNode(), 'probaR1'=>$res['r1'], 'probaR2'=>$res['r2'], 'probaR0'=>$res['r0'], 'probaTrash'=>$res['trash']);
 	}
 
 	return array($cloud, $totalDifficulty);
@@ -204,8 +210,9 @@ function cgBuildCloud($db, $centerEid, $cloudSize, $sources, $sumWeights)
 * @param r2 : Le type de la relation 2.
 * @param totalDifficulty : La difficulté totale.
 */
-function cgInsert($db, $centerEid, $cloud, $r1, $r2, $totalDifficulty)
+function cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty)
 {
+	$db = getDB();
 	// Insère dans la base une partie avec le mot central $centerEid, le nuage $cloud et les relations $r1 et $r2
 	$db->exec("begin transaction;");
 	$db->exec("INSERT INTO game(gid, eid_central_word, relation_1, relation_2, difficulty)
@@ -251,19 +258,20 @@ function cgInsert($db, $centerEid, $cloud, $r1, $r2, $totalDifficulty)
 /** Retourne un identifiant de partie aléatoire de la liste de parties jouables
 * @return gid : Identifiant de partie.
 */
-function randomGameCore($db) {
+function randomGameCore() {
+	$db = getDB();
 	return $db->querySingle("select gid from game where gid = (abs(random()) % (select max(gid) from game))+1 or gid = (select max(gid) from game where gid > 0) order by gid limit 1;");
 }
 
-function randomGame($db)
+function randomGame()
 {
-	$gid = randomGameCore($db);
+	$gid = randomGameCore();
 	if ($gid === null) {
 		// TODO : séparer ces créations de parties dans une fonction qui détecte le mode toussa.
 		for ($i = 0; $i < 100; $i++) {
-			createGameCore($db, 10);
+			createGameCore(10);
 		}
-		$gid = randomGameCore($db);
+		$gid = randomGameCore();
 		if ($gid === null) {
 			throw new Exception("Erreur lors de la récupération de la partie. Vérifiez qu'il y a au moins une partie.", 6);
 		}
@@ -271,7 +279,8 @@ function randomGame($db)
 	return $gid;
 }
 
-function formatWord($db, $word) {
+function formatWord($word) {
+	$db = getDB();
 	$res = "";
 	$stack = array();
 	while (($pos = strpos($word, ">")) !== false) {
@@ -293,9 +302,11 @@ function formatWord($db, $word) {
 /** Formate une partie en JSON en l'imprimant.
 * @param gameId : L'identifiant d'une partie.
 */
-function game2json($db, $user, $gameId)
+function game2json($user, $gameId)
 {
-	// TODO : planter si la requête suivante échoue pour quelque raison que ce soit.
+	$db = getDB();
+	// TODO : factoriser avec game2array() .
+	// TODO : planter si la requête suivante échoue pour quelque raison que ce soit.
 	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp) VALUES (null, ".$gameId.", '$user', -1);");
 	$pgid = $db->lastInsertRowID();
 	
@@ -304,7 +315,7 @@ function game2json($db, $user, $gameId)
 	$game = $game->fetchArray();
 	
 	echo '{"gid":'.$gameId.',"pgid":'.$pgid.',"cat1":'.$game['relation_1'].',"cat2":'.$game['relation_2'].',"cat3":0,"cat4":-1,';
-	echo '"center":{"id":'.$game['eid_central_word'].',"name":'.json_encode(''.formatWord($db, $game['name_central_word'])).'},';
+	echo '"center":{"id":'.$game['eid_central_word'].',"name":'.json_encode(''.formatWord($game['name_central_word'])).'},';
 	echo '"cloudsize":10,"cloud":['; // TODO ! compter dynamiquement.
 	
 	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word from game_cloud where gid = ".$gameId.";");
@@ -317,10 +328,57 @@ function game2json($db, $user, $gameId)
 		else
 			$notfirst=true;
 
-		echo '{"id":'.$x['eid_word'].',"name":'.json_encode("".formatWord($db, $x['name_word'])).'}';
+		echo '{"id":'.$x['eid_word'].',"name":'.json_encode("".formatWord($x['name_word'])).'}';
 	}
 
 	echo "]}";
+}
+
+/** Récupère une partie sous forme de tableau.
+* @param db : descripteur de la bdd (obtenu avec getDB()).
+* @param user : Login de l'utilisateur demandant la partie.
+* @param gameId : L'identifiant d'une partie.
+*/
+function game2array($user, $gameId)
+{
+	$db = getDB();
+	// TODO : planter si la requête suivante échoue pour quelque raison que ce soit.
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp) VALUES (null, ".$gameId.", '$user', -1);");
+	$pgid = $db->lastInsertRowID();
+	
+	// TODO Yoann : faire des tests d'erreur pour ces select ?
+	$game = $db->query("select gid, (select name from node where eid = eid_central_word) as name_central_word, eid_central_word, relation_1, relation_2 from game where gid = ".$gameId.";");
+	$game = $game->fetchArray();
+
+	$ret = array();
+	$ret['gid'] = $gameId;
+	$ret['pgid'] = $pgid;
+	$ret['cat1'] = $game['relation_1'];
+	$ret['cat2'] = $game['relation_2'];
+	$ret['cat3'] = 0;
+	$ret['cat4'] = -1;
+	$ret['center'] = array('id' => $game['eid_central_word'], 'name' => formatWord($game['name_central_word']));
+	$ret['cloud'] = array(); // TODO ! compter dynamiquement.
+	
+	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word, num, difficulty, totalWeight, probaR1, probaR2, probaR0, probaTrash from game_cloud where gid = ".$gameId.";");
+	
+	while ($x = $res->fetchArray())
+	{
+		$ret['cloud'][$x['num']] = array(
+			'id' => $x['eid_word'],
+			'name' => formatWord($x['name_word']),
+			'difficulty' => $x['difficulty'],
+			'totalWeight' => $x['totalWeight'],
+			'probaR1' => $x['probaR1'],
+			'probaR2' => $x['probaR2'],
+			'probaR0' => $x['probaR0'],
+			'probaTrash' => $x['probaTrash'],
+			'probas' => normalizeProbas($x)
+		);
+	}
+	
+	$ret['cloudsize'] = count($ret['cloud']);
+	return $ret;
 }
 
 
@@ -329,7 +387,7 @@ function game2json($db, $user, $gameId)
 function createGame($nbParties, $mode)
 {
 	for ($i = 0; $i < $nbParties; $i++)
-		createGameCore($db, 10);
+		createGameCore(10);
 }
 
 /** Génère une partie (mode normal pour l'instant) pour une certaine taille de nuage.
@@ -337,26 +395,26 @@ function createGame($nbParties, $mode)
 *
 * Est appelée par randomGame(), donc il faudra adapter quand on aura plusieurs modes, par exemple en ayant une fonction intermédiaire qui puisse être appelée par createGame et randomGame.
 */
-function createGameCore($db, $cloudSize)
+function createGameCore($cloudSize)
 {
 	// select random node
-	$centerEid = randomCenterNode($db);
+	$centerEid = randomCenterNode();
 
 	$r1 = cgChooseRelations(); $r2 = $r1[1]; $r1 = $r1[0];
-	$sources = cgBuildResultSets($db, $cloudSize, $centerEid, $r1, $r2); $sumWeights = $sources[1]; $sources = $sources[0];
-	$cloud = cgBuildCloud($db, $centerEid, $cloudSize, $sources, $sumWeights); $totalDifficulty = $cloud[1]; $cloud = $cloud[0];
-	cgInsert($db, $centerEid, $cloud, $r1, $r2, $totalDifficulty);
+	$sources = cgBuildResultSets($cloudSize, $centerEid, $r1, $r2); $sumWeights = $sources[1]; $sources = $sources[0];
+	$cloud = cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights); $totalDifficulty = $cloud[1]; $cloud = $cloud[0];
+	cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
 }
 
 /** Récupération d'une partie.
 */
-function getGame($db, $user, $nbGames, $mode)
+function getGame($user, $nbGames, $mode)
 {
 	echo "[";
 
 	for ($i=0; $i < $nbGames; $i)
 	{
-		game2json($db, $user, randomGame($db));
+		game2json($user, randomGame());
 
 		if ((++$i) < $nbGames)
 			echo ",";
@@ -365,18 +423,39 @@ function getGame($db, $user, $nbGames, $mode)
 	echo "]";
 }
 
+function computeScore($probas, $difficulty, $answer, $userReputation) {
+	// Calcul du score. Score = proba[réponse de l'utilisateur]*coeff1 - proba[autres reponses]*coeff2
+	// score = - proba[autres reponses]*coeff2
+	$score = -0.7 * (($probas[0] + $probas[1] + $probas[2] + $probas[3]) - $probas[$answer]);
+	// ici, -0.7 <= score <= 0
+	// score = proba[réponse de l'utilisateur]*coeff1 - proba[autres reponses]*coeff2
+	$score += ($difficulty/5) * $probas[$answer];
+	// ici, -0.7 <= score <= 2
+	// Adapter le score en fonction de la réputation de l'utilisateur (quand il est jeune, augmenter le score pour le motiver).
+	$score += min(2 - max(0, ($userReputation / 4) - 1), 2);
+	// ici, -0.7 <= score <= 4
+	return round($score * 100) / 100;
+}
+
+function computeUserReputation($score) {
+	return ($score > 0) ? log($score) : 0;
+}
+
+function normalizeProbas($row) {
+	return array($row['probaR1']/$row['totalWeight'], $row['probaR2']/$row['totalWeight'], $row['probaR0']/$row['totalWeight'], $row['probaTrash']/$row['totalWeight']);
+}
 
 /** Insertion des données d'une partie.
 */
-function setGame($db, $user, $pgid, $gid, $num, $answers)
+function setGame($user, $pgid, $gid, $num, $answers)
 {
+	$db = getDB();
 	if ('ok' !== $db->querySingle("SELECT 'ok' FROM played_game WHERE pgid = $pgid and $gid = $gid and login = '$user' and timestamp = -1;")) {
 		throw new Exception("Cette partie n'est associée à votre nom d'utilisateur, ou bien vous l'avez déjà jouée.", 4);
 	}
-		
-	$userReputation = $db->querySingle("SELECT score FROM user WHERE login='$user';");
-	$userReputation = ($userReputation > 0) ? log($userReputation) : 0;
-		
+	
+	$userReputation = computeUserReputation($db->querySingle("SELECT score FROM user WHERE login='".$user."';"));
+	
 	$db->exec("begin transaction;");
 	$db->exec("update played_game set timestamp = ".time()." where pgid = $pgid;");
 
@@ -404,18 +483,8 @@ function setGame($db, $user, $pgid, $gid, $num, $answers)
 			default:     throw new Exception("Réponse invalide pour le mot $num.", 5);
 		}
 			
-		$probas = array($row['probaR1']/$row['totalWeight'], $row['probaR2']/$row['totalWeight'], $row['probaR0']/$row['totalWeight'], $row['probaTrash']/$row['totalWeight']);
-		// Calcul du score. Score = proba[réponse de l'utilisateur]*coeff1 - proba[autres reponses]*coeff2
-		// score = - proba[autres reponses]*coeff2
-		$score = -0.7 * (($probas[0] + $probas[1] + $probas[2] + $probas[3]) - $probas[$answer]);
-		// ici, -0.7 <= score <= 0
-		// score = proba[réponse de l'utilisateur]*coeff1 - proba[autres reponses]*coeff2
-		$score += ($row['difficulty']/5) * $probas[$answer];
-		// ici, -0.7 <= score <= 2
-		// Adapter le score en fonction de la réputation de l'utilisateur (quand il est jeune, augmenter le score pour le motiver).
-		$score += min(2 - max(0, ($userReputation / 4) - 1), 2);
-		// ici, -0.7 <= score <= 4
-
+		$score = computeScore(normalizeProbas($row), $row['difficulty'], $answer, $userReputation);
+		
 		$db->exec("insert into played_game_cloud(pgid, gid, type, num, relation, weight, score) values($pgid, $gid, 1, $num, $r1, ".$userReputation.", ".$score.");");
 		$db->exec("update game_cloud set $probaRx = $probaRx + ".max($userReputation,1)." where gid = $gid;");
 		$db->exec("update game_cloud set totalWeight = totalWeight + ".max($userReputation,1)." where gid = $gid;");
@@ -425,7 +494,7 @@ function setGame($db, $user, $pgid, $gid, $num, $answers)
 	$db->exec("commit;");
 	// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
 	echo "{\"score\":$score,\"newGame\":";
-	game2json($db, $user, randomGame($db));
+	game2json($user, randomGame());
 	echo "}";
 }
 

@@ -34,12 +34,10 @@ function main()
 		throw new Exception("La requête est incomplète", 2);
 	}
 	
-	$db = getDB();
-
 	// Login
 	$action = $_GET['action'];
 	$user = SQLite3::escapeString($_GET['user']);
-	$loginIsOk = checkLogin($db, $user, $_GET['passwd']);
+	$loginIsOk = checkLogin($user, $_GET['passwd']);
 	if ($action != 3 && (!$loginIsOk)) {
 		throw new Exception("Utilisateur non enregistré ou mauvais mot de passe", 3);
 	}
@@ -64,13 +62,13 @@ function main()
 		if(!isset($_GET['nb']) || !isset($_GET['mode'])) {
 			throw new Exception("La requête est incomplète", 2);
 		}
-		getGame($db, $user, intval($_GET['nb']), $_GET['mode']);
+		getGame($user, intval($_GET['nb']), $_GET['mode']);
 	} else if($action == 1) {           // "Set partie"
 		// Requête POST : http://serveur/server.php?action=1&mode=normal&user=foo&passwd=bar&gid=1234&pgid=12357&0=0&1=-1&2=22&3=13&9=-1
 		if (!isset($_GET['pgid']) || !isset($_GET['gid'])) {
 			throw new Exception("La requête est incomplète", 2);
 		}
-		setGame($db, $user, intval($_GET['pgid']), intval($_GET['gid']), $_GET); // TODO : il faudrait filtrer les paramètres qui correspondent à une réponse au lieu d'envoyer $_GET en entier, mais on ne connaît pas leur nom à l'avance.
+		setGame($user, intval($_GET['pgid']), intval($_GET['gid']), $_GET); // TODO : il faudrait filtrer les paramètres qui correspondent à une réponse au lieu d'envoyer $_GET en entier, mais on ne connaît pas leur nom à l'avance.
 	} else {
 		throw new Exception("Commande inconnue", 2);
 	}
