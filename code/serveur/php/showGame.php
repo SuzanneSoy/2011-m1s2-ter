@@ -73,7 +73,11 @@
 							$columns = array(0 => 'probaR1', 1 => 'probaR2', 2 => 'probaR0', 3 => 'probaTrash');
 							foreach ($columns as $answer => $probaRX) {
 								echo "<td>" . $v[$probaRX] . "</td>";
-								echo "<td>" . ($v[$probaRX] / $v['totalWeight'])."</td>";
+								echo '<td style="color:#'
+									. str_pad(dechex(max(0,min(255,0xff - 2*255*$v['probas'][$answer]))), 2, "0", STR_PAD_LEFT)
+									. str_pad(dechex(max(0,min(255,       2*255*$v['probas'][$answer]))), 2, "0", STR_PAD_LEFT)
+									. '00;">'
+									. $v['probas'][$answer] . "</td>";
 								echo "<td>" . computeScore($v['probas'], $v['difficulty'], $answer, computeUserReputation(0))."</td>";
 								echo "<td>" . computeScore($v['probas'], $v['difficulty'], $answer, computeUserReputation(10))."</td>";
 								echo "<td>" . computeScore($v['probas'], $v['difficulty'], $answer, computeUserReputation(100))."</td>";
