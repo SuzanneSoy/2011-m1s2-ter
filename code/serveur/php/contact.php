@@ -12,7 +12,7 @@ function writemail($filename,$email,$subject,$message)
 	$file = fopen($filename,"a+");
 	
 	if($file != -1) {
-		fprintf($file,"%s\n%s\n%s\n\n",$email,$subject,$message);
+		fprintf($file,"%s\n%s\n%s\n\n---------------------\n\n\n",$email,$subject,$message);
 	}
 	else
 		die($strings['err_contact_open_mailfile']);
@@ -33,14 +33,17 @@ if(isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message']
 		$message = str_replace("\r\n","\n",$_POST['message']);
 		
 		writemail($mailfile,$from,$subject,$message);
+		
+		$displayForm = false;
 
 		/*if(mail($dest,$subject,$message,$header))
 		{
 			$msg = $strings['ok_msg_sent'];
-			$displayForm = false;
+			
 		}
 		else
 			$msg = "Une erreur s'est produite lors de l'envoi du message";*/
+		
 		$msg = $strings['ok_contact_msg_sent'];
 	}
 	else
