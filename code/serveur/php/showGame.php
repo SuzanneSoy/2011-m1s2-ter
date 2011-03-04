@@ -16,12 +16,28 @@
 			<?php
 				require_once("pticlic.php");
 				require_once("relations.php");
-				$game = game2array("foo", (isset($_GET['gid']) ? $_GET['gid'] : randomGame()));
+				$gameId = randomGame();
+				if (isset($_GET['gid'])) $gameId = intval($_GET['gid']);
+				if (isset($_POST['gid'])) $gameId = intval($_POST['gid']);
+				$game = game2array("foo", $gameId);
 			?>
-			<h3><?php echo $game['center']['name'] . " (eid = " . $game['center']['id'] . ")"; ?></h3>
+			<h3>Informations internes sur le nuage</h3>
 			<p>
-				<?php $scoreAvantPartie = 10; ?>Score de l'utilisateur avant la partie : <?php echo $scoreAvantPartie; ?>.
+				Partie numéro <?php echo $gameId; ?> (pgid=<?php echo $game['pgid']; ?>). Pous pouvez obtenir aléatoirement une <a href="showGame.php">autre partie</a>,
+				ou avoir un lien vers <a href="showGame.php?gid=<?php echo $gameId; ?>">celle-ci</a>.
 			</p>
+			<p>
+				Vous avez actuellement un score de <?php echo $currentUserScore = getDB()->querySingle("SELECT score FROM user WHERE login='foo';"); ?> points
+				et une réputation de <?php echo computeUserReputation($currentUserScore); ?>, ce qui est assez mauvais.
+				Vous n'avez aucun espoir de briller grâce à ce jeu. Retournez donc coder.
+			</p>
+			<?php
+				if (isset($_POST['gid'])) {
+					$scores = setGame("foo", $game['pgid'], $gameId, $_POST);
+					echo '<a name="results"></a>';
+					echo '<p>Voilà une bien belle partie ! Vous avez gagné '.$scores['total'].' points au total. Maintenant, retournez coder.</p>';
+				}
+			?>
 			<ul>
 				<li>Poids désigne le poids pour cette relation entre le mot central et le mot en cours (pour cette partie).</li>
 				<li>PoidsTotal désigne la somme des poids sur la ligne. C'est un bon indice de la fiabilité des poids pour ce mot : plus PoidsTotal est faible, moins c'est fiable.</li>
@@ -31,12 +47,18 @@
 			<table class="show-game">
 				<thead>
 					<tr>
-						<th colspan="3">Mot</th>
+						<th colspan="3" style="color: darkgreen;"><?php echo $game['center']['name'] . " (eid = " . $game['center']['id'] . ")"; ?></th>
 						<th rowspan="2">PoidsTotal</th>
 						<th colspan="6"><?php echo $stringRelations[$game['cat1']] . " (rid = " . $game['cat1'] . ")"; ?></th>
 						<th colspan="6"><?php echo $stringRelations[$game['cat2']] . " (rid = " . $game['cat2'] . ")"; ?></th>
 						<th colspan="6"><?php echo $stringRelations[$game['cat3']] . " (rid = " . $game['cat3'] . ")"; ?></th>
 						<th colspan="6"><?php echo $stringRelations[$game['cat4']] . " (rid = " . $game['cat4'] . ")"; ?></th>
+						<?php
+							if (isset($_POST['gid'])) {
+								echo '<th rowspan="2">Votre réponse</th>';
+								echo '<th rowspan="2">Votre score</th>';
+							}
+						?>
 					</tr>
 					<tr>
 						<th>Num.</th>
@@ -72,16 +94,25 @@
 						<?php
 							$columns = array(0 => 'probaR1', 1 => 'probaR2', 2 => 'probaR0', 3 => 'probaTrash');
 							foreach ($columns as $answer => $probaRX) {
-								echo "<td>" . $v[$probaRX] . "</td>";
+								echo "<td";
+								if (isset($_POST['gid']) && $game['cat'.($answer+1)] == $_POST[$k])
+									echo ' style="background-color:#ddd;"';
+								echo '>' . $v[$probaRX] . "</td>";
 								echo '<td style="color:#'
-									. str_pad(dechex(max(0,min(255,0xff - 2*255*$v['probas'][$answer]))), 2, "0", STR_PAD_LEFT)
-									. str_pad(dechex(max(0,min(255,       2*255*$v['probas'][$answer]))), 2, "0", STR_PAD_LEFT)
+									. str_pad(dechex(max(0,min(255,0xff - 1.3*255*$v['probas'][$answer]))), 2, "0", STR_PAD_LEFT)
+									. str_pad(dechex(max(0,min(255,       1.3*255*$v['probas'][$answer]))), 2, "0", STR_PAD_LEFT)
 									. '00;">'
-									. $v['probas'][$answer] . "</td>";
+									. (round($v['probas'][$answer]*100)/100) . "</td>";
 								echo "<td>" . computeScore($v['probas'], $v['difficulty'], $answer, computeUserReputation(0))."</td>";
 								echo "<td>" . computeScore($v['probas'], $v['difficulty'], $answer, computeUserReputation(10))."</td>";
 								echo "<td>" . computeScore($v['probas'], $v['difficulty'], $answer, computeUserReputation(100))."</td>";
 								echo "<td>" . computeScore($v['probas'], $v['difficulty'], $answer, computeUserReputation(1000))."</td>";
+							}
+						?>
+						<?php
+							if (isset($_POST['gid'])) {
+								echo '<td>'.$stringRelations[$_POST[$k]]." (rid=".$_POST[$k].")".'</td>';
+								echo '<td>'.$scores[$k].'</td>';
 							}
 						?>
 					</tr>
@@ -90,6 +121,32 @@
 					?>
 				</tbody>
 			</table>
+			
+			<h3>Jouer à la partie</h3>
+			<form action="showGame.php#results" method="POST">
+				<input type="hidden" name="gid" id="gid" value="<?php echo $gameId; ?>" />
+				<p>Mot central : <span style="color: darkgreen;"><?php echo $game['center']['name']; ?></span>.</p>
+				<table class="show-game">
+					<tbody>
+						<?php
+							foreach ($game['cloud'] as $k => $v) {
+						?>
+						<tr>
+							<th><?php echo $v['name']; ?></th>
+							<?php for ($answer = 0; $answer < 4; $answer++) { ?>
+							<td>
+								<input type="radio" name="<?php echo $k; ?>" id="<?php echo $k . '-' . $answer; ?>" value="<?php echo $game['cat'.($answer+1)]; ?>" />
+								<label for="<?php echo $k . '-' . $answer; ?>"><?php echo $stringRelations[$game['cat'.($answer+1)]]; ?></label>
+							</td>
+							<?php } ?>
+						</tr>
+						<?php
+							}
+						?>
+					</tbody>
+				</table>
+				<input type="submit" value="Gamble !" />
+			</form>
 		</div>
 		<?php include("ressources/footer.inc"); ?>
 	</body>

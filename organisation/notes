@@ -1,3 +1,8 @@
+BUG : dans les parties qu'on génère, la somme des poids doit toujours être 2, or il y en a certaines où c'est 0 !?!
+
+
+
+
 - Une classe Constante pour toutes les constantes ("symboles" pour les paramètres, ...).
 - Boutons pour les différents modes de jeu directement sur la "page de garde".
 - Icônes : http://developer.android.com/guide/practices/ui_guidelines/icon_design.html

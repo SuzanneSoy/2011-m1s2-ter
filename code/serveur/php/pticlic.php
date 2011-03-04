@@ -46,10 +46,10 @@ function cgBuildResultSets($cloudSize, $centerEid, $r1, $r2)
 		// Voisins 1 saut via r_associated (0), donc qu'on voudrait spécifier si possible.
 		array('w'=>40, 'd'=>2, 's'=>"select end as eid, 0.25 as r1, 0.25 as r2, 0.5 as r0, 0 as trash from relation where start = $centerEid and type = 0 order by random();"),
 		// Voisins 1 saut via les autres relations
-		array('w'=>20, 'd'=>3, 's'=>"select end as eid, 0.1 as r1, 0.1 as r2, 0.8 as r0, 0 as trash from relation where start = $centerEid and type not in (0, $r1, $r2, 4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) order by random();"),
+		array('w'=>20, 'd'=>3.1, 's'=>"select end as eid, 0.1 as r1, 0.1 as r2, 0.8 as r0, 0 as trash from relation where start = $centerEid and type not in (0, $r1, $r2, 4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) order by random();"),
 		// Voisins 2 sauts, avec un mix de R1 et R2 pour les liens. Par ex [ A -R1-> B -R2-> C ] ou bien [ A -R2-> B -R2-> C ]
 		// Version optimisée de : "select end as eid from relation where $typer1r2 and start in oneHopWithType order by random();"
-		array('w'=>30, 'd'=>3, 's'=>"select B.end as eid, ((A.type = $r1) + (B.type = $r1)) / 3 as r1, ((A.type = $r2) + (B.type = $r2)) / 3 as r2, 1/6 as r0, 1/6 as trash from relation as A, relation as B where A.start = $centerEid and A.$typer1r2 and B.start = A.end and B.$typer1r2 order by random();"),
+		array('w'=>30, 'd'=>3.2, 's'=>"select B.end as eid, ((A.type = $r1) + (B.type = $r1)) / 3. as r1, ((A.type = $r2) + (B.type = $r2)) / 3. as r2, 1/6. as r0, 1/6. as trash from relation as A, relation as B where A.start = $centerEid and A.$typer1r2 and B.start = A.end and B.$typer1r2 order by random();"),
 		// Voisins 1 saut r1/r2 + 1 saut synonyme
 		// Version optimisée de : "select end as eid from relation where start in oneHopWithType and type = 5 order by random()";
 		array('w'=>20, 'd'=>5, 's'=>"select B.end as eid, (A.type = $r1) * 0.75 as r1, (A.type = $r2) * 0.75 as r2, 0.25 as r0, 0 as trash from relation as A, relation as B where A.start = $centerEid and A.$typer1r2 and B.start = A.end and B.type = 5 order by random();"),
@@ -236,8 +236,9 @@ function cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty)
 	// TODO : R0 et Trash + corrections
 	foreach ($cloud as $c)
 	{
+		$totalWeight = $c['probaR1'] + $c['probaR2'] + $c['probaR0'] + $c['probaTrash'];
 		$db->exec("INSERT INTO game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash)
-			   VALUES ($gid, ".$c['pos'].", ".$c['d'].", ".$c['eid'].", 2, ".$c['probaR1'].", ".$c['probaR2'].", ".$c['probaR0'].", ".$c['probaTrash'].");");
+			   VALUES ($gid, ".$c['pos'].", ".$c['d'].", ".$c['eid'].", $totalWeight, ".$c['probaR1'].", ".$c['probaR2'].", ".$c['probaR0'].", ".$c['probaTrash'].");");
 		
 		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
 			   VALUES ($pgid1, $gid, 0, ".$c['pos'].", $r1, ".$c['probaR1'].", 0);");
@@ -427,18 +428,21 @@ function computeScore($probas, $difficulty, $answer, $userReputation) {
 	// Calcul du score. Score = proba[réponse de l'utilisateur]*coeff1 - proba[autres reponses]*coeff2
 	// score = - proba[autres reponses]*coeff2
 	$score = -0.7 * (($probas[0] + $probas[1] + $probas[2] + $probas[3]) - $probas[$answer]);
+	
 	// ici, -0.7 <= score <= 0
 	// score = proba[réponse de l'utilisateur]*coeff1 - proba[autres reponses]*coeff2
 	$score += ($difficulty/5) * $probas[$answer];
+	
 	// ici, -0.7 <= score <= 2
 	// Adapter le score en fonction de la réputation de l'utilisateur (quand il est jeune, augmenter le score pour le motiver).
 	$score += min(2 - max(0, ($userReputation / 4) - 1), 2);
+	
 	// ici, -0.7 <= score <= 4
 	return round($score * 100) / 100;
 }
 
 function computeUserReputation($score) {
-	return ($score > 0) ? log($score) : 0;
+	return max(round(log($score)*100)/100, 0);
 }
 
 function normalizeProbas($row) {
@@ -447,7 +451,7 @@ function normalizeProbas($row) {
 
 /** Insertion des données d'une partie.
 */
-function setGame($user, $pgid, $gid, $num, $answers)
+function setGame($user, $pgid, $gid, $answers)
 {
 	$db = getDB();
 	if ('ok' !== $db->querySingle("SELECT 'ok' FROM played_game WHERE pgid = $pgid and $gid = $gid and login = '$user' and timestamp = -1;")) {
@@ -466,6 +470,7 @@ function setGame($user, $pgid, $gid, $num, $answers)
 	$r1 = $r1['relation_1'];
 	$res = $db->query("SELECT num, difficulty, totalWeight, probaR1, probaR2, probaR0, probaTrash FROM game_cloud WHERE gid = $gid;");
 	$gameScore = 0;
+	$scores = array();
 	
 	while ($row = $res->fetchArray())
 	{
@@ -481,23 +486,22 @@ function setGame($user, $pgid, $gid, $num, $answers)
 			case $r2:    $answer = 1; $probaRx = "probaR2"; break;
 			case $r0:    $answer = 2; $probaRx = "probaR0"; break;
 			case $trash: $answer = 3; $probaRx = "probaTrash"; break;
-			default:     throw new Exception("Réponse invalide pour le mot $num.", 5);
+			default:     throw new Exception("Réponse ($relanswer) invalide pour le mot $num. Les réponses possibles sont : $r1, $r2, $r0, $trash", 5);
 		}
 			
 		$wordScore = computeScore(normalizeProbas($row), $row['difficulty'], $answer, $userReputation);
 		$gameScore += $wordScore;
+		$scores[$num] = $wordScore;
 		
 		$db->exec("insert into played_game_cloud(pgid, gid, type, num, relation, weight, score) values($pgid, $gid, 1, $num, $r1, ".$userReputation.", ".$wordScore.");");
-		$db->exec("update game_cloud set $probaRx = $probaRx + ".max($userReputation,1)." where gid = $gid;");
-		$db->exec("update game_cloud set totalWeight = totalWeight + ".max($userReputation,1)." where gid = $gid;");
+		$db->exec("update game_cloud set $probaRx = $probaRx + ".max(min($userReputation/2,5),0)." where gid = $gid and num = $num;");
+		$db->exec("update game_cloud set totalWeight = totalWeight + ".max(min($userReputation/2,5),0)." where gid = $gid and num = $num;");
 	}
 	$db->exec("update user set score = score + ".$gameScore." where login = '$user';");
 
 	$db->exec("commit;");
-	// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
-	echo "{\"score\":".$gameScore.",\"newGame\":";
-	game2json($user, randomGame());
-	echo "}";
+	$scores['total'] = $gameScore;
+	return $scores;
 }
 
 ?>

@@ -68,7 +68,13 @@ function main()
 		if (!isset($_GET['pgid']) || !isset($_GET['gid'])) {
 			throw new Exception("La requête est incomplète", 2);
 		}
-		setGame($user, intval($_GET['pgid']), intval($_GET['gid']), $_GET); // TODO : il faudrait filtrer les paramètres qui correspondent à une réponse au lieu d'envoyer $_GET en entier, mais on ne connaît pas leur nom à l'avance.
+		// TODO : il faudrait filtrer les paramètres qui correspondent à une réponse
+		// au lieu d'envoyer $_GET en entier, mais on ne connaît pas leur nom à l'avance.
+		$scores = setGame($user, intval($_GET['pgid']), intval($_GET['gid']), $_GET);
+		// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
+		echo "{\"score\":".$scores['total'].",\"newGame\":";
+		game2json($user, randomGame());
+		echo "}";
 	} else {
 		throw new Exception("Commande inconnue", 2);
 	}

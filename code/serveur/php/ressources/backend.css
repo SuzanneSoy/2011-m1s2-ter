@@ -1,5 +1,10 @@
 .show-game {
 	border-collapse: collapse;
+	margin-left: 4em;
+}
+
+form * {
+	margin-left: 0 !important;
 }
 
 .show-game td,
