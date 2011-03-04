@@ -425,19 +425,26 @@ function getGame($user, $nbGames, $mode)
 }
 
 function computeScore($probas, $difficulty, $answer, $userReputation) {
-	// Calcul du score. Score = proba[réponse de l'utilisateur]*coeff1 - proba[autres reponses]*coeff2
+	// Calcul du score. Score = proba[réponse de l'utilisateur]*coeff1 - proba[autres reponses]*coeff2 + bonus
 	// score = - proba[autres reponses]*coeff2
+	// On aura donc -0.7 <= score <= 0
 	$score = -0.7 * (($probas[0] + $probas[1] + $probas[2] + $probas[3]) - $probas[$answer]);
 	
-	// ici, -0.7 <= score <= 0
 	// score = proba[réponse de l'utilisateur]*coeff1 - proba[autres reponses]*coeff2
-	$score += ($difficulty/5) * $probas[$answer];
+	// On aura donc -0.7 <= score <= 2
+	$score += 2 * $probas[$answer];
 	
-	// ici, -0.7 <= score <= 2
+	// On est indulgent si la réponse est 3 (poubelle) :
+	if ($answer == 3 && $score < 0) {
+		$score = $score / 2;
+	}
+	
 	// Adapter le score en fonction de la réputation de l'utilisateur (quand il est jeune, augmenter le score pour le motiver).
-	$score += min(2 - max(0, ($userReputation / 4) - 1), 2);
+	// On aura donc -0.7 <= score <= 3
+	if ($score > 0.6) {
+		$score += max(0, min(1, 1 - ($userReputation / 4)));
+	}
 	
-	// ici, -0.7 <= score <= 4
 	return round($score * 100) / 100;
 }
 
