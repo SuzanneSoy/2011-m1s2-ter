@@ -1,4 +1,4 @@
-// Requête : http://serveur/pticlic.php?action=getparties&nb=2&mode=normal&user=foo&passwd=bar
+// Requête : http://serveur/server.php?action=getparties&nb=2&mode=normal&user=foo&passwd=bar
 [
 	{
 		gid: 1234,

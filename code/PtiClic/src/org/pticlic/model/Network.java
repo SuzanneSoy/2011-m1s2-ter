@@ -88,7 +88,7 @@ public class Network {
 	 */
 	public Network(String serverURL, Mode mode, String id, String passwd) {
 		this.mode = mode;
-		this.serverURL = serverURL;
+		this.serverURL = serverURL + "/server.php";
 		this.id = id;
 		this.passwd = passwd;
 	}
@@ -119,7 +119,7 @@ public class Network {
 	public static boolean isLoginCorrect(Context context) {
 		
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-		String serverURL = sp.getString(Constant.SERVER_URL, Constant.SERVER);
+		String serverURL = sp.getString(Constant.SERVER_URL, Constant.SERVER) + "/server.php";
 		String id = sp.getString(Constant.USER_ID, "joueur");
 		String passwd = sp.getString(Constant.USER_PASSWD, "");
 
@@ -129,7 +129,7 @@ public class Network {
 		String json = null;
 		boolean res = false;
 		try {
-			String urlS = serverURL+"/pticlic.php?"
+			String urlS = serverURL
 			+ "action=" + Action.CHECK_LOGIN.value()
 			+ "&user=" + id
 			+ "&passwd=" + passwd;
@@ -172,7 +172,7 @@ public class Network {
 		String json = null;
 		try {
 			// TODO : ne restera le temps que les requete du serveur passe du GET au POST
-			String urlS = this.serverURL+"/pticlic.php?"
+			String urlS = this.serverURL
 			+ "action=" + Action.GET_GAMES.value()
 			+ "&user=" + this.id
 			+ "&passwd=" + this.passwd
@@ -286,7 +286,7 @@ public class Network {
 		try {
 			
 			// TODO : ne restera le temps que les requete du serveur passe du GET au POST
-			String urlS = this.serverURL+"/pticlic.php?"
+			String urlS = this.serverURL
 			+ "action=" + Action.SEND_GAME.value()
 			+ "&user=" + this.id
 			+ "&passwd=" + this.passwd
@@ -310,7 +310,7 @@ public class Network {
 			
 			url = new URL(urlS);
 
-//			URL url = new URL(this.serverURL);
+//			URL url = new URL(this.serverURL); // Attention ! this.serverURL contient "/server.php"
 //			URLConnection connection = url.openConnection();
 //			connection.addRequestProperty("action", Action.SEND_GAME.value());
 //			connection.addRequestProperty("user", this.id);
