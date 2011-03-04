@@ -465,6 +465,7 @@ function setGame($user, $pgid, $gid, $num, $answers)
 	$r2 = $r1['relation_2'];
 	$r1 = $r1['relation_1'];
 	$res = $db->query("SELECT num, difficulty, totalWeight, probaR1, probaR2, probaR0, probaTrash FROM game_cloud WHERE gid = $gid;");
+	$gameScore = 0;
 	
 	while ($row = $res->fetchArray())
 	{
@@ -483,17 +484,18 @@ function setGame($user, $pgid, $gid, $num, $answers)
 			default:     throw new Exception("Réponse invalide pour le mot $num.", 5);
 		}
 			
-		$score = computeScore(normalizeProbas($row), $row['difficulty'], $answer, $userReputation);
+		$wordScore = computeScore(normalizeProbas($row), $row['difficulty'], $answer, $userReputation);
+		$gameScore += $wordScore;
 		
-		$db->exec("insert into played_game_cloud(pgid, gid, type, num, relation, weight, score) values($pgid, $gid, 1, $num, $r1, ".$userReputation.", ".$score.");");
+		$db->exec("insert into played_game_cloud(pgid, gid, type, num, relation, weight, score) values($pgid, $gid, 1, $num, $r1, ".$userReputation.", ".$wordScore.");");
 		$db->exec("update game_cloud set $probaRx = $probaRx + ".max($userReputation,1)." where gid = $gid;");
 		$db->exec("update game_cloud set totalWeight = totalWeight + ".max($userReputation,1)." where gid = $gid;");
-		$db->exec("update user set score = score + ".$score." where login = '$user';");
 	}
+	$db->exec("update user set score = score + ".$gameScore." where login = '$user';");
 
 	$db->exec("commit;");
 	// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
-	echo "{\"score\":$score,\"newGame\":";
+	echo "{\"score\":".$gameScore.",\"newGame\":";
 	game2json($user, randomGame());
 	echo "}";
 }
