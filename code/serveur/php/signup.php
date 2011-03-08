@@ -79,10 +79,10 @@ if(isset($_POST['signuppswd2'])){
 
 if(count($msg) == 0 && $newpage == false)
 {
-	$ok = ($db->query("INSERT INTO user(mail, login, hash_passwd, score) VALUES ('" . SQLite3::escapeString($signupemail)
+	$ok = ($db->query("INSERT INTO user(mail, login, hash_passwd, score, group) VALUES ('" . SQLite3::escapeString($signupemail)
 		. "', '" . SQLite3::escapeString($signupid)
 		. "', '" . SQLite3::escapeString(md5($signuppswd1))
-		. "', 0);"));
+		. "', 0, 1);"));
 	
 	if($ok == true) {
 		$_SESSION['userId'] = $signupid;
