@@ -110,15 +110,20 @@ form input[type=submit] {
 	height : 200px;
 }
 
-.creategame td {
-	vertical-align : top;	
+.creategame .wordsform {
+	border-collapse : collapse;
+}
+
+.creategame .wordsform td {
+	border : 1px solid #808080;
+	vertical-align : middle;
+	padding : 1.5ex;
 	text-align : right;
 	padding-left : 3em;
 	padding-right : 1em;
 }
 
 .creategame .wordsform .inputcell {
-	vertical-align : top;	
 	text-align : left;
 	padding-left : 1em;
 	padding-right : 3em;
