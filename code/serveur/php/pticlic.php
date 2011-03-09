@@ -2,6 +2,11 @@
 
 require_once("db.php");
 
+/**  Vérifie la validité du couple nom d'utilisateur / mot de passe.
+* @param user : Le nom d'utilisateur.
+* @param passwd : Le mot de passe.
+* @return boolean : true si OK sinon false.
+*/
 function checkLogin($user, $passwd) {
 	$db = getDB();
 	$hashPasswd = md5($passwd);
@@ -9,7 +14,8 @@ function checkLogin($user, $passwd) {
 	return $loginIsOk;
 }
 
-/** Selectionne aléatoirement un noeud.
+/** Selectionne aléatoirement l'eid d'un mot central.
+* @return eid : Identifiant d'un mot central, NULL en cas d'erreur.
 */
 function randomCenterNode()
 {
@@ -17,14 +23,14 @@ function randomCenterNode()
 	return $db->querySingle("select eid from random_center_node where rowid = (abs(random()) % (select max(rowid) from random_center_node))+1;");
 }
 
+/** Selectionne aléatoirement un noeud d'un nuage.
+* @return eid : L'identifiant du noeud.
+*/
 function randomCloudNode()
 {
 	$db = getDB();
 	return $db->querySingle("select eid from random_cloud_node where rowid = (abs(random()) % (select max(rowid) from random_cloud_node))+1;");
 }
-
-
-// TODO : Yoann : peut-être faire une classe GameCreator avec les fonctions ci-dessous comme méthodes ?
 
 /**
 * @param cloudSize : Taille du nuage.
@@ -102,7 +108,7 @@ function cgBuildResultSets($cloudSize, $centerEid, $r1, $r2)
 }
 
 
-/**
+/** Sélectionne aléatoirement deux relations.
 * @return array : Tableau avec la relation 1 et la relation 2.
 */
 function cgChooseRelations()
@@ -120,7 +126,7 @@ function cgChooseRelations()
 	return array($r1, $r2);
 }
 
-/**
+/** Génération d'un nuage pour un mot central.
 * @param cloudSize : Taille du nuage.
 * @param sources Les sources.
 * @param sumWeights La somme des poids.
@@ -203,7 +209,7 @@ function cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights)
 }
 
 
-/**
+/** Insère la partie dans la base de données.
 * @param centerEid : Identifiant du mot central.
 * @param cloud : Le nuage.
 * @param r1 : Le type de la relation 1.
@@ -264,26 +270,35 @@ function randomGameCore() {
 	return $db->querySingle("select gid from game where gid = (abs(random()) % (select max(gid) from game))+1 or gid = (select max(gid) from game where gid > 0) order by gid limit 1;");
 }
 
+/** Sélection aléatoire d'une partie de la base de données parmis les parties à jouer.
+* @return gid : Identifiant de la partie selectionnée.
+*/
 function randomGame()
 {
 	$gid = randomGameCore();
+
 	if ($gid === null) {
 		// TODO : séparer ces créations de parties dans une fonction qui détecte le mode toussa.
-		for ($i = 0; $i < 100; $i++) {
+		for ($i = 0; $i < 100; $i++)
 			createGameCore(10);
-		}
+
 		$gid = randomGameCore();
-		if ($gid === null) {
+
+		if ($gid === null)
 			throw new Exception("Erreur lors de la récupération de la partie. Vérifiez qu'il y a au moins une partie.", 6);
-		}
 	}
 	return $gid;
 }
 
+/** Formatage des mots lorsqu'il y a des généralisations/spécifications par le symbole ">".
+* @param word : Le mot que l'on veut reformater.
+* @return word : le mot formaté.
+*/
 function formatWord($word) {
 	$db = getDB();
 	$res = "";
 	$stack = array();
+
 	while (($pos = strpos($word, ">")) !== false) {
 		$res .= substr($word,0,$pos) . " (";
 		$eid = intval(substr($word,$pos+1));
@@ -293,14 +308,17 @@ function formatWord($word) {
 		$stack[] = $eid;
 		$word = $db->querySingle("select name from node where eid = $eid");
 	}
+
 	$res .= $word;
-	for ($depth = count($stack); $depth > 0; $depth--) {
+
+	for ($depth = count($stack); $depth > 0; $depth--)
 		$res .= ')';
-	}
+
 	return $res;
 }
 
 /** Formate une partie en JSON en l'imprimant.
+* @param user : l'utilisateur.
 * @param gameId : L'identifiant d'une partie.
 */
 function game2json($user, $gameId)
@@ -383,7 +401,9 @@ function game2array($user, $gameId)
 }
 
 
-/** Création d'une partie.
+/** Création d'un lot de parties suivant un mode donnée.
+* @param nbParties : le nombre de parties à créer.
+* @param mode : Le mode de jeu pour les parties à créer.
 */
 function createGame($nbParties, $mode)
 {
@@ -408,6 +428,9 @@ function createGameCore($cloudSize)
 }
 
 /** Récupération d'une partie.
+* @param user : L'identifiant de l'utilisateur.
+* @param nbGames : Le nombre de parties à récupérer.
+* @param mode : Le mode de jeu des parties à récupérer.
 */
 function getGame($user, $nbGames, $mode)
 {
@@ -423,6 +446,7 @@ function getGame($user, $nbGames, $mode)
 	
 	echo "]";
 }
+
 
 function computeScore($probas, $difficulty, $answer, $userReputation) {
 	// Calcul du score. Score = proba[réponse de l'utilisateur]*coeff1 - proba[autres reponses]*coeff2 + bonus
@@ -448,15 +472,26 @@ function computeScore($probas, $difficulty, $answer, $userReputation) {
 	return round($score * 100) / 100;
 }
 
+/** Calcul de la réputation de l'utilisateur selon son score.
+* @param score : Le score du joueur.
+*/
 function computeUserReputation($score) {
 	return max(round(log($score)*100)/100, 0);
 }
 
+/** Formatage des probalitées dans un tableau.
+* @param row : le vecteur de probabilités.
+* @return array : Le vecteur de probabilités normalisé.
+*/
 function normalizeProbas($row) {
 	return array($row['probaR1']/$row['totalWeight'], $row['probaR2']/$row['totalWeight'], $row['probaR0']/$row['totalWeight'], $row['probaTrash']/$row['totalWeight']);
 }
 
-/** Insertion des données d'une partie.
+/** Insertion des données d'une partie joué par un utilisateur.
+* @param user : L'identifiant de l'utilisateur ayant joué à la partie.
+* @param pgid : L'identifiant de la partie jouée.
+* @param gid : L'identifiant du jeu auquel la partie appartient.
+* @return score : Le score réalisé par le joueur.
 */
 function setGame($user, $pgid, $gid, $answers)
 {
@@ -511,4 +546,20 @@ function setGame($user, $pgid, $gid, $answers)
 	return $scores;
 }
 
+/** Fourni l'ensembles des relations pouvant apparaître dans le jeu.
+* @return array : un tableau de realtions.
+*/
+function get_game_relations()
+{
+		$reqlations = array();
+		$db = getDB();
+
+		// TODO modifier la requête pour ne sélectionner que les relations pertinentes.
+		$res = $db->query("SELECT num,name FROM type_relation");
+	
+		while($r = $res->fetchArray())
+			$relations[] = $r;
+
+		return $relations;
+}
 ?>
