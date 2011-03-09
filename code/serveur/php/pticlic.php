@@ -46,13 +46,15 @@ function cgBuildResultSets($cloudSize, $centerEid, $r1, $r2)
 	//   eid => l'eid du mot à mettre dans le nuage,
 	//   r1 => la probabilité pour que le mot soit dans r1, entre -1 et 1 (négatif = ne devrait pas y être, positif = devrait y être à coup sûr, 0 = on sait pas).
 	$typer1r2 = "type in ($r1, $r2)";
+	$banned_types = "4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001";
+	
 	$sources = array(
 		// Voisins 1 saut du bon type (= relations déjà existantes)
 		array('w'=>40, 'd'=>1, 's'=>"select end as eid, type = $r1 as r1, type = $r2 as r2, 0 as r0, 0 as trash from relation where start = $centerEid and $typer1r2 order by random();"),
 		// Voisins 1 saut via r_associated (0), donc qu'on voudrait spécifier si possible.
 		array('w'=>40, 'd'=>2, 's'=>"select end as eid, 0.25 as r1, 0.25 as r2, 0.5 as r0, 0 as trash from relation where start = $centerEid and type = 0 order by random();"),
 		// Voisins 1 saut via les autres relations
-		array('w'=>20, 'd'=>3.1, 's'=>"select end as eid, 0.1 as r1, 0.1 as r2, 0.8 as r0, 0 as trash from relation where start = $centerEid and type not in (0, $r1, $r2, 4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) order by random();"),
+		array('w'=>20, 'd'=>3.1, 's'=>"select end as eid, 0.1 as r1, 0.1 as r2, 0.8 as r0, 0 as trash from relation where start = $centerEid and type not in (0, $r1, $r2, $banned_types) order by random();"),
 		// Voisins 2 sauts, avec un mix de R1 et R2 pour les liens. Par ex [ A -R1-> B -R2-> C ] ou bien [ A -R2-> B -R2-> C ]
 		// Version optimisée de : "select end as eid from relation where $typer1r2 and start in oneHopWithType order by random();"
 		array('w'=>30, 'd'=>3.2, 's'=>"select B.end as eid, ((A.type = $r1) + (B.type = $r1)) / 3. as r1, ((A.type = $r2) + (B.type = $r2)) / 3. as r2, 1/6. as r0, 1/6. as trash from relation as A, relation as B where A.start = $centerEid and A.$typer1r2 and B.start = A.end and B.$typer1r2 order by random();"),
@@ -62,13 +64,13 @@ function cgBuildResultSets($cloudSize, $centerEid, $r1, $r2)
 		// Version optimisée de : "select end as eid from relation where start in (select end from relation where start = $centerEid and type = 5) and $typer1r2 order by random();"
 		array('w'=>20, 'd'=>6, 's'=>"select B.end as eid, (B.type = $r1) * 0.75 as r1, (B.type = $r2) * 0.75 as r2, 0.25 as r0, 0 as trash from relation as A, relation as B where A.start = $centerEid and A.type = 5 and B.start = A.end and B.$typer1r2 order by random();"),
 		// Voisins 2 sauts (tous)
-		// Version optimisée de : "select end as eid, 0.1 as r1, 0.1 as r2, 0.3 as r0, 0.5 as trash from relation where start in (select end from relation where start = $centerEid and type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001)) and type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) order by random();"
-		array('w'=>10, 'd'=>8, 's'=>"select x as eid, 0.1 as r1, 0.1 as r2, 0.3 as r0, 0.5 as trash from (select x from (select X.eid + Y.dumb as x from (select B.end as eid from relation as A, relation as B where A.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and A.start = $centerEid and B.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and B.start = A.end limit ".($cloudSize*4).") as X, (select 0 as dumb) as Y)) order by random();"),
+		// Version optimisée de : "select end as eid, 0.1 as r1, 0.1 as r2, 0.3 as r0, 0.5 as trash from relation where start in (select end from relation where start = $centerEid and type not in ($banned_types)) and type not in ($banned_types) order by random();"
+		array('w'=>10, 'd'=>8, 's'=>"select x as eid, 0.1 as r1, 0.1 as r2, 0.3 as r0, 0.5 as trash from (select x from (select X.eid + Y.dumb as x from (select B.end as eid from relation as A, relation as B where A.type not in ($banned_types) and A.start = $centerEid and B.type not in ($banned_types) and B.start = A.end limit ".($cloudSize*4).") as X, (select 0 as dumb) as Y)) order by random();"),
 		// Centre pointe vers X, M pointe vers X aussi, on prend M.
-		// Version optimisée de : "select start as eid from relation where end in (select end from relation where start = $centerEid) and type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) order by random();"
-		// Ce n'est toujours pas ça… : "select eid from (select B.start as eid from relation as A, relation as B where A.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and A.start = $centerEid and B.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and B.end = A.end limit 1) order by random();"
+		// Version optimisée de : "select start as eid from relation where end in (select end from relation where start = $centerEid) and type not in ($banned_types) order by random();"
+		// Ce n'est toujours pas ça… : "select eid from (select B.start as eid from relation as A, relation as B where A.type not in ($banned_types) and A.start = $centerEid and B.type not in ($banned_types) and B.end = A.end limit 1) order by random();"
 		// Tordu, mais ça marche \o/ . En fait il faut empêcher l'optimiseur de ramener le random avant le limit (et l'optimiseur est malin… :)
-		array('w'=>10, 'd'=>8, 's'=>"select x as eid, 0.1 as r1, 0.1 as r2, 0.2 as r0, 0.6 as trash from (select x from (select X.eid + Y.dumb as x from (select B.start as eid from relation as A, relation as B where A.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and A.start = $centerEid and B.type not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001) and B.end = A.end limit ".($cloudSize*4).") as X, (select 0 as dumb) as Y)) order by random();"),
+		array('w'=>10, 'd'=>8, 's'=>"select x as eid, 0.1 as r1, 0.1 as r2, 0.2 as r0, 0.6 as trash from (select x from (select X.eid + Y.dumb as x from (select B.start as eid from relation as A, relation as B where A.type not in ($banned_types) and A.start = $centerEid and B.type not in ($banned_types) and B.end = A.end limit ".($cloudSize*4).") as X, (select 0 as dumb) as Y)) order by random();"),
 		'rand' => array('w'=>5, 'd'=>10, 's'=>false) // random. Le r1 et r2 de random sont juste en-dessous
 	);
 
@@ -451,12 +453,12 @@ function getGame($user, $nbGames, $mode)
 function computeScore($probas, $difficulty, $answer, $userReputation) {
 	// Calcul du score. Score = proba[réponse de l'utilisateur]*coeff1 - proba[autres reponses]*coeff2 + bonus
 	// score = - proba[autres reponses]*coeff2
-	// On aura donc -0.7 <= score <= 0
-	$score = -0.7 * (($probas[0] + $probas[1] + $probas[2] + $probas[3]) - $probas[$answer]);
+	// On aura donc -5 <= score <= 0
+	$score = -5 * (($probas[0] + $probas[1] + $probas[2] + $probas[3]) - $probas[$answer]);
 	
 	// score = proba[réponse de l'utilisateur]*coeff1 - proba[autres reponses]*coeff2
-	// On aura donc -0.7 <= score <= 2
-	$score += 2 * $probas[$answer];
+	// On aura donc -5 <= score <= 10
+	$score += 10 * $probas[$answer];
 	
 	// On est indulgent si la réponse est 3 (poubelle) :
 	if ($answer == 3 && $score < 0) {
@@ -464,19 +466,19 @@ function computeScore($probas, $difficulty, $answer, $userReputation) {
 	}
 	
 	// Adapter le score en fonction de la réputation de l'utilisateur (quand il est jeune, augmenter le score pour le motiver).
-	// On aura donc -0.7 <= score <= 3
-	if ($score > 0.6) {
-		$score += max(0, min(1, 1 - ($userReputation / 4)));
+	// On aura donc -5 <= score <= 15
+	if ($score > 3) {
+		$score += max(0, min(5, 5 - $userReputation));
 	}
 	
-	return round($score * 100) / 100;
+	return round($score);
 }
 
 /** Calcul de la réputation de l'utilisateur selon son score.
 * @param score : Le score du joueur.
 */
 function computeUserReputation($score) {
-	return max(round(log($score)*100)/100, 0);
+	return max(round(log($score/10)*100)/100, 0);
 }
 
 /** Formatage des probalitées dans un tableau.
