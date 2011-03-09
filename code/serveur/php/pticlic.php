@@ -554,6 +554,7 @@ function get_game_relations()
 		$reqlations = array();
 		$db = getDB();
 
+		// TODO modifier la requête pour ne sélectionner que les relations pertinentes.
 		$res = $db->query("SELECT num,name FROM type_relation");
 	
 		while($r = $res->fetchArray())
