@@ -1,5 +1,6 @@
 <?php
 require_once("ressources/strings.inc");
+require_once("pticlic.php");
 session_start();
 
 $state = 0;
@@ -17,6 +18,8 @@ if(isset($_POST['nbcloudwords'])) {
 		$state = 1;
 	
 	if($state == 1) {
+		$relations = get_game_relations();
+
 		for($i = 0; $i < $nbwords; $i++)
 			if(!isset($_POST['word'.$i]) || empty($_POST['word'.$i])) {
 				$err = true;
@@ -67,6 +70,16 @@ if($err == false)
 					}
 					elseif($state == 1) {
 						echo '<table class="wordsform">';
+						echo '<tr><td><label for="relation1">Relation 1 : </label></td>';
+						echo '<td class="inputcell"><select name="relation1">';
+							foreach($relations as $r)
+								echo '<option value="'.$r[0].'">'.$r[1].'</option>';
+						echo '</select></td>';
+						echo '<td><label for="relation2">Relation 2 : </label></td>';
+						echo '<td class="inputcell"><select name="relation2">';
+							foreach($relations as $r)
+								echo '<option value="'.$r[0].'">'.$r[1].'</option>';
+						echo '</select></td>';
 						echo '<input type="hidden" name="nbcloudwords" value="'.$nbwords.'" />';
 						echo '<tr><td colspan="2"><label for="centralword">Mot central : </label><br /><br /></td>';
 						echo '<td colspan="2" class="inputcell"><input type="text" name="centralword" value="';

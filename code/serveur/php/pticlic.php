@@ -546,4 +546,19 @@ function setGame($user, $pgid, $gid, $answers)
 	return $scores;
 }
 
+/** Fourni l'ensembles des relations pouvant apparaître dans le jeu.
+* @return array : un tableau de realtions.
+*/
+function get_game_relations()
+{
+		$reqlations = array();
+		$db = getDB();
+
+		$res = $db->query("SELECT num,name FROM type_relation");
+	
+		while($r = $res->fetchArray())
+			$relations[] = $r;
+
+		return $relations;
+}
 ?>
