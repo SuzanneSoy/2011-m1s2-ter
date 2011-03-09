@@ -45,7 +45,15 @@ public class PtiClicException extends Exception {
 	}
 
 	public String getMessage() {
-		return "Erreur numero: " + error.getNum() + "\n" + error.getMsg();
+		if (error == null) {
+			return "Erreur inconnue !";
+		} else {
+			int n = error.getNum();
+			String s = error.getMsg();
+			if (s == null) {
+				return "Erreur inconnue !";
+			}
+			return "Erreur numero: " + error.getNum() + "\n" + error.getMsg();
+		}
 	}
-
 }

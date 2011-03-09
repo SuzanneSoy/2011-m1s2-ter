@@ -67,7 +67,7 @@ public class FrontPage extends Activity implements OnClickListener{
 	private void checkAllIsOk(Class c) {
 		if (Network.isConnected(this)) {
 			if (Network.isLoginCorrect(this)) {
-			startActivity(new Intent(this, c));
+				startActivity(new Intent(this, c));
 			} else {
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				builder.setTitle(getString(R.string.app_name))
