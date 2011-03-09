@@ -65,28 +65,32 @@ if($err == false)
 						echo '<td><input type="text" name="nbcloudwords" /></td></tr>';
 						echo '<tr><td></td><td><input type="submit" value="suivant" /></td></tr>';			
 					}
-					else {
+					elseif($state == 1) {
 						echo '<table class="wordsform">';
 						echo '<input type="hidden" name="nbcloudwords" value="'.$nbwords.'" />';
 						echo '<tr><td colspan="2"><label for="centralword">Mot central : </label><br /><br /></td>';
-						echo '<td colspan="2" class="inputcell"><input type="text" name="centralword" /><br /><br /></td>';
+						echo '<td colspan="2" class="inputcell"><input type="text" name="centralword" value="';
+							if(isset($_POST['centralword'])) echo $_POST['centralword'];
+						echo '"/><br /><br /></td>';
 				
 						for($i = 0; $i < $nbwords; $i++) {
-							if($i % 2 == 0) {
-								echo '</tr><tr><td><label for="word'.$i.'">Mot '.($i+1).' : </label></td>';
-								echo '<td class="inputcell"><input type="text" name="word'.$i.'" /></td>';
-							}
-							else {
-								echo '<td><label for="word'.$i.'">Mot '.($i+1).' : </label></td>';
-								echo '<td class="inputcell"><input type="text" name="word'.$i.'" /></td>';
-							}
+							if($i % 2 == 0)
+								echo '</tr><tr>';								
+
+							echo '<td><label for="word'.$i.'">Mot '.($i+1).' : </label></td>';
+							echo '<td class="inputcell"><input type="text" name="word'.$i.'" value="';
+								if(isset($_POST['word'.$i])) echo $_POST['word'.$i];
+							echo '" /></td>';
 						}
 				
 						if($nbwords % 2 != 0)
 							echo '<td></td>';
 
 						echo '</tr><tr><td colspan="2"></td><td colspan="2" class="td2"><input type="submit" value="Enregistrer la partie" /></td></tr>';
-					}			
+					}
+					else {
+
+					}
 					?>
 				</table>
 			</form>
