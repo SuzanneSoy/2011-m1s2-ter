@@ -27,23 +27,21 @@ public class Preference extends PreferenceActivity implements OnSharedPreference
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("passwd")) {
+			
+			SharedPreferences.Editor editor = sharedPreferences.edit();
+			editor.putBoolean(Constant.SERVER_AUTH, false);
+			editor.commit();
+			
 			if (Network.isConnected(this)) {
 				if (Network.isLoginCorrect(this)) {
 					Toast.makeText(this,
 							getString(R.string.preferences_loginmdp_valid),
 							Toast.LENGTH_LONG).show();
 					
-					SharedPreferences.Editor editor = sharedPreferences.edit();
-					editor.putBoolean(Constant.SERVER_AUTH, true);
-					editor.commit();
 				} else {
 					Toast.makeText(this,
 							getString(R.string.preferences_loginmdp_notvalid),
 							Toast.LENGTH_LONG).show();
-					
-					SharedPreferences.Editor editor = sharedPreferences.edit();
-					editor.putBoolean(Constant.SERVER_AUTH, false);
-					editor.commit();
 				}
 			} else {
 				Toast.makeText(this,

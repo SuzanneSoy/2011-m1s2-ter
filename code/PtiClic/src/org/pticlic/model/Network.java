@@ -1,13 +1,11 @@
 package org.pticlic.model;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 
 import org.pticlic.exception.PtiClicException;
 
@@ -121,7 +119,12 @@ public class Network {
 		String serverURL = sp.getString(Constant.SERVER_URL, Constant.SERVER) + "/server.php";
 		String id = sp.getString(Constant.USER_ID, "joueur");
 		String passwd = sp.getString(Constant.USER_PASSWD, "");
+		Boolean auth = sp.getBoolean(Constant.SERVER_AUTH, false);
 
+		if (auth) {
+			return auth;
+		}
+		
 		Gson gson = null;
 		String json = null;
 		boolean res = false;
@@ -137,6 +140,10 @@ public class Network {
 		Check check = gson.fromJson(json, Check.class);
 		res = check.isLogin_ok();
 
+		SharedPreferences.Editor editor = sp.edit();
+		editor.putBoolean(Constant.SERVER_AUTH, res);
+		editor.commit();
+		
 		return res;
 	}
 

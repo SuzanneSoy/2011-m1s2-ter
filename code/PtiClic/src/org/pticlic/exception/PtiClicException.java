@@ -48,7 +48,6 @@ public class PtiClicException extends Exception {
 		if (error == null) {
 			return "Erreur inconnue !";
 		} else {
-			int n = error.getNum();
 			String s = error.getMsg();
 			if (s == null) {
 				return "Erreur inconnue !";
