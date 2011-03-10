@@ -44,6 +44,9 @@ if(isset($_POST['nbcloudwords'])) {
 			$msg = $strings['err_creategame_eq_relations'];
 		}
 	}
+	else if($state == 2) {
+
+	}
 	else {
 		$err = true;
 		$msg = $strings['err_creategame_fill_all'];
@@ -93,7 +96,7 @@ else
 						echo '<tr><td><label for="relation1">Relation 1 : </label></td>';
 						echo '<td class="inputcell"><select name="relation1">';
 							foreach($relations as $key=>$r)
-								echo '<option value="'.$ey.'">'.$r[1].'</option>';
+								echo '<option value="'.$key.'">'.$r[1].'</option>';
 						echo '</select></td>';
 						echo '<td><label for="relation2">Relation 2 : </label></td>';
 						echo '<td class="inputcell"><select name="relation2">';
@@ -129,13 +132,13 @@ else
 
 						foreach($words as $key=>$w) {
 							echo '<td>'.$w.'</td><td class="inputcell">';
-							echo '<input type="radio" name="'.$key.'" id="'.$key.'_r1" value="0">';
+							echo '<input type="radio" name="rd'.$key.'" id="'.$key.'_r1" value="0">';
 							echo '<label for="'.$key.'_r1">'.$rels[0].'</label><br />';
-							echo '<input type="radio" name="'.$key.'" id="'.$key.'_r2" value="1">';
+							echo '<input type="radio" name="rd'.$key.'" id="'.$key.'_r2" value="1">';
 							echo '<label for="'.$key.'_r2">'.$rels[1].'</label><br />';
-							echo '<input type="radio" name="'.$key.'" id="'.$key.'_r3" value="2">';
+							echo '<input type="radio" name="rd'.$key.'" id="'.$key.'_r3" value="2">';
 							echo '<label for="'.$key.'_r3">'.$rels[2].'</label><br />';
-							echo '<input type="radio" name="'.$key.'" id="'.$key.'_r4" value="3">';
+							echo '<input type="radio" name="rd'.$key.'" id="'.$key.'_r4" value="3">';
 							echo '<label for="'.$key.'_r4">'.$rels[3].'</label></td>';
 
 							if($key%2 != 0)
