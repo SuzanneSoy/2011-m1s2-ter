@@ -2,6 +2,31 @@
 
 require_once("db.php");
 
+/* Les prototypes des fonctions :
+* ===============================>
+*   checkLogin($user, $passwd);
+*   randomCenterNode();
+*   randomCloudNode();
+*   cgBuildResultSets($cloudSize, $centerEid, $r1, $r2);
+*   cgChooseRelations();
+*   cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights);
+*   cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
+*   randomGameCore();
+*   randomGame();
+*   formatWord($word);
+*   game2json($user, $gameId);
+*   game2array($user, $gameId);
+*   createGame($nbParties, $mode);
+*   createGameCore($cloudSize);
+*   getGame($user, $nbGames, $mode);
+*   computeScore($probas, $difficulty, $answer, $userReputation);
+*   computeUserReputation($score);
+*   normalizeProbas($row);
+*   setGame($user, $pgid, $gid, $answers);
+*   get_game_relations();
+*/
+
+
 /**  Vérifie la validité du couple nom d'utilisateur / mot de passe.
 * @param user : Le nom d'utilisateur.
 * @param passwd : Le mot de passe.
