@@ -24,33 +24,43 @@ import android.widget.TextView;
  * 
  * Permet l'affichage du score obtenu par le joueur lors de sa partie.
  */
-public class Score extends Activity implements OnClickListener{
+public class BaseScore extends Activity implements OnClickListener{
 	
 	private Match 			gamePlayed;
+	
+	private void networkStuff() {
+		String id = sp.getString(Constant.USER_ID, "joueur");
+		String passwd = sp.getString(Constant.USER_PASSWD, "");
+		Mode mode = null;
+		
+		if (getIntent().getExtras() != null) {
+			// GamePlayed contient toutes les infos sur la partie jouee
+			this.gamePlayed = (Match) getIntent().getExtras().get(Constant.SCORE_GAMEPLAYED);
+			mode = (Mode) getIntent().getExtras().get(Constant.SCORE_MODE);
+		}
+		
+		// TODO : factoriser le serverUrl dans Network
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+		String serverURL = sp.getString(Constant.SERVER_URL, Constant.SERVER);
+		Network network = new Network(serverURL, mode, id, passwd);
+		try {
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.score);
 		
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-		String serverURL = sp.getString(Constant.SERVER_URL, Constant.SERVER);
-		String id = sp.getString(Constant.USER_ID, "joueur");
-		String passwd = sp.getString(Constant.USER_PASSWD, "");
-		Mode mode = null;
 		
-		if (getIntent().getExtras() != null) {
-			// Pour JC : GamePlayed contient toutes les infos sur la partie jouee
-			this.gamePlayed = (Match) getIntent().getExtras().get(Constant.SCORE_GAMEPLAYED);
-			mode = (Mode) getIntent().getExtras().get(Constant.SCORE_MODE);
-		}
-
-		Network network = new Network(serverURL, mode, id, passwd);
-		try {
 			// Permet de regler la precision : rajoute/enlever des # pour modifier la precision
 			DecimalFormat dfrmtr = new DecimalFormat("#.##");
 			Double score = network.sendGame(gamePlayed);
 			((TextView)findViewById(R.id.total)).setText(String.valueOf(dfrmtr.format(score)));
+			// TODO : Attention, le cast en (BaseGame) n'est pas sûr !
+			((TextView)findViewById(R.id.scoreRel1)).setText("Foo1");
+			((TextView)findViewById(R.id.scoreRel2)).setText("Foo2");
+			((TextView)findViewById(R.id.scoreRel3)).setText("Foo3");
+			((TextView)findViewById(R.id.scoreRel4)).setText("Foo4");
 			sp.edit().putString(Constant.NEW_BASE_GAME, network.getNewGame()).commit();			
 		} catch (PtiClicException e) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);

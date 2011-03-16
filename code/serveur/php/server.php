@@ -73,7 +73,7 @@ function main()
 		$scores = setGame($user, intval($_GET['pgid']), intval($_GET['gid']), $_GET);
 		// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
 		echo "{\"score\":".$scores['total'].",\"newGame\":";
-		game2json($user, randomGame());
+		json_encode("".game2json($user, randomGame()));
 		echo "}";
 	} else {
 		throw new Exception("Commande inconnue", 2);

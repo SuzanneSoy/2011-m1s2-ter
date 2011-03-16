@@ -28,6 +28,18 @@ import com.google.gson.stream.JsonReader;
  */
 public class Network {
 
+	public static class ScoreResponse {
+		private int score;
+		private String newGame;
+		public ScoreResponse() {}
+		public int getScore() {
+			return score;
+		}
+		public String getNewGame() {
+			return newGame;
+		}
+	}
+
 	public static class Check implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private boolean login_ok = false;
@@ -124,16 +136,16 @@ public class Network {
 		if (auth) {
 			return auth;
 		}
-		
+
 		Gson gson = null;
 		String json = null;
 		boolean res = false;
-		
+
 		String urlS = serverURL
-			+ "?action=" + Action.CHECK_LOGIN.value()
-			+ "&user=" + id
-			+ "&passwd=" + passwd;
-		
+		+ "?action=" + Action.CHECK_LOGIN.value()
+		+ "&user=" + id
+		+ "&passwd=" + passwd;
+
 		gson = new Gson();
 		json = HttpClient.SendHttpPost(urlS);
 
@@ -143,7 +155,7 @@ public class Network {
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putBoolean(Constant.SERVER_AUTH, res);
 		editor.commit();
-		
+
 		return res;
 	}
 
@@ -174,12 +186,12 @@ public class Network {
 		//		connection.addRequestProperty("mode", mode.value());
 
 		String urlS = this.serverURL
-			+ "?action=" + Action.GET_GAMES.value()
-			+ "&user=" + this.id
-			+ "&passwd=" + this.passwd
-			+ "&nb=" + String.valueOf(nbGames)
-			+ "&mode="+mode.value();
-			
+		+ "?action=" + Action.GET_GAMES.value()
+		+ "&user=" + this.id
+		+ "&passwd=" + this.passwd
+		+ "&nb=" + String.valueOf(nbGames)
+		+ "&mode="+mode.value();
+
 		gson = new Gson();
 		json = HttpClient.SendHttpPost(urlS);
 
@@ -261,99 +273,62 @@ public class Network {
 	 * @param game La partie jouee par l'utilisateur 
 	 * @return Le score sous forme JSON.
 	 */
-	public double sendGame(Match game) throws PtiClicException, Exception  {
+	public ScoreResponse sendGame(Match game) throws PtiClicException, Exception  {
 		switch (mode) {
 		case SIMPLE_GAME:
 			return sendBaseGame(game);
 		default:
-			return -1;
+			return null;
 		}
 	}
 
-
-	public double sendBaseGame(Match game) throws PtiClicException, Exception {
+	public ScoreResponse sendBaseGame(Match game) throws PtiClicException, Exception {
 		double score = -1;
 		Gson gson = null;
 		String json = null;
-		try {
 
-			// TODO : ne restera le temps que les requete du serveur passe du GET au POST
-			String urlS = this.serverURL
-			+ "?action=" + Action.SEND_GAME.value()
-			+ "&user=" + this.id
-			+ "&passwd=" + this.passwd
-			+ "&pgid=" + game.getGame().getPgid()
-			+ "&gid=" + game.getGame().getGid()
-			+ "&mode="+mode.value();
+		// TODO : ne restera le temps que les requete du serveur passe du GET au POST
+		String urlS = this.serverURL
+		+ "?action=" + Action.SEND_GAME.value()
+		+ "&user=" + this.id
+		+ "&passwd=" + this.passwd
+		+ "&pgid=" + game.getGame().getPgid()
+		+ "&gid=" + game.getGame().getGid()
+		+ "&mode="+mode.value();
 
-			// TODO : faut gere le mode
-			for (Integer i : game.getRelation1()) {
-				urlS += "&" + i + "=" + ((DownloadedBaseGame)game.getGame()).getCat1() ;
-			}
-			for (Integer i : game.getRelation2()) {
-				urlS += "&" +  i + "=" + ((DownloadedBaseGame)game.getGame()).getCat2();
-			}
-			for (Integer i : game.getRelation3()) {
-				urlS += "&" +  i + "=" + ((DownloadedBaseGame)game.getGame()).getCat3();
-			}
-			for (Integer i : game.getRelation4()) {
-				urlS += "&" + i + "=" + ((DownloadedBaseGame)game.getGame()).getCat4();
-			}
-
-			//			URL url = new URL(this.serverURL); // Attention ! this.serverURL contient "/server.php"
-			//			URLConnection connection = url.openConnection();
-			//			connection.addRequestProperty("action", Action.SEND_GAME.value());
-			//			connection.addRequestProperty("user", this.id);
-			//			connection.addRequestProperty("passwd", this.passwd);
-			//			connection.addRequestProperty("mode", mode.value());
-			//			connection.addRequestProperty("pgid", String.valueOf(game.getGame().getId()));
-
-			gson = new Gson();
-			json = HttpClient.SendHttpPost(urlS);
-
-			//JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-			InputStream in = new ByteArrayInputStream(json.getBytes("UTF-8"));
-			JsonReader jsonReader = new JsonReader(new InputStreamReader(in));
-
-			// Comme gson ne renvoie pas une erreur si l'objet qui recupere ne correspond pas a la classe qu'il attends.
-			// On creer tout d'abord une objet error et si celui-ci est vide on creer l'objet score, sinon on lance
-			// une exception.
-			PtiClicException.Error error = gson.fromJson(json, PtiClicException.Error.class);
-			if (error.getMsg() == null) {
-				score = getScore(jsonReader, gson);
-			} else {
-				throw new PtiClicException(error);
-			}
-
-		} catch (UnsupportedEncodingException e1) {
-			throw new PtiClicException(0, "Impossible de recuperer l'erreur, nous avons pris note de cette erreur.\n Merci");
-		} catch (IOException e1) {
-			throw new PtiClicException(0, "Impossible de recuperer l'erreur, nous avons pris note de cette erreur.\n Merci");
+		// TODO : faut gere le mode
+		for (Integer i : game.getRelation1()) {
+			urlS += "&" + i + "=" + ((DownloadedBaseGame)game.getGame()).getCat1() ;
+		}
+		for (Integer i : game.getRelation2()) {
+			urlS += "&" +  i + "=" + ((DownloadedBaseGame)game.getGame()).getCat2();
+		}
+		for (Integer i : game.getRelation3()) {
+			urlS += "&" +  i + "=" + ((DownloadedBaseGame)game.getGame()).getCat3();
+		}
+		for (Integer i : game.getRelation4()) {
+			urlS += "&" + i + "=" + ((DownloadedBaseGame)game.getGame()).getCat4();
 		}
 
-		return score;
-	}
+		//			URL url = new URL(this.serverURL); // Attention ! this.serverURL contient "/server.php"
+		//			URLConnection connection = url.openConnection();
+		//			connection.addRequestProperty("action", Action.SEND_GAME.value());
+		//			connection.addRequestProperty("user", this.id);
+		//			connection.addRequestProperty("passwd", this.passwd);
+		//			connection.addRequestProperty("mode", mode.value());
+		//			connection.addRequestProperty("pgid", String.valueOf(game.getGame().getId()));
 
-	private double getScore(JsonReader reader, Gson gson) throws IOException {
-		double					score = -1;
+		gson = new Gson();
+		json = HttpClient.SendHttpPost(urlS);
 
-		reader.beginObject();
-		while (reader.hasNext()) {
-			String name = reader.nextName();
-			if (name.equals("score")) {
-				score = reader.nextDouble();
-			} else if (name.equals("newGame")) {
-				DownloadedBaseGame newGame = gson.fromJson(reader, DownloadedBaseGame.class);
-				newGameJson = gson.toJson(newGame);
-			} else {
-				reader.skipValue();
-			}
+		// Comme gson ne renvoie pas une erreur si l'objet qui recupere ne correspond pas a la classe qu'il attends.
+		// On creer tout d'abord une objet error et si celui-ci est vide on creer l'objet score, sinon on lance
+		// une exception.
+		PtiClicException.Error error = gson.fromJson(json, PtiClicException.Error.class);
+		if (error.getMsg() == null) {
+			return gson.fromJson(json, ScoreResponse.class);
+		} else {
+			throw new PtiClicException(error);
 		}
-		reader.endObject();
-		return score;	
-	}
-
-	public String getNewGame() {
-		return this.newGameJson;
 	}
 }

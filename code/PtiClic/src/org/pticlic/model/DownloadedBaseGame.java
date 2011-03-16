@@ -69,10 +69,23 @@ public class DownloadedBaseGame extends DownloadedGame {
 		return word.getName();
 	}
 	
+	public int getCat(int numCat) {
+		switch (numCat) {
+		case 1: return getCat1();
+		case 2: return getCat2(); 
+		case 3: return getCat3(); 
+		default: return getCat4(); 
+		}
+	}
+	
+	public String getCatString(int numCat) {
+		return Relation.getInstance().getRelationName(this.getCat(numCat));
+	}
+
 	public int getCat1() {
 		return cat1;
 	}
-
+	
 	public void setCat1(int cat1) {
 		this.cat1 = cat1;
 	}

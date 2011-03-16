@@ -13,7 +13,7 @@
     <activity android:name=".Preference" android:label="Préférence" android:screenOrientation="portrait"></activity>
     <activity android:name=".games.BaseGame" android:screenOrientation="portrait"></activity>
     <activity android:label="Information" android:name=".Information" android:screenOrientation="portrait"></activity>
-    <activity android:name=".Score" android:label="Score" android:screenOrientation="portrait"></activity>
+    <activity android:name="BaseScore" android:label="Score" android:screenOrientation="portrait"></activity>
 <activity android:name="FrontPage" android:screenOrientation="portrait"></activity>
 </application>
 
