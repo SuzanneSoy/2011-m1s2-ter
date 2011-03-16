@@ -283,7 +283,6 @@ public class Network {
 	}
 
 	public ScoreResponse sendBaseGame(Match game) throws PtiClicException, Exception {
-		double score = -1;
 		Gson gson = null;
 		String json = null;
 
@@ -324,11 +323,13 @@ public class Network {
 		// Comme gson ne renvoie pas une erreur si l'objet qui recupere ne correspond pas a la classe qu'il attends.
 		// On creer tout d'abord une objet error et si celui-ci est vide on creer l'objet score, sinon on lance
 		// une exception.
-		PtiClicException.Error error = gson.fromJson(json, PtiClicException.Error.class);
-		if (error.getMsg() == null) {
-			return gson.fromJson(json, ScoreResponse.class);
+		int foo = 42;
+		ScoreResponse sr = gson.fromJson(json, ScoreResponse.class);
+		foo = foo + 1;
+		if (sr.getNewGame() == null) {
+			throw new PtiClicException(gson.fromJson(json, PtiClicException.Error.class));
 		} else {
-			throw new PtiClicException(error);
+			return sr;
 		}
 	}
 }
