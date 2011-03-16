@@ -2,6 +2,31 @@
 
 require_once("db.php");
 
+/* Les prototypes des fonctions :
+* ===============================>
+*   checkLogin($user, $passwd);
+*   randomCenterNode();
+*   randomCloudNode();
+*   cgBuildResultSets($cloudSize, $centerEid, $r1, $r2);
+*   cgChooseRelations();
+*   cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights);
+*   cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
+*   randomGameCore();
+*   randomGame();
+*   formatWord($word);
+*   game2json($user, $gameId);
+*   game2array($user, $gameId);
+*   createGame($nbParties, $mode);
+*   createGameCore($cloudSize);
+*   getGame($user, $nbGames, $mode);
+*   computeScore($probas, $difficulty, $answer, $userReputation);
+*   computeUserReputation($score);
+*   normalizeProbas($row);
+*   setGame($user, $pgid, $gid, $answers);
+*   get_game_relations();
+*/
+
+
 /**  Vérifie la validité du couple nom d'utilisateur / mot de passe.
 * @param user : Le nom d'utilisateur.
 * @param passwd : Le mot de passe.
@@ -559,7 +584,10 @@ function get_game_relations()
 		$db = getDB();
 
 		// TODO modifier la requête pour ne sélectionner que les relations pertinentes.
-		$res = $db->query("SELECT num,name FROM type_relation");
+		$res = $db->query("SELECT num,extended_name
+							FROM type_relation
+							WHERE num=5 OR num=7 OR num=9
+								OR num=10 OR num=13 OR num=14 OR num=22");
 	
 		while($r = $res->fetchArray())
 			$relations[] = $r;

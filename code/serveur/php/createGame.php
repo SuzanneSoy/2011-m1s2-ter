@@ -7,6 +7,54 @@ $state = 0;
 $err = false;
 $msg = "";
 
+function getWords($nbwords)
+{
+	global $msg;
+	global $err;
+	$words = array();	
+
+	for($i = 0; $i < $nbwords; $i++)
+		if(!isset($_POST['word'.$i]) || empty($_POST['word'.$i])) {
+			$err = true;
+			$msg = $strings['err_creategame_fill_all'];
+			return -1;
+		}
+		else
+			$words[$i] = $_POST['word'.$i];
+
+	return $words;
+}
+
+function getWordsAndResponses($nbwords)
+{
+	global $err;
+	global $msg;
+	$words = array();
+	$respwords = array();
+	
+	$words = getWords($nbwords);
+
+	if($words == -1)
+		return -1;
+
+	foreach($words as $key=>$w) {
+		if(isset($_POST['rd'.$key])) {
+			$respwords[$key] = array();
+			$respwords[$key][0] = $words[$key];
+			$respwords[$key][1] = $_POST['rd'.$key];
+		}
+		else
+			return -1;
+	}
+
+	return $respwords;
+}
+
+function checked($name, $value) {
+	if(isset($_POST[$name]) && $_POST[$name] == $value)
+		return 'checked';
+}
+
 if(isset($_POST['nbcloudwords'])) {
 	$nbwords = $_POST['nbcloudwords'];
 
@@ -27,14 +75,7 @@ if(isset($_POST['nbcloudwords'])) {
 			$rels[2] = "Est en rapport avec";
 			$rels[3] = "N'a aucun rapport avec";
 			
-			for($i = 0; $i < $nbwords; $i++)
-				if(!isset($_POST['word'.$i]) || empty($_POST['word'.$i])) {
-					$err = true;
-					$msg = $strings['err_creategame_fill_all'];
-					break;
-				}
-				else
-					$words[$i] = $_POST['word'.$i];
+			$words = getWords($nbwords);
 
 			if($err != true)
 				$state = 2;
@@ -43,6 +84,15 @@ if(isset($_POST['nbcloudwords'])) {
 			$err = true;
 			$msg = $strings['err_creategame_eq_relations'];
 		}
+	}
+	
+	if($state == 2) {
+		$respwords = getWordsAndResponses($nbwords);
+
+		if($respwords != -1) {
+
+		}
+
 	}
 	else {
 		$err = true;
@@ -93,7 +143,7 @@ else
 						echo '<tr><td><label for="relation1">Relation 1 : </label></td>';
 						echo '<td class="inputcell"><select name="relation1">';
 							foreach($relations as $key=>$r)
-								echo '<option value="'.$ey.'">'.$r[1].'</option>';
+								echo '<option value="'.$key.'">'.$r[1].'</option>';
 						echo '</select></td>';
 						echo '<td><label for="relation2">Relation 2 : </label></td>';
 						echo '<td class="inputcell"><select name="relation2">';
@@ -122,20 +172,25 @@ else
 						echo '</tr><tr><td colspan="2"></td><td colspan="2" class="td2"><input type="submit" value="Enregistrer la partie" /></td></tr>';
 					}
 					else {
-						echo '<table class="wordsform">';
 						echo 'Mot central : ';
 						echo $centralword;
-						echo '<tr>';						
+						echo '<input type="hidden" name="centralword" value="'.$centralword.'" />';
+						echo '<input type="hidden" name="nbcloudwords" value="'.$nbwords.'" />';
+						echo '<input type="hidden" name="relation1" value="'.$_POST['relation1'].'" />';
+						echo '<input type="hidden" name="relation2" value="'.$_POST['relation2'].'" />';
+						echo '<table class="wordsform">';
+						echo '<tr>';
 
 						foreach($words as $key=>$w) {
 							echo '<td>'.$w.'</td><td class="inputcell">';
-							echo '<input type="radio" name="'.$key.'" id="'.$key.'_r1" value="0">';
+							echo '<input type="hidden" name="word'.$key.'" value="'.$w.'" />';
+							echo '<input type="radio"  name="rd'.$key.'" id="'.$key.'_r1" value="0" '.checked("rd".$key,0).'>';
 							echo '<label for="'.$key.'_r1">'.$rels[0].'</label><br />';
-							echo '<input type="radio" name="'.$key.'" id="'.$key.'_r2" value="1">';
+							echo '<input type="radio" name="rd'.$key.'" id="'.$key.'_r2" value="1" '.checked("rd".$key,1).'>';
 							echo '<label for="'.$key.'_r2">'.$rels[1].'</label><br />';
-							echo '<input type="radio" name="'.$key.'" id="'.$key.'_r3" value="2">';
+							echo '<input type="radio" name="rd'.$key.'" id="'.$key.'_r3" value="2" '.checked("rd".$key,2).'>';
 							echo '<label for="'.$key.'_r3">'.$rels[2].'</label><br />';
-							echo '<input type="radio" name="'.$key.'" id="'.$key.'_r4" value="3">';
+							echo '<input type="radio" name="rd'.$key.'" id="'.$key.'_r4" value="3" '.checked("rd".$key,3).'>';
 							echo '<label for="'.$key.'_r4">'.$rels[3].'</label></td>';
 
 							if($key%2 != 0)
@@ -143,10 +198,10 @@ else
 						}
 						
 						if(count($words)%2 != 0)
-							echo '<td></td><td></td>';
+							echo '<td colspan="2"></td>';
 
 						echo '</tr>';
-						echo '<tr><td><input type="submit" value="Enregistrer" /></td></tr>';
+						echo '<tr><td colspan="4"><input type="submit" value="Enregistrer" /></td></tr>';
 					}
 					?>
 				</table>
