@@ -73,7 +73,7 @@ function main()
 		$scores = setGame($user, intval($_GET['pgid']), intval($_GET['gid']), $_GET);
 		// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
 		echo "{\"scoreTotal\":".$scores['total'];
-		echo ',"scores":['
+		echo ',"scores":[';
 		for (i = 0; i < $scores['nb']; i++) {
 			if (i != 0) echo ',';
 			echo $scores[i];
