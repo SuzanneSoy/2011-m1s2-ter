@@ -1,7 +1,7 @@
 package org.pticlic.games;
 
 import org.pticlic.R;
-import org.pticlic.Score;
+import org.pticlic.BaseScore;
 import org.pticlic.exception.PtiClicException;
 import org.pticlic.model.Constant;
 import org.pticlic.model.DownloadedBaseGame;
@@ -283,7 +283,7 @@ public class BaseGame extends Activity implements OnClickListener {
 			leaveView();
 			start();
 		} else {
-			Intent intent = new Intent(this, Score.class);
+			Intent intent = new Intent(this, BaseScore.class);
 			intent.putExtra(Constant.SCORE_GAMEPLAYED, match);
 			intent.putExtra(Constant.SCORE_MODE, Mode.SIMPLE_GAME);
 

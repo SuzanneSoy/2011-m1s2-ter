@@ -335,9 +335,10 @@ function game2json($user, $gameId)
 	$game = $db->query("select gid, (select name from node where eid = eid_central_word) as name_central_word, eid_central_word, relation_1, relation_2 from game where gid = ".$gameId.";");
 	$game = $game->fetchArray();
 	
-	echo '{"gid":'.$gameId.',"pgid":'.$pgid.',"cat1":'.$game['relation_1'].',"cat2":'.$game['relation_2'].',"cat3":0,"cat4":-1,';
-	echo '"center":{"id":'.$game['eid_central_word'].',"name":'.json_encode(''.formatWord($game['name_central_word'])).'},';
-	echo '"cloudsize":10,"cloud":['; // TODO ! compter dynamiquement.
+	$retstr = "";
+	$retstr .= '{"gid":'.$gameId.',"pgid":'.$pgid.',"cat1":'.$game['relation_1'].',"cat2":'.$game['relation_2'].',"cat3":0,"cat4":-1,';
+	$retstr .= '"center":{"id":'.$game['eid_central_word'].',"name":'.json_encode(''.formatWord($game['name_central_word'])).'},';
+	$retstr .= '"cloudsize":10,"cloud":['; // TODO ! compter dynamiquement.
 	
 	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word from game_cloud where gid = ".$gameId.";");
 	$notfirst = false;
@@ -345,14 +346,15 @@ function game2json($user, $gameId)
 	while ($x = $res->fetchArray())
 	{
 		if ($notfirst) 
-			echo ",";
+			$retstr .= ",";
 		else
 			$notfirst=true;
 
-		echo '{"id":'.$x['eid_word'].',"name":'.json_encode("".formatWord($x['name_word'])).'}';
+		$retstr .= '{"id":'.$x['eid_word'].',"name":'.json_encode("".formatWord($x['name_word'])).'}';
 	}
 
-	echo "]}";
+	$retstr .= "]}";
+	return $retstr;
 }
 
 /** Récupère une partie sous forme de tableau.
@@ -440,7 +442,7 @@ function getGame($user, $nbGames, $mode)
 
 	for ($i=0; $i < $nbGames; $i)
 	{
-		game2json($user, randomGame());
+		echo game2json($user, randomGame());
 
 		if ((++$i) < $nbGames)
 			echo ",";

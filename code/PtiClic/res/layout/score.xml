@@ -7,6 +7,10 @@ android:id="@+id/LinearLayout01" android:layout_gravity="center" android:layout_
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2" android:orientation="vertical" android:layout_weight="2">
         <TextView android:layout_width="fill_parent" android:id="@+id/textView1" android:layout_height="wrap_content" android:text="Votre score est de :" android:gravity="center" android:layout_weight="1"></TextView>
         <TextView android:layout_width="fill_parent" android:id="@+id/total" android:layout_height="wrap_content" android:text="@+id/total" android:textStyle="bold" android:textSize="25px" android:layout_weight="1" android:gravity="center|top"></TextView>
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/scoreRel1" android:text="@+id/scoreRel1"></TextView>
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/scoreRel2" android:text="@+id/scoreRel2"></TextView>
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/scoreRel3" android:text="@+id/scoreRel3"></TextView>
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/scoreRel4" android:text="@+id/scoreRel4"></TextView>
     </LinearLayout>
 <LinearLayout android:layout_width="fill_parent" android:id="@+id/linearLayout1" android:layout_weight="1" android:layout_height="wrap_content">
     <Button android:id="@+id/saw" android:text="J'ai vu !" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_gravity="top"></Button>
