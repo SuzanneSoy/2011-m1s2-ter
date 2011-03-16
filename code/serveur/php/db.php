@@ -16,6 +16,8 @@ function getDB() {
 }
 
 function closeDB() {
+	global $getDBSingleton;
+
 	if ($getDBSingleton) $getDBSingleton->close();
 }
 

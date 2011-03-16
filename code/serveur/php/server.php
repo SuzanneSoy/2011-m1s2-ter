@@ -74,9 +74,9 @@ function main()
 		// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
 		echo "{\"scoreTotal\":".$scores['total'];
 		echo ',"scores":[';
-		for (i = 0; i < $scores['nb']; i++) {
-			if (i != 0) echo ',';
-			echo $scores[i];
+		for ($i = 0; $i < $scores['nb']; $i++) {
+			if ($i != 0) echo ',';
+			echo $scores[$i];
 		}
 		echo "],\"newGame\":";
 		echo json_encode("".game2json($user, randomGame()));

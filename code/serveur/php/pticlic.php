@@ -574,7 +574,7 @@ function setGame($user, $pgid, $gid, $answers)
 
 	$db->exec("commit;");
 	$scores['total'] = $gameScore;
-	$scores['nb] = $nbScores;
+	$scores['nb'] = $nbScores;
 	return $scores;
 }
 
