@@ -29,46 +29,46 @@ public class Relation {
 
 		// ATTENTION ! Tout ce qui est ci-dessous est en double dans relations.php .
 		stringRelations = new HashMap<Integer, String>();
-		stringRelations.put(-1, "Mots non liés");
-		stringRelations.put(0, "...est en rapport avec...");
+		stringRelations.put(-1, "Mot non lié au mot central");
+		stringRelations.put(0, "'%s' est en rapport avec...");
 		stringRelations.put(1, "raffinement sémantique");
 		stringRelations.put(2, "raffinement morphologique");
-		stringRelations.put(3, "domaine");
-		stringRelations.put(4, "r_pos");
-		stringRelations.put(5, "Synonymes");
-		stringRelations.put(6, "générique");
-		stringRelations.put(7, "Contraires");
-		stringRelations.put(8, "spécifique");
-		stringRelations.put(9, "...fait partie d'un(e)...");
-		stringRelations.put(10, "...est une partie d'un(e)...");
-		stringRelations.put(11, "locution");
-		stringRelations.put(12, "potentiel de FL");
-		stringRelations.put(13, "action>agent");
-		stringRelations.put(14, "action>patient");
-		stringRelations.put(15, "chose>lieu");
-		stringRelations.put(16, "action>instrument");
-		stringRelations.put(17, "caractéristique");
-		stringRelations.put(18, "r_data");
-		stringRelations.put(19, "r_lemma");
-		stringRelations.put(20, "magn");
-		stringRelations.put(21, "antimagn");
-		stringRelations.put(22, "famille");
-		stringRelations.put(29, "predicat");
-		stringRelations.put(30, "lieu>action");
-		stringRelations.put(31, "action>lieu");
-		stringRelations.put(32, "sentiment");
-		stringRelations.put(33, "erreur");
-		stringRelations.put(34, "manière");
-		stringRelations.put(35, "sens/signification");
-		stringRelations.put(36, "information potentielle");
-		stringRelations.put(37, "rôle télique");
-		stringRelations.put(38, "rôle agentif");
-		stringRelations.put(41, "conséquence");
-		stringRelations.put(42, "cause");
-		stringRelations.put(52, "succession");
-		stringRelations.put(53, "produit");
-		stringRelations.put(54, "est le produit de");
-		stringRelations.put(55, "s'oppose à");
+		stringRelations.put(3, "domaine"); // pas utilisé
+		stringRelations.put(4, "r_pos"); // pas utilisé
+		stringRelations.put(5, "'%s' est un synonyme de...");
+		stringRelations.put(6, "'%s' est une sorte de...");
+		stringRelations.put(7, "Un contraire de '%s' est...");
+		stringRelations.put(8, "Un spécifique de '%s' est...");
+		stringRelations.put(9, "... est une partie de '%s'");
+		stringRelations.put(10, "'%s' fait partie de...");
+		stringRelations.put(11, "locution"); // pas utilisé
+		stringRelations.put(12, "potentiel de FL"); // pas utilisé
+		stringRelations.put(13, "Quoi/Qui pourrait '%s'");
+		stringRelations.put(14, "action>patient"); // pas utilisé
+		stringRelations.put(15, "Le lieu pour '%s' est...");
+		stringRelations.put(16, "Un instrument pour '%s' est...");
+		stringRelations.put(17, "Un caractéristique de '%s' est...");
+		stringRelations.put(18, "r_data"); // pas utilisé
+		stringRelations.put(19, "r_lemma"); // pas utilisé
+		stringRelations.put(20, "magn"); // pas utilisé
+		stringRelations.put(21, "antimagn"); // pas utilisé
+		stringRelations.put(22, "'%s' est de la même famille que...");
+		stringRelations.put(29, "predicat"); // pas utilisé
+		stringRelations.put(30, "lieu>action"); // pas utilisé
+		stringRelations.put(31, "action>lieu"); // pas utilisé
+		stringRelations.put(32, "sentiment"); // pas utilisé
+		stringRelations.put(33, "erreur"); // pas utilisé
+		stringRelations.put(34, "manière"); // pas utilisé
+		stringRelations.put(35, "sens/signification"); // pas utilisé
+		stringRelations.put(36, "information potentielle"); // pas utilisé
+		stringRelations.put(37, "rôle télique"); // pas utilisé
+		stringRelations.put(38, "rôle agentif"); // pas utilisé
+		stringRelations.put(41, "conséquence"); // pas utilisé
+		stringRelations.put(42, "cause"); // pas utilisé
+		stringRelations.put(52, "succession"); // pas utilisé
+		stringRelations.put(53, "produit"); // pas utilisé
+		stringRelations.put(54, "est le produit de"); // pas utilisé
+		stringRelations.put(55, "s'oppose à"); // pas utilisé
 	}
 
 	public synchronized static Relation getInstance() {
