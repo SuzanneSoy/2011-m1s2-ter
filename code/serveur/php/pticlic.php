@@ -547,7 +547,7 @@ function setGame($user, $pgid, $gid, $answers)
 	while ($row = $res->fetchArray())
 	{
 		$num = intval($row['num']);
-		$nbScores = max($nbScores, $num);
+		$nbScores++;
 		if (!isset($answers[$num])) {
 			throw new Exception("Cette requête \"Set partie\" ne donne pas de réponse (une relation) pour le mot numéro $num de la partie.", 5);
 		}

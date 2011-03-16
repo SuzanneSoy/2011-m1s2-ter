@@ -79,7 +79,9 @@ public class DownloadedBaseGame extends DownloadedGame {
 	}
 	
 	public String getCatString(int numCat) {
-		return Relation.getInstance().getRelationName(this.getCat(numCat));
+		return String.format(
+				Relation.getInstance().getRelationName(this.getCat(numCat)),
+				center.getName());
 	}
 
 	public int getCat1() {

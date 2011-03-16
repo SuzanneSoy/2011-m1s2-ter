@@ -1,7 +1,9 @@
 package org.pticlic;
 
 import org.pticlic.exception.PtiClicException;
+import org.pticlic.games.BaseGame;
 import org.pticlic.model.Constant;
+import org.pticlic.model.DownloadedBaseGame;
 import org.pticlic.model.Match;
 import org.pticlic.model.Network;
 import org.pticlic.model.Network.Mode;
@@ -85,15 +87,44 @@ public class BaseScore extends Activity implements OnClickListener{
 
 		this.networkStuff();
 
-		((TextView)findViewById(R.id.total)).setText("42");
 		// TODO : Attention, le cast en (BaseGame) n'est pas sûr !
-		((TextView)findViewById(R.id.scoreRel1)).setText("Foo1");
-		((TextView)findViewById(R.id.scoreRel2)).setText("Foo2");
-		((TextView)findViewById(R.id.scoreRel3)).setText("Foo3");
-		((TextView)findViewById(R.id.scoreRel4)).setText("Foo4");
+		DownloadedBaseGame bg = (DownloadedBaseGame)gamePlayed.getGame();
+		((TextView)findViewById(R.id.total)).setText(String.valueOf(sr.getScoreTotal()));
+		((TextView)findViewById(R.id.scoreRel1)).setText(bg.getCatString(1));
+		((TextView)findViewById(R.id.scoreRel2)).setText(bg.getCatString(2));
+		((TextView)findViewById(R.id.scoreRel3)).setText(bg.getCatString(3));
+		((TextView)findViewById(R.id.scoreRel4)).setText(bg.getCatString(4));
+		
+		String res;
+		res = "";
+		for (int i : gamePlayed.getRelation1()) {
+			res += bg.getWordInCloud(i).getName();
+			res += " (" + String.valueOf(sr.getScoreOfWord(i)) + "), ";
+		}
+		((TextView)findViewById(R.id.scoreWords1)).setText(res);
+		
+		res = "";
+		for (int i : gamePlayed.getRelation2()) {
+			res += bg.getWordInCloud(i).getName();
+			res += " (" + String.valueOf(sr.getScoreOfWord(i)) + "), ";
+		}
+		((TextView)findViewById(R.id.scoreWords2)).setText(res);
+		
+		res = "";
+		for (int i : gamePlayed.getRelation3()) {
+			res += bg.getWordInCloud(i).getName();
+			res += " (" + String.valueOf(sr.getScoreOfWord(i)) + "), ";
+		}
+		((TextView)findViewById(R.id.scoreWords3)).setText(res);
+		
+		res = "";
+		for (int i : gamePlayed.getRelation4()) {
+			res += bg.getWordInCloud(i).getName();
+			res += " (" + String.valueOf(sr.getScoreOfWord(i)) + "), ";
+		}
+		((TextView)findViewById(R.id.scoreWords4)).setText(res);
 		
 		((Button)findViewById(R.id.saw)).setOnClickListener(this);
-
 	}
 
 	@Override

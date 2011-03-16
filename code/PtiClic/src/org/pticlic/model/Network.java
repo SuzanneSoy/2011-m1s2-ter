@@ -29,11 +29,18 @@ import com.google.gson.stream.JsonReader;
 public class Network {
 
 	public static class ScoreResponse {
-		private int score;
+		private int scoreTotal;
+		private int[] scores;
 		private String newGame;
 		public ScoreResponse() {}
-		public int getScore() {
-			return score;
+		public int[] getScores() {
+			return scores;
+		}
+		public int getScoreOfWord(int i) {
+			return scores[i];
+		}
+		public int getScoreTotal() {
+			return scoreTotal;
 		}
 		public String getNewGame() {
 			return newGame;
