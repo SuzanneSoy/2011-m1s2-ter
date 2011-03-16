@@ -29,7 +29,7 @@ public class Relation {
 
 		// ATTENTION ! Tout ce qui est ci-dessous est en double dans relations.php .
 		stringRelations = new HashMap<Integer, String>();
-		stringRelations.put(-1, "Mot non lié au mot central");
+		stringRelations.put(-1, "Mot non lié à '%s'");
 		stringRelations.put(0, "'%s' est en rapport avec...");
 		stringRelations.put(1, "raffinement sémantique");
 		stringRelations.put(2, "raffinement morphologique");

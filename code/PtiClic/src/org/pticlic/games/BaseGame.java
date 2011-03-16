@@ -184,7 +184,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		// TODO : A enlever lorsque l'on aura toutes les images des relations.
 		try {
 			r1.setOnClickListener(this); 
-			rn1.setText(r.getRelationName(game.getCat1()));
+			rn1.setText(String.format(r.getRelationName(game.getCat1()), ((TextView)findViewById(R.id.mainWord)).getText()));
 			r1.setImageResource(r.getRelationImage(game.getCat1()));
 		} catch (Exception e) {
 			r1.setImageResource(R.drawable.icon);
@@ -192,7 +192,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		// TODO : A enlever lorsque l'on aura toutes les images des relations.
 		try {
 			r2.setOnClickListener(this); 
-			rn2.setText(r.getRelationName(game.getCat2()));
+			rn2.setText(String.format(r.getRelationName(game.getCat2()), ((TextView)findViewById(R.id.mainWord)).getText()));
 			r2.setImageResource(r.getRelationImage(game.getCat2()));
 		} catch (Exception e) {
 			r2.setImageResource(R.drawable.icon);
@@ -208,7 +208,7 @@ public class BaseGame extends Activity implements OnClickListener {
 		// TODO : A enlever lorsque l'on aura toutes les images des relations.
 		try {
 			r4.setOnClickListener(this);
-			rn4.setText(r.getRelationName(game.getCat4()));
+			rn4.setText(String.format(r.getRelationName(game.getCat4()), ((TextView)findViewById(R.id.mainWord)).getText()));
 			r4.setImageResource(r.getRelationImage(game.getCat4()));
 		} catch (Exception e) {
 			r4.setImageResource(R.drawable.icon);
