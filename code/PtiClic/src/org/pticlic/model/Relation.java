@@ -31,8 +31,8 @@ public class Relation {
 		stringRelations = new HashMap<Integer, String>();
 		stringRelations.put(-1, "Mot non lié à '%s'");
 		stringRelations.put(0, "'%s' est en rapport avec...");
-		stringRelations.put(1, "raffinement sémantique");
-		stringRelations.put(2, "raffinement morphologique");
+		stringRelations.put(1, "raffinement sémantique"); // pas utilisé
+		stringRelations.put(2, "raffinement morphologique"); // pas utilisé
 		stringRelations.put(3, "domaine"); // pas utilisé
 		stringRelations.put(4, "r_pos"); // pas utilisé
 		stringRelations.put(5, "'%s' est un synonyme de...");
