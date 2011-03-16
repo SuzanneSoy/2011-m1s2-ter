@@ -542,10 +542,12 @@ function setGame($user, $pgid, $gid, $answers)
 	$res = $db->query("SELECT num, difficulty, totalWeight, probaR1, probaR2, probaR0, probaTrash FROM game_cloud WHERE gid = $gid;");
 	$gameScore = 0;
 	$scores = array();
+	$nbScores = 0;
 	
 	while ($row = $res->fetchArray())
 	{
-		$num = $row['num'];
+		$num = intval($row['num']);
+		$nbScores = max($nbScores, $num);
 		if (!isset($answers[$num])) {
 			throw new Exception("Cette requête \"Set partie\" ne donne pas de réponse (une relation) pour le mot numéro $num de la partie.", 5);
 		}
@@ -572,6 +574,7 @@ function setGame($user, $pgid, $gid, $answers)
 
 	$db->exec("commit;");
 	$scores['total'] = $gameScore;
+	$scores['nb] = $nbScores;
 	return $scores;
 }
 

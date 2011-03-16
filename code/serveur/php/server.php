@@ -72,8 +72,14 @@ function main()
 		// au lieu d'envoyer $_GET en entier, mais on ne connaît pas leur nom à l'avance.
 		$scores = setGame($user, intval($_GET['pgid']), intval($_GET['gid']), $_GET);
 		// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
-		echo "{\"score\":".$scores['total'].",\"newGame\":";
-		json_encode("".game2json($user, randomGame()));
+		echo "{\"scoreTotal\":".$scores['total'];
+		echo ',"scores":['
+		for (i = 0; i < $scores['nb']; i++) {
+			if (i != 0) echo ',';
+			echo $scores[i];
+		}
+		echo "],\"newGame\":";
+		echo json_encode("".game2json($user, randomGame()));
 		echo "}";
 	} else {
 		throw new Exception("Commande inconnue", 2);
