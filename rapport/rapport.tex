@@ -44,7 +44,7 @@ Des linguistes et des informaticiens récupèrent les données liées aux partie
 Notre travail consiste à créer une version du PtiClic sous Android, une version modifiée du jeu adaptée pour téléphone mobile. Le sujet du TER définit clairement l'objectif de ce projet~:
 
 \begin{quotation}
-%% Correction Bertarnd remplacement de fonctionnant sur des Android semble est intéressante => fonctionnant sur Android semble intéressante
+%% Correction Bertarnd remplacement de fonctionnant sur des Android semble est intéressante => fonctionnant sur Android semble intéressante => NON, CAR CITATION, ON NE PEUT PAS LE 'CORRIGER'
 L'étude et le prototypage d'une version fonctionnant sur Android semble intéressante. En particulier on s'intéressera a deux aspects : * les contraintes imposées par l'environnement smartphone * le biais qu'imposent ces contraintes sur le jeu et les données récoltées. Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel. 
 \end{quotation}
 
@@ -113,59 +113,70 @@ La base de données à laquelle correspond le dump est aussi celle utilisée pou
 
 Le dump contient en tout début des remerciements et quelques explications des acronymes et des abbréviations utilisés, puis des statistiques, à savoir, le nombre d'occurrences de relations, la fréquence des noeuds, les 50 termes les plus fréquents. Plus un terme ou expression est fréquent, plus son poids est élevé. 
 
+%Le dump a proprement parler contient deux grandes parties~: une partie 'noeuds' (NODES) et une partie relations (RELATIONS). 
 
-Le dump a proprement parler contient deux grandes parties : la partie des mots et expressions (NODES) et la partie des relations (RELATIONS). 
+La partie 'noeuds' ne contient pas seulement des adjectifs, des adverbs, des substantifs et des verbs, mais aussi des locutions et des syntagmes. Des mots tels que les prépositions, les conjonctions, les pronoms, les articles et les déterminants n'y figurent pas. Les substantifs peuvent être des noms propres, y compris des noms de lieux, des noms de personnes et d'autres nom propres, ainsi que des noms communs. 
 
 Dans la partie mots et expressions, chaque entrée -- chaque ligne -- contient un eid (Entry IDentifier), un nom n (name), un type t et un poids w (weight). En voici un exemple~:
 
-%eid=231064:n=\"pour femme\":t=1:w=50
+eid=231064:n=\"pour femme\":t=1:w=50
 
-Pour a partie relation, l'identifiant est le rid (Relation IDentifier), le noeud de début n1 (starting node), le noeud de fin n2 (ending node), le type (relation type) et le poids w (weight). En voici un exemple~:
+Pour la partie relation, l'identifiant est le rid (Relation IDentifier), le noeud de début n1 (starting node), le noeud de fin n2 (ending node), le type (relation type) et le poids w (weight). En voici un exemple~:
 
-%rid=430049:n1=82029:n2=151553:t=12:w=18
+rid=430049:n1=82029:n2=151553:t=12:w=18
 
 
-\subsection{Analyse approfondie du jeu}
-Bien que le dump de la base de données contienne 39 relations différentes, la version en ligne du jeu du PtiClic ne contient que dix relations~:
+\subsection{Analyse plus approfondie du jeu}
+Bien que le dump de la base de données contienne 39 relations différentes, la version en ligne du jeu du PtiClic ne contient que onze relations~:
 
 \begin{itemize}
 
 \item r\_associated|0|idée|Tout terme lié d'une façon ou d'une autre au mot cible... Ce mot vous fait penser à quoi~? \\
-{\bf \verb![mot central]! est en rapport avec...}
-
-\item r\_associated|0|idée|Tout terme lié d'une façon ou d'une autre au mot cible... Ce mot vous fait penser à quoi~? \\
-{\bf \verb![mot central]! est en rapport avec...}
+{\bf \verb![mot central]! est en rapport avec...} \\
+ADJECTIFS, ADVERBS, SUBSTANTIFS, VERBS
 
 \item r\_syn|5|synonyme|A partir d'un terme, il est demandé d'énumérer les synonymes ou quasi-synonymes de ce terme. \\
-{\bf \verb![mot central]! a comme synonyme...}
+{\bf \verb![mot central]! a comme synonyme...} \\
+ADJECTIFS, ADVERBS, SUBSTANTIFS, VERBS
 
 \item r\_isa|6|générique|'animal' est un générique de 'chat', 'mammifère', 'être vivant' etc. en sont d'autres... \\
 {\bf \verb![mot central]! est une sorte de...}
+SUBSTANTIFS (mais ADJECTIFS, ADVERBS et VERBS possibles)
 
 \item r\_anto|7|contraire|'chaud' est le contraire de 'froid', vous vous rappelez~? :) \\
-{\bf Un contraire de \verb![mot central]! est...}
+{\bf Un contraire de \verb![mot central]! est...} \\
+ADJECTIFS, ADVERBS, SUBSTANTIFS, VERBS
 
 \item r\_hypo|8|spécifique|'mouche', 'abeille', 'guêpe' sont des spécifiques de 'insecte'... \\
-{\bf un spécifique de \verb![mot central]! est...}
+{\bf un spécifique de \verb![mot central]! est...} \\
+SUBSTANTIFS (mais ADJECTIFS, ADVERBS et VERBS possibles)
 
 \item r\_has\_part|9|partie|Il faut donner des parties/constituants/éléments du mot cible. Par exemple, 'voiture' pourrait avoir comme parties : 'porte', 'roue', 'moteur', ... \\
-{\bf ... est une partie de \verb![mot central]!}
+{\bf ... est une partie de \verb![mot central]!} \\
+SUBSTANTIFS
+
+\item r\_holo|10|tout|Le tout est ce qui contient l'objet en question. Pour 'main', on aura 'bras', 'corps', 'personne', etc... On peut aussi voir le tout comme l'ensemble auquel appartient un élément, comme 'classe' pour 'élève'. \\
+{\bf \verb![mot central]! fait partie de...} \\
+SUBSTANTIFS
 
 \item r\_agent|13|action>agent|L'agent (qu'on appelle aussi le sujet) est l'entité qui effectue l'action. Par exemple dans - Le chat mange la souris -, l'agent est le chat. Des agents typiques de 'courir' peuvent être 'sportif', 'enfant',... \\
-{\bf Quoi/Qui pourrait \verb![mot central]!~?}
+{\bf Quoi/Qui pourrait \verb![mot central]!~?} \\
+VERBS
 
-\item r\_lieu|15|chose>lieu|A partir d'un nom d'objet (ou autre), il est demandé d'énumérer les lieux typiques ou peut se trouver l'objet en question. \\
-{\bf Un lieu pour \verb![mot central]! est...}
+\item r\_lieu|15|chose>lieu|A partir d'un nom d'objet (ou autre), il est demandé d'énumérer les lieux typiques où peut se trouver l'objet en question. \\
+{\bf Un lieu pour \verb![mot central]! est...} \\
+SUBSTANTIFS
 
 \item r\_instr|16|action>instrument|L'instrument est l'objet avec lequel on fait l'action. Dans - Il mange sa salade avec une fourchette -, fourchette est l'instrument. Des instruments typiques de 'tuer' peuvent être 'arme', 'pistolet', 'poison', ... \\
-{\bf Un instrument pour \verb![mot central]! est...}
+{\bf Un instrument pour \verb![mot central]! est...} \\
+SUBSTANTIFS
 
 \item r\_carac|17|caractéristique|Pour une terme donné, en général un objet, il est demandé d'énumérer les caractéristiques possibles et/ou typiques de cet objet. Par exemple, pour 'eau' on pourra avoir 'liquide', 'froide', 'chaude', etc. \\
 {\bf Une caractéristique de \verb![mot central]! est...}
 
 \end{itemize}
 
-Vingt-neufs relations qui figurent dans la base de données d'origine ne sont pas utilisées dans l'application~:
+Vingt-huit relations qui figurent dans la base de données d'origine ne sont pas utilisées dans l'application~:
 
 \begin{itemize}
 \item r\_raff\_sem|1|raffinement sémantique|Raffinement sémantique vers un usage particulier du terme source
@@ -228,61 +239,124 @@ Vingt-neufs relations qui figurent dans la base de données d'origine ne sont pa
 
 \end{itemize}
 
+
+
 \section{Analyse des besoins}
 
 
 
+\begin{quotation}
+%% Correction Bertarnd remplacement de fonctionnant sur des Android semble est intéressante => fonctionnant sur Android semble intéressante => NON, CAR CITATION, ON NE PEUT PAS LE 'CORRIGER'
+L'étude et le prototypage d'une version fonctionnant sur Android semble intéressante. En particulier on s'intéressera a deux aspects : * les contraintes imposées par l'environnement smartphone * le biais qu'imposent ces contraintes sur le jeu et les données récoltées. Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel. 
+\end{quotation}
+
+\subsection{Les contraintes de l'environment smartphone}
+
+Comme tout outil, l'environment smartphone présente à la fois des avantages et des inconvéniants. 
+
+Les avantages sont nombreux~: un instrument portatif avec un bref temps de démarrage adapté à effectuer des tâches ponctuelles souvent de courte durée avec un écran tactile qui permet d'agir directement sur des éléments affichés sur son écran. Le smartphone présente encore d'autres avantages, il est à la fois un lecteur mp3, un dictaphone, un appareil, un chronomètre et réveil, pour en citer quelques exemples.
+
+Les inconvénients par rapport à un ordinateur classique sont aussi nombreux. L'écran est nettement plus petit limitant l'espace de travail et obligeant davantage de navigation de page en page. L'entrée des données est plus difficile, il n'existe pas de clavier, ou bien seulement un clavier virtuel ou un micro-clavier intégré à certains smartphones. Malgré les avantages de l'écran tactile, son utilisation permet une précision bien moindre que l'utilisation d'une souris à cause de la petite taille de l'écran et les doigts et les mains qui bloque la vue de l'écran lors du glissement-et-déposé par exemple. Le faible espace de stockage et les limites d'autonomies et d'énergies se traduisent par une nécessité d'économie de la part des concepteurs d'applications par rapport aux ordinateurs classiques d'aujourd'hui qui sont très de plus en plus performants. C'est pour cette raison que le smartphone n'est pas du plus adapté à effectuer des tâches de longue haleine telles que la rédaction d'un document.
+
+TODO: Beaucoup d'accès réseau (gd) !! (inconvénient)
+
+Les applications qui sont bien adaptées au smartphone sont celles telles que les calculatrices, les chronomètres et les jeux, et le jeu du PtiClic n'est pas une exception à cette dernière. L'avantage de telles applications sur un smartphone est qu'il est possible d'y jouer lorsque l'on est en file d'attente à la Poste ou bien dans les transports en commun. Un tel prototypage du jeu demande toutefois une réflexion non seulement aux limites mais aussi aux avantages des smartphones.
+
+Le jeu de base du PtiClic sous Android effectue exactement les mêmes cas d'utilisations que l'application d'origine. 
 
 
 
 \section{Conception}
 
-\begin{verbatim}
-NODE(EID integer primary key autoincrement, name string, #type (ref TYPE_NODE.num), weight);
 
-RELATION(RID integer primary key autoincrement, #start (ref NODE.eid), #end (ref NODE.eid), #type (ref TYPE_RELATION.num), weight);
+\subsection{Base de données}
 
-TYPE_NODE(NUM, name string);
+Le schéma relationnel suivant a été modélisé à partir des informations du dump de la base de données d'origine et nos besoin en matière d'authentification et de sécurité côté serveur~:
 
-TYPE_RELATION(NUM, name string, extended_name string, info string);
+{\footnotesize
+NODE(\underline{EID}, name, \#type, weight) \\ 
+RELATION(\underline{RID}, \#start, \#end, \#type, weight) \\
+TYPE\_NODE(\underline{num}, name) \\
+TYPE\_RELATION(\underline{num}, name, extended\_name, info) \\
+USER(\underline{login}, mail, hash\_passwd, \#score) \\
+GAME(\underline{GID}, \#eid\_central\_word, \#relation\_1, \#relation\_2, difficulty) \\
+GAME\_CLOUD(\underline{GID, num}, difficulty, \#eid\_word, totalWeight, probaR1, probaR2, probaR0, probaTrash) \\
+PLAYED\_GAME(\underline{PGID}, \#gid, \#login) \\
+PLAYED\_GAME\_CLOUD(\underline{\#PGID, \#GID, num}, type, \#relation, weight, score) 
+}
 
-USER(LOGIN string primary key, mail string, hash_passwd string (md5sum du password), #score (contrainte : somme de tous les scores des PLAYED_GAME_CLOUD);
+Si nous reprenons nos deux petits exemples d'entrées NODE et RELATION du dump de la base de données, il devient clair que les tables NODE et RELATION y correspondent strictement à la structure d'origine~: eid=231064:n=\"pour femme\":t=1:w=50, où 'eid' correspond à 'EID', 'n' à 'name', 't' à 'type' et 'w' à 'weight' de la table NODE de notre base~; rid=430049:n1=82029:n2=151553:t=12:w=18 où 'rid' correspond à 'RID', 'n1' à 'start', 'n2' à 'end', 't' à 'type' et 'w' à 'weight' de la table RELATION de notre base. 
 
-GAME(GID integer primary key autoincrement, #eid_central_word (ref NODE.eid, #relation_1 (ref RELATION.rid), #relation_2 ( (ref RELATION.rid), difficulty (contrainte : 10 <= difficulty <= 100));
 
-GAME_CLOUD(GID, NUM, difficulty (contrainte : 1 <= difficulty <= 10), #eid_word(ref NODE.eid), totalWeight (contrainte : = somme des probas), probaR1 (contrainte : = somme des probas des PLAYED_GAME_CLOUD.weight avec la bonne relation et la même gid et num), probaR2 (idem), probaR0 (idem), probaTrash (idem));
 
-PLAYED_GAME(PGID integer primary key autoincrement, #gid (ref GAME.gid), #login (ref USER.login);
+TYPE\_NODE(\underline{num}, name) \\
 
-PLAYED_GAME_CLOUD(#PGID (ref PLAYED_GAME.pgid), #GID (ref PLAYED_GAME.gid), NUM, type (contrainte : 0 = partie de référence, 1 = réponse d'un joueur), #relation (ref RELATION.rid), weight (contrainte : probabilité estimée de cette réponse pour les bots (robots), réputation du joueur sinon), score (score donné au joueur, 0 pour les bots);
+%// ---- Node stats
 
-**INT unless otherwise marked
-\end{verbatim}
-\begin{verbatim}
-create table node(eid integer primary key autoincrement, name, type, weight);
-create table relation(rid integer primary key autoincrement, start, end, type, weight);
-create table type_node(name, num);
-create table type_relation(name, num, extended_name, info);
-create table user(login primary key, mail, hash_passwd, score);
-create table game(gid integer primary key autoincrement, eid_central_word, relation_1, relation_2, difficulty);
-create table game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash);
-create table played_game(pgid integer primary key autoincrement, gid, login);
-create table played_game_cloud(pgid, gid, type, num, relation, weight, score);
+%/// 3 occurrences of nodes n_generic (t=0)
+%/// 228800 occurrences of nodes n_term (t=1)
+%/// 0 occurrences of nodes n_acception (t=2)
+%/// 0 occurrences of nodes n_definition (t=3)
+%/// 143 occurrences of nodes n_pos (t=4)
+%/// 1001 occurrences of nodes n_concept (t=5)
+%/// 42 occurrences of nodes n_flpot (t=6)
+%/// 0 occurrences of nodes n_hub (t=7)
+%/// 17 occurrences of nodes n_data (t=18)
+%/// 39 occurrences of nodes n_data_pot (t=36)
+%/// 956 occurrences of nodes AKI (t=666)
 
-create index i_relation_start on relation(start);
-create index i_relation_end on relation(end);
-create index i_relation_type on relation(type);
-create index i_relation_start_type on relation(start,type);
-create index i_relation_end_type on relation(end,type);
-\end{verbatim}
+TYPE\_RELATION(\underline{num}, name, extended\_name, info) \\
+
+???
+
+%*************
+%NE PAS EFFECER -> CI-DESSOUS LE SCHEMA COMME DECRIT PAR GD 
+
+%NODE(EID integer primary key autoincrement, name string, #type (ref TYPE_NODE.num), weight);
+%RELATION(RID integer primary key autoincrement, #start (ref NODE.eid), #end (ref NODE.eid), #type (ref %TYPE_RELATION.num), weight);
+%TYPE_NODE(NUM, name string);
+%TYPE_RELATION(NUM, name string, extended_name string, info string);
+%USER(LOGIN string primary key, mail string, hash_passwd string (md5sum du password), #score (contrainte : somme de tous les scores des PLAYED_GAME_CLOUD);
+%GAME(GID integer primary key autoincrement, #eid_central_word (ref NODE.eid, #relation_1 (ref RELATION.rid), #relation_2 ( (ref RELATION.rid), difficulty (contrainte : 10 <= difficulty <= 100));
+%GAME_CLOUD(GID, NUM, difficulty (contrainte : 1 <= difficulty <= 10), #eid_word(ref NODE.eid), totalWeight (contrainte : = somme des probas), probaR1 (contrainte : = somme des probas des PLAYED_GAME_CLOUD.weight avec la bonne relation et la même gid et num), probaR2 (idem), probaR0 (idem), probaTrash (idem));
+%PLAYED_GAME(PGID integer primary key autoincrement, #gid (ref GAME.gid), #login (ref USER.login);
+%PLAYED_GAME_CLOUD(#PGID (ref PLAYED_GAME.pgid), #GID (ref PLAYED_GAME.gid), NUM, type (contrainte : 0 = partie de référence, 1 = réponse d'un joueur), #relation (ref RELATION.rid), weight (contrainte : probabilité estimée de cette réponse pour les bots (robots), réputation du joueur sinon), score (score donné au joueur, 0 pour les bots);
+
+%**INT unless otherwise marked
+
+%create table node(eid integer primary key autoincrement, name, type, weight);
+%create table relation(rid integer primary key autoincrement, start, end, type, weight);
+%create table type_node(name, num);
+%create table type_relation(name, num, extended_name, info);
+%create table user(login primary key, mail, hash_passwd, score);
+%create table game(gid integer primary key autoincrement, eid_central_word, relation_1, relation_2, difficulty);
+%create table game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash);
+%create table played_game(pgid integer primary key autoincrement, gid, login);
+%create table played_game_cloud(pgid, gid, type, num, relation, weight, score);
+
+%create index i_relation_start on relation(start);
+%create index i_relation_end on relation(end);
+%create index i_relation_type on relation(type);
+%create index i_relation_start_type on relation(start,type);
+%create index i_relation_end_type on relation(end,type);
 
 TODO: UML, diagrammes de classes, Use cases, etc...
 
 
 \section{Réalisation}
 \subsection{Cahier des charges}
+
+
+
+
 \subsubsection{Langages de programmation}
+
+
+
 \subsubsection{Base de données}
+
+
+
 \subsubsection{d'autres subsubsections?}
 
 \subsection{Outils utilisés}
