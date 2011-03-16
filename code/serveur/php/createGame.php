@@ -1,5 +1,6 @@
 <?php
 require_once("ressources/strings.inc");
+require_once("relations.php");
 require_once("pticlic.php");
 session_start();
 
@@ -55,6 +56,10 @@ function checked($name, $value) {
 		return 'checked';
 }
 
+function probaOf($relation, $relation2) {
+	return 0;
+}
+
 if(isset($_POST['nbcloudwords'])) {
 	$nbwords = $_POST['nbcloudwords'];
 
@@ -88,10 +93,28 @@ if(isset($_POST['nbcloudwords'])) {
 	
 	if($state == 2) {
 		$respwords = getWordsAndResponses($nbwords);
+		$r1 = $stringRelations[$_POST['relation1']];
+		$r2 = $stringRelations[$_POST['relation2']];
+		$cloud = array();
+		$totalDifficulty = 0;
+
+		insertNode($centralword);
+		$centralword = getNodeEid($centralword);
 
 		if($respwords != -1) {
+			foreach($respwords as $key=>$rw) {
+				insertNode($respwords[$key][0]);
+				$cloud[$key] = array('pos'=>$key, 'd'=>1, 'eid'=>getNodeEid($respwords[$key][0]),
+									'probaR1'=> probaOf("r1", $rw[1]),
+									'probaR2'=> probaOf('r2', $rw[1]),
+									'probaR0'=> probaOf('r0', $rw[1]),
+									'probaTrash'=> probaOf('trash', $rw[1]));
 
+				$totalDifficulty += 1;
+			}
 		}
+
+		cgInsert($centralword, $cloud, $r1, $r2, $totalDifficulty);
 
 	}
 	else {
@@ -143,12 +166,12 @@ else
 						echo '<tr><td><label for="relation1">Relation 1 : </label></td>';
 						echo '<td class="inputcell"><select name="relation1">';
 							foreach($relations as $key=>$r)
-								echo '<option value="'.$key.'">'.$r[1].'</option>';
+								echo '<option value="'.$key.'">'.$stringRelations[$r].'</option>';
 						echo '</select></td>';
 						echo '<td><label for="relation2">Relation 2 : </label></td>';
 						echo '<td class="inputcell"><select name="relation2">';
 							foreach($relations as $key=>$r)
-								echo '<option value="'.$key.'">'.$r[1].'</option>';
+								echo '<option value="'.$key.'">'.$stringRelations[$r].'</option>';
 						echo '</select></td>';
 						echo '<input type="hidden" name="nbcloudwords" value="'.$nbwords.'" />';
 						echo '<tr><td colspan="2"><br /><label for="centralword">Mot central : </label><br /><br /></td>';

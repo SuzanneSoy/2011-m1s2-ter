@@ -24,6 +24,8 @@ require_once("db.php");
 *   normalizeProbas($row);
 *   setGame($user, $pgid, $gid, $answers);
 *   get_game_relations();
+*   insertNode($node);
+*   getNodeEid($node);
 */
 
 
@@ -584,17 +586,40 @@ function setGame($user, $pgid, $gid, $answers)
 function get_game_relations()
 {
 		$reqlations = array();
-		$db = getDB();
 
-		// TODO modifier la requête pour ne sélectionner que les relations pertinentes.
-		$res = $db->query("SELECT num,extended_name
-							FROM type_relation
-							WHERE num=5 OR num=7 OR num=9
-								OR num=10 OR num=13 OR num=14 OR num=22");
-	
-		while($r = $res->fetchArray())
-			$relations[] = $r;
+		$relations[] = 5;
+		$relations[] = 7;
+		$relations[] = 9;
+		$relations[] = 10;
+		$relations[] = 14;
+		$relations[] = 22;
 
 		return $relations;
+}
+
+
+/** Insère dans la base de données le noeud si il n'existe pas encore.
+* @param node : le noeud à ajouter.
+*/
+function insertNode($node) {
+	$db = getDB();
+	
+	if($db->querySingle("SELECT eid FROM node WHERE name=".$node) != null) {
+		$db->exec("INSERT INTO node(name,type,weight) VALUES($node,1,50);");
+		return true;
+	}
+
+	return false;
+}
+
+
+/** retourne l'eid d'un mot.
+* @param node : le mot dont on veut obtenir l'eid.
+*/
+
+function getNodeEid($node) {
+	$db = getDB();
+
+	//return $db->querySingle("SELECT eid FROM node WHERE name='".SQLite3::escapeString($node)."';");
 }
 ?>
