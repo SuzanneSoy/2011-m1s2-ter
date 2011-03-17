@@ -70,7 +70,7 @@ function main()
 		}
 		// TODO : il faudrait filtrer les paramètres qui correspondent à une réponse
 		// au lieu d'envoyer $_GET en entier, mais on ne connaît pas leur nom à l'avance.
-		setGameGetScore($_GET['pgid'], $_GET['gid'], $_GET);
+		setGameGetScore($user, $_GET['pgid'], $_GET['gid'], $_GET);
 	} else {
 		throw new Exception("Commande inconnue", 2);
 	}

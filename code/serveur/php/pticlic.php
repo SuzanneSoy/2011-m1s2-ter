@@ -24,7 +24,7 @@ require_once("db.php");
 *   normalizeProbas($row);
 *   setGame($user, $pgid, $gid, $answers);
 *   get_game_relations();
-*   setGameGetScore($pgid, $gid, $answers);
+*   setGameGetScore($user, $pgid, $gid, $answers);
 *   insertNode($node);
 *   getNodeEid($node);
 */
@@ -578,14 +578,14 @@ function setGame($user, $pgid, $gid, $answers)
 	$db->exec("commit;");
 	$scores['total'] = $gameScore;
 	$scores['nb'] = $nbScores;
-	$scores['alreadyPlayed'] = 0;
+	$scores['alreadyPlayed'] = 'false';
 	return $scores;
 }
 
 function getGameScores($user, $pgid, $gid) {
 	$db = getDB();
 	$timestamp = $db->querySingle("SELECT timestamp FROM played_game WHERE pgid = $pgid and $gid = $gid and login = '$user';");
-	if (timestamp == -1) {
+	if ($timestamp == -1) {
 		throw new Exception("Cette partie n'a jamais été jouée.", 4); // TODO : code d'erreur en doublon avec celui ci-dessous.
 	} else if ($timestamp == null) {
 		throw new Exception("Cette partie n'est associée à votre nom d'utilisateur.", 4);
@@ -603,7 +603,7 @@ function getGameScores($user, $pgid, $gid) {
 	}
 	$scores['total'] = $gameScore;
 	$scores['nb'] = $nbScores;
-	$scores['alreadyPlayed'] = 1;
+	$scores['alreadyPlayed'] = 'true';
 	return $scores;
 }
 
@@ -624,7 +624,7 @@ function get_game_relations()
 		return $relations;
 }
 
-function setGameGetScore($pgid, $gid, $answers) {
+function setGameGetScore($user, $pgid, $gid, $answers) {
 	$scores = setGame($user, intval($pgid), intval($gid), $answers);
 	// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
 	echo '{"scoreTotal":'.$scores['total'];
