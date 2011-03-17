@@ -1,7 +1,6 @@
 package org.pticlic;
 
 import org.pticlic.exception.PtiClicException;
-import org.pticlic.games.BaseGame;
 import org.pticlic.model.Constant;
 import org.pticlic.model.DownloadedBaseGame;
 import org.pticlic.model.Match;
