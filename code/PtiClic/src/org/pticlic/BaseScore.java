@@ -1,5 +1,6 @@
 package org.pticlic;
 
+import org.pticlic.R.string;
 import org.pticlic.exception.PtiClicException;
 import org.pticlic.model.Constant;
 import org.pticlic.model.DownloadedBaseGame;
@@ -85,6 +86,7 @@ public class BaseScore extends Activity implements OnClickListener{
 		setContentView(R.layout.score);
 
 		this.networkStuff();
+		this.networkStuff();
 
 		// TODO : Attention, le cast en (BaseGame) n'est pas sûr !
 		DownloadedBaseGame bg = (DownloadedBaseGame)gamePlayed.getGame();
@@ -95,33 +97,34 @@ public class BaseScore extends Activity implements OnClickListener{
 		((TextView)findViewById(R.id.scoreRel4)).setText(bg.getCatString(4));
 		
 		String res;
+		String noAnswers = getString(string.score_no_answers);
 		res = "";
 		for (int i : gamePlayed.getRelation1()) {
 			res += bg.getWordInCloud(i).getName();
 			res += " (" + String.valueOf(sr.getScoreOfWord(i)) + "), ";
 		}
-		((TextView)findViewById(R.id.scoreWords1)).setText(res);
+		((TextView)findViewById(R.id.scoreWords1)).setText(res.length() < 1 ? noAnswers : res);
 		
-		res = "";
+		res = noAnswers;
 		for (int i : gamePlayed.getRelation2()) {
 			res += bg.getWordInCloud(i).getName();
 			res += " (" + String.valueOf(sr.getScoreOfWord(i)) + "), ";
 		}
-		((TextView)findViewById(R.id.scoreWords2)).setText(res);
+		((TextView)findViewById(R.id.scoreWords2)).setText(res.length() < 1 ? noAnswers : res);
 		
-		res = "";
+		res = noAnswers;
 		for (int i : gamePlayed.getRelation3()) {
 			res += bg.getWordInCloud(i).getName();
 			res += " (" + String.valueOf(sr.getScoreOfWord(i)) + "), ";
 		}
-		((TextView)findViewById(R.id.scoreWords3)).setText(res);
+		((TextView)findViewById(R.id.scoreWords3)).setText(res.length() < 1 ? noAnswers : res);
 		
-		res = "";
+		res = noAnswers;
 		for (int i : gamePlayed.getRelation4()) {
 			res += bg.getWordInCloud(i).getName();
 			res += " (" + String.valueOf(sr.getScoreOfWord(i)) + "), ";
 		}
-		((TextView)findViewById(R.id.scoreWords4)).setText(res);
+		((TextView)findViewById(R.id.scoreWords4)).setText(res.length() < 1 ? noAnswers : res);
 		
 		((Button)findViewById(R.id.saw)).setOnClickListener(this);
 	}

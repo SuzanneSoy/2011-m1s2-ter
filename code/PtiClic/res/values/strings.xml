@@ -20,4 +20,5 @@
 <string name="score_your_score">Votre score</string>
 <string name="score_your_answers">Vos réponses</string>
 <string name="score_explanation">(Détail du calcul du score entre parenthèse)</string>
+<string name="score_no_answers">(aucune réponse)</string>
 </resources>

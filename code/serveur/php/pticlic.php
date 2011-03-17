@@ -585,7 +585,7 @@ function setGame($user, $pgid, $gid, $answers)
 function getGameScores($user, $pgid, $gid) {
 	$db = getDB();
 	$timestamp = $db->querySingle("SELECT timestamp FROM played_game WHERE pgid = $pgid and $gid = $gid and login = '$user';");
-	if (timestamp == -1) {
+	if ($timestamp == -1) {
 		throw new Exception("Cette partie n'a jamais été jouée.", 4); // TODO : code d'erreur en doublon avec celui ci-dessous.
 	} else if ($timestamp == null) {
 		throw new Exception("Cette partie n'est associée à votre nom d'utilisateur.", 4);
