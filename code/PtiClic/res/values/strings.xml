@@ -17,4 +17,7 @@
 <string name="frontpage_no_connection">Vous n\'êtes pas connecté(e). Vérifiez votre connexion réseau.</string>
 <string name="frontpage_user_connected">Vous êtes connecté(e)</string>
 <string name="frontpage_user_notconnected">Vous n\'êtes pas authentifié(e)</string>
+<string name="score_your_score">Votre score</string>
+<string name="score_your_answers">Vos réponses</string>
+<string name="score_explanation">(Détail du calcul du score entre parenthèse)</string>
 </resources>
