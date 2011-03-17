@@ -19,7 +19,7 @@
 			</p>
 			<p>
 				Soyez parmi les tous premiers à <a href="download.php">télécharger cette 
-				application gratuitement</a> en devenant Alpha-testeur.
+				application gratuitement</a> en devenant alpha-testeur.
 				L'<a href="signup.php">inscription</a> est simple, il suffit de fournir
 				une adresse mail, de créer un identifiant et vous pourrez commencer à jouer&nbsp;!
 			</p>
@@ -41,7 +41,7 @@
 				de conception et de développement est composée de quatre étudiants&nbsp;: Bertrand BRUN, 
 				Yoann BONAVERO, John CHARRON et Georges DUPERON.
 			</p>
-			<h2>Votre rôle en tant qu'Alpha-testeur</h2>
+			<h2>Votre rôle en tant qu'alpha-testeur</h2>
 			<p>
 				L'application étant en phase de développement et offerte gratuitement,
 				nous serions reconnaissant si vous pouviez nous donner votre avis, vos suggestions, 
