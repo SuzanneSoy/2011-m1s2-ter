@@ -20,8 +20,7 @@ echo "==============================="
 echo
 echo "Étape 4/5 : Insertion dans la bdd"
 echo "================================="
-[ -e php/db ] && mv php/db php/db.old
-pv sql | sqlite3 php/db
+pv sql | sqlite3 php/db.new
 
 
 echo
@@ -33,5 +32,8 @@ sudo chgrp -R www-data php > /tmp/log-chmod-pticlic || sudo chgrp -R www php > /
 	echo "ATTENTION : Les deux méthodes de chgrp ont échoué !"
 	exit 1
 }
-chmod 664 php/db
+chmod 664 php/db.new
 chmod 775 php
+
+[ -e php/db ] && mv php/db php/db.old
+mv php/db.new php/db
