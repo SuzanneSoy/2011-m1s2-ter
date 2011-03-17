@@ -32,18 +32,28 @@ public class Network {
 		private int scoreTotal;
 		private int[] scores;
 		private String newGame;
+		private boolean alreadyPlayed;
+		
 		public ScoreResponse() {}
+		
 		public int[] getScores() {
 			return scores;
 		}
+		
 		public int getScoreOfWord(int i) {
 			return scores[i];
 		}
+		
 		public int getScoreTotal() {
 			return scoreTotal;
 		}
+		
 		public String getNewGame() {
 			return newGame;
+		}
+		
+		public boolean getAlreadyPlayed() { 
+			return alreadyPlayed;
 		}
 	}
 
@@ -300,7 +310,8 @@ public class Network {
 		+ "&passwd=" + this.passwd
 		+ "&pgid=" + game.getGame().getPgid()
 		+ "&gid=" + game.getGame().getGid()
-		+ "&mode="+mode.value();
+		+ "&mode="+mode.value()
+		+ "&nb="+((DownloadedBaseGame)(game.getGame())).getNbWord();
 
 		// TODO : faut gere le mode
 		for (Integer i : game.getRelation1()) {

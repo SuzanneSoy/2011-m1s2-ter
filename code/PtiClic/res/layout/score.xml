@@ -1,24 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
-android:layout_height="fill_parent" android:orientation="vertical" 
-android:id="@+id/LinearLayout01" android:layout_gravity="center" android:layout_width="fill_parent">
-    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2" android:orientation="vertical" android:layout_weight="2">
-        <TextView android:layout_width="fill_parent" android:id="@+id/textView1" android:layout_height="wrap_content" android:text="Votre score est de :" android:gravity="center" android:layout_weight="1"></TextView>
-        <TextView android:layout_width="fill_parent" android:id="@+id/total" android:layout_height="wrap_content" android:text="@+id/total" android:textStyle="bold" android:textSize="25px" android:layout_weight="1" android:gravity="center|top"></TextView>
-        <TextView android:layout_height="wrap_content" android:id="@+id/scoreRel1" android:text="@+id/scoreRel1" android:layout_width="fill_parent"></TextView>
-        <TextView android:layout_height="wrap_content" android:id="@+id/scoreWords1" android:layout_width="fill_parent" android:paddingLeft="40dip" android:text="@+id/scoreWords1"></TextView>
-        <TextView android:layout_height="wrap_content" android:id="@+id/scoreRel2" android:text="@+id/scoreRel2" android:layout_width="fill_parent"></TextView>
-        <TextView android:layout_height="wrap_content" android:id="@+id/scoreWords2" android:text="@+id/scoreWords2" android:layout_width="fill_parent" android:paddingLeft="40dip"></TextView>
-        <TextView android:layout_height="wrap_content" android:id="@+id/scoreRel3" android:text="@+id/scoreRel3" android:layout_width="fill_parent"></TextView>
-        <TextView android:layout_height="wrap_content" android:id="@+id/scoreWords3" android:text="@+id/scoreWords3" android:layout_width="fill_parent" android:paddingLeft="40dip"></TextView>
-        <TextView android:layout_height="wrap_content" android:id="@+id/scoreRel4" android:text="@+id/scoreRel4" android:layout_width="fill_parent"></TextView>
-        <TextView android:layout_height="wrap_content" android:id="@+id/scoreWords4" android:text="@+id/scoreWords4" android:layout_width="fill_parent" android:paddingLeft="40dip"></TextView>
-    </LinearLayout>
-<LinearLayout android:id="@+id/linearLayout1" android:layout_weight="1" android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center_horizontal" android:paddingTop="20dip">
-    <Button android:id="@+id/saw" android:text="J'ai vu !" android:layout_height="wrap_content" android:layout_gravity="top" android:layout_width="150dip"></Button>
-</LinearLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="fill_parent" android:orientation="vertical"
+	android:id="@+id/LinearLayout01" android:layout_gravity="center"
+	android:layout_width="fill_parent">
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:id="@+id/linearLayout2"
+		android:orientation="vertical" android:layout_weight="2">
+		
+		<TextView android:layout_width="fill_parent" android:id="@+id/textView1"
+			android:layout_height="wrap_content" android:text="@string/score_your_score"
+			android:gravity="center|bottom" android:layout_weight="1" android:textSize="25dip"
+			android:textStyle="bold"></TextView>
+
+		<TextView android:layout_width="fill_parent" android:id="@+id/total"
+			android:layout_height="wrap_content" android:text="@+id/total"
+			android:textStyle="bold" android:textSize="25dip"
+			android:layout_weight="1" android:gravity="center|top"></TextView>
+
+		<TextView android:layout_width="fill_parent" android:id="@+id/textView1"
+			android:layout_height="wrap_content" android:text="@string/score_your_answers"
+			android:gravity="center|bottom" android:layout_weight="0.1"
+			android:textSize="25dip" android:textStyle="bold"></TextView>
+
+		<TextView android:layout_width="fill_parent" android:id="@+id/textView1"
+			android:layout_height="wrap_content" android:text="@string/score_explanation"
+			android:gravity="center|top" android:layout_weight="1"
+			android:textSize="15dip"></TextView>
+			
+		<TextView android:layout_height="wrap_content" android:id="@+id/scoreRel1"
+			android:text="@+id/scoreRel1" android:layout_width="fill_parent"
+			android:textStyle="bold" android:paddingLeft="10dip"></TextView>
+			
+		<TextView android:layout_height="wrap_content" android:id="@+id/scoreWords1"
+			android:layout_width="fill_parent" android:paddingLeft="30dip"
+			android:text="@+id/scoreWords1" android:paddingBottom="5dip"></TextView>
+			
+		<TextView android:layout_height="wrap_content" android:id="@+id/scoreRel2"
+			android:text="@+id/scoreRel2" android:layout_width="fill_parent"
+			android:textStyle="bold" android:paddingLeft="10dip"></TextView>
+			
+		<TextView android:layout_height="wrap_content" android:id="@+id/scoreWords2"
+			android:text="@+id/scoreWords2" android:layout_width="fill_parent"
+			android:paddingLeft="30dip" android:paddingBottom="5dip"></TextView>
+			
+		<TextView android:layout_height="wrap_content" android:id="@+id/scoreRel3"
+			android:text="@+id/scoreRel3" android:layout_width="fill_parent"
+			android:textStyle="bold" android:paddingLeft="10dip"></TextView>
+			
+		<TextView android:layout_height="wrap_content" android:id="@+id/scoreWords3"
+			android:text="@+id/scoreWords3" android:layout_width="fill_parent"
+			android:paddingLeft="30dip" android:paddingBottom="5dip"></TextView>
+			
+		<TextView android:layout_height="wrap_content" android:id="@+id/scoreRel4"
+			android:text="@+id/scoreRel4" android:layout_width="fill_parent"
+			android:textStyle="bold" android:paddingLeft="10dip"></TextView>
+			
+		<TextView android:layout_height="wrap_content" android:id="@+id/scoreWords4"
+			android:text="@+id/scoreWords4" android:layout_width="fill_parent"
+			android:paddingLeft="30dip" android:paddingBottom="5dip"></TextView>
+			
+	</LinearLayout>
+	
+	<LinearLayout android:id="@+id/linearLayout1"
+		android:layout_weight="1" android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:gravity="center_horizontal"
+		android:paddingTop="20dip">
+		<Button android:id="@+id/saw" android:text="J'ai vu !"
+			android:layout_height="wrap_content" android:layout_gravity="top"
+			android:layout_width="150dip"></Button>
+	</LinearLayout>
 
 
 </LinearLayout>
