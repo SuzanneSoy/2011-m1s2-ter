@@ -599,7 +599,7 @@ function getGameScores($user, $pgid, $gid) {
 	{
 		$nbScores++;
 		$gameScore += $row['score'];
-		$scores[$row['num'] = $row['score'];
+		$scores[$row['num']] = $row['score'];
 	}
 	$scores['total'] = $gameScore;
 	$scores['nb'] = $nbScores;
