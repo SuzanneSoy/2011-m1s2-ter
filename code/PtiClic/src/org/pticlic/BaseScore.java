@@ -105,21 +105,21 @@ public class BaseScore extends Activity implements OnClickListener{
 		}
 		((TextView)findViewById(R.id.scoreWords1)).setText(res.length() < 1 ? noAnswers : res);
 		
-		res = noAnswers;
+		res = "";
 		for (int i : gamePlayed.getRelation2()) {
 			res += bg.getWordInCloud(i).getName();
 			res += " (" + String.valueOf(sr.getScoreOfWord(i)) + "), ";
 		}
 		((TextView)findViewById(R.id.scoreWords2)).setText(res.length() < 1 ? noAnswers : res);
 		
-		res = noAnswers;
+		res = "";
 		for (int i : gamePlayed.getRelation3()) {
 			res += bg.getWordInCloud(i).getName();
 			res += " (" + String.valueOf(sr.getScoreOfWord(i)) + "), ";
 		}
 		((TextView)findViewById(R.id.scoreWords3)).setText(res.length() < 1 ? noAnswers : res);
 		
-		res = noAnswers;
+		res = "";
 		for (int i : gamePlayed.getRelation4()) {
 			res += bg.getWordInCloud(i).getName();
 			res += " (" + String.valueOf(sr.getScoreOfWord(i)) + "), ";
