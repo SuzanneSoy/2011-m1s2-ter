@@ -164,6 +164,7 @@ function cgChooseRelations()
 */
 function cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights)
 {
+	$db = getDB();
 	// On boucle tant qu'il n'y a pas eu au moins 2 sources épuisées
 	$cloud = array();
 	$nbFailed = 0;
@@ -213,6 +214,8 @@ function cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights)
 		$rejected = false;
 		// Ne pas mettre le mot central dans le nuage.
 		if ($res['eid'] == $centerEid) { continue; }
+		$nodeName = $db->querySingle("select name from node where eid=".$res['eid'].";");
+		if (substr($nodeName, 0, 2) == "::") { continue; }
 		foreach ($cloud as $c) {
 			if ($c['eid'] == $res['eid']) {
 				$nbFailed++;
