@@ -24,6 +24,7 @@ require_once("db.php");
 *   normalizeProbas($row);
 *   setGame($user, $pgid, $gid, $answers);
 *   get_game_relations();
+*   setGameGetScore($pgid, $gid, $answers);
 */
 
 
@@ -526,7 +527,7 @@ function setGame($user, $pgid, $gid, $answers)
 {
 	$db = getDB();
 	if ('ok' !== $db->querySingle("SELECT 'ok' FROM played_game WHERE pgid = $pgid and $gid = $gid and login = '$user' and timestamp = -1;")) {
-		throw new Exception("Cette partie n'est associée à votre nom d'utilisateur, ou bien vous l'avez déjà jouée.", 4);
+		return getGameScores($user, $pgid, $gid);
 	}
 	
 	$userReputation = computeUserReputation($db->querySingle("SELECT score FROM user WHERE login='".$user."';"));
@@ -575,6 +576,32 @@ function setGame($user, $pgid, $gid, $answers)
 	$db->exec("commit;");
 	$scores['total'] = $gameScore;
 	$scores['nb'] = $nbScores;
+	$scores['alreadyPlayed'] = 0;
+	return $scores;
+}
+
+function getGameScores($user, $pgid, $gid) {
+	$db = getDB();
+	$timestamp = $db->querySingle("SELECT timestamp FROM played_game WHERE pgid = $pgid and $gid = $gid and login = '$user';");
+	if (timestamp == -1) {
+		throw new Exception("Cette partie n'a jamais été jouée.", 4); // TODO : code d'erreur en doublon avec celui ci-dessous.
+	} else if ($timestamp == null) {
+		throw new Exception("Cette partie n'est associée à votre nom d'utilisateur.", 4);
+	}
+	
+	$gameScore = 0;
+	$scores = array();
+	$nbScores = 0;
+	$res = $db->query("SELECT num,score from played_game_cloud where pgid = $pgid and gid = $gid;");
+	while ($row = $res->fetchArray())
+	{
+		$nbScores++;
+		$gameScore += $row['score'];
+		$scores[$row['num'] = $row['score'];
+	}
+	$scores['total'] = $gameScore;
+	$scores['nb'] = $nbScores;
+	$scores['alreadyPlayed'] = 1;
 	return $scores;
 }
 
@@ -596,5 +623,20 @@ function get_game_relations()
 			$relations[] = $r;
 
 		return $relations;
+}
+
+function setGameGetScore($pgid, $gid, $answers) {
+	$scores = setGame($user, intval($pgid), intval($gid), $answers);
+	// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
+	echo '{"scoreTotal":'.$scores['total'];
+	echo ',"alreadyPlayed":'.$scores['alreadyPlayed'];
+	echo ',"scores":[';
+	for ($i = 0; $i < $scores['nb']; $i++) {
+		if ($i != 0) echo ',';
+		echo $scores[$i];
+	}
+	echo "],\"newGame\":";
+	echo json_encode("".game2json($user, randomGame()));
+	echo "}";
 }
 ?>
