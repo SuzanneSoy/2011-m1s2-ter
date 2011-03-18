@@ -7,6 +7,7 @@ session_start();
 $state = 0;
 $err = false;
 $msg = "";
+$rels = array();
 
 function getWords($nbwords)
 {
@@ -57,6 +58,12 @@ function checked($name, $value) {
 }
 
 function probaOf($relation, $relation2) {
+	if (($relation == "r1" && $relation2 == 0)
+	|| ($relation == "r2" && $relation2 == 1)
+	|| ($relation == "r0" && $relation2 == 2)
+	|| ($relation == "trash" && $relation2 == 3))
+		return 1;
+
 	return 0;
 }
 
@@ -75,10 +82,10 @@ if(isset($_POST['nbcloudwords'])) {
 	if($state == 1 && isset($_POST['centralword']) && !empty($_POST['centralword'])) {
 		if($_POST['relation1'] != $_POST['relation2']) {		
 			$centralword = $_POST['centralword'];			
-			$rels[0] = $relations[$_POST['relation1']][1];
-			$rels[1] = $relations[$_POST['relation2']][1];
-			$rels[2] = "Est en rapport avec";
-			$rels[3] = "N'a aucun rapport avec";
+			$rels[0] = $stringRelations[$_POST['relation1']];
+			$rels[1] = $stringRelations[$_POST['relation2']];
+			$rels[2] = $stringRelations[0];
+			$rels[3] = $stringRelations[-1];
 			
 			$words = getWords($nbwords);
 
@@ -93,29 +100,38 @@ if(isset($_POST['nbcloudwords'])) {
 	
 	if($state == 2) {
 		$respwords = getWordsAndResponses($nbwords);
-		$r1 = $stringRelations[$_POST['relation1']];
-		$r2 = $stringRelations[$_POST['relation2']];
+		$r1 = $_POST['relation1'];
+		$r2 = $_POST['relation2'];
 		$cloud = array();
 		$totalDifficulty = 0;
+		$addedWords = 0;
 
-		insertNode($centralword);
-		$centralword = getNodeEid($centralword);
+		if($respwords != -1 && isset($_POST['tDifficulty'])) {
+			$totalDifficulty = $_POST['tDifficulty'];
 
-		if($respwords != -1) {
+			if(insertNode($centralword))
+				$addedWords++;
+
+			$centralword = getNodeEid($centralword);
+
 			foreach($respwords as $key=>$rw) {
-				insertNode($respwords[$key][0]);
-				$cloud[$key] = array('pos'=>$key, 'd'=>1, 'eid'=>getNodeEid($respwords[$key][0]),
+				$difficulty = $totalDifficulty / count($respwords);
+
+				if(insertNode($respwords[$key][0]))
+					$addedWords++;
+
+				$cloud[$key] = array('pos'=>$key, 'd'=> $difficulty, 'eid'=>getNodeEid($respwords[$key][0]),
 									'probaR1'=> probaOf("r1", $rw[1]),
 									'probaR2'=> probaOf('r2', $rw[1]),
 									'probaR0'=> probaOf('r0', $rw[1]),
 									'probaTrash'=> probaOf('trash', $rw[1]));
-
-				$totalDifficulty += 1;
 			}
+
+			$state = 3;
+			$msg = $strings['ok_creategame_game_create'];
 		}
 
-		cgInsert($centralword, $cloud, $r1, $r2, $totalDifficulty);
-
+		//cgInsert($centralword, $cloud, $r1, $r2, $totalDifficulty);
 	}
 	else {
 		$err = true;
@@ -166,12 +182,12 @@ else
 						echo '<tr><td><label for="relation1">Relation 1 : </label></td>';
 						echo '<td class="inputcell"><select name="relation1">';
 							foreach($relations as $key=>$r)
-								echo '<option value="'.$key.'">'.$stringRelations[$r].'</option>';
+								echo '<option value="'.$r.'">'.$stringRelations[$r].'</option>';
 						echo '</select></td>';
 						echo '<td><label for="relation2">Relation 2 : </label></td>';
 						echo '<td class="inputcell"><select name="relation2">';
 							foreach($relations as $key=>$r)
-								echo '<option value="'.$key.'">'.$stringRelations[$r].'</option>';
+								echo '<option value="'.$r.'">'.$stringRelations[$r].'</option>';
 						echo '</select></td>';
 						echo '<input type="hidden" name="nbcloudwords" value="'.$nbwords.'" />';
 						echo '<tr><td colspan="2"><br /><label for="centralword">Mot central : </label><br /><br /></td>';
@@ -194,7 +210,7 @@ else
 
 						echo '</tr><tr><td colspan="2"></td><td colspan="2" class="td2"><input type="submit" value="Enregistrer la partie" /></td></tr>';
 					}
-					else {
+					elseif($state == 2) {
 						echo 'Mot central : ';
 						echo $centralword;
 						echo '<input type="hidden" name="centralword" value="'.$centralword.'" />';
@@ -224,7 +240,17 @@ else
 							echo '<td colspan="2"></td>';
 
 						echo '</tr>';
+						echo '<tr><td colspan="2"><label for="tDifficulty">Difficulté de la partie</label></td>';
+						echo '<td class="inputcell" colspan="2"><select name="tDifficulty">';
+						for($i = 1; $i < 11; $i++)
+							echo '<option value="'.$i.'">'.$i.'</option>';
+						echo '</select></td></tr>';
+
 						echo '<tr><td colspan="4"><input type="submit" value="Enregistrer" /></td></tr>';
+					}
+					elseif($state == 3) {
+					{
+						echo '<p>nombre de mots ajoutés dans la base de données : '.$addedWords;
 					}
 					?>
 				</table>
