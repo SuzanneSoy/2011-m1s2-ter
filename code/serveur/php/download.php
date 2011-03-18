@@ -13,27 +13,28 @@ if(!isset($_SESSION['userId']))
 	</head>
 	<body>
 		<?php include("ressources/menu.inc"); ?>
-		<div class="content">
-			<?php include("ressources/showmsg.inc"); ?>
-			<h2>Téléchargement de l'application</h2>			
+<div class="content">
+	<?php include("ressources/showmsg.inc"); ?>
+		<h2>Téléchargement de l'application</h2>			
 			<span class="downloadarea"><a href="ressources/pticlic-alpha-v0.1.apk" id="downloadlink">Téléchargement</a></span>
 			<h2>Installation de l'application</h2>
-			<h3> A partir de votre téléphone </h3>
-			<ul>
-				<li><a href="ressources/pticlic-alpha-v0.1.apk">Téléchargez le fichier d'installation</a></li>
-				<li>Une fois téléchargée, cliquez sur le fichier dans la barre de notification d'Android et suivez
-					les instructions d'installation. Vous devrez patientez quelques instant pendant l'installation.</li>
-				<li>Une fois l'installation terminée, démarrez l'application</li>
-				<li> Suivez attentivement les instructions lors du premier démarrage de l'application</li>
+		<h3> A partir de votre téléphone </h3>
+		<ul>
+		<li><a href="ressources/pticlic-alpha-v0.1.apk">Téléchargez le fichier d'installation</a></li>
+				<li>Vous avez besoin d'autorisé votre téléphone à accepter les sources inconnue. Pour cela, aller dans Préférence→Application. Coché Sources inconnues.</li>
+				<li>Une fois téléchargé, cliquez sur le fichier dans la barre de notification d'Android et suivez
+	les instructions d'installation. Vous devrez patientez quelques instant pendant l'installation.</li>
+	<li>Une fois l'installation terminée, démarrez l'application</li>
+	<li> Suivez attentivement les instructions lors du premier démarrage de l'application</li>
 			</ul>
 			<h3> A partir de votre ordinateur </h3>
 			<ul>
 				<li><a href="ressources/pticlic-alpha-v0.1.apk">Téléchargez le fichier d'installation</a> </li>
-				<li>Transférez ce fichier sur votre téléphone à l'aide de bluetooth, une clé usb ou autre</li>
+	<li>Transférez ce fichier sur votre téléphone à l'aide de bluetooth, une clé usb ou autre</li>
 				<li>Depuis votre téléphone, retrouvez sur votre carte mémoire l'application que vous
-					venez de transférer</li>
-				<li>Cliquez sur l'application afin de l'installer sur votre téléphone</li>
-				<li>Suivez attentivement les instructions lors du premier démarrage de l'application</li>
+	venez de transférer</li>
+	<li>Cliquez sur l'application afin de l'installer sur votre téléphone</li>
+	<li>Suivez attentivement les instructions lors du premier démarrage de l'application</li>
 			</ul>
 		</div>
 		<?php include("ressources/footer.inc"); ?>
