@@ -91,11 +91,20 @@ if(isset($_POST['nbcloudwords'])) {
 
 			if($err != true)
 				$state = 2;
+			else {
+				$err = true;
+				$msg = $strings['err_creategame_cloud_fill_all'];
+			}
+				
 		}
 		else {
 			$err = true;
 			$msg = $strings['err_creategame_eq_relations'];
 		}
+	}
+	elseif (isset($_POST['centralword']) && empty($_POST['centralword'])) {
+		$err = true;
+		$msg = $strings['err_creategame_cloud_fill_all'];
 	}
 	
 	if($state == 2) {
@@ -107,41 +116,44 @@ if(isset($_POST['nbcloudwords'])) {
 		$addedWords = 0;
 
 		if($respwords != -1 && isset($_POST['tDifficulty'])) {
-			$totalDifficulty = $_POST['tDifficulty'];
+			if(is_numeric($totalDifficulty = $_POST['tDifficulty'])) {
 
-			if(insertNode($centralword))
-				$addedWords++;
-
-			$centralword = getNodeEid($centralword);
-
-			foreach($respwords as $key=>$rw) {
-				$difficulty = $totalDifficulty / count($respwords);
-
-				if(insertNode($respwords[$key][0]))
+				if(insertNode($centralword))
 					$addedWords++;
 
-				$cloud[$key] = array('pos'=>$key, 'd'=> $difficulty, 'eid'=>getNodeEid($respwords[$key][0]),
-									'probaR1'=> probaOf("r1", $rw[1]),
-									'probaR2'=> probaOf('r2', $rw[1]),
-									'probaR0'=> probaOf('r0', $rw[1]),
-									'probaTrash'=> probaOf('trash', $rw[1]));
+				$centralword = getNodeEid($centralword);
+
+				foreach($respwords as $key=>$rw) {
+					$difficulty = $totalDifficulty / count($respwords);
+
+					if(insertNode($respwords[$key][0]))
+						$addedWords++;
+
+					$cloud[$key] = array('pos'=>$key, 'd'=> $difficulty, 'eid'=>getNodeEid($respwords[$key][0]),
+										'probaR1'=> probaOf("r1", $rw[1]),
+										'probaR2'=> probaOf('r2', $rw[1]),
+										'probaR0'=> probaOf('r0', $rw[1]),
+										'probaTrash'=> probaOf('trash', $rw[1]));
+				}
+			}
+			else {
+				$err = true;
+				$msg = $strings['err_creategame_isNumeric_tDifficulty'];
 			}
 
 			$state = 3;
 			$msg = $strings['ok_creategame_game_create'];
 		}
 
-		//cgInsert($centralword, $cloud, $r1, $r2, $totalDifficulty);
+		cgInsert($centralword, $cloud, $r1, $r2, $totalDifficulty);
 	}
-	else {
+	elseif($state == 2) {
 		$err = true;
 		$msg = $strings['err_creategame_fill_all'];
 	}
 }
 else
 	$err = true;
-
-
 
 ?>
 
@@ -249,7 +261,6 @@ else
 						echo '<tr><td colspan="4"><input type="submit" value="Enregistrer" /></td></tr>';
 					}
 					elseif($state == 3) {
-					{
 						echo '<p>nombre de mots ajoutés dans la base de données : '.$addedWords;
 					}
 					?>
