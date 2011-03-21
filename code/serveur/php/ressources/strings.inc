@@ -12,6 +12,10 @@ $strings['err_contact_fill_all'] = "Veuillez remplir tout les champs.";
 
 $strings['err_creategame_fill_all'] = "Tous les mots du nuage ne sont pas renseignés.";
 $strings['err_creategame_nbwords_value'] = "Veuillez entrer une valeur supérieure à zéro.";
+$strings['ok_creategame_game_create'] = "La partie à bien été enregistrée.";
+$strings['err_creategame_eq_relations'] = "Les deux relations doivent être différentes.";
+$strings['err_creategame_isNumeric_tDifficulty'] = "La difficulté doit être une valeur numérique";
+$strings['err_creategame_cloud_fill_all'] = "Veuillez remplir l'intégralité des champs.";
 
 $strings['err_index_invalid_msg'] = "Paramètre de la requête invalide. Merci de nous signaler le problème.";
 $strings['err_index_redirect'] = "Erreur de redirection. Merci de nous signaler le problème.";

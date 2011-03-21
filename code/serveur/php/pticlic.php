@@ -648,8 +648,8 @@ function setGameGetScore($user, $pgid, $gid, $answers) {
 function insertNode($node) {
 	$db = getDB();
 	
-	if($db->querySingle("SELECT eid FROM node WHERE name=".$node) != null) {
-		$db->exec("INSERT INTO node(name,type,weight) VALUES($node,1,50);");
+	if($db->querySingle("SELECT eid FROM node WHERE name='".SQLite3::escapeString($node)."'") == null) {
+		$db->exec("INSERT INTO node(name,type,weight) VALUES('".SQLite3::escapeString($node)."',1,50);");
 		return true;
 	}
 
@@ -664,6 +664,6 @@ function insertNode($node) {
 function getNodeEid($node) {
 	$db = getDB();
 
-	//return $db->querySingle("SELECT eid FROM node WHERE name='".SQLite3::escapeString($node)."';");
+	return $db->querySingle("SELECT eid FROM node WHERE name='".SQLite3::escapeString($node)."';");
 }
 ?>

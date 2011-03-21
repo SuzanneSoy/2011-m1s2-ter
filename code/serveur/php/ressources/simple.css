@@ -112,10 +112,12 @@ form input[type=submit] {
 
 .creategame .wordsform {
 	border-collapse : collapse;
+	margin-top : 20px;
 }
 
 .creategame .wordsform td {
 	border : 1px solid #808080;
+	border-right : none;
 	vertical-align : middle;
 	padding : 1.5ex;
 	text-align : right;
@@ -127,6 +129,7 @@ form input[type=submit] {
 	text-align : left;
 	padding-left : 1em;
 	padding-right : 3em;
+	border-left : 0;
 }
 
 
