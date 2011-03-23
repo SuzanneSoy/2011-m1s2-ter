@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PtiClic pre-alpha 0.2</title>
+	<style>
+#screen {
+	border: thin solid blue;
+	width: 320px;
+	position: absolute;
+	height: 400px;
+}
+
+#centralWord {
+	border-bottom: thin solid blue;
+	text-align: center;
+}
+
+#currentWord {
+	border-bottom: thin solid blue;
+	text-align: center;
+}
+
+.relation {
+	padding-left: 76px;
+	background-color: #dfe;
+	-moz-border-radius: 10px;
+	margin: 10px;
+	min-height: 72px;
+	background-repeat: no-repeat;
+	background-position: 0 center;
+}
+
+.relation.rid-1 { background-image: url("img/rel/-1.png"); }
+.relation.rid0 { background-image: url("img/rel/0.png"); }
+.relation.rid5 { background-image: url("img/rel/5.png"); }
+.relation.rid7 { background-image: url("img/rel/7.png"); }
+.relation.rid9 { background-image: url("img/rel/9.png"); }
+.relation.rid10 { background-image: url("img/rel/10.png"); }
+
+	</style>
+</head>
+<body>
+<div id="screen">
+	<div id="centralWord">MotCentral</div>
+	<div id="currentWord">MotNuage</div>
+	<div id="relations">
+		<div id="r1" class="relation rid7">MotNuage est un synonyme de MotCentral</div>
+		<div id="r2" class="relation rid5">MotNuage a pour contraire MotCentral</div>
+		<div id="r3" class="relation rid0">MotNuage est une idée associée à MotCentral</div>
+		<div id="r4" class="relation rid-1">Poubelle</div>
+	</div>
+</div>
+</body>
+</html>
