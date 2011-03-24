@@ -141,7 +141,7 @@ ADJECTIFS, ADVERBS, SUBSTANTIFS, VERBS
 
 \item r\_isa|6|générique|'animal' est un générique de 'chat', 'mammifère', 'être vivant' etc. en sont d'autres... \\
 {\bf \verb![mot central]! est une sorte de...}
-SUBSTANTIFS (mais ADJECTIFS, ADVERBS et VERBS possibles)
+SUBSTANTIFS
 
 \item r\_anto|7|contraire|'chaud' est le contraire de 'froid', vous vous rappelez~? :) \\
 {\bf Un contraire de \verb![mot central]! est...} \\
@@ -149,7 +149,7 @@ ADJECTIFS, ADVERBS, SUBSTANTIFS, VERBS
 
 \item r\_hypo|8|spécifique|'mouche', 'abeille', 'guêpe' sont des spécifiques de 'insecte'... \\
 {\bf un spécifique de \verb![mot central]! est...} \\
-SUBSTANTIFS (mais ADJECTIFS, ADVERBS et VERBS possibles)
+SUBSTANTIFS 
 
 \item r\_has\_part|9|partie|Il faut donner des parties/constituants/éléments du mot cible. Par exemple, 'voiture' pourrait avoir comme parties : 'porte', 'roue', 'moteur', ... \\
 {\bf ... est une partie de \verb![mot central]!} \\
@@ -173,6 +173,7 @@ SUBSTANTIFS
 
 \item r\_carac|17|caractéristique|Pour une terme donné, en général un objet, il est demandé d'énumérer les caractéristiques possibles et/ou typiques de cet objet. Par exemple, pour 'eau' on pourra avoir 'liquide', 'froide', 'chaude', etc. \\
 {\bf Une caractéristique de \verb![mot central]! est...}
+ADJECTIFS
 
 \end{itemize}
 
@@ -239,6 +240,17 @@ Vingt-huit relations qui figurent dans la base de données d'origine ne sont pas
 
 \end{itemize}
 
+
+Pour un mot central donné, seulement un nombre limité de relations sont possibles~:
+
+SUBSTANTIF~: synonyme, contraire, spécifique, générique, partie, tout, lieu
+VERB~: synonyme, contraire, lieu, instrument, agent
+ADJECTIF~: synonyme, contraire
+ADVERB~: synonyme, contraire
+
+Les adverbs et le locutions advertiales sont relativement peu fréquents. La grande majorité des mots sont des substatifs, des verbs et des adjectifs ainsi que des locutions nominales, verbales et adjectivales. 
+
+La relation "patient" est possible pour un mot central qui est un verb, mais est plus complexe car elle ne fonctionne que si le verb en question est transitif. 
 
 
 \section{Analyse des besoins}
