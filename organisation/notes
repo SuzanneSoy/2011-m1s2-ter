@@ -1,3 +1,74 @@
+NOTES DES PREMIERES REUNIONS (IL ME SEMBLE)
+
+GEORGES'S NOTEBOOK (en vrac)
+=====================
+(Attention, parfois je n'arrivais pas à lire,
+donc j'ai deviné...)
+
+
+pas de triche -> ça démotive, ça pourrit la base
+
+réseau social ? -> pas multicompte, pas de vs sur des parties issues du même téléphone
+
+progression + de mots, + de cibles, relations complexes, mots difficiles
+
+Dans Gantt -> alpha-tests
+
+ADDICTION : 
+	- attirer les gens
+	- rappel -> faire revenir les gens
+	- faire que les joueurs continue à jouer (accrocher les joueurs)
+	
+débblocage de nouveaux modes
+	- marathon
+	- vs
+	- shoot
+	- image cachée
+	- mosaïque / memorg
+	
+Jdm -> diko.php, reso.php, reso_xml.php
+
+SERVEUR MySQL
+--------------------
+- pas action/agent ou patient, sauf pour les verbes
+- pas les catégories sytème
+- date pour les insertions (pour les synchros)
+- requête vérif id/mdp ok
+
+pie > 12345
+
+choix non-experts meilleur pris séparément
+Etat del 'arts GWAP
+Luis Von (ou Van) Ann... indexation img
+Libermann "Everyday common facts"
++ GWAP sur smartphones, casual game
+granularité, temps très faible
+données récupérées
+
+tout est très petit : prix, temps, données, tél, ... mais grand nombre de joueurs
+
+biais des résultats dû à la manière de jouer (sur téléphone)
+faire "boucler" réseau -> nuages
+pas de parties trop random
+pouvoir avoir un dump de toutes les modifs depuis X temps
+rajouter M. Lafourcade dans l'alpha-test
+pouvoir baisser la difficulté (automatiquement)
+faire un forum
+shoot-em-up -> pas trop d'adresse
+intégration réseaux sociaux en IT2 plutôt que 3.
+Dans le rapport, comment on crée le nuage ? -> requêtes
+Stats sur l'influence du type mot / stratégie de select
+version mac dump ? SQLite md5/sum
+(sous mac la commande md5 est echo '...' | md5)
+
+!! site Web inscription alpha-tests
+version glisser-déposer le mot sur relation
+
+=====FIN GEORGES'S NOTEBOOK=====
+
+******************
+
+
 BUG : dans les parties qu'on génère, la somme des poids doit toujours être 2, or il y en a certaines où c'est 0 !?!
 
 
