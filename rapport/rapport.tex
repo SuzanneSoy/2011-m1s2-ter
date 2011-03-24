@@ -342,6 +342,16 @@ TYPE\_RELATION(\underline{num}, name, extended\_name, info) \\
 
 TODO: UML, diagrammes de classes, Use cases, etc...
 
+/subsection{Site Internet}
+Afin de pouvoir utiliser le jeu il faut posséder un compte utilisateur. Un utilisateur qui installe pour la première fois l'application sur son smartphone devra obtenir un compte avant de profiter du jeu.
+
+Le site Internet permet de réaliser cette inscription grâce à un formulaire qui permet la saisie des informations nécessaires. Il est également un moyen de présenter le projet, l'application et de prendre contact avec les développeurs.
+
+Le site et constitué d'un petit nombre de pages à savoir : une présentation de l'application et du projet, l'inscription et l'authentification, une page de téléchargement de l'application et de procédure d'installation, ainsi que quelques pages permettant de créer et afficher des parties.
+
+Les deux dernières pages citées concernant la création et l'affichage de parties ne sont pas accessibles à tout le monde. Il faudra que l'utilisateur débloque ce mode en obtenant un certain nombre de points dans le jeu.
+
+
 
 \section{Réalisation}
 \subsection{Cahier des charges}
@@ -366,6 +376,14 @@ TODO: UML, diagrammes de classes, Use cases, etc...
 \subsubsection{Gestionnaire de version~: GitHub}
 \subsubsection{JUnit}
 \subsubsection{d'autres subsubsections~?}
+
+
+/subsection{Site Internet}
+Le site Internet est en grande partie "statique" (langage HTML). Les pages "statiques" sont les pages de présentation, de contact et de téléchargement.
+
+Certain éléments comme l'inscription, la connexion... ont une partie PHP qui permet d'intérroger la base de données afin de valider ou non l'action.
+
+La création de parties et elle réalisée en PHP et JavaScript afin de rendre plus intuitif l'interraction avec l'utilisateur. Les parties générées par les utilisateurs ont éjoutées dans la base de données pour qu'elle puissent par la suite être jouées par les autres joueurs.
 
 
 \section{Discussion}
