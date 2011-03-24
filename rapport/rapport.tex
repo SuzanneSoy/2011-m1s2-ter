@@ -127,7 +127,7 @@ rid=430049:n1=82029:n2=151553:t=12:w=18
 
 
 \subsection{Analyse plus approfondie du jeu}
-Bien que le dump de la base de données contienne 39 relations différentes, la version en ligne du jeu du PtiClic ne contient que onze relations~:
+Bien que le dump de la base de données contienne 39 relations différentes, la version en ligne du jeu du PtiClic ne contient que treize relations~:
 
 \begin{itemize}
 
@@ -175,9 +175,16 @@ SUBSTANTIFS
 {\bf Une caractéristique de \verb![mot central]! est...}
 ADJECTIFS
 
+\item r\_lieu\_action|30|lieu>action|A partir d'un lieu, énumérer les action typiques possibles dans ce lieu.
+VERBS
+
+\item r\_action\_lieu|31|action>lieu|A partir d'une action (un verbe), énumérer les lieux typiques possibles où peut être réalisée cette action.
+{\bf Un lieu pour \verb![mot central]! est...} \\
+SUBSTANTIFS
+
 \end{itemize}
 
-Vingt-huit relations qui figurent dans la base de données d'origine ne sont pas utilisées dans l'application~:
+Vingt-six relations qui figurent dans la base de données d'origine ne sont pas utilisées dans l'application~:
 
 \begin{itemize}
 \item r\_raff\_sem|1|raffinement sémantique|Raffinement sémantique vers un usage particulier du terme source
@@ -207,10 +214,6 @@ Vingt-huit relations qui figurent dans la base de données d'origine ne sont pas
 \item r\_familly|22|famille|Des mots de la même famille sont demandés. Par exemple, pour 'lait' on pourrait mettre 'laitier', 'laitage', 'laiterie', etc.
 
 \item r\_chunk\_pred|29|predicat|(interne) d'un chunk quel prédicat ?
-
-\item r\_lieu\_action|30|lieu>action|A partir d'un lieu, énumérer les action typiques possibles dans ce lieu.
-
-\item r\_action\_lieu|31|action>lieu|A partir d'une action (un verbe), énumérer les lieux typiques possibles où peut être réalisée cette action.
 
 \item r\_sentiment|32|sentiment|Pour un terme donné, évoquer des SENTIMENTS ou EMOTIONS que vous pourriez associer à ce terme. Par exemple, la joie, le plaisir, le dégoût, la peur, la haine, l'amour, l'indifférence, l'envie, etc.
 
@@ -426,8 +429,7 @@ Making people play for Lexical Acquisition. In Proc. SNLP 2007, 7th Symposium on
 
 \subsection{Java}
 
-Code Conventions for the Java Programming Language, Oracle, 1999. (\url{http://www.oracle.com/technetwork/java/codeconvtoc-136057.html,
-  www.oracle.com/technetwork/java/codeconventions-150003.pdf})
+Code Conventions for the Java Programming Language, Oracle, 1999. (\url{http://www.oracle.com/technetwork/java/codeconvtoc-136057.html, www.oracle.com/technetwork/java/codeconventions-150003.pdf})
 
 \subsection{Android}
 
@@ -452,18 +454,6 @@ $*$ & r\_holo      & 10 & Fait partie de (patte -> chat) \\
     & r\_carac     & 17 & Caractéristique (chat -> affectueux (ou pas…)) \\
 \hline
 \end{tabular}
-\newpage
-
-\section{Notes Bertrand}
-\subsection{Outils}
-\subsubsection{Android}
-\subsubsection{Git}
-\subsubsection{Eclipse}
-\subsubsection{Visual Paradigm}
-\subsection{Language de programmation}
-\subsubsection{Java}
-\subsubsection{PHP}
-\subsubsection{SHELL}
 \newpage
 
 \appendix
