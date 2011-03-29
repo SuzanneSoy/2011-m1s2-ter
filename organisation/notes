@@ -1,3 +1,5 @@
+2010-03-29 : TODO : s'assurer dans le serveur que les mots du nuage sont envoyés dans l'ordre, et que les num sont *toujours* entre 0..n
+
 BUG : dans les parties qu'on génère, la somme des poids doit toujours être 2, or il y en a certaines où c'est 0 !?!
 
 
