@@ -1,4 +1,15 @@
 $(function () {
+/*	window.setTimeout(function() {
+	var w=480;
+	var h=800;
+	var a=[]; $("#screen").find("*").add("#screen").each(function(i,e){ a.push({
+		e:$(e),
+		w:$(e).width()*w/480,
+		h:$(e).height()*h/800});
+	});
+	$.each(a,function(i,a){ a.e.width(a.w); a.e.height(a.h); });
+}, 1000); */
+	
 	var url = "tmp.json"
 	$.getJSON(url, function(data) {
 		var game = data[0];
