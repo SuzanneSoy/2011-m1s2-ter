@@ -4,31 +4,63 @@
 	<title>PtiClic pre-alpha 0.2</title>
 	<meta charset="utf-8" />
 	<style>
-#screen {
-	border: thin solid blue;
-	width: 320px;
-	position: absolute;
-	height: 400px;
+body {
+	background-color: black;
+	padding: 0;
+	margin: 0;
+	text-align: center;
 }
 
-.mn.caption {
-	border-bottom: thin solid blue;
-	text-align: center;
+#screen {
+	background-color: white;
+	display: inline-block;
+	text-align: left;
+	width: 480px;
+	height: 800px;
+	background-color : #FFFFE0;
 }
 
 .mc.caption {
-	border-bottom: thin solid blue;
+	border-bottom: medium solid #44AA44;
 	text-align: center;
+	color: #8b4;
+	font-size: 50px;
+	padding: 10px 0;
+}
+
+.mn.caption {
+	border-bottom: medium solid #44AA44;
+	text-align: center;
+	color: #4a4;
+	background-color: #F0F8D0;
+	font-size: 30px;
+	padding: 10px 0;
+}
+
+.relations {
+	width: 100%;
 }
 
 .relations div {
-	padding-left: 76px;
-	background-color: #dfe;
+	background-color: #F0F8D0;
+	border: thin solid #44AA44;
 	-moz-border-radius: 10px;
 	margin: 10px;
-	min-height: 72px;
+	height: 72px;
 	background-repeat: no-repeat;
-	background-position: 0 center;
+	padding: 10px;
+}
+
+.relations div:nth-child(odd) {
+	text-align: right;
+	padding-left: 76px;
+	background-position: 2% center;
+}
+
+.relations div:nth-child(even) {
+	text-align: left;
+	padding-right: 76px;
+	background-position: 98% center;
 }
 
 .relations .rid-1 { background-image: url("img/rel/-1.png"); }
@@ -44,8 +76,8 @@
 </head>
 <body>
 <div id="screen">
-	<div class="mn caption"></div>
 	<div class="mc caption"></div>
+	<div class="mn caption"></div>
 	<div class="relations"></div>
 </div>
 </body>
