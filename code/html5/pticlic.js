@@ -7,8 +7,8 @@ $(function () {
 		
 		var refresh = function() {
 			if (currentWordNb < game.cloud.length) {
-				$(".mc").text(game.cloud[currentWordNb].name);
-				$(".mn").text(game.center.name);
+				$(".mn").text(game.cloud[currentWordNb].name);
+				$(".mc").text(game.center.name);
 			} else {
 				$(".relations").empty();
 				alert("Partie terminée !");

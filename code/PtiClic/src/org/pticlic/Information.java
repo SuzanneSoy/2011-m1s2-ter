@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.TextView;
 
@@ -21,8 +22,10 @@ public class Information extends Activity {
 		((TextView)findViewById(R.id.infoVersion)).setText("version : " + getString(R.string.version));
 		InputStream in = getResources().openRawResource(R.raw.info);
 		WebView webview = (WebView)findViewById(R.id.textContent);
-		webview.setBackgroundColor(Color.BLACK);
+		webview.setBackgroundColor(Color.WHITE);
 		webview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+		WebSettings webSettings = webview.getSettings();
+		webSettings.setJavaScriptEnabled(true);
 		
 		if (in != null) {
 			
@@ -37,7 +40,7 @@ public class Information extends Activity {
 				}
 			
 			in.close();
-			webview.loadData(buf.toString(), "text/html", "UTF-8");
+			webview.loadUrl("http://www.pticlic.fr/html5/code/html5/");
 			
 			} catch (IOException e) {
 				//TODO : Ajouter un boite de dialog indiquant qu'une erreur est arrivee.
