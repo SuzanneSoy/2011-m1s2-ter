@@ -83,6 +83,9 @@ function main()
 		else
 			echo 'false';
 	}
+	else if($action == 5) {           // Get relations (JSON)
+		echo "mqslkjfmlqskjfqmskf";//echo getGameRaltionsJSON();
+	}
 	else {
 		throw new Exception("Commande inconnue", 2);
 	}

@@ -24,6 +24,7 @@ require_once("db.php");
 *   normalizeProbas($row);
 *   setGame($user, $pgid, $gid, $answers);
 *   get_game_relations();
+	getGameRelationsJSON();
 *   setGameGetScore($user, $pgid, $gid, $answers);
 *   insertNode($node);
 *   getNodeEid($node);
@@ -625,6 +626,20 @@ function get_game_relations()
 		$relations[] = 22;
 
 		return $relations;
+}
+
+function getGameRelationsJSON() {
+	$json = "{";
+	
+	foreach($stringRelations as $id=>$description)
+		if($id == -1)
+			$json .= '"'.$id.'":"'.$description.'"';
+		else
+			$json .= ',"'.$id.'":"'.$description.'"';
+			
+	$json .= '}';
+	
+	return $json;
 }
 
 function setGameGetScore($user, $pgid, $gid, $answers) {
