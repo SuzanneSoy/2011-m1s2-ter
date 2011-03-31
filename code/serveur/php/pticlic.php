@@ -666,4 +666,10 @@ function getNodeEid($node) {
 
 	return $db->querySingle("SELECT eid FROM node WHERE name='".SQLite3::escapeString($node)."';");
 }
+
+function wordExist($node) {
+	$db = getDB();
+
+	return $db->querySingle("SELECT eid FROM node WHERE name='".SQLite3::escapeString($node)."';") ? true : false;
+}
 ?>

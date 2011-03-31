@@ -166,15 +166,16 @@ else
 		<script type="text/javascript" src="ressources/jquery-1.5.1.min.js" /></script>
 		<script type="text/javascript" src="ressources/createGame.js" /></script>
 <style type="text/css">
-
+	#wordLines input{
+			border : 2px solid grey;		
+		}
 </style>
 	</head>
 	<body>
 		<?php include("ressources/menu.inc"); ?>	
 		<div class="content creategame">
 			<h2>Création de parties</h2>
-			<label for="centralWord"> Le mot central : </label>
-			<input type="text" id="centralWord" name="centralWord" />
+			<div id="center">Mot central</div>
 			<div id="wordLines"></div>
 			<input type="button" id="addLine" value="Ajouter un ligne" />
 
