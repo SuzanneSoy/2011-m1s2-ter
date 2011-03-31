@@ -1,16 +1,36 @@
-$(function () {
-/*	window.setTimeout(function() {
-	var w=480;
-	var h=800;
-	var a=[]; $("#screen").find("*").add("#screen").each(function(i,e){ a.push({
-		e:$(e),
-		w:$(e).width()*w/480,
-		h:$(e).height()*h/800});
-	});
-	$.each(a,function(i,a){ a.e.width(a.w); a.e.height(a.h); });
-}, 1000); */
+function jss() {
+	var w=480, h=800;
+	var mch = h/8, mnh = h*0.075;
+	$("#screen")
+		.width(w)
+		.height(h)
 	
-	var url = "tmp.json"
+	$("#mc-caption-block")
+		.width(w)
+		.height(mch)
+		.position({my:"center top", at:"center top", of:"#screen", collision:"none"});
+	$("#mc-caption")
+		.fitFont(w*0.9, mch*0.9, 20)
+		.css("max-width", w*0.9)
+		.position({my:"center center", at:"center center", of:"#mc-caption-block", collision:"none"});
+	
+	$("#mn-caption-block")
+		.width(w)
+		.height(mnh)
+		.css("border-width", h/100)
+		.position({my:"center top", at:"center bottom", of:"#mc-caption-block", collision:"none"});
+	$("#mn-caption")
+		.fitFont(w*0.9, mnh*0.9, 20)
+		.css("max-width", w*0.9)
+		.position({my:"center center", at:"center center", of:"#mn-caption-block", collision:"none"});
+
+	$("#screen")
+		.position({my:"center center", at:"center center", of:"body", collision:"none"});
+}
+
+
+$(function () {
+	var url = "tmp.json";
 	$.getJSON(url, function(data) {
 		var game = data[0];
 		var currentWordNb = 0;
@@ -24,6 +44,7 @@ $(function () {
 				$(".relations").empty();
 				alert("Partie terminée !");
 			}
+			jss();
 		}
 		
 		$.each(game.cat, function(i, cat) {
