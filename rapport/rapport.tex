@@ -474,6 +474,31 @@ $*$ & r\_holo      & 10 & Fait partie de (patte -> chat) \\
 \end{tabular}
 \newpage
 
+\section{Notes Bertrand}
+
+\subsection{Langages}
+Notre projet c'est decouper en 2 gros parties. La premiere partie, la \og{}partie Serveur\fg{}, permet de realiser des actions sur l'ensemble de la base de donnee (creation de parti, validation de partie\ldots),
+la realisation de celle-ci c'est fait principalement en PHP, l'autre partie etant du SHELL.
+La seconde partie, la \og{}partie Cliente\fg{}, permet a l'utilisateur de pouvoir interagir avec le serveur, et surtout de pouvoir jouee a PtiClic. Elle a ete realiser en Java en utilisant le framework Android.
+
+\subsubsection{PHP}
+Comme cite plus haut, nous avons utiliser PHP pour la creation du serveur. PHP est un langage imperatif, il dispose aussi depuis la version 5 de fonctionnalites objet, mais nous ne les utilisont pas dans projet. Ce langage est
+principalement utilise pour produire des pages Web dynamiques, c'est la raison de sont utilisation dans notre projet. C'est un langage peu type, souple, multiplate-forme, libre et gratuit.
+Nous utilisons donc PHP pour la creation de notre site web \url{http://www.pticlic.fr} ainsi que pour toute la partie generation de partie a savoir la creation, generation, envoie et recuperation de partie PtiClic.
+\subsubsection{SHELL}
+Nous utilisons aussi le langage SHELL. Ce langage est surtout utiliser pour l'initialisation du serveur lors de sont installation sur un serveur different. Sont but, pour notre projet, et de recupere le dernier dump de la base de donnee,
+de convertir ce dump en SQL et de l'insere dans la base de donnee SQLite
+\subsubsection{SQLite3}
+SQLite est un bibliotheque, ecrite en C qui propose un moteur de base de donnees relationnelles accessible par le langage SQL. Contrairement aux serveurs de bases de donnee traditionnels, comme MySQL ou PostgreSQLL, sa paritcularite est
+de ne pas reproduire le schema habituel client-serveur mais d'être directement intégrée aux programmes. L'intégralité de la base de données est stockée dans un fichier indépendant de la plateforme. Le code source de SQLite est dans le domaine public, ce qui permet son utilisation sans restriction aussi bien dans les projets open source que dans les projet propriétaire.
+\subsubsection{Java}
+\subsection{Outils}
+\subsubsection{Eclipse}
+\subsubsection{Git}
+\subsubsection{Visual Paradigm}
+
+\newpage
+
 \appendix
 
 \section{Annexe A}
