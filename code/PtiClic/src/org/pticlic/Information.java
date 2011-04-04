@@ -40,7 +40,7 @@ public class Information extends Activity {
 				}
 			
 			in.close();
-			webview.loadUrl("http://www.pticlic.fr/html5/code/html5/");
+			webview.loadData(html, "text/html", "UTF-8");
 			
 			} catch (IOException e) {
 				//TODO : Ajouter un boite de dialog indiquant qu'une erreur est arrivee.
