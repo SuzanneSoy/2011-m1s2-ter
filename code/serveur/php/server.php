@@ -57,13 +57,15 @@ function main()
 		}
 		createGame(intval($_GET['nb']), $_GET['mode']);
 		echo '{"success":1}';
-	} else if($action == 0) {           // "Get partie"
+	}
+	else if($action == 0) {           // "Get partie"
 		// Requête POST : http://serveur/server.php?action=0&nb=2&mode=normal&user=foo&passwd=bar
 		if(!isset($_GET['nb']) || !isset($_GET['mode'])) {
 			throw new Exception("La requête est incomplète", 2);
 		}
 		getGame($user, intval($_GET['nb']), $_GET['mode']);
-	} else if($action == 1) {           // "Set partie"
+	}
+	else if($action == 1) {           // "Set partie"
 		// Requête POST : http://serveur/server.php?action=1&mode=normal&user=foo&passwd=bar&gid=1234&pgid=12357&0=0&1=-1&2=22&3=13&9=-1
 		if (!isset($_GET['pgid']) || !isset($_GET['gid'])) {
 			throw new Exception("La requête est incomplète", 2);
@@ -71,7 +73,20 @@ function main()
 		// TODO : il faudrait filtrer les paramètres qui correspondent à une réponse
 		// au lieu d'envoyer $_GET en entier, mais on ne connaît pas leur nom à l'avance.
 		setGameGetScore($user, $_GET['pgid'], $_GET['gid'], $_GET);
-	} else {
+	}
+	else if($action == 4) {           // CheckWord
+		if (!isset($_GET['word']))
+			throw new Exception("La requête est incomplète", 2);
+
+		if(wordExist($_GET['word']))
+			echo 'true';
+		else
+			echo 'false';
+	}
+	else if($action == 5) {           // Get relations (JSON)
+		echo "mqslkjfmlqskjfqmskf";//echo getGameRaltionsJSON();
+	}
+	else {
 		throw new Exception("Commande inconnue", 2);
 	}
 }

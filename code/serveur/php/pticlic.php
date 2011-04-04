@@ -24,6 +24,7 @@ require_once("db.php");
 *   normalizeProbas($row);
 *   setGame($user, $pgid, $gid, $answers);
 *   get_game_relations();
+	getGameRelationsJSON();
 *   setGameGetScore($user, $pgid, $gid, $answers);
 *   insertNode($node);
 *   getNodeEid($node);
@@ -627,6 +628,20 @@ function get_game_relations()
 		return $relations;
 }
 
+function getGameRelationsJSON() {
+	$json = "{";
+	
+	foreach($stringRelations as $id=>$description)
+		if($id == -1)
+			$json .= '"'.$id.'":"'.$description.'"';
+		else
+			$json .= ',"'.$id.'":"'.$description.'"';
+			
+	$json .= '}';
+	
+	return $json;
+}
+
 function setGameGetScore($user, $pgid, $gid, $answers) {
 	$scores = setGame($user, intval($pgid), intval($gid), $answers);
 	// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
@@ -665,5 +680,11 @@ function getNodeEid($node) {
 	$db = getDB();
 
 	return $db->querySingle("SELECT eid FROM node WHERE name='".SQLite3::escapeString($node)."';");
+}
+
+function wordExist($node) {
+	$db = getDB();
+
+	return $db->querySingle("SELECT eid FROM node WHERE name='".SQLite3::escapeString($node)."';") ? true : false;
 }
 ?>
