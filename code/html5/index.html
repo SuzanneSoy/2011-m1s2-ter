@@ -6,9 +6,6 @@
 	<style>
 body {
 	background-color: black;
-	padding: 0;
-	margin: 0;
-	text-align: left;
 }
 
 #screen {
@@ -17,63 +14,36 @@ body {
 }
 
 #mc-caption {
-	position: absolute;
-	text-align: center;
 	color: #8b4;
 }
 
 #mn-caption {
-	position: absolute;
-	text-align: center;
 	color: #4a4;
 }
 
-#mc-caption-block {
-	position: absolute;
-}
-
 #mn-caption-block {
-	position: absolute;
 	border-top: medium solid #44AA44;
 	border-bottom: medium solid #44AA44;
 	background-color: #F0F8D0;
 }
-	</style>
-
-<!--
-/*.relations {
-	width: 100%;
-}*/
-
 .relations div {
 	background-color: #F0F8D0;
 	border: thin solid #44AA44;
 	-moz-border-radius: 10px;
-/*	margin: 10px;
-	height: 72px; */
 	background-repeat: no-repeat;
-/*	padding: 10px; */
-}
-
-.relations div:nth-child(odd) {
-	text-align: right;
-	padding-left: 76px;
-	background-position: 2% center;
-}
-
-.relations div:nth-child(even) {
-	text-align: left;
-	padding-right: 76px;
-	background-position: 98% center;
 }
 
 .relations .rid-1 { background-image: url("img/rel/-1.png"); }
-.relations .rid0 { background-image: url("img/rel/0.png"); }
-.relations .rid5 { background-image: url("img/rel/5.png"); }
-.relations .rid7 { background-image: url("img/rel/7.png"); }
-.relations .rid9 { background-image: url("img/rel/9.png"); }
-.relations .rid10 { background-image: url("img/rel/10.png"); } */
-	</style>-->
+.relations .rid0  { background-image: url("img/rel/0.png"); }
+.relations .rid5  { background-image: url("img/rel/5.png"); }
+.relations .rid7  { background-image: url("img/rel/7.png"); }
+.relations .rid9  { background-image: url("img/rel/9.png"); }
+.relations .rid10 { background-image: url("img/rel/10.png"); }
+
+.relations .hot {
+	background-color: yellow;
+}
+	</style>
 	<script src="jquery-1.5.1.min.js"></script>
 	<script src="jquery-ui-1.8.11.custom.min.js"></script>
 	<script src="pticlic.js"></script>
@@ -85,7 +55,7 @@ body {
 	<div id="mn-caption-block"></div>
 	<div id="mc-caption" class="mc"></div>
 	<div id="mn-caption" class="mn"></div>
-	<!--<div class="relations"></div>-->
+	<div class="relations"></div>
 </div>
 </body>
 </html>
