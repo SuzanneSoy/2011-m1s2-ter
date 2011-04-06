@@ -31,7 +31,7 @@ function logError($errNum, $msg, $other="")
 function main()
 {
 	if(!isset($_GET['action']) || !isset($_GET['user']) || !isset($_GET['passwd'])) {
-		throw new Exception("La requête est incomplète", 2);
+		errRequestIncomplete();
 	}
 	
 	// Login
@@ -39,7 +39,7 @@ function main()
 	$user = SQLite3::escapeString($_GET['user']);
 	$loginIsOk = checkLogin($user, $_GET['passwd']);
 	if ($action != 3 && (!$loginIsOk)) {
-		throw new Exception("Utilisateur non enregistré ou mauvais mot de passe", 3);
+		errUserUnknownOrBadPassword();
 	}
 	if ($action == 3) {
 		echo '{"login_ok":' . ($loginIsOk ? 'true' : 'false') . '}';
@@ -53,26 +53,26 @@ function main()
 	if  ($action == 2) {                // "Create partie"
 		// Requête POST : http://serveur/server.php?action=2&nb=2&mode=normal&user=foo&passwd=bar
 		if (!isset($_GET['nb']) || !isset($_GET['mode'])) {
-			throw new Exception("La requête est incomplète", 2);
+			errRequestIncomplete();
 		}
 		createGame(intval($_GET['nb']), $_GET['mode']);
 		echo '{"success":1}';
 	} else if($action == 0) {           // "Get partie"
 		// Requête POST : http://serveur/server.php?action=0&nb=2&mode=normal&user=foo&passwd=bar
 		if(!isset($_GET['nb']) || !isset($_GET['mode'])) {
-			throw new Exception("La requête est incomplète", 2);
+			errRequestIncomplete();
 		}
 		getGame($user, intval($_GET['nb']), $_GET['mode']);
 	} else if($action == 1) {           // "Set partie"
 		// Requête POST : http://serveur/server.php?action=1&mode=normal&user=foo&passwd=bar&gid=1234&pgid=12357&0=0&1=-1&2=22&3=13&9=-1
 		if (!isset($_GET['pgid']) || !isset($_GET['gid'])) {
-			throw new Exception("La requête est incomplète", 2);
+			errRequestIncomplete();
 		}
 		// TODO : il faudrait filtrer les paramètres qui correspondent à une réponse
 		// au lieu d'envoyer $_GET en entier, mais on ne connaît pas leur nom à l'avance.
 		setGameGetScore($user, $_GET['pgid'], $_GET['gid'], $_GET);
 	} else {
-		throw new Exception("Commande inconnue", 2);
+		errRequestIncomplete();
 	}
 }
 
