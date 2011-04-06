@@ -10,44 +10,38 @@ function jss() {
 		});
 	
 	$("#screen")
-		.width(w)
-		.height(h)
-		.position({my:"center center", at:"center center", of:"body", collision:"none"});
+		.wh(w, h)
+		.north($("body").north()); // TODO : par rapport à la fenêtre entière.0
 	
 	$("#mc-caption-block")
-		.css({
-			position: "absolute"
-		})
-		.width(w)
-		.height(mch)
-		.position({my:"center top", at:"center top", of:"#screen", collision:"none"});
+		.wh(w, mch)
+		.north($("#screen").north());
 	
 	$("#mc-caption")
 		.css({
 			maxWidth: w*0.9,
-			textAlign: "center",
-			position: "absolute"
+			textAlign: "center"
 		})
 		.fitFont(w*0.9, mch*0.9, 20)
-		.position({my:"center center", at:"center center", of:"#mc-caption-block", collision:"none"});
+		.center($("#mc-caption-block").center());
 	
 	$("#mn-caption-block")
 		.css({
 			borderWidth: h/100,
 			position: "absolute"
 		})
-		.width(w)
-		.height(mnh)
-		.position({my:"center top", at:"center bottom", of:"#mc-caption-block", collision:"none"});
+		.wh(w, mnh)
+		.north($("#mc-caption-block").south());
 	
 	$("#mn-caption")
 		.css({
 			maxWidth: w*0.9,
 			textAlign: "center",
-			position: "absolute"
+			position: "absolute",
+			zIndex: 10
 		})
 		.fitFont(w*0.9, mnh*0.9, 20)
-		.position({my:"center center", at:"center center", of:"#mn-caption-block", collision:"none"});
+		.center($("#mn-caption-block").center());
 	
 	$(".relations > div")
 		.css({
@@ -72,7 +66,13 @@ function jss() {
 		});
 	
 	$(".relations")
-		.position({my:"center bottom", at:"center bottom", of:"#screen", offset:"0 -10", collision:"none"});
+		.south($("#screen").south());
+}
+
+function animateNext(e, button) {
+	console.log(e, e.clientX, e.clientY);
+	$(button).qAddClass("hot").delay(100).qRemoveClass("hot");
+	$("#mn-caption").animate({left:e.clientX, top:e.clientY},1500);
 }
 
 
@@ -98,9 +98,9 @@ $(function () {
 			$('<div/>')
 				.html(cat.name.replace(/%(m[cn])/g, '<span class="$1"/>'))
 				.addClass("rid"+cat.id)
-				.click(function() {
+				.click(function(e) {
 					answers[currentWordNb++] = cat.id;
-					$(this).addClass("hot")//.delay(500).removeClass("hot"); // TODO: just blink.
+					animateNext(e, this);
 					refresh();
 				})
 				.appendTo(".relations");
