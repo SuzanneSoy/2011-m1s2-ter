@@ -176,9 +176,21 @@ else
 		<div class="content creategame">
 			<h2>Création de parties</h2>
 			<p>Cette page vous permet de créer des parties personalisées en indiquant les mots qui seront affiché pour un mot central.<br /><br />
-			<div id="center">Mot central</div>
+			<div id="center">
+				<label for="centralWord"> Le mot central : </label><input type="text" id="centralWord" name="centralWord" />
+			</div>
+			<div id="relations">
+				<label for="relation1">Relation 1</label>
+				<select name="relation1" id="relation1">
+				</select>
+				<label for="relation2">Relation 2</label>
+				<select name="relation2" id="relation2">
+				</select>
+			</div>
 			<div id="wordLines"></div>
 			<div id="button"></div>
+		</div>
+		<div id="templates" style="display:none">
 		</div>
 		<?php include("ressources/footer.inc"); ?>
 	</body>

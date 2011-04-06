@@ -1,7 +1,10 @@
-$(function () {
+$($.getJSON("server.php",
+					{action:"5", user:"foo", passwd:"bar"},
+					function (data) {
 	var numWord = 1;
 	var user = "foo";
 	var passwd = "bar";
+	var relations = data;
 	
 	var displayNWordLines = function (nb) {
 
@@ -21,15 +24,16 @@ $(function () {
 		numWord += nb;
 	}
 	
-	var displayCentralWord = function () {
-		$("#center").html('<label for="centralWord"> Le mot central : </label><input type="text" id="centralWord" name="centralWord" />');
+	var displayCentralWordAndRelations = function () {
 		$("#centralWord").focusout(function () {
-										var input = "centralWord";
-										checkWord(input)
-									}
-								);
+			var input = "centralWord";
+			checkWord(input);
+		});
+		$.each(relations,function(i,value){
+			console.log(value);
+			$('<option/>').val(i).text(value).appendTo("#relations select")
+		});
 	}
-	
 	var displayButtons = function () {
 		$("#button").html('<input type="button" id="addLine" name="addLine" value="Ajouter" />');
 		$("#addLine").click(function(){displayNWordLines(1)});
@@ -56,13 +60,7 @@ $(function () {
     	}
    }
 
-	var getRelationsList = function () {
-		$.getJSON("server.php?action=5&user=foo&passwd=ba",function (data) {
-														$.debug(data);
-													});
-	}
-	getRelationsList();
-	displayCentralWord();	
+	displayCentralWordAndRelations();	
 	displayNWordLines(10);
 	displayButtons();
-});
+}));
