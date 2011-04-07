@@ -167,8 +167,19 @@ else
 		<script type="text/javascript" src="ressources/createGame.js" /></script>
 <style type="text/css">
 	#wordLines input{
-			border : 2px solid grey;		
-		}
+		border : 2px solid grey;		
+	}
+	.wordLine .status {
+		visibility: hidden;
+	}
+	.wordLine.valid .status, #center.valid .status {
+		color: green;
+		visibility: visible;
+	}
+	.wordLine.invalid .status, #center.invalid .status, #center .status {
+		color: red;
+		visibility: visible;
+	}
 </style>
 	</head>
 	<body>
@@ -176,8 +187,12 @@ else
 		<div class="content creategame">
 			<h2>Création de parties</h2>
 			<p>Cette page vous permet de créer des parties personalisées en indiquant les mots qui seront affiché pour un mot central.<br /><br />
+			<div id="errorDiv" class="message warning" style="display:none;"></div>
+			
 			<div id="center">
-				<label for="centralWord"> Le mot central : </label><input type="text" id="centralWord" name="centralWord" />
+				<label for="centralWord"> Le mot central : </label>
+				<input type="text" id="centralWord" name="centralWord" />
+				<span class="status">●</span>
 			</div>
 			<div id="relations">
 				<label for="relation1">Relation 1</label>
@@ -187,7 +202,15 @@ else
 				<select name="relation2" id="relation2">
 				</select>
 			</div>
-			<div id="wordLines"></div>
+			<div id="wordLines">
+				<div style="display:none">
+					<div class="wordLine" id="templateWordLine">
+						<label for="word"></label>
+						<input id="word"/>
+						<span class="status">●</span>
+					</div>
+				</div>
+			</div>
 			<div id="button"></div>
 		</div>
 		<div id="templates" style="display:none">
