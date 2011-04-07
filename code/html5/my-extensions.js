@@ -1,9 +1,10 @@
 $.fn.fitFont = function(w, h, minFont, maxFont) {
 	minFont = minFont || 0;
 	maxFont = maxFont || Infinity;
-	e = $(this)
+	e = $(this);
 	var oldpos = e.css("position");
 	e.css("position", "absolute");
+	// TODO : reset temporairement le max-width.
 	var size = parseInt(e.css("font-size"), 10);
 	
 	var i = 0;
@@ -34,6 +35,21 @@ $.fn.fitFont = function(w, h, minFont, maxFont) {
 	return e;
 }
 
+$.fn.fitIn = function(e, t, r, b, l) {
+	e = $(e);
+	if (isNaN(+t)) t = 0;
+	if (isNaN(+r)) r = t;
+	if (isNaN(+b)) b = t;
+	if (isNaN(+l)) l = r;
+	var w = e.width();
+	var h = e.height();
+	t *= h;
+	r *= w;
+	b *= h;
+	l *= w;
+	$(this).fitFont(w - r - l, h - t - b, 20).center(e.center());
+}
+
 function queueize(method) {
 	return function() {
 		var that = $(this);
@@ -54,8 +70,8 @@ $.fn.wh = function(w, h) {
 
 $.fn.relativePos = function(xAnchor, yAnchor, to) {
 	var that = $(this);
-	var deltaX = that.width()  * xAnchor;
-	var deltaY = that.height() * yAnchor;
+	var deltaX = that.outerWidth()  * xAnchor;
+	var deltaY = that.outerHeight() * yAnchor;
 
 	if (to) {
 		that.css("position", "absolute");

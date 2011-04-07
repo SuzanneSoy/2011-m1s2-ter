@@ -2,7 +2,7 @@ function jss() {
 	var w=480, h=800;
 	var mch = h/8, mnh = h*0.075;
 	
-	$("body")
+	$("body, html")
 		.css({
 			padding: 0,
 			margin: 0,
@@ -18,30 +18,16 @@ function jss() {
 		.north($("#screen").north());
 	
 	$("#mc-caption")
-		.css({
-			maxWidth: w*0.9,
-			textAlign: "center"
-		})
-		.fitFont(w*0.9, mch*0.9, 20)
-		.center($("#mc-caption-block").center());
+		.fitIn("#mc-caption-block", 0.1);
 	
 	$("#mn-caption-block")
-		.css({
-			borderWidth: h/100,
-			position: "absolute"
-		})
+		.css({borderWidth: h/100})
 		.wh(w, mnh)
 		.north($("#mc-caption-block").south());
 	
 	$("#mn-caption")
-		.css({
-			maxWidth: w*0.9,
-			textAlign: "center",
-			position: "absolute",
-			zIndex: 10
-		})
-		.fitFont(w*0.9, mnh*0.9, 20)
-		.center($("#mn-caption-block").center());
+		.css({zIndex: 10})
+		.fitIn("#mn-caption-block");
 	
 	$(".relations > div")
 		.css({
@@ -71,8 +57,8 @@ function jss() {
 
 function animateNext(e, button) {
 	console.log(e, e.clientX, e.clientY);
-	$(button).qAddClass("hot").delay(100).qRemoveClass("hot");
-	$("#mn-caption").animate({left:e.clientX, top:e.clientY},1500);
+	$(button).clearQueue().qAddClass("hot").delay(100).qRemoveClass("hot");
+	$("#mn-caption").clearQueue().animate({left:e.clientX, top:e.clientY},1500);
 }
 
 
