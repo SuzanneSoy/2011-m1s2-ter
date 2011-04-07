@@ -78,7 +78,7 @@ $(function() {
    				displayError("Le nuage doit contenir au moins "+nbWordMin+" mots valides.");
 		};
 		
-		var nbWordOK = fucntion() {
+		var nbWordOK = function() {
 			var count = 0;
 		   	
    			for (word in wordsOK)
