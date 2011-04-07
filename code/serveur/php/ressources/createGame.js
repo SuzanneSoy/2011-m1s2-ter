@@ -5,7 +5,7 @@ $(function() {
 		var passwd = "bar";
 		var relations = data;
 		var nbWordMin = 10;
-		var WordsOK = new Array();
+		var wordsOK = new Array();
 		var centerOK = false;
 		
 		
