@@ -29,56 +29,18 @@ function jss() {
 		.css({zIndex: 10})
 		.fitIn("#mn-caption-block");
 	
-	// TODO : fitFont pour ".relations div"
-/*	$(".relations > .relation:nth-child(odd)")
-		.css({
-			backgroundPosition: "2% center", // TODO : virer le pourcentage, et séparer l'icône dans un nouvel élément.
-			textAlign: "right",
-		})
-		.find(".icon").css("float", "left");
-	
-	$(".relations > .relation:nth-child(even)")
-		.css({
-			backgroundPosition: "98% center", // TODO : virer le pourcentage, et séparer l'icône dans un nouvel élément.
-			textAlign: "left",
-		})
-		.find(".icon").css("float", "right"); */
-
 	$(".relation > *")
 		.css({
 			display: "inline-block",
 			position: "absolute",
 			textAlign: "right"
 		});
-	
+
+	$(".relation .icon")
+		.wh(72,72);
+		
 	$(".relation")
-		.height(76)
-		.width(w);
-
-    // TODO : fitFont pour ".relations div"
-	/*  $(".relations > .relation:nth-child(odd)")
-        .css({
-            backgroundPosition: "2% center", // TODO : virer le pourcentage, et séparer l'icône dans un nouvel élément.
-            textAlign: "right",
-        })
-        .find(".icon").css("float", "left");
-
-    $(".relations > .relation:nth-child(even)")
-        .css({
-            backgroundPosition: "98% center", // TODO : virer le pourcentage, et séparer l'icône dans un nouvel élément.
-            textAlign: "left",
-        })
-        .find(".icon").css("float", "right"); */
-
-	$(".relation > *")
-		.css({
-			display: "inline-block",
-			position: "absolute"
-		});
-
-	$(".relation")
-		.height(76)
-		.width(w);
+		.wh(w,76);
 
 	$(".relation").each(function (i,e) {
 		e = $(e);

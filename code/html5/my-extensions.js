@@ -1,16 +1,15 @@
 $.fn.fitFont = function(w, h, minFont, maxFont) {
 	minFont = minFont || 0;
 	maxFont = maxFont || Infinity;
-	e = $(this);
-	var oldpos = e.css("position");
-	e.css("position", "absolute");
+	var oldpos = this.css("position");
+	this.css("position", "absolute");
 	// TODO : reset temporairement le max-width.
-	var size = parseInt(e.css("font-size"), 10);
+	var size = parseInt(this.css("font-size"), 10);
 	
 	var i = 0;
-	while ((e.width() < w || e.height() < h) && ++i < 10) {
+	while ((this.width() < w || this.height() < h) && ++i < 10) {
 		size *= 2;
-		e.css("font-size", size);
+		this.css("font-size", size);
 	}
 
 	var max = size;
@@ -18,21 +17,21 @@ $.fn.fitFont = function(w, h, minFont, maxFont) {
 	i=0;
 	while (min < max && ++i < 10) {
 		size = (max + min) / 2;
-		e.css("font-size", size);
-		if (e.width() < w && e.height() < h) {
+		this.css("font-size", size);
+		if (this.width() < w && this.height() < h) {
 			min = size;
 		} else {
 			max = size;
 		}
 	}
 
-	if (e.width() > w || e.height() > h) --size;
+	if (this.width() > w || this.height() > h) --size;
 	if (size < minFont) size = minFont;
 	if (size > maxFont) size = maxFont;
-	e.css("font-size", size);
+	this.css("font-size", size);
 
-	e.css("position", oldpos);
-	return e;
+	this.css("position", oldpos);
+	return this;
 }
 
 $.fn.fitIn = function(e, t, r, b, l) {
@@ -47,15 +46,14 @@ $.fn.fitIn = function(e, t, r, b, l) {
 	r *= w;
 	b *= h;
 	l *= w;
-	$(this).fitFont(w - r - l, h - t - b, 20).center(e.center());
+	this.fitFont(w - r - l, h - t - b, 20).center(e.center());
 }
 
 function queueize(method) {
 	return function() {
-		var that = $(this);
-		var args = arguments;
-		return that.queue(function(next) {
-			that[method].apply(that,args);
+		var $this = this;
+		return this.queue(function(next) {
+			$this[method].apply($this,arguments);
 			next();
 		});
 	};
@@ -65,23 +63,22 @@ $.fn.qAddClass = queueize("addClass");
 $.fn.qRemoveClass = queueize("removeClass");
 
 $.fn.wh = function(w, h) {
-	return $(this).width(w).height(h);
+	return this.width(w).height(h);
 }
 
 $.fn.relativePos = function(xAnchor, yAnchor, to) {
-	var that = $(this);
-	var deltaX = that.outerWidth()  * xAnchor;
-	var deltaY = that.outerHeight() * yAnchor;
+	var deltaX = this.outerWidth()  * xAnchor;
+	var deltaY = this.outerHeight() * yAnchor;
 
 	if (to) {
-		that.css("position", "absolute");
-		that.offset({
+		this.css("position", "absolute");
+		this.offset({
 			left: to.left - deltaX,
 			top:  to.top  - deltaY
 		});
-		return that;
+		return this;
 	} else {
-		var pos = that.offset();
+		var pos = this.offset();
 		pos.left += deltaX;
 		pos.top  += deltaY;
 		return pos;
@@ -101,5 +98,5 @@ $.each({
 }, function(i,e) {
 	var x = e.x;
 	var y = e.y;
-	$.fn[i] = function(to) { return $(this).relativePos(x, y, to); };
+	$.fn[i] = function(to) { return this.relativePos(x, y, to); };
 });
