@@ -66,17 +66,17 @@ $.fn.wh = function(w, h) {
 	return this.width(w).height(h);
 }
 
-$.fn.relativePos = function(xAnchor, yAnchor, to) {
+$.fn.relativePos = function(xAnchor, yAnchor, to, justCss) {
 	var deltaX = this.outerWidth()  * xAnchor;
 	var deltaY = this.outerHeight() * yAnchor;
 
 	if (to) {
 		this.css("position", "absolute");
-		this.offset({
+		var css = {
 			left: to.left - deltaX,
 			top:  to.top  - deltaY
-		});
-		return this;
+		};
+		return (justCss ? css : this.offset(css));
 	} else {
 		var pos = this.offset();
 		pos.left += deltaX;
@@ -98,5 +98,5 @@ $.each({
 }, function(i,e) {
 	var x = e.x;
 	var y = e.y;
-	$.fn[i] = function(to) { return this.relativePos(x, y, to); };
+	$.fn[i] = function(to, justCss) { return this.relativePos(x, y, to, justCss); };
 });

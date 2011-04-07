@@ -54,25 +54,6 @@ function jss() {
 		.south($("#screen").south());
 }
 
-function animateNext(e, button) {
-	console.log(e, e.clientX, e.clientY);
-	$(button).clearQueue().qAddClass("hot").delay(100).qRemoveClass("hot");
-	var el = $("#mn-caption")
-		.clone()
-		.removeClass("mn")
-		.appendTo("#screen")
-		.clearQueue();
-	var oldOff = el.offset();
-	el.offset({left:e.pageX, top:e.pageY});
-	var pos = el.position();
-	el.offset(oldOff);
-	pos.fontSize = 0;
-	el.animate(pos,500).queue(function() {
-		el.remove();
-	});
-}
-
-
 $(function () {
 	var url = "tmp.json";
 	$.getJSON(url, function(data) {
@@ -91,6 +72,31 @@ $(function () {
 			jss();
 		}
 		
+		function animateNext(e, button) {
+			var duration = 700;
+			
+			var mn = $("#mn-caption");
+			
+			$(button).addClass("hot").removeClass("hot", duration);
+			
+			(mn)
+				.clone()
+				.removeClass("mn") // Pour que le texte animé ne soit pas modifié.
+				.appendTo("body") // Append to body so we can animate the offset (instead of top/left).
+				.offset(mn.offset())
+				.clearQueue()
+				.animate({left:e.pageX, top:e.pageY, fontSize: 0}, duration)
+				.queue(function() { $(this).remove(); });
+
+			refresh();
+			var fs = mn.css("fontSize");
+			var mncbCenter = $("#mn-caption-block").center();
+			
+			(mn)
+				.css("fontSize", 0)
+				.animate({fontSize: fs}, {duration:duration, step:function(){mn.center(mncbCenter);}});
+		}
+		
 		$.each(game.cat, function(i, cat) {
 			$('#templates .relation')
 				.clone()
@@ -103,7 +109,6 @@ $(function () {
 				.click(function(e) {
 					answers[currentWordNb++] = cat.id;
 					animateNext(e, this);
-					refresh();
 				})
 				.appendTo(".relations");
 		});
