@@ -29,27 +29,64 @@ function jss() {
 		.css({zIndex: 10})
 		.fitIn("#mn-caption-block");
 	
-	$(".relations > div")
-		.css({
-			margin: 10,
-			height: 72,
-			padding: 10,
-		});
-
 	// TODO : fitFont pour ".relations div"
-	$(".relations > div:nth-child(odd)")
+/*	$(".relations > .relation:nth-child(odd)")
 		.css({
 			backgroundPosition: "2% center", // TODO : virer le pourcentage, et séparer l'icône dans un nouvel élément.
 			textAlign: "right",
-			paddingLeft: 76
-		});
+		})
+		.find(".icon").css("float", "left");
 	
-	$(".relations > div:nth-child(even)")
+	$(".relations > .relation:nth-child(even)")
 		.css({
 			backgroundPosition: "98% center", // TODO : virer le pourcentage, et séparer l'icône dans un nouvel élément.
 			textAlign: "left",
-			paddingRight: 76
+		})
+		.find(".icon").css("float", "right"); */
+
+	$(".relation > *")
+		.css({
+			display: "inline-block",
+			position: "absolute",
+			textAlign: "right"
 		});
+	
+	$(".relation")
+		.height(76)
+		.width(w);
+
+    // TODO : fitFont pour ".relations div"
+	/*  $(".relations > .relation:nth-child(odd)")
+        .css({
+            backgroundPosition: "2% center", // TODO : virer le pourcentage, et séparer l'icône dans un nouvel élément.
+            textAlign: "right",
+        })
+        .find(".icon").css("float", "left");
+
+    $(".relations > .relation:nth-child(even)")
+        .css({
+            backgroundPosition: "98% center", // TODO : virer le pourcentage, et séparer l'icône dans un nouvel élément.
+            textAlign: "left",
+        })
+        .find(".icon").css("float", "right"); */
+
+	$(".relation > *")
+		.css({
+			display: "inline-block",
+			position: "absolute"
+		});
+
+	$(".relation")
+		.height(76)
+		.width(w);
+
+	$(".relation").each(function (i,e) {
+		e = $(e);
+		e.find(".icon")
+			.west(e.west());
+		e.find(".text")
+			.east(e.east());
+	});
 	
 	$(".relations")
 		.south($("#screen").south());
@@ -58,7 +95,19 @@ function jss() {
 function animateNext(e, button) {
 	console.log(e, e.clientX, e.clientY);
 	$(button).clearQueue().qAddClass("hot").delay(100).qRemoveClass("hot");
-	$("#mn-caption").clearQueue().animate({left:e.clientX, top:e.clientY},1500);
+	var el = $("#mn-caption")
+		.clone()
+		.removeClass("mn")
+		.appendTo("#screen")
+		.clearQueue();
+	var oldOff = el.offset();
+	el.offset({left:e.pageX, top:e.pageY});
+	var pos = el.position();
+	el.offset(oldOff);
+	pos.fontSize = 0;
+	el.animate(pos,500).queue(function() {
+		el.remove();
+	});
 }
 
 
@@ -81,9 +130,14 @@ $(function () {
 		}
 		
 		$.each(game.cat, function(i, cat) {
-			$('<div/>')
-				.html(cat.name.replace(/%(m[cn])/g, '<span class="$1"/>'))
-				.addClass("rid"+cat.id)
+			$('#templates .relation')
+				.clone()
+				.find(".text")
+					.html(cat.name.replace(/%(m[cn])/g, '<span class="$1"/>'))
+				.end()
+				.find(".icon")
+					.attr("src", "img/rel/"+cat.id+".png")
+				.end()
 				.click(function(e) {
 					answers[currentWordNb++] = cat.id;
 					animateNext(e, this);

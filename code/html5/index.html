@@ -26,19 +26,14 @@ body {
 	border-bottom: medium solid #44AA44;
 	background-color: #F0F8D0;
 }
-.relations div {
+
+.relation {
 	background-color: #F0F8D0;
 	border: thin solid #44AA44;
 	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
 	background-repeat: no-repeat;
 }
-
-.relations .rid-1 { background-image: url("img/rel/-1.png"); }
-.relations .rid0  { background-image: url("img/rel/0.png"); }
-.relations .rid5  { background-image: url("img/rel/5.png"); }
-.relations .rid7  { background-image: url("img/rel/7.png"); }
-.relations .rid9  { background-image: url("img/rel/9.png"); }
-.relations .rid10 { background-image: url("img/rel/10.png"); }
 
 .relations .hot {
 	background-color: yellow;
@@ -56,6 +51,12 @@ body {
 	<div id="mc-caption" class="mc"></div>
 	<div id="mn-caption" class="mn"></div>
 	<div class="relations"></div>
+	<div id="templates" style="display: none;">
+		<div class="relation">
+			<img class="icon" alt="" src=""></img>
+			<div class="text"></div>
+		</div>
+	</div>
 </div>
 </body>
 </html>
