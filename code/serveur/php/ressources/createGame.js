@@ -5,6 +5,10 @@ $($.getJSON("server.php",
 	var user = "foo";
 	var passwd = "bar";
 	var relations = data;
+	var nbWordMin = 10;
+	var WordsOK = new Array();
+	var centerOK = false;
+	
 	
 	var displayNWordLines = function (nb) {
 
@@ -17,11 +21,12 @@ $($.getJSON("server.php",
 			
 			(function (i) {
 				$("#word"+i).focusout(checkWord);
+				wordsOK[i] = false;
 			})(i);
 		}
 
 		numWord += nb;
-	}
+	};
 	
 	var displayCentralWordAndRelations = function () {
 		$("#centralWord").focusout(checkWord);
@@ -30,24 +35,20 @@ $($.getJSON("server.php",
 			$('<option/>').val(i).text(value).appendTo("#relations select")
 		});
 		$("#relation1, #relation2").change(function(){
-			if($("#relation1").val() == $("#relation2").val()) {
-				$("#errorDiv").text("Les relations doivent être différentes");
-				$("#errorDiv").css("display","block");			
-			}
-			else {
-				$("#errorDiv").text("");
-				$("#errorDiv").css("display","none");
-			}
+			if($("#relation1").val() == $("#relation2").val())
+				displayError("Les relations doivent être différentes");			
+			else
+				displayError("");
 		});
-	}
+	};
 	
 	var displayButtons = function () {
 		$("#button").html('<input type="button" id="addLine" name="addLine" value="Ajouter" />');
 		$("#addLine").click(function(){displayNWordLines(1)});
 		
 		$("#button").append('<input type="button" id="validate" name="validate" value="Valider" />');
-		$("#validate").click(function(){});
-	}
+		$("#validate").click(function(){formOK();});
+	};
 	
 	var checkWord = function () {
 		var input = $(this);
@@ -60,10 +61,43 @@ $($.getJSON("server.php",
    					data: "action=4&word="+word+"&user="+user+"&passwd="+passwd,
    					success: function(msg){
    						input.parent(".wordLine, #center").addClass((msg == false) ? "invalid" : "valid");
+   						wordsOK[input.val()] = msg == false ? false : true;
     					}});
     	}
    };
+   
+   var formOK = function(){
+		displayError("");
+		   	
+   	if($("#relation1").val() == $("#relation2").val())
+   		displayError("Les deux relation doivent être différents");
+   	else if($("#centralWord").val() == "")
+   		displayError("Le mot central doit être renseigné.");
+   	else if(nbWordOK() < nbWordMin)
+   		displayError("Le nuage doit contenir au moin "+nbWordMin+" mots valides.");
+   };
+   
+   var nbWordOK = fucntion() {
+		var count = 0;
+		   	
+   	foreach(word in wordsOK)
+   		if(word == true)
+   			count++;
+   	
+   	return count;
+   };
 
+	var displayError = function(message){
+		if(message != ""){		
+			$("#errorDiv").text(message);
+			$("#errorDiv").css("display","block");
+		}
+		else {
+			$("#errorDiv").text("");
+			$("#errorDiv").css("display","none");
+		}	
+	};
+	
 	displayCentralWordAndRelations();	
 	displayNWordLines(10);
 	displayButtons();
