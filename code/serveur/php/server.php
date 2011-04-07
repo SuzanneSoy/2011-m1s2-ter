@@ -79,9 +79,9 @@ function main()
 			throw new Exception("La requête est incomplète", 2);
 
 		if(wordExist($_GET['word']))
-			echo 'true';
+			echo true;
 		else
-			echo 'false';
+			echo false;
 	}
 	else if($action == 5) {           // Get relations (JSON)
 		echo getGameRelationsJSON();
