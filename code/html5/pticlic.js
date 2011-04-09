@@ -1,17 +1,22 @@
 function jss() {
-	var w=480, h=800;
+	var w, h;
+	//w = 480; h=800;
+	w = $(window).width();
+	h = $(window).height();
+	
 	var mch = h/8, mnh = h*0.075;
 	
 	$("body, html")
 		.css({
 			padding: 0,
 			margin: 0,
+			overflow: "hidden",
 			textAlign: "left"
 		});
 	
 	$("#screen")
 		.wh(w, h)
-		.north($("body").north()); // TODO : par rapport à la fenêtre entière.0
+		.north($("body").north()); // TODO : par rapport à la fenêtre entière.
 	
 	$("#mc-caption-block")
 		.wh(w, mch)
@@ -28,27 +33,26 @@ function jss() {
 	$("#mn-caption")
 		.css({zIndex: 10})
 		.fitIn("#mn-caption-block");
-	
-	$(".relation > *")
+
+	$(".relationBox:visible")
 		.css({
-			display: "inline-block",
-			position: "absolute",
-			textAlign: "right"
+			margin: 10,
+			padding: 10,
+			MozBorderRadius: 10,
+			WebkitBorderRadius: 10
 		});
+	
+	$(".relationBox:visible .icon")
+		.wh(72,72)
+		.css({
+			float: "left",
+			marginRight: $(".relationBox").css("padding-left")
+		});
+	
+	$(".relations")
+		.width(w);
 
-	$(".relation .icon")
-		.wh(72,72);
-		
-	$(".relation")
-		.wh(w,76);
-
-	$(".relation").each(function (i,e) {
-		e = $(e);
-		e.find(".icon")
-			.west(e.west());
-		e.find(".text")
-			.east(e.east());
-	});
+	$(".relation:visible").fitFont($(".relationBox:visible").width(), 72, 10);
 	
 	$(".relations")
 		.south($("#screen").south());
@@ -61,18 +65,23 @@ $(function () {
 		var currentWordNb = 0;
 		var answers = [];
 		
-		var refresh = function() {
+		var updateText = function() {
+			$(".mn").text(game.cloud[currentWordNb].name);
+			$(".mc").text(game.center.name);
+			jss();
+		}
+		
+		var nextWord = function(click, button) {
+			answers[currentWordNb++] = $(button).data("rid");
 			if (currentWordNb < game.cloud.length) {
-				$(".mn").text(game.cloud[currentWordNb].name);
-				$(".mc").text(game.center.name);
+				animateNext(click, button);
 			} else {
 				$(".relations").empty();
 				alert("Partie terminée !");
 			}
-			jss();
 		}
 		
-		function animateNext(e, button) {
+		function animateNext(click, button) {
 			var duration = 700;
 			
 			var mn = $("#mn-caption");
@@ -80,15 +89,16 @@ $(function () {
 			$(button).addClass("hot").removeClass("hot", duration);
 			
 			(mn)
+				.stop()       // Attention : stop() et clearQueue() ont aussi un effet
+				.clearQueue() // sur la 2e utilisation de mn (ci-dessous).
 				.clone()
 				.removeClass("mn") // Pour que le texte animé ne soit pas modifié.
 				.appendTo("body") // Append to body so we can animate the offset (instead of top/left).
 				.offset(mn.offset())
-				.clearQueue()
-				.animate({left:e.pageX, top:e.pageY, fontSize: 0}, duration)
+				.animate({left:click.left, top:click.top, fontSize: 0}, duration)
 				.queue(function() { $(this).remove(); });
 
-			refresh();
+			updateText();
 			var fs = mn.css("fontSize");
 			var mncbCenter = $("#mn-caption-block").center();
 			
@@ -97,24 +107,23 @@ $(function () {
 				.animate({fontSize: fs}, {duration:duration, step:function(){mn.center(mncbCenter);}});
 		}
 		
-		$.each(game.cat, function(i, cat) {
-			$('#templates .relation')
+		$.each(game.relations, function(i, relation) {
+			$('#templates .relationBox')
 				.clone()
+				.data("rid", relation.id)
 				.find(".text")
-					.html(cat.name.replace(/%(m[cn])/g, '<span class="$1"/>'))
+					.html(relation.name.replace(/%(m[cn])/g, '<span class="$1"/>'))
 				.end()
 				.find(".icon")
-					.attr("src", "img/rel/"+cat.id+".png")
+					.attr("src", "img/rel/"+relation.id+".png")
 				.end()
 				.click(function(e) {
-					answers[currentWordNb++] = cat.id;
-					animateNext(e, this);
+					nextWord({left:e.pageX, top:e.pageY}, this);
 				})
 				.appendTo(".relations");
 		});
 		
 		$(window).resize(jss);
-		refresh();
-		refresh(); // TODO : fix the bug with the margin on ".relation > div"
+		updateText();
 	});
 });

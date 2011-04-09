@@ -1,36 +1,47 @@
+Number.prototype.clip = function(min, max) {
+	return Math.min(Math.max(this, min), max);
+};
+
+function dichotomy(start, isBigger) {
+	var i = 0, min = 0, max, half;
+
+	for (max = start || 1; ++i < 10 && !isBigger(max); max *= 2);
+	for (half = start; Math.abs(min-max) > 0.1; half = (min + max) / 2) {
+		if (!isBigger(half)) min = half;
+		else                 max = half;
+	}
+	while (half > 1 && isBigger(half)) { --half; }
+	return half;
+}
+
+$.fn.maxWidth = function() {
+	max = 0;
+	this.each(function(i,e){ max = Math.max(max, $(e).width()); });
+	return max;
+}
+$.fn.maxHeight = function() {
+	max = 0;
+	this.each(function(i,e){ max = Math.max(max, $(e).height()); });
+	return max;
+}
+
 $.fn.fitFont = function(w, h, minFont, maxFont) {
-	minFont = minFont || 0;
-	maxFont = maxFont || Infinity;
 	var oldpos = this.css("position");
-	this.css("position", "absolute");
-	// TODO : reset temporairement le max-width.
-	var size = parseInt(this.css("font-size"), 10);
+	this.css({
+		position: "absolute",
+		maxWidth: w
+	});
+	var wrappers = this.wrapInner("<span/>").children();
 	
-	var i = 0;
-	while ((this.width() < w || this.height() < h) && ++i < 10) {
-		size *= 2;
-		this.css("font-size", size);
-	}
+	var that = this;
+	this.css("font-size", dichotomy(parseInt(this.css("font-size"), 10), function(x) {
+		that.css("fontSize", x);
+		return (wrappers.maxHeight() > h || wrappers.maxWidth() > w);
+	}).clip(minFont || 0, maxFont || Infinity));
 
-	var max = size;
-	var min = 0;
-	i=0;
-	while (min < max && ++i < 10) {
-		size = (max + min) / 2;
-		this.css("font-size", size);
-		if (this.width() < w && this.height() < h) {
-			min = size;
-		} else {
-			max = size;
-		}
-	}
-
-	if (this.width() > w || this.height() > h) --size;
-	if (size < minFont) size = minFont;
-	if (size > maxFont) size = maxFont;
-	this.css("font-size", size);
-
+	// Restore stuff
 	this.css("position", oldpos);
+	wrappers.children().unwrap();
 	return this;
 }
 
@@ -67,11 +78,11 @@ $.fn.wh = function(w, h) {
 }
 
 $.fn.relativePos = function(xAnchor, yAnchor, to, justCss) {
+	if (to) this.css("position", "absolute");
 	var deltaX = this.outerWidth()  * xAnchor;
 	var deltaY = this.outerHeight() * yAnchor;
 
 	if (to) {
-		this.css("position", "absolute");
 		var css = {
 			left: to.left - deltaX,
 			top:  to.top  - deltaY
