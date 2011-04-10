@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PtiClic pre-alpha 0.2</title>
+	<meta charset="utf-8" />
+	<style>
+body {
+	background-color: black;
+}
+
+#screen {
+	background-color : #FFFFE0;
+}
+	</style>
+	<script src="jquery-1.5.1.min.js"></script>
+	<script src="jquery-ui-1.8.11.custom.min.js"></script>
+	<script src="scores.js"></script>
+	<script src="my-extensions.js"></script>
+</head>
+<body>
+<div id="screen">
+	<h1>Score total : <span class="scoreTotal"></span></h1>
+	<div class="scores"></div>
+	<div id="templates" style="display: none;">
+		<div class="scoreLine">
+			<span class="word"></span> (<span class="score"></span>)
+		</div>
+	</div>
+</div>
+</body>
+</html>
