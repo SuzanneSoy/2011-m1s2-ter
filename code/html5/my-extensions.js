@@ -1,5 +1,5 @@
-Number.prototype.clip = function(min, max) {
-	return Math.min(Math.max(this, min), max);
+Number.prototype.clip = function(min, max, floor) {
+	return Math.min(Math.max(floor ? Math.floor(this) : this, min), max);
 };
 
 function dichotomy(start, isBigger) {

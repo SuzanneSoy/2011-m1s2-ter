@@ -1,6 +1,6 @@
 function jss() {
+	// TODO : réduire le nombre de fitIn ou fitFont, ou bien les précalculer.
 	var w, h;
-	//w = 480; h=800;
 	w = $(window).width();
 	h = $(window).height();
 	
