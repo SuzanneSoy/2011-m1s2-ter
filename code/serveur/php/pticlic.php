@@ -1,5 +1,6 @@
 <?php
 
+require_once("relations.php");
 require_once("db.php");
 
 /* Les prototypes des fonctions :
@@ -630,6 +631,7 @@ function get_game_relations()
 
 function getGameRelationsJSON() {
 	$json = "{";
+	global $stringRelations;
 	
 	foreach($stringRelations as $id=>$description)
 		if($id == -1)
