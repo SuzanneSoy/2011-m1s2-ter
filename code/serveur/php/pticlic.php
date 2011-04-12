@@ -39,10 +39,7 @@ require_once("ressources/errors.inc")
 * @return boolean : true si OK sinon false.
 */
 function checkLogin($user, $passwd) {
-	$db = getDB();
-	$hashPasswd = md5($passwd);
-	$loginIsOk = ($hashPasswd == $db->querySingle(sqlGetPassword($user)));
-	return $loginIsOk;
+	return md5($passwd) == sqlGetPasswd($user);
 }
 
 /** Selectionne aléatoirement l'eid d'un mot central.

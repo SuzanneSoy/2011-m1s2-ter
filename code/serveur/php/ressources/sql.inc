@@ -1,8 +1,12 @@
+<?php
+$r1 = "todo";
+$r2 = "todo";
 $typer1r2 = "type in ($r1, $r2)";
 $banned_types = "4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001";
 
-function sqlGetPassword($user) {
-	return "SELECT hash_passwd FROM user WHERE login='".$user."';";
+function sqlGetPasswd($user) {
+	$db = getDB();
+	return $db->querySingle("SELECT hash_passwd FROM user WHERE login='".SQLite3::escapeString($user)."';");
 }
 
 function sqlGetEIDCenterNode() {
@@ -117,3 +121,4 @@ function sqlGetNumAndScoreFromGame($pgid, $gid) {
 function sqlGetEidFromNode($node) {
 	return "SELECT eid FROM node WHERE name='".SQLite3::escapeString($node)."'";
 }
+?>
