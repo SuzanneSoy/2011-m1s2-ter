@@ -17,37 +17,9 @@ import com.google.gson.Gson;
  * soit le score qu'a réalisé un utilisateur. 
  * Elle permet aussi d'envoyer au serveur les parties realiser par l'utilisateur pour que le serveur
  * puisse insérer la contribution de l'utilisateur, mais aussi pouvoir calculer le score de celui-ci.
+ * 
  */
 public class Network {
-
-	public static class ScoreResponse {
-		private int scoreTotal;
-		private int[] scores;
-		private String newGame;
-		private boolean alreadyPlayed;
-		
-		public ScoreResponse() {}
-		
-		public int[] getScores() {
-			return scores;
-		}
-		
-		public int getScoreOfWord(int i) {
-			return scores[i];
-		}
-		
-		public int getScoreTotal() {
-			return scoreTotal;
-		}
-		
-		public String getNewGame() {
-			return newGame;
-		}
-		
-		public boolean getAlreadyPlayed() { 
-			return alreadyPlayed;
-		}
-	}
 
 	public static class Check implements Serializable {
 		private static final long serialVersionUID = 1L;
@@ -65,9 +37,6 @@ public class Network {
 	String	 	newGameJson = null;
 
 	public enum Action {
-		GET_GAMES(0),
-		SEND_GAME(1),
-		CREATE_GAME(2),
 		CHECK_LOGIN(3);
 
 		private final int value;
@@ -77,38 +46,6 @@ public class Network {
 		}
 
 		private String value() { return String.valueOf(value); }
-	}
-
-	public enum Mode {
-		SIMPLE_GAME("normal");
-
-		private final String value;
-
-		Mode(String value) {
-			this.value = value;
-		}
-
-		private String value() { return value; }
-	}
-
-	private Mode mode;
-	private String serverURL;
-	private String id;
-	private String passwd;
-
-	/**
-	 * Constructeur
-	 * 
-	 * @param serverURL Chaine de caractères représentant l'URL où se situe le serveur.
-	 * @param mode Le type de partie que l'on veut récupérer.
-	 * @param id L'indentifiant du joueur.
-	 * @param passwd Le mot de passe de l'utilisateur.
-	 */
-	public Network(String serverURL, Mode mode, String id, String passwd) {
-		this.mode = mode;
-		this.serverURL = serverURL + "/server.php";
-		this.id = id;
-		this.passwd = passwd;
 	}
 
 	/**

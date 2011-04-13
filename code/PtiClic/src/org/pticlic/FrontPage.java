@@ -1,5 +1,6 @@
 package org.pticlic;
 
+import org.pticlic.js.JavaScriptInterface;
 import org.pticlic.model.Constant;
 
 import android.app.Activity;
@@ -19,8 +20,9 @@ public class FrontPage extends Activity {
 
 		webView = (WebView) findViewById(R.id.webview);
 		WebSettings webSettings = webView.getSettings();
-		webSettings.setJavaScriptEnabled(true);		
+		webSettings.setJavaScriptEnabled(true);
 		
+		webView.addJavascriptInterface(new JavaScriptInterface(this), "Pticlic");
 		webView.loadUrl(Constant.SERVER + Constant.SERVER_URL);
 	}
 
