@@ -7,9 +7,14 @@ $banned_types = "4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001";
 /* Les prototypes des fonctions :
  * ===============================>
  *   querySingle($query);
+ *
  *   sqlGetPasswd($user);
  *   sqlGetRandomCenterNode();
  *   sqlGetRandomCloudNode();
+ *   sqlGetForwardOne($origin, [$types])
+ *   sqlGetBackwardOne($origin, [$types])
+ *
+ *   sourceOneForwardR1R2($centerEid, $r1, $r2)
  */
 
 function querySingle($query) {
@@ -47,7 +52,8 @@ function sqlGetForwardOne($origin, $types = null) {
 	if (is_integer($types)) " and type = ".$types;
 	elseif (is_array($types)) " and type in (".$types.")";
 	else $types = "";
-	return querySingle("select end from relation where start = " . $origin . $types);
+	// TODO : vérifier que c'est compatible avec l'affectation list($a,$b) = ...()
+	return querySingle("select end, type from relation where start = " . $origin . $types . " order by random();", true);
 }
 
 /** Selectionne un voisin un saut en arrière, avec une relation du type donné.
@@ -59,10 +65,25 @@ function sqlGetBackwardOne($origin, $types = null) {
 	if (is_integer($types)) " and type = ".$types;
 	elseif (is_array($types)) " and type in (".$types.")";
 	else $types = "";
-	return querySingle("select start from relation where end = " . $origin . $types);
+	return querySingle("select start, type from relation where end = " . $origin . $types . " order by random();", true);
 }
 
-// Voisins 1 saut du bon type (= relations déjà existantes)
+/* Voisins 1 saut du bon type (= relations déjà connues)
+ * @return array : list($eid, $probaR1, $probaR2, $probaR0, $probaTrash)
+function sourceOneForwardR1R2($centerEid, $r1, $r2) {
+	list($eid, $type) = sqlGetForwardOne($origin, array($r1, $r2));
+	return array($eid, $type == $r1, $type == $r2, 0, 0);
+}
+
+/* Voisins 1 saut via r_associated (0), donc qu'on voudrait spécifier si possible.
+ * @return array : list($eid, $probaR1, $probaR2, $probaR0, $probaTrash)
+function sourceOneForwardAssociated($centerEid, $r1, $r2) {
+	list($eid, $type) = sqlGetForwardOne($origin, 0);
+	return array($eid, 0.25, 0.25, 0.5, 0);
+}
+
+/*
+// Voisins 1 saut du bon type (= relations déjà connues)
 function sql1JumpGoodType($r1, $r2, $centerEid) {
 	global $typer1r2;
 	
@@ -73,6 +94,7 @@ function sql1JumpGoodType($r1, $r2, $centerEid) {
 function sql1JumpViaRAssociated0($centerEid) {
 	return "select end as eid, 0.25 as r1, 0.25 as r2, 0.5 as r0, 0 as trash from relation where start = $centerEid and type = 0 order by random();";
 }
+*/
 
 // Voisins 1 saut via les autres relations
 function sql1JumpViaOtherRelation($centerEid, $r1, $r2) {
