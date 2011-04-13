@@ -4,17 +4,62 @@ $r2 = "todo";
 $typer1r2 = "type in ($r1, $r2)";
 $banned_types = "4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001";
 
+/* Les prototypes des fonctions :
+ * ===============================>
+ *   querySingle($query);
+ *   sqlGetPasswd($user);
+ *   sqlGetRandomCenterNode();
+ *   sqlGetRandomCloudNode();
+ */
+
+function querySingle($query) {
+	return getDB()->querySingle($query);
+}
+
+/** Sélectionne le mot de passe d'un utilisateur.
+ * @param user : Le nom d'utilisateur.
+ * @return string : Le mot de passe.
+ */
 function sqlGetPasswd($user) {
-	$db = getDB();
-	return $db->querySingle("SELECT hash_passwd FROM user WHERE login='".SQLite3::escapeString($user)."';");
+	return querySingle("SELECT hash_passwd FROM user WHERE login='".SQLite3::escapeString($user)."';");
 }
 
-function sqlGetEIDCenterNode() {
-	return "select eid from random_center_node where rowid = (abs(random()) % (select max(rowid) from random_center_node))+1;";
+/** Selectionne aléatoirement l'eid d'un mot central.
+ * @return eid : Identifiant d'un mot central, NULL en cas d'erreur.
+ */
+function sqlGetRandomCenterNode() {
+	return querySingle("select eid from random_center_node where rowid = (abs(random()) % (select max(rowid) from random_center_node))+1;");
 }
 
-function sqlGetEIRCloudNode() {
-	return "select eid from random_cloud_node where rowid = (abs(random()) % (select max(rowid) from random_cloud_node))+1;";
+/** Selectionne aléatoirement un noeud d'un nuage.
+ * @return eid : L'identifiant du noeud.
+ */
+function sqlGetRandomCloudNode() {
+	return querySingle("select eid from random_cloud_node where rowid = (abs(random()) % (select max(rowid) from random_cloud_node))+1;");
+}
+
+/** Selectionne un voisin un saut en avant, avec une relation du type donné.
+ * @param origin : L'identifiant du noeud de départ
+ * @param types : Facultatif. Entier ou tableau d'entiers représentant les types de relations autorisés.
+ * @return eid : L'identifiant du noeud.
+ */
+function sqlGetForwardOne($origin, $types = null) {
+	if (is_integer($types)) " and type = ".$types;
+	elseif (is_array($types)) " and type in (".$types.")";
+	else $types = "";
+	return querySingle("select end from relation where start = " . $origin . $types);
+}
+
+/** Selectionne un voisin un saut en arrière, avec une relation du type donné.
+ * @param origin : L'identifiant du noeud de départ
+ * @param types : Facultatif. Entier ou tableau d'entiers représentant les types de relations autorisés.
+ * @return eid : L'identifiant du noeud.
+ */
+function sqlGetBackwardOne($origin, $types = null) {
+	if (is_integer($types)) " and type = ".$types;
+	elseif (is_array($types)) " and type in (".$types.")";
+	else $types = "";
+	return querySingle("select start from relation where end = " . $origin . $types);
 }
 
 // Voisins 1 saut du bon type (= relations déjà existantes)

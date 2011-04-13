@@ -7,8 +7,6 @@ require_once("ressources/errors.inc")
 /* Les prototypes des fonctions :
 * ===============================>
 *   checkLogin($user, $passwd);
-*   randomCenterNode();
-*   randomCloudNode();
 *   cgBuildResultSets($cloudSize, $centerEid, $r1, $r2);
 *   cgChooseRelations();
 *   cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights);
@@ -42,23 +40,6 @@ function checkLogin($user, $passwd) {
 	return md5($passwd) == sqlGetPasswd($user);
 }
 
-/** Selectionne aléatoirement l'eid d'un mot central.
-* @return eid : Identifiant d'un mot central, NULL en cas d'erreur.
-*/
-function randomCenterNode()
-{
-	$db = getDB();
-	return $db->querySingle(sqlGetEIDCenterNode());
-}
-
-/** Selectionne aléatoirement un noeud d'un nuage.
-* @return eid : L'identifiant du noeud.
-*/
-function randomCloudNode()
-{
-	$db = getDB();
-	return $db->querySingle(sqlGetEIRCloudNode());
-}
 
 /**
 * @param cloudSize : Taille du nuage.
@@ -112,7 +93,7 @@ function cgBuildResultSets($cloudSize, $centerEid, $r1, $r2)
 			
 			for ($i = 0; $i < 10; $i++)
 			{
-				$sources[$k]['resultSet'][] = array('eid'=>randomCloudNode(), 'r1'=>0, 'r2'=>0, 'r0'=>0, 'trash'=>1);
+				$sources[$k]['resultSet'][] = array('eid'=>sqlGetRandomCloudNode(), 'r1'=>0, 'r2'=>0, 'r0'=>0, 'trash'=>1);
 				$sources[$k]['rsSize']++;
 			}
 		}
@@ -219,7 +200,7 @@ function cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights)
 	while ($i < $cloudSize)
 	{
 		$totalDifficulty += $sources['rand']['d'];
-		$cloud[$i] = array('pos'=>$i++, 'd'=>$sources['rand']['d'], 'eid'=>randomCloudNode(), 'probaR1'=>$res['r1'], 'probaR2'=>$res['r2'], 'probaR0'=>$res['r0'], 'probaTrash'=>$res['trash']);
+		$cloud[$i] = array('pos'=>$i++, 'd'=>$sources['rand']['d'], 'eid'=>sqlGetRandomCloudNode(), 'probaR1'=>$res['r1'], 'probaR2'=>$res['r2'], 'probaR0'=>$res['r0'], 'probaTrash'=>$res['trash']);
 	}
 
 	return array($cloud, $totalDifficulty);
@@ -437,7 +418,7 @@ function createGame($nbParties, $mode)
 function createGameCore($cloudSize)
 {
 	// select random node
-	$centerEid = randomCenterNode();
+	$centerEid = sqlGetEIDCenterNode();
 
 	$r1 = cgChooseRelations(); $r2 = $r1[1]; $r1 = $r1[0];
 	$sources = cgBuildResultSets($cloudSize, $centerEid, $r1, $r2); $sumWeights = $sources[1]; $sources = $sources[0];
