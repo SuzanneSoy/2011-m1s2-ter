@@ -2,7 +2,6 @@
 
 require_once("relations.php");
 require_once("db.php");
-require_once("ressources/errors.inc")
 
 /* Les prototypes des fonctions :
 * ===============================>
@@ -41,7 +40,7 @@ require_once("ressources/errors.inc")
 function checkLogin($user, $passwd) {
 	$db = getDB();
 	$hashPasswd = md5($passwd);
-	$loginIsOk = ($hashPasswd == $db->querySingle(sqlGetPassword($user)));
+	$loginIsOk = ($hashPasswd == $db->querySingle("SELECT hash_passwd FROM user WHERE login='".$user."';"));
 	return $loginIsOk;
 }
 
@@ -51,7 +50,7 @@ function checkLogin($user, $passwd) {
 function randomCenterNode()
 {
 	$db = getDB();
-	return $db->querySingle(sqlGetEIDCenterNode());
+	return $db->querySingle("select eid from random_center_node where rowid = (abs(random()) % (select max(rowid) from random_center_node))+1;");
 }
 
 /** Selectionne aléatoirement un noeud d'un nuage.
@@ -60,7 +59,7 @@ function randomCenterNode()
 function randomCloudNode()
 {
 	$db = getDB();
-	return $db->querySingle(sqlGetEIRCloudNode());
+	return $db->querySingle("select eid from random_cloud_node where rowid = (abs(random()) % (select max(rowid) from random_cloud_node))+1;");
 }
 
 /**
@@ -76,16 +75,32 @@ function cgBuildResultSets($cloudSize, $centerEid, $r1, $r2)
 	// Le select doit ranvoyer trois colonnes :
 	//   eid => l'eid du mot à mettre dans le nuage,
 	//   r1 => la probabilité pour que le mot soit dans r1, entre -1 et 1 (négatif = ne devrait pas y être, positif = devrait y être à coup sûr, 0 = on sait pas).
+	$typer1r2 = "type in ($r1, $r2)";
+	$banned_types = "4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001";
 	
 	$sources = array(
-		array('w'=>40, 'd'=>1, 's'=>sql1JumpGoodType($r1, $r2, $centerEid)),
-		array('w'=>40, 'd'=>2, 's'=>sql1JumpViaRAssociated0($centerEid)),
-		array('w'=>20, 'd'=>3.1, 's'=>sql1JumpViaOtherRelation($centerEid, $r1, $r2, $banned_types)),
-		array('w'=>30, 'd'=>3.2, 's'=>sql2JumpWithMixR1R2ForLinks($r1, $r2, $centerEid)),
-		array('w'=>20, 'd'=>5, 's'=>sql1JumpR1DivR2Plus1JumpSynonymOneHopWithType($r1, $r2, $centerEid)),
-		array('w'=>20, 'd'=>6, 's'=>sql1JumpR1DivR2Plus1JumpSynonym($r1, $r2, $centerEid)),
-		array('w'=>10, 'd'=>8, 's'=>sql2JumpAll($centerEid, $cloudSize)),
-		array('w'=>10, 'd'=>8, 's'=>sqlXPointsToMMPointsToXTakeM($cloudSize)),
+		// Voisins 1 saut du bon type (= relations déjà existantes)
+		array('w'=>40, 'd'=>1, 's'=>"select end as eid, type = $r1 as r1, type = $r2 as r2, 0 as r0, 0 as trash from relation where start = $centerEid and $typer1r2 order by random();"),
+		// Voisins 1 saut via r_associated (0), donc qu'on voudrait spécifier si possible.
+		array('w'=>40, 'd'=>2, 's'=>"select end as eid, 0.25 as r1, 0.25 as r2, 0.5 as r0, 0 as trash from relation where start = $centerEid and type = 0 order by random();"),
+		// Voisins 1 saut via les autres relations
+		array('w'=>20, 'd'=>3.1, 's'=>"select end as eid, 0.1 as r1, 0.1 as r2, 0.8 as r0, 0 as trash from relation where start = $centerEid and type not in (0, $r1, $r2, $banned_types) order by random();"),
+		// Voisins 2 sauts, avec un mix de R1 et R2 pour les liens. Par ex [ A -R1-> B -R2-> C ] ou bien [ A -R2-> B -R2-> C ]
+		// Version optimisée de : "select end as eid from relation where $typer1r2 and start in oneHopWithType order by random();"
+		array('w'=>30, 'd'=>3.2, 's'=>"select B.end as eid, ((A.type = $r1) + (B.type = $r1)) / 3. as r1, ((A.type = $r2) + (B.type = $r2)) / 3. as r2, 1/6. as r0, 1/6. as trash from relation as A, relation as B where A.start = $centerEid and A.$typer1r2 and B.start = A.end and B.$typer1r2 order by random();"),
+		// Voisins 1 saut r1/r2 + 1 saut synonyme
+		// Version optimisée de : "select end as eid from relation where start in oneHopWithType and type = 5 order by random()";
+		array('w'=>20, 'd'=>5, 's'=>"select B.end as eid, (A.type = $r1) * 0.75 as r1, (A.type = $r2) * 0.75 as r2, 0.25 as r0, 0 as trash from relation as A, relation as B where A.start = $centerEid and A.$typer1r2 and B.start = A.end and B.type = 5 order by random();"),
+		// Version optimisée de : "select end as eid from relation where start in (select end from relation where start = $centerEid and type = 5) and $typer1r2 order by random();"
+		array('w'=>20, 'd'=>6, 's'=>"select B.end as eid, (B.type = $r1) * 0.75 as r1, (B.type = $r2) * 0.75 as r2, 0.25 as r0, 0 as trash from relation as A, relation as B where A.start = $centerEid and A.type = 5 and B.start = A.end and B.$typer1r2 order by random();"),
+		// Voisins 2 sauts (tous)
+		// Version optimisée de : "select end as eid, 0.1 as r1, 0.1 as r2, 0.3 as r0, 0.5 as trash from relation where start in (select end from relation where start = $centerEid and type not in ($banned_types)) and type not in ($banned_types) order by random();"
+		array('w'=>10, 'd'=>8, 's'=>"select x as eid, 0.1 as r1, 0.1 as r2, 0.3 as r0, 0.5 as trash from (select x from (select X.eid + Y.dumb as x from (select B.end as eid from relation as A, relation as B where A.type not in ($banned_types) and A.start = $centerEid and B.type not in ($banned_types) and B.start = A.end limit ".($cloudSize*4).") as X, (select 0 as dumb) as Y)) order by random();"),
+		// Centre pointe vers X, M pointe vers X aussi, on prend M.
+		// Version optimisée de : "select start as eid from relation where end in (select end from relation where start = $centerEid) and type not in ($banned_types) order by random();"
+		// Ce n'est toujours pas ça… : "select eid from (select B.start as eid from relation as A, relation as B where A.type not in ($banned_types) and A.start = $centerEid and B.type not in ($banned_types) and B.end = A.end limit 1) order by random();"
+		// Tordu, mais ça marche \o/ . En fait il faut empêcher l'optimiseur de ramener le random avant le limit (et l'optimiseur est malin… :)
+		array('w'=>10, 'd'=>8, 's'=>"select x as eid, 0.1 as r1, 0.1 as r2, 0.2 as r0, 0.6 as trash from (select x from (select X.eid + Y.dumb as x from (select B.start as eid from relation as A, relation as B where A.type not in ($banned_types) and A.start = $centerEid and B.type not in ($banned_types) and B.end = A.end limit ".($cloudSize*4).") as X, (select 0 as dumb) as Y)) order by random();"),
 		'rand' => array('w'=>5, 'd'=>10, 's'=>false) // random. Le r1 et r2 de random sont juste en-dessous
 	);
 
@@ -201,7 +216,7 @@ function cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights)
 		$rejected = false;
 		// Ne pas mettre le mot central dans le nuage.
 		if ($res['eid'] == $centerEid) { continue; }
-		$nodeName = $db->querySingle(sqlGetNameFromNode($res));
+		$nodeName = $db->querySingle("select name from node where eid=".$res['eid'].";");
 		if (substr($nodeName, 0, 2) == "::") { continue; }
 		foreach ($cloud as $c) {
 			if ($c['eid'] == $res['eid']) {
@@ -287,7 +302,7 @@ function cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty)
 */
 function randomGameCore() {
 	$db = getDB();
-	return $db->querySingle(sqlGetGidFromGame());
+	return $db->querySingle("select gid from game where gid = (abs(random()) % (select max(gid) from game))+1 or gid = (select max(gid) from game where gid > 0) order by gid limit 1;");
 }
 
 /** Sélection aléatoire d'une partie de la base de données parmis les parties à jouer.
@@ -305,7 +320,7 @@ function randomGame()
 		$gid = randomGameCore();
 
 		if ($gid === null)
-			errGetGame();
+			throw new Exception("Erreur lors de la récupération de la partie. Vérifiez qu'il y a au moins une partie.", 6);
 	}
 	return $gid;
 }
@@ -322,11 +337,11 @@ function formatWord($word) {
 	while (($pos = strpos($word, ">")) !== false) {
 		$res .= substr($word,0,$pos) . " (";
 		$eid = intval(substr($word,$pos+1));
-		if ($eid == 0) { errFollowingPointer($word);  }
-		if (in_array($eid, $stack)) { errLoopDetected($word);  }
-		if (count($stack) > 10) { errTooMuchRecursion($word);  }
+		if ($eid == 0) { throw new Exception("Erreur lors du suivi des pointeurs de spécialisation du mot $word.", 7); }
+		if (in_array($eid, $stack)) { throw new Exception("Boucle rencontrée lors du suivi des pointeurs de spécialisation du mot $word.", 8); }
+		if (count($stack) > 10) { throw new Exception("Trop de niveaux de récursions lors du suivi des pointeurs de spécialisation du mot $word.", 9); }
 		$stack[] = $eid;
-		$word = $db->querySingle(sqlGetNameFromNodeWithEid($eid));
+		$word = $db->querySingle("select name from node where eid = $eid");
 	}
 
 	$res .= $word;
@@ -349,7 +364,8 @@ function game2json($user, $gameId)
 	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp) VALUES (null, ".$gameId.", '$user', -1);");
 	$pgid = $db->lastInsertRowID();
 	
-	$game = $db->query(sqlGetGamesForId($gameId));
+	// TODO Yoann : faire des tests d'erreur pour ces select ?
+	$game = $db->query("select gid, (select name from node where eid = eid_central_word) as name_central_word, eid_central_word, relation_1, relation_2 from game where gid = ".$gameId.";");
 	$game = $game->fetchArray();
 	
 	$retstr = "";
@@ -357,7 +373,7 @@ function game2json($user, $gameId)
 	$retstr .= '"center":{"id":'.$game['eid_central_word'].',"name":'.json_encode(''.formatWord($game['name_central_word'])).'},';
 	$retstr .= '"cloudsize":10,"cloud":['; // TODO ! compter dynamiquement.
 	
-	$res = $db->query(sqlGetWordEidAndName($gameId));
+	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word from game_cloud where gid = ".$gameId.";");
 	$notfirst = false;
 	
 	while ($x = $res->fetchArray())
@@ -387,7 +403,7 @@ function game2array($user, $gameId)
 	$pgid = $db->lastInsertRowID();
 	
 	// TODO Yoann : faire des tests d'erreur pour ces select ?
-	$game = $db->query(sqlGetGamesForId($gameId));
+	$game = $db->query("select gid, (select name from node where eid = eid_central_word) as name_central_word, eid_central_word, relation_1, relation_2 from game where gid = ".$gameId.";");
 	$game = $game->fetchArray();
 
 	$ret = array();
@@ -400,7 +416,7 @@ function game2array($user, $gameId)
 	$ret['center'] = array('id' => $game['eid_central_word'], 'name' => formatWord($game['name_central_word']));
 	$ret['cloud'] = array(); // TODO ! compter dynamiquement.
 	
-	$res = $db->query(sqlGetInformationAboutGame($gameId));
+	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word, num, difficulty, totalWeight, probaR1, probaR2, probaR0, probaTrash from game_cloud where gid = ".$gameId.";");
 	
 	while ($x = $res->fetchArray())
 	{
@@ -517,11 +533,11 @@ function normalizeProbas($row) {
 function setGame($user, $pgid, $gid, $answers)
 {
 	$db = getDB();
-	if ('ok' !== $db->querySingle(sqlGameIsOK($pgid, $gid, $user))) {
+	if ('ok' !== $db->querySingle("SELECT 'ok' FROM played_game WHERE pgid = $pgid and $gid = $gid and login = '$user' and timestamp = -1;")) {
 		return getGameScores($user, $pgid, $gid);
 	}
 	
-	$userReputation = computeUserReputation($db->querySingle(sqlGetScoreForUser($user)));
+	$userReputation = computeUserReputation($db->querySingle("SELECT score FROM user WHERE login='".$user."';"));
 	
 	$db->exec("begin transaction;");
 	$db->exec("update played_game set timestamp = ".time()." where pgid = $pgid;");
@@ -541,7 +557,7 @@ function setGame($user, $pgid, $gid, $answers)
 		$num = intval($row['num']);
 		$nbScores++;
 		if (!isset($answers[$num])) {
-			errSetPartiNoRelation($num);
+			throw new Exception("Cette requête \"Set partie\" ne donne pas de réponse (une relation) pour le mot numéro $num de la partie.", 5);
 		}
 		$relanswer = intval($answers[$num]);
 
@@ -551,7 +567,7 @@ function setGame($user, $pgid, $gid, $answers)
 			case $r2:    $answer = 1; $probaRx = "probaR2"; break;
 			case $r0:    $answer = 2; $probaRx = "probaR0"; break;
 			case $trash: $answer = 3; $probaRx = "probaTrash"; break;
-			default:     errAnswerInvalidForWord($r1, $r2, $r0, $trash);
+			default:     throw new Exception("Réponse ($relanswer) invalide pour le mot $num. Les réponses possibles sont : $r1, $r2, $r0, $trash", 5);
 		}
 			
 		$wordScore = computeScore(normalizeProbas($row), $row['difficulty'], $answer, $userReputation);
@@ -573,17 +589,17 @@ function setGame($user, $pgid, $gid, $answers)
 
 function getGameScores($user, $pgid, $gid) {
 	$db = getDB();
-	$timestamp = $db->querySingle(sqlGetPlayedGameTime($pgid, $gid, $user));
+	$timestamp = $db->querySingle("SELECT timestamp FROM played_game WHERE pgid = $pgid and $gid = $gid and login = '$user';");
 	if ($timestamp == -1) {
-		errGameNeverPlayed();
+		throw new Exception("Cette partie n'a jamais été jouée.", 4); // TODO : code d'erreur en doublon avec celui ci-dessous.
 	} else if ($timestamp == null) {
-		errGameNotAssociatedWithUser();
+		throw new Exception("Cette partie n'est associée à votre nom d'utilisateur.", 4);
 	}
 	
 	$gameScore = 0;
 	$scores = array();
 	$nbScores = 0;
-	$res = $db->query(sqlGetNumAndScoreFromGame($pgid, $gid));
+	$res = $db->query("SELECT num,score from played_game_cloud where pgid = $pgid and gid = $gid;");
 	while ($row = $res->fetchArray())
 	{
 		$nbScores++;
@@ -649,7 +665,7 @@ function setGameGetScore($user, $pgid, $gid, $answers) {
 function insertNode($node) {
 	$db = getDB();
 	
-	if($db->querySingle(sqlGetEidFromNode($node)) == null) {
+	if($db->querySingle("SELECT eid FROM node WHERE name='".SQLite3::escapeString($node)."'") == null) {
 		$db->exec("INSERT INTO node(name,type,weight) VALUES('".SQLite3::escapeString($node)."',1,50);");
 		return true;
 	}
@@ -665,7 +681,7 @@ function insertNode($node) {
 function getNodeEid($node) {
 	$db = getDB();
 
-	return $db->querySingle(sqlGetEidFromNode($node));
+	return $db->querySingle("SELECT eid FROM node WHERE name='".SQLite3::escapeString($node)."';");
 }
 
 function wordExist($node) {
