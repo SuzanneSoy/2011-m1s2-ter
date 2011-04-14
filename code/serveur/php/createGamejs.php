@@ -1,7 +1,7 @@
 <?php
 require_once("ressources/strings.inc");
 require_once("relations.php");
-require_once("pticlic.php");
+require_once("pticlic2.php");
 session_start();
 
 $state = 0;
@@ -203,11 +203,15 @@ else
 				</select>
 			</div>
 			<div id="wordLines">
-				<div style="display:none">
-					<div class="wordLine" id="templateWordLine">
-						<label for="word"></label>
-						<input id="word"/>
+				<div id="templates" style="display:none">
+					<div class="wordLine" class="wordLine">
+						<label for="word-"></label>
+						<input type="text" id="word-"/>
 						<span class="status">●</span>
+						<input type="checkbox" id="r1-"/><label class="r1" for="r1-">Blabla</label>
+						<input type="checkbox" id="r2-"/><label class="r2" for="r2-">Blabla</label>
+						<input type="checkbox" id="r3-"/><label class="r3" for="r3-">Blabla</label>
+						<input type="checkbox" id="r4-"/><label class="r4" for="r4-">Blabla</label>
 					</div>
 				</div>
 			</div>

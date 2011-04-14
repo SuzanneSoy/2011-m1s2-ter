@@ -1,5 +1,16 @@
+$.fn.changeId = function(append) {
+	this.find("[id]").each(function(i,e){
+		$(e).attr("id", $(e).attr("id") + append);
+	});
+	this.find('[for="word-"]').text(append);
+	this.find("[for]").each(function(i,e){
+		$(e).attr("for", $(e).attr("for") + append);
+	});
+	return this;
+};
+
 $(function() {
-	$.getJSON("server.php", {action:"5", user:"foo", passwd:"bar"}, function (data) {
+	$.getJSON("pticlic2.php", {action:"5", user:"foo", passwd:"bar"}, function (data) {
 		var numWord = 1;
 		var user = "foo";
 		var passwd = "bar";
@@ -12,32 +23,47 @@ $(function() {
 		var displayNWordLines = function (nb) {
 			
 			for(var i=numWord; i<numWord+nb; i++){
-				$("#templateWordLine")
+				$("#templates .wordLine")
 					.clone()
-					.find("label").attr("for", "word"+i).text(i).end()
-					.find("input").attr("id", "word"+i).end()
+					.changeId(i)
+//					.find("label").attr("for", "word"+i).text(i).end()
+//					.find("input").attr("id", "word"+i).end()
 					.appendTo("#wordLines");
 				
 				(function (i) {
-					$("#word"+i).focusout(checkWord);
+					$("#word-"+i).focusout(checkWord);
 					wordsOK[i] = false;
 				})(i);
 			}
 
 			numWord += nb;
+			
+			displayRelations();
+			// truc.children("option:nth-child(2)");
+			// $(truc.children("option").get(2 /* ou 1 */))
 		};
+		
+		var displayRelations = function() {
+			$(".r1").text(relations[$("#relation1").val()]);
+			$(".r2").text(relations[$("#relation2").val()]);
+			$(".r3").text(relations[0]);
+			$(".r4").text(relations[-1]);
+		}
 		
 		var displayCentralWordAndRelations = function() {
 			$("#centralWord").focusout(checkWord);
 			
 			$.each(relations, function(i, value) {
-				$('<option/>').val(i).text(value).appendTo("#relations select");
+				if(i != 0 && i != -1)
+					$('<option/>').val(i).text(value).appendTo("#relations select");
 			});
 			$("#relation1, #relation2").change(function() {
 				if ($("#relation1").val() == $("#relation2").val())
 					displayError("Les relations doivent être différentes");
 				else
 					displayError("");
+					
+				displayRelations();
 			});
 		};
 		
@@ -69,11 +95,15 @@ $(function() {
 		
 		var formOK = function() {
 			displayError("");
+			
+			console.log(wordsOK);
 		   	
    			if ($("#relation1").val() == $("#relation2").val())
    				displayError("Les deux relation doivent être différents");
    			else if ($("#centralWord").val() == "")
    				displayError("Le mot central doit être renseigné.");
+				else if (badWord())
+					displayError("Il existe des mots incorrects");   			
    			else if (nbWordOK() < nbWordMin)
    				displayError("Le nuage doit contenir au moins "+nbWordMin+" mots valides.");
 		};
@@ -81,12 +111,23 @@ $(function() {
 		var nbWordOK = function() {
 			var count = 0;
 		   	
-   			for (word in wordsOK)
-   				if (word == true)
-   					count++;
+   		for (word in wordsOK)
+   			if (word == true)
+   				count++;
    			
-   			return count;
+   		return count;
 		};
+		
+		var badWord = function() {
+			for (word in wordsOK)
+   			if (word == false)
+   				return true;
+   			
+   		return false;
+   	}
+   	
+   	
+   		
 
 		var displayError = function(message) {
 			if (message != "")
