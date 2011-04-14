@@ -358,6 +358,7 @@ function formatWord($word) {
 */
 function game2json($user, $gameId)
 {
+	global $stringRelations;
 	$db = getDB();
 	// TODO : factoriser avec game2array() .
 	// TODO : planter si la requête suivante échoue pour quelque raison que ce soit.
@@ -367,9 +368,14 @@ function game2json($user, $gameId)
 	// TODO Yoann : faire des tests d'erreur pour ces select ?
 	$game = $db->query("select gid, (select name from node where eid = eid_central_word) as name_central_word, eid_central_word, relation_1, relation_2 from game where gid = ".$gameId.";");
 	$game = $game->fetchArray();
-	
+
 	$retstr = "";
-	$retstr .= '{"gid":'.$gameId.',"pgid":'.$pgid.',"cat1":'.$game['relation_1'].',"cat2":'.$game['relation_2'].',"cat3":0,"cat4":-1,';
+	$retstr .= '{"gid":'.$gameId.',"pgid":'.$pgid.',"relations":[';
+	$retstr .= '{"id":'.$game['relation_1'].', "name":'.json_encode(''.formatWord($stringRelations[$game['relation_1']])).'}';
+	$retstr .= ', {"id":'.$game['relation_2'].', "name":'.json_encode(''.formatWord($stringRelations[$game['relation_2']])).'}';
+	$retstr .= ', {"id":0, "name":'.json_encode(''.formatWord($stringRelations[0])).'}';
+	$retstr .= ', {"id":-1, "name":'.json_encode(''.formatWord($stringRelations[-1])).'}],';
+	//	$retstr .= '{"gid":'.$gameId.',"pgid":'.$pgid.',"cat1":'.$game['relation_1'].',"cat2":'.$game['relation_2'].',"cat3":0,"cat4":-1,';
 	$retstr .= '"center":{"id":'.$game['eid_central_word'].',"name":'.json_encode(''.formatWord($game['name_central_word'])).'},';
 	$retstr .= '"cloudsize":10,"cloud":['; // TODO ! compter dynamiquement.
 	
