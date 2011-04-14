@@ -32,7 +32,7 @@ $(function() {
 				
 				(function (i) {
 					$("#word-"+i).focusout(checkWord);
-					wordsOK[i] = false;
+					wordsOK["word-"+i] = false;
 				})(i);
 			}
 
@@ -88,7 +88,7 @@ $(function() {
    					data: "action=4&word="+word+"&user="+user+"&passwd="+passwd,
    					success: function(msg){
    						input.parent(".wordLine, #center").addClass((msg == false) ? "invalid" : "valid");
-   						wordsOK[input.val()] = !(msg == false);
+   						wordsOK[input.attr("id")] = !(msg == false);
     				}});
     		}
 		};
@@ -106,13 +106,15 @@ $(function() {
 					displayError("Il existe des mots incorrects");   			
    			else if (nbWordOK() < nbWordMin)
    				displayError("Le nuage doit contenir au moins "+nbWordMin+" mots valides.");
+   			else if (!relationsOK())
+   				displayError("Tout les mots ne sont pas liés à une relation");
 		};
 		
 		var nbWordOK = function() {
 			var count = 0;
 		   	
    		for (word in wordsOK)
-   			if (word == true)
+   			if (wordsOK[word] == true)
    				count++;
    			
    		return count;
@@ -120,13 +122,22 @@ $(function() {
 		
 		var badWord = function() {
 			for (word in wordsOK)
-   			if (word == false)
+   			if (wordsOK[word] == false)
    				return true;
    			
    		return false;
    	}
    	
-   	
+   	var relationsOK = function() {
+   		for(i = 0; i < numWord; i++)
+   			if(wordsOK["word-"+i]) {
+   				console.log("mot ok");
+   				if(!$("r1-"+i).is(":checked") && !$("r2-"+i).is(":checked") && !$("r3-"+i).is(":checked") && !$("r4-"+i).is(":checked"))
+   					return false;
+   			}
+   					
+   		return true;
+   	}
    		
 
 		var displayError = function(message) {
