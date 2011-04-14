@@ -21,7 +21,6 @@ function jss() {
 $(function () {
 	var url = "score.json";
 	$.getJSON(url, function(data) {
-		console.log(data);
 		$.each(data.scores, function(i,e) {
 			var percentScore = (e.score - data.minScore) / (data.maxScore - data.minScore);
 			$("#templates .scoreLine")

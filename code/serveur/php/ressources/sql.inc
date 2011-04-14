@@ -17,8 +17,8 @@ $banned_types = "4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001";
  *   sourceOneForwardR1R2($centerEid, $r1, $r2)
  */
 
-function querySingle($query) {
-	return getDB()->querySingle($query);
+function querySingle($query, $wholeRow = false) {
+	return getDB()->querySingle($query, $wholeRow);
 }
 
 /** Sélectionne le mot de passe d'un utilisateur.
@@ -70,37 +70,34 @@ function sqlGetBackwardOne($origin, $types = null) {
 
 /* Voisins 1 saut du bon type (= relations déjà connues)
  * @return array : list($eid, $probaR1, $probaR2, $probaR0, $probaTrash)
+ */
 function sourceOneForwardR1R2($centerEid, $r1, $r2) {
-	list($eid, $type) = sqlGetForwardOne($origin, array($r1, $r2));
+	list($eid, $type) = sqlGetForwardOne($centerEid, array($r1, $r2));
 	return array($eid, $type == $r1, $type == $r2, 0, 0);
 }
 
 /* Voisins 1 saut via r_associated (0), donc qu'on voudrait spécifier si possible.
  * @return array : list($eid, $probaR1, $probaR2, $probaR0, $probaTrash)
+ */
 function sourceOneForwardAssociated($centerEid, $r1, $r2) {
-	list($eid, $type) = sqlGetForwardOne($origin, 0);
+	list($eid, $type) = sqlGetForwardOne($centerEid, 0);
 	return array($eid, 0.25, 0.25, 0.5, 0);
 }
 
-/*
-// Voisins 1 saut du bon type (= relations déjà connues)
-function sql1JumpGoodType($r1, $r2, $centerEid) {
-	global $typer1r2;
-	
-	return "select end as eid, type = $r1 as r1, type = $r2 as r2, 0 as r0, 0 as trash from relation where start = $centerEid and $typer1r2 order by random();";
+/* Voisins 1 saut relation quelconque.
+ * @return array : list($eid, $probaR1, $probaR2, $probaR0, $probaTrash)
+ */
+function sourceOneForwardAny($centerEid, $r1, $r2) {
+	// TODO : sauf relations 0, r1, r2, banned
+	list($eid, $type) = sqlGetForwardOne($centerEid);
+	return array($eid, 0.1, 0.1, 0.8, 0);
 }
 
-// Voisins 1 saut via r_associated (0), donc qu'on voudrait spécifier si possible.
-function sql1JumpViaRAssociated0($centerEid) {
-	return "select end as eid, 0.25 as r1, 0.25 as r2, 0.5 as r0, 0 as trash from relation where start = $centerEid and type = 0 order by random();";
-}
-*/
-
-// Voisins 1 saut via les autres relations
-function sql1JumpViaOtherRelation($centerEid, $r1, $r2) {
-	global $banned_types;
-	
-	return "select end as eid, 0.1 as r1, 0.1 as r2, 0.8 as r0, 0 as trash from relation where start = $centerEid and type not in (0, $r1, $r2, $banned_types) order by random();";
+// Voisins 2 sauts, avec un mix de R1 et R2 pour les liens. Par ex [ A -R1-> B -R2-> C ] ou bien [ A -R2-> B -R2-> C ]
+function sourceTwoForwardR1R2($centerEid, $r1, $r2) {
+	list($eid1, $type1) = sqlGetForwardOne($centerEid, array($r1, $r2));
+	list($eid2, $type2) = sqlGetForwardOne($eid1, array($r1, $r2));
+	return array($eid, (($type1 == $r1) + ($type2 == $r1)) / 3, (($type1 == $r2) + ($type2 == $r2)) / 3, 1/6, 1/6);
 }
 
 // Voisins 2 sauts, avec un mix de R1 et R2 pour les liens. Par ex [ A -R1-> B -R2-> C ] ou bien [ A -R2-> B -R2-> C ]
@@ -109,14 +106,6 @@ function sql2JumpWithMixR1R2ForLinks($r1, $r2, $centerEid) {
 	global $typer1r2;
 
 	return "select B.end as eid, ((A.type = $r1) + (B.type = $r1)) / 3. as r1, ((A.type = $r2) + (B.type = $r2)) / 3. as r2, 1/6. as r0, 1/6. as trash from relation as A, relation as B where A.start = $centerEid and A.$typer1r2 and B.start = A.end and B.$typer1r2 order by random();";
-}
-
-// Voisins 1 saut r1/r2 + 1 saut synonyme
-// Version optimisée de : "select end as eid from relation where start in oneHopWithType and type = 5 order by random()";
-function sql1JumpR1DivR2Plus1JumpSynonymOneHopWithType($r1, $r2, $centerEid) {
-	global $typer1r2;
-
-	return "select B.end as eid, (A.type = $r1) * 0.75 as r1, (A.type = $r2) * 0.75 as r2, 0.25 as r0, 0 as trash from relation as A, relation as B where A.start = $centerEid and A.$typer1r2 and B.start = A.end and B.type = 5 order by random();";
 }
 
 // Version optimisée de : "select end as eid from relation where start in (select end from relation where start = $centerEid and type = 5) and $typer1r2 order by random();"
@@ -133,6 +122,35 @@ function sql2JumpAll($centerEid, $cloudSize) {
 	
 	return "select x as eid, 0.1 as r1, 0.1 as r2, 0.3 as r0, 0.5 as trash from (select x from (select X.eid + Y.dumb as x from (select B.end as eid from relation as A, relation as B where A.type not in ($banned_types) and A.start = $centerEid and B.type not in ($banned_types) and B.start = A.end limit ".($cloudSize*4).") as X, (select 0 as dumb) as Y)) order by random();";
 }
+
+/*
+// Voisins 1 saut du bon type (= relations déjà connues)
+function sql1JumpGoodType($r1, $r2, $centerEid) {
+	global $typer1r2;
+	
+	return "select end as eid, type = $r1 as r1, type = $r2 as r2, 0 as r0, 0 as trash from relation where start = $centerEid and $typer1r2 order by random();";
+}
+
+// Voisins 1 saut via r_associated (0), donc qu'on voudrait spécifier si possible.
+function sql1JumpViaRAssociated0($centerEid) {
+	return "select end as eid, 0.25 as r1, 0.25 as r2, 0.5 as r0, 0 as trash from relation where start = $centerEid and type = 0 order by random();";
+}
+
+// Voisins 1 saut via les autres relations
+function sql1JumpViaOtherRelation($centerEid, $r1, $r2) {
+	global $banned_types;
+	
+	return "select end as eid, 0.1 as r1, 0.1 as r2, 0.8 as r0, 0 as trash from relation where start = $centerEid and type not in (0, $r1, $r2, $banned_types) order by random();";
+}
+
+// Voisins 1 saut r1/r2 + 1 saut synonyme
+// Version optimisée de : "select end as eid from relation where start in oneHopWithType and type = 5 order by random()";
+function sql1JumpR1DivR2Plus1JumpSynonymOneHopWithType($r1, $r2, $centerEid) {
+	global $typer1r2;
+
+	return "select B.end as eid, (A.type = $r1) * 0.75 as r1, (A.type = $r2) * 0.75 as r2, 0.25 as r0, 0 as trash from relation as A, relation as B where A.start = $centerEid and A.$typer1r2 and B.start = A.end and B.type = 5 order by random();";
+}
+*/
 
 // Centre pointe vers X, M pointe vers X aussi, on prend M.
 // Version optimisée de : "select start as eid from relation where end in (select end from relation where start = $centerEid) and type not in ($banned_types) order by random();"
