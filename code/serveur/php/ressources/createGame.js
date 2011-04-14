@@ -10,7 +10,7 @@ $.fn.changeId = function(append) {
 };
 
 $(function() {
-	$.getJSON("pticlic2.php", {action:"5", user:"foo", passwd:"bar"}, function (data) {
+	$.getJSON("server.php", {action:"5", user:"foo", passwd:"bar"}, function (data) {
 		var numWord = 1;
 		var user = "foo";
 		var passwd = "bar";

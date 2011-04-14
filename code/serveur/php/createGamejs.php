@@ -1,7 +1,7 @@
 <?php
 require_once("ressources/strings.inc");
 require_once("relations.php");
-require_once("pticlic2.php");
+require_once("server.php");
 session_start();
 
 $state = 0;
