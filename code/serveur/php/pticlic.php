@@ -11,9 +11,7 @@ require_once("ressources/errors.inc")
 *   cgChooseRelations();
 *   cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights);
 *   cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
-*   randomGameCore();
 *   randomGame();
-*   formatWord($word);
 *   game2json($user, $gameId);
 *   game2array($user, $gameId);
 *   createGame($nbParties, $mode);
@@ -40,8 +38,7 @@ function checkLogin($user, $passwd) {
 	return md5($passwd) == sqlGetPasswd($user);
 }
 
-
-/**
+/**  Construit les sets de résultats qui serviront à la construction du nuage.
 * @param cloudSize : Taille du nuage.
 * @param centerEid : Identifiant du mot central.
 * @param r1 Type de la relation 1.
@@ -179,7 +176,7 @@ function cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights)
 		$rejected = false;
 		// Ne pas mettre le mot central dans le nuage.
 		if ($res['eid'] == $centerEid) { continue; }
-		$nodeName = $db->querySingle(sqlGetNameFromNode($res));
+		$nodeName = sqlGetRawNodeName($res['eid']);
 		if (substr($nodeName, 0, 2) == "::") { continue; }
 		foreach ($cloud as $c) {
 			if ($c['eid'] == $res['eid']) {
@@ -260,59 +257,24 @@ function cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty)
 	$db->exec("commit;");
 }
 
-/** Retourne un identifiant de partie aléatoire de la liste de parties jouables
-* @return gid : Identifiant de partie.
-*/
-function randomGameCore() {
-	$db = getDB();
-	return $db->querySingle(sqlGetGidFromGame());
-}
-
 /** Sélection aléatoire d'une partie de la base de données parmis les parties à jouer.
 * @return gid : Identifiant de la partie selectionnée.
 */
 function randomGame()
 {
-	$gid = randomGameCore();
+	$gid = sqlGetRandomGID();
 
 	if ($gid === null) {
 		// TODO : séparer ces créations de parties dans une fonction qui détecte le mode toussa.
 		for ($i = 0; $i < 100; $i++)
 			createGameCore(10);
 
-		$gid = randomGameCore();
+		$gid = sqlGetRandomGID();
 
 		if ($gid === null)
 			errGetGame();
 	}
 	return $gid;
-}
-
-/** Formatage des mots lorsqu'il y a des généralisations/spécifications par le symbole ">".
-* @param word : Le mot que l'on veut reformater.
-* @return word : le mot formaté.
-*/
-function formatWord($word) {
-	$db = getDB();
-	$res = "";
-	$stack = array();
-
-	while (($pos = strpos($word, ">")) !== false) {
-		$res .= substr($word,0,$pos) . " (";
-		$eid = intval(substr($word,$pos+1));
-		if ($eid == 0) { errFollowingPointer($word);  }
-		if (in_array($eid, $stack)) { errLoopDetected($word);  }
-		if (count($stack) > 10) { errTooMuchRecursion($word);  }
-		$stack[] = $eid;
-		$word = $db->querySingle(sqlGetNameFromNodeWithEid($eid));
-	}
-
-	$res .= $word;
-
-	for ($depth = count($stack); $depth > 0; $depth--)
-		$res .= ')';
-
-	return $res;
 }
 
 /** Formate une partie en JSON en l'imprimant.
@@ -327,15 +289,14 @@ function game2json($user, $gameId)
 	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp) VALUES (null, ".$gameId.", '$user', -1);");
 	$pgid = $db->lastInsertRowID();
 	
-	$game = $db->query(sqlGetGamesForId($gameId));
-	$game = $game->fetchArray();
+	$game = sqlGetGameInfo($gameId);
 	
 	$retstr = "";
 	$retstr .= '{"gid":'.$gameId.',"pgid":'.$pgid.',"cat1":'.$game['relation_1'].',"cat2":'.$game['relation_2'].',"cat3":0,"cat4":-1,';
-	$retstr .= '"center":{"id":'.$game['eid_central_word'].',"name":'.json_encode(''.formatWord($game['name_central_word'])).'},';
+	$retstr .= '"center":{"id":'.$game['eid_central_word'].',"name":'.json_encode(''.sqlGetNodeName($game['eid_central_word'])).'},';
 	$retstr .= '"cloudsize":10,"cloud":['; // TODO ! compter dynamiquement.
 	
-	$res = $db->query(sqlGetWordEidAndName($gameId));
+	$res = $db->query(sqlGetCloudWords($gameId));
 	$notfirst = false;
 	
 	while ($x = $res->fetchArray())
@@ -345,7 +306,7 @@ function game2json($user, $gameId)
 		else
 			$notfirst=true;
 
-		$retstr .= '{"id":'.$x['eid_word'].',"name":'.json_encode("".formatWord($x['name_word'])).'}';
+		$retstr .= '{"id":'.$x['eid_word'].',"name":'.json_encode("".sqlGetNodeName($x['eid_word'])).'}';
 	}
 
 	$retstr .= "]}";
@@ -365,8 +326,7 @@ function game2array($user, $gameId)
 	$pgid = $db->lastInsertRowID();
 	
 	// TODO Yoann : faire des tests d'erreur pour ces select ?
-	$game = $db->query(sqlGetGamesForId($gameId));
-	$game = $game->fetchArray();
+	$game = sqlGetGameInfo($gameId);
 
 	$ret = array();
 	$ret['gid'] = $gameId;
@@ -375,16 +335,16 @@ function game2array($user, $gameId)
 	$ret['cat2'] = $game['relation_2'];
 	$ret['cat3'] = 0;
 	$ret['cat4'] = -1;
-	$ret['center'] = array('id' => $game['eid_central_word'], 'name' => formatWord($game['name_central_word']));
+	$ret['center'] = array('id' => $game['eid_central_word'], 'name' => sqlGetNodeName($game['eid_central_word']));
 	$ret['cloud'] = array(); // TODO ! compter dynamiquement.
 	
-	$res = $db->query(sqlGetInformationAboutGame($gameId));
+	$res = $db->query(sqlGetCloudInfo($gameId));
 	
 	while ($x = $res->fetchArray())
 	{
 		$ret['cloud'][$x['num']] = array(
 			'id' => $x['eid_word'],
-			'name' => formatWord($x['name_word']),
+			'name' => sqlGetNodeName($x['eid_word']),
 			'difficulty' => $x['difficulty'],
 			'totalWeight' => $x['totalWeight'],
 			'probaR1' => $x['probaR1'],
@@ -495,11 +455,11 @@ function normalizeProbas($row) {
 function setGame($user, $pgid, $gid, $answers)
 {
 	$db = getDB();
-	if ('ok' !== $db->querySingle(sqlGameIsOK($pgid, $gid, $user))) {
+	if (sqlGameIsOK($pgid, $gid, $user)) {
 		return getGameScores($user, $pgid, $gid);
 	}
 	
-	$userReputation = computeUserReputation($db->querySingle(sqlGetScoreForUser($user)));
+	$userReputation = computeUserReputation(sqlGetUserScore($user));
 	
 	$db->exec("begin transaction;");
 	$db->exec("update played_game set timestamp = ".time()." where pgid = $pgid;");
@@ -551,7 +511,7 @@ function setGame($user, $pgid, $gid, $answers)
 
 function getGameScores($user, $pgid, $gid) {
 	$db = getDB();
-	$timestamp = $db->querySingle(sqlGetPlayedGameTime($pgid, $gid, $user));
+	$timestamp = sqlGetPlayedGameTime($pgid, $gid, $user);
 	if ($timestamp == -1) {
 		errGameNeverPlayed();
 	} else if ($timestamp == null) {
@@ -561,7 +521,7 @@ function getGameScores($user, $pgid, $gid) {
 	$gameScore = 0;
 	$scores = array();
 	$nbScores = 0;
-	$res = $db->query(sqlGetNumAndScoreFromGame($pgid, $gid));
+	$res = $db->query(sqlGetPlayedCloudScores($pgid, $gid));
 	while ($row = $res->fetchArray())
 	{
 		$nbScores++;

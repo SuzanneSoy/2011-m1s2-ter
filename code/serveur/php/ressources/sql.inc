@@ -1,8 +1,6 @@
 <?php
-$r1 = "todo";
-$r2 = "todo";
-$typer1r2 = "type in ($r1, $r2)";
-$banned_types = "4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001";
+
+define('REL_SYNONYM', 5);
 
 /* Les prototypes des fonctions :
  * ===============================>
@@ -11,10 +9,17 @@ $banned_types = "4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001";
  *   sqlGetPasswd($user);
  *   sqlGetRandomCenterNode();
  *   sqlGetRandomCloudNode();
- *   sqlGetForwardOne($origin, [$types])
- *   sqlGetBackwardOne($origin, [$types])
+ *   sqlGetForwardOne($origin, [$types]);
+ *   sqlGetBackwardOne($origin, [$types]);
  *
- *   sourceOneForwardR1R2($centerEid, $r1, $r2)
+ *   sourceOneForwardR1R2       ($centerEid, $r1, $r2);
+ *   sourceOneForwardAssociated ($centerEid, $r1, $r2);
+ *   sourceOneForwardAny        ($centerEid, $r1, $r2);
+ *   sourceTwoForwardR1R2_R1R2  ($centerEid, $r1, $r2);
+ *   sourceTwoForwardR1R2_Syn   ($centerEid, $r1, $r2);
+ *   sourceTwoForwardSyn_R1R2   ($centerEid, $r1, $r2);
+ *   sourceTwoForwardAny_Any    ($centerEid, $r1, $r2);
+ *   sourceArrowheadAny_Any     ($centerEid, $r1, $r2);
  */
 
 function querySingle($query, $wholeRow = false) {
@@ -43,17 +48,20 @@ function sqlGetRandomCloudNode() {
 	return querySingle("select eid from random_cloud_node where rowid = (abs(random()) % (select max(rowid) from random_cloud_node))+1;");
 }
 
-/** Selectionne un voisin un saut en avant, avec une relation du type donné.
+/** Selectionne un voisin un saut en avant ou en arrière, avec une relation du type donné.
  * @param origin : L'identifiant du noeud de départ
  * @param types : Facultatif. Entier ou tableau d'entiers représentant les types de relations autorisés.
+ * @param forward : Booléen indiquant s'il faut partir de origin (sinon, on arrive dessus).
  * @return eid : L'identifiant du noeud.
  */
-function sqlGetForwardOne($origin, $types = null) {
-	if (is_integer($types)) " and type = ".$types;
-	elseif (is_array($types)) " and type in (".$types.")";
-	else $types = "";
+function sqlGetForwardOne($origin, $types = null, $forward = true) {
+	$dir_from = $forward ? 'start' : 'end';
+	$dir_to = $forward ? 'end' : 'start';
+	if (is_integer($types)) "= ".intval($types);
+	elseif (is_array($types)) "in (".implode(',', array_map("intval", $types)).")";
+	else $types = "not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001)";
 	// TODO : vérifier que c'est compatible avec l'affectation list($a,$b) = ...()
-	return querySingle("select end, type from relation where start = " . $origin . $types . " order by random();", true);
+	return querySingle("select ".$dir_to.", type from relation where ".$dir_from." = ".intval($origin)." and type ".$types." order by random();", true);
 }
 
 /** Selectionne un voisin un saut en arrière, avec une relation du type donné.
@@ -62,10 +70,7 @@ function sqlGetForwardOne($origin, $types = null) {
  * @return eid : L'identifiant du noeud.
  */
 function sqlGetBackwardOne($origin, $types = null) {
-	if (is_integer($types)) " and type = ".$types;
-	elseif (is_array($types)) " and type in (".$types.")";
-	else $types = "";
-	return querySingle("select start, type from relation where end = " . $origin . $types . " order by random();", true);
+	return sqlGetForwardOne($origin, $types, false);
 }
 
 /* Voisins 1 saut du bon type (= relations déjà connues)
@@ -94,116 +99,104 @@ function sourceOneForwardAny($centerEid, $r1, $r2) {
 }
 
 // Voisins 2 sauts, avec un mix de R1 et R2 pour les liens. Par ex [ A -R1-> B -R2-> C ] ou bien [ A -R2-> B -R2-> C ]
-function sourceTwoForwardR1R2($centerEid, $r1, $r2) {
+function sourceTwoForwardR1R2_R1R2($centerEid, $r1, $r2) {
 	list($eid1, $type1) = sqlGetForwardOne($centerEid, array($r1, $r2));
 	list($eid2, $type2) = sqlGetForwardOne($eid1, array($r1, $r2));
-	return array($eid, (($type1 == $r1) + ($type2 == $r1)) / 3, (($type1 == $r2) + ($type2 == $r2)) / 3, 1/6, 1/6);
-}
-
-// Voisins 2 sauts, avec un mix de R1 et R2 pour les liens. Par ex [ A -R1-> B -R2-> C ] ou bien [ A -R2-> B -R2-> C ]
-// Version optimisée de : "select end as eid from relation where $typer1r2 and start in oneHopWithType order by random();"
-function sql2JumpWithMixR1R2ForLinks($r1, $r2, $centerEid) {
-	global $typer1r2;
-
-	return "select B.end as eid, ((A.type = $r1) + (B.type = $r1)) / 3. as r1, ((A.type = $r2) + (B.type = $r2)) / 3. as r2, 1/6. as r0, 1/6. as trash from relation as A, relation as B where A.start = $centerEid and A.$typer1r2 and B.start = A.end and B.$typer1r2 order by random();";
-}
-
-// Version optimisée de : "select end as eid from relation where start in (select end from relation where start = $centerEid and type = 5) and $typer1r2 order by random();"
-function sql1JumpR1DivR2Plus1JumpSynonym($r1, $r2, $centerEid) {
-	global $typer1r2;
-	
-	return "select B.end as eid, (B.type = $r1) * 0.75 as r1, (B.type = $r2) * 0.75 as r2, 0.25 as r0, 0 as trash from relation as A, relation as B where A.start = $centerEid and A.type = 5 and B.start = A.end and B.$typer1r2 order by random();";
-}
-
-// Voisins 2 sauts (tous)
-// Version optimisée de : "select end as eid, 0.1 as r1, 0.1 as r2, 0.3 as r0, 0.5 as trash from relation where start in (select end from relation where start = $centerEid and type not in ($banned_types)) and type not in ($banned_types) order by random();"
-function sql2JumpAll($centerEid, $cloudSize) {
-	global $banned_types;
-	
-	return "select x as eid, 0.1 as r1, 0.1 as r2, 0.3 as r0, 0.5 as trash from (select x from (select X.eid + Y.dumb as x from (select B.end as eid from relation as A, relation as B where A.type not in ($banned_types) and A.start = $centerEid and B.type not in ($banned_types) and B.start = A.end limit ".($cloudSize*4).") as X, (select 0 as dumb) as Y)) order by random();";
-}
-
-/*
-// Voisins 1 saut du bon type (= relations déjà connues)
-function sql1JumpGoodType($r1, $r2, $centerEid) {
-	global $typer1r2;
-	
-	return "select end as eid, type = $r1 as r1, type = $r2 as r2, 0 as r0, 0 as trash from relation where start = $centerEid and $typer1r2 order by random();";
-}
-
-// Voisins 1 saut via r_associated (0), donc qu'on voudrait spécifier si possible.
-function sql1JumpViaRAssociated0($centerEid) {
-	return "select end as eid, 0.25 as r1, 0.25 as r2, 0.5 as r0, 0 as trash from relation where start = $centerEid and type = 0 order by random();";
-}
-
-// Voisins 1 saut via les autres relations
-function sql1JumpViaOtherRelation($centerEid, $r1, $r2) {
-	global $banned_types;
-	
-	return "select end as eid, 0.1 as r1, 0.1 as r2, 0.8 as r0, 0 as trash from relation where start = $centerEid and type not in (0, $r1, $r2, $banned_types) order by random();";
+	return array($eid2, (($type1 == $r1) + ($type2 == $r1)) / 3, (($type1 == $r2) + ($type2 == $r2)) / 3, 1/6, 1/6);
 }
 
 // Voisins 1 saut r1/r2 + 1 saut synonyme
-// Version optimisée de : "select end as eid from relation where start in oneHopWithType and type = 5 order by random()";
-function sql1JumpR1DivR2Plus1JumpSynonymOneHopWithType($r1, $r2, $centerEid) {
-	global $typer1r2;
-
-	return "select B.end as eid, (A.type = $r1) * 0.75 as r1, (A.type = $r2) * 0.75 as r2, 0.25 as r0, 0 as trash from relation as A, relation as B where A.start = $centerEid and A.$typer1r2 and B.start = A.end and B.type = 5 order by random();";
+function sourceTwoForwardR1R2_Syn($centerEid, $r1, $r2) {
+	list($eid1, $type1) = sqlGetForwardOne($centerEid, array($r1, $r2));
+	list($eid2, $type2) = sqlGetForwardOne($eid1, constant('REL_SYNONYM'));
+	return array($eid2, ($type1 == $r1) * 0.75, ($type1 == $r2) * 0.75, 0.5, 0.25);
 }
-*/
+
+// Voisins 1 saut synonyme + 1 saut r1/r2
+function sourceTwoForwardSyn_R1R2($centerEid, $r1, $r2) {
+	list($eid1, $type1) = sqlGetForwardOne($centerEid, constant('REL_SYNONYM'));
+	list($eid2, $type2) = sqlGetForwardOne($eid1, array($r1, $r2));
+	return array($eid2, ($type2 == $r1) * 0.75, ($type2 == $r2) * 0.75, 0.5, 0.25);
+}
+
+// Voisins 2 sauts (tous)
+function sourceTwoForwardAny_Any($centerEid, $r1, $r2) {
+	list($eid1, $type1) = sqlGetForwardOne($centerEid);
+	list($eid2, $type2) = sqlGetForwardOne($eid1);
+	return array($eid2, 0.1, 0.1, 0.3, 0.5);
+}
 
 // Centre pointe vers X, M pointe vers X aussi, on prend M.
-// Version optimisée de : "select start as eid from relation where end in (select end from relation where start = $centerEid) and type not in ($banned_types) order by random();"
-// Ce n'est toujours pas ça… : "select eid from (select B.start as eid from relation as A, relation as B where A.type not in ($banned_types) and A.start = $centerEid and B.type not in ($banned_types) and B.end = A.end limit 1) order by random();"
-// Tordu, mais ça marche \o/ . En fait il faut empêcher l'optimiseur de ramener le random avant le limit (et l'optimiseur est malin… :)
-function sqlXPointsToMMPointsToXTakeM($cloudSize) {
-	global $banned_types;
-	
-	return "select x as eid, 0.1 as r1, 0.1 as r2, 0.2 as r0, 0.6 as trash from (select x from (select X.eid + Y.dumb as x from (select B.start as eid from relation as A, relation as B where A.type not in ($banned_types) and A.start = $centerEid and B.type not in ($banned_types) and B.end = A.end limit ".($cloudSize*4).") as X, (select 0 as dumb) as Y)) order by random();";
+function sourceArrowheadAny_Any($centerEid, $r1, $r2) {
+	list($eid1, $type1) = sqlGetForwardOne($centerEid);
+	list($eid2, $type2) = sqlGetBackwardOne($eid1);
+	return array($eid2, 0.1, 0.1, 0.2, 0.6);
 }
 
-function sqlGetNameFromNode($res) {
-	return "select name from node where eid=".$res['eid'].";";
+function sqlGetRawNodeName($eid) {
+	return querySingle("select name from node where eid=".intval($eid).";");
 }
 
-function sqlGetGidFromGame() {
-	return "select gid from game where gid = (abs(random()) % (select max(gid) from game))+1 or gid = (select max(gid) from game where gid > 0) order by gid limit 1;";
-}
+/** Formatage des mots lorsqu'il y a des généralisations/spécifications par le symbole ">".
+* @param word : Le mot que l'on veut reformater.
+* @return word : le mot formaté.
+*/
+function sqlGetNodeName($eid) {
+	$db = getDB();
+	$res = "";
+	$stack = array();
+	$word = sqlGetRawNodeName($eid);
 
-function sqlGetNameFromNodeWithEid($eid) {
-	return "select name from node where eid = $eid";
+	while (($pos = strpos($word, ">")) !== false) {
+		$res .= substr($word,0,$pos) . " (";
+		$eid = intval(substr($word,$pos+1));
+		if ($eid == 0) { errFollowingPointer($word);  }
+		if (in_array($eid, $stack)) { errLoopDetected($word);  }
+		if (count($stack) > 10) { errTooMuchRecursion($word);  }
+		$stack[] = $eid;
+		$word = sqlGetRawNodeName($eid);
+	}
+
+	$res .= $word;
+
+	for ($depth = count($stack); $depth > 0; $depth--)
+		$res .= ')';
+
+	return $res;
+}
+													  
+/** Retourne un identifiant de partie aléatoire de la liste de parties jouables
+ * @return gid : Identifiant de partie.
+ */
+function sqlGetRandomGID() {
+	return querySingle("select gid from game where gid = (abs(random()) % (select max(gid) from game))+1 or gid = (select max(gid) from game where gid > 0) order by gid limit 1;");
 }
 
 // TODO Yoann : faire des tests d'erreur pour ces select ?
-function sqlGetGamesForId($gameId) {
-	return "select gid, (select name from node where eid = eid_central_word) as name_central_word, eid_central_word, relation_1, relation_2 from game where gid = ".$gameId.";";
+function sqlGetGameInfo($gameId) {
+	return querySingle("select gid, eid_central_word, eid_central_word, relation_1, relation_2 from game where gid = ".intval($gameId).";", true);
 }
 
-function sqlGetWordEidAndName($gameId) {
-	return "select eid_word,(select name from node where eid=eid_word) as name_word from game_cloud where gid = ".$gameId.";";
+function sqlGetCloudWords($gameId) {
+	return "select eid_word from game_cloud where gid = ".intval($gameId).";";
 }
 
-function sqlGetInformationAboutGame($gameId) {
-	return "select eid_word,(select name from node where eid=eid_word) as name_word, num, difficulty, totalWeight, probaR1, probaR2, probaR0, probaTrash from game_cloud where gid = ".$gameId.";";
+function sqlGetCloudInfo($gameId) {
+	return "select eid_word, num, difficulty, totalWeight, probaR1, probaR2, probaR0, probaTrash from game_cloud where gid = ".intval($gameId).";";
 }
 
-function sqlGameIsOK($pgid, $gid, $user) {
-	return "SELECT 'ok' FROM played_game WHERE pgid = $pgid and $gid = $gid and login = '$user' and timestamp = -1;";
-}
-
-function sqlGetScoreForUser($user) {
-	return "SELECT score FROM user WHERE login='".$user."';";
+function sqlGetUserScore($user) {
+	return querySingle("SELECT score FROM user WHERE login='".sqlite3::escapestring($user)."';");
 }
 
 function sqlGetPlayedGameTime($pgid, $gid, $user) {
-	return "SELECT timestamp FROM played_game WHERE pgid = $pgid and $gid = $gid and login = '$user';";
+	return querySingle("SELECT timestamp FROM played_game WHERE pgid = ".intval($pgid)." and gid = ".intval($gid)." and login = '".sqlite3::escapestring($user)."';");
 }
 
-function sqlGetNumAndScoreFromGame($pgid, $gid) {
-	return "SELECT num,score from played_game_cloud where pgid = $pgid and gid = $gid;";
+function sqlGameIsOK($pgid, $gid, $user) {
+	return (-1) == sqlGetPlayedGameTime();
 }
 
-function sqlGetEidFromNode($node) {
-	return "SELECT eid FROM node WHERE name='".SQLite3::escapeString($node)."'";
+function sqlGetPlayedCloudScores($pgid, $gid) {
+	return "SELECT num,score from played_game_cloud where pgid = ".intval($pgid)." and gid = ".intval($gid).";";
 }
-?>
