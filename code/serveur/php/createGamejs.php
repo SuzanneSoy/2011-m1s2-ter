@@ -169,17 +169,79 @@ else
 	#wordLines input{
 		border : 2px solid grey;		
 	}
-	.wordLine .status {
+	.status {
 		visibility: hidden;
 	}
-	.wordLine.valid .status, #center.valid .status {
+	.valid .status, #center.valid .status {
 		color: green;
 		visibility: visible;
 	}
-	.wordLine.invalid .status, #center.invalid .status, #center .status {
+	.invalid .status, #center.invalid .status, #center .status {
 		color: red;
 		visibility: visible;
 	}
+	
+	.wordLinesTable {
+		min-height : 20px;
+		min-width : 20px;		
+		border-collapse : collapse;
+		border-spacing : 0px;
+		margin-left : 30px;
+	}
+	
+	.wordLinesTable td {
+		padding : 6px;		
+		padding-left : 10px;		
+	}
+	
+	.wordLinesTable .lightLine {
+		background-color : #DADADA;
+	}
+		
+	
+	#center {		
+		margin-left : 100px;
+		margin-top : 20px;
+		margin-bottom : 30px;
+	}
+	
+	#center label {
+		border-bottom : 1px solid grey;
+		border-left : 1px solid grey;
+		-moz-border-radius : 100%;
+		padding-left : 10px;
+	}
+
+	
+	#relations {
+		margin-bottom : 20px;
+		margin-top : 10px;
+	}
+	
+	#relations label {
+		margin-left : 40px;
+		border-bottom : 1px solid grey;
+		border-left : 1px solid grey;
+		-moz-border-radius : 100%;
+		padding-left : 10px;
+		padding-right : 10px;
+	}
+	
+	#button {
+		margin-top : 30px;
+		margin-left : 50px;
+		margin-bottom : 40px;
+	}
+	
+	#button input {
+		margin-left : 10px;
+		margin-right : 40px;
+		padding : 4px;
+		padding-left : 8px;
+		padding-right : 8px;
+		font-weight : bold;
+	}
+	
 </style>
 	</head>
 	<body>
@@ -202,18 +264,39 @@ else
 				<select name="relation2" id="relation2">
 				</select>
 			</div>
-			<div id="wordLines">
+			<div id="wordLines">				
 				<div id="templates" style="display:none">
-					<div class="wordLine" class="wordLine">
-						<label for="word-"></label>
-						<input type="text" id="word-"/>
-						<span class="status">●</span>
-						<input type="checkbox" id="r1-"/><label class="r1" for="r1-">Blabla</label>
-						<input type="checkbox" id="r2-"/><label class="r2" for="r2-">Blabla</label>
-						<input type="checkbox" id="r3-"/><label class="r3" for="r3-">Blabla</label>
-						<input type="checkbox" id="r4-"/><label class="r4" for="r4-">Blabla</label>
-					</div>
+					<table>
+						<thead> </thead>
+						<tbody>					
+							<tr class="wordLine">
+								<td>
+									<label for="word-"></label>
+								</td>
+								<td>
+									<input type="text" id="word-"/>
+									<span class="status">●</span>
+								</td>
+								<td>
+									<input type="checkbox" id="r1-"/><label class="r1" for="r1-">Blabla</label>
+								</td>
+								<td>
+									<input type="checkbox" id="r2-"/><label class="r2" for="r2-">Blabla</label>
+								</td>
+								<td>
+									<input type="checkbox" id="r3-"/><label class="r3" for="r3-">Blabla</label>
+								</td>
+								<td>
+									<input type="checkbox" id="r4-"/><label class="r4" for="r4-">Blabla</label>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
+				
+				<table class="wordLinesTable">
+				<tr><td></td></tr>
+				</table>
 			</div>
 			<div id="button"></div>
 		</div>
