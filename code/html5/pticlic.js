@@ -125,5 +125,7 @@ $(function () {
 		
 		$(window).resize(jss);
 		updateText();
+	}).error(function(x){
+		alert("Erreur fatale. Merci de nous envoyer ce message :\n"+x.status+"\n"+x.statusText+"\n"+x.responseText.substring(0,20)+"…");
 	});
 });
