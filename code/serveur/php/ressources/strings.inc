@@ -26,6 +26,7 @@ $strings['err_login_bad_user_pass'] = "Mauvais nom d'utilisateur ou mot de passe
 $strings['err_login_fill_all'] = "Veuillez remplir tous les champs.";
 $strings['err_login_dbopen'] = "Erreur lors de l'ouverture de la base de données SQLite3. Merci de nous signaler le problème.";
 $strings['oth_login_download_nauth'] = "Afin d'accéder à la page de téléchargement et obtenir l'application vous devez être authentifié.";
+$strings['oth_login_createGame_nauth'] = "Afin de pouvoir créer des parties vous devez être authentifié.";
 
 $strings['err_signup_dbopen'] = "Erreur lors de l'ouverture de la base de données SQLite3. Merci de nous signaler le problème.";
 $strings['err_signup_fill_mail'] = "Veuillez renseigner le champ 'Saisissez votre adresse mail'.";
