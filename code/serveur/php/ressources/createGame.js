@@ -124,14 +124,16 @@ $(function() {
 		};
 		
 		var badWord = function() {
+			console.log(wordsOK);
 			for (word in wordsOK)
-   			if (wordsOK[word] == false)
+   			if ($("#"+word).val() != "" && wordsOK[word] == false)
    				return true;
    			
    		return false;
    	}
    	
    	var relationsOK = function() {
+   		console.log(wordsOK);
    		for(i = 1; i < numWord; i++) {
    			if(wordsOK["word-"+i]) {
    				if(!$("#r1-"+i).is(":checked") && !$("#r2-"+i).is(":checked") && !$("#r3-"+i).is(":checked") && !$("#r4-"+i).is(":checked"))
