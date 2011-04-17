@@ -15,7 +15,7 @@ $(function() {
 		var user = "foo";
 		var passwd = "bar";
 		var relations = data;
-		var nbWordMin = 10;
+		var nbWordMin = 3;
 		var wordsOK = new Array();
 		var centerOK = false;
 		
@@ -26,9 +26,10 @@ $(function() {
 				$("#templates .wordLine")
 					.clone()
 					.changeId(i)
+					.addClass(i%2==0 ? "lightLine" : "")
 //					.find("label").attr("for", "word"+i).text(i).end()
 //					.find("input").attr("id", "word"+i).end()
-					.appendTo("#wordLines");
+					.appendTo(".wordLinesTable tbody");
 				
 				(function (i) {
 					$("#word-"+i).focusout(checkWord);
@@ -79,7 +80,7 @@ $(function() {
 			var input = $(this);
 			var word = input.val();
 
-			input.parent(".wordLine, #center").removeClass("valid invalid");
+			input.parent("td, #center").removeClass("valid invalid");
 
 			if (word != "") {
 				$.ajax({
@@ -87,7 +88,7 @@ $(function() {
 					url: "server.php?",
    					data: "action=4&word="+word+"&user="+user+"&passwd="+passwd,
    					success: function(msg){
-   						input.parent(".wordLine, #center").addClass((msg == false) ? "invalid" : "valid");
+   						input.parent("td, #center").addClass((msg == false) ? "invalid" : "valid");
    						wordsOK[input.attr("id")] = !(msg == false);
     				}});
     		}
@@ -95,19 +96,21 @@ $(function() {
 		
 		var formOK = function() {
 			displayError("");
-			
-			console.log(wordsOK);
 		   	
-   			if ($("#relation1").val() == $("#relation2").val())
-   				displayError("Les deux relation doivent être différents");
-   			else if ($("#centralWord").val() == "")
-   				displayError("Le mot central doit être renseigné.");
-				else if (badWord())
-					displayError("Il existe des mots incorrects");   			
-   			else if (nbWordOK() < nbWordMin)
-   				displayError("Le nuage doit contenir au moins "+nbWordMin+" mots valides.");
-   			else if (!relationsOK())
-   				displayError("Tout les mots ne sont pas liés à une relation");
+   		if ($("#relation1").val() == $("#relation2").val())
+   			displayError("Les deux relation doivent être différents");
+   		else if ($("#centralWord").val() == "")
+   			displayError("Le mot central doit être renseigné.");
+			else if (badWord())
+				displayError("Il existe des mots incorrects");   			
+   		else if (nbWordOK() < nbWordMin)
+   			displayError("Le nuage doit contenir au moins "+nbWordMin+" mots valides.");
+   		else if (!relationsOK())
+   			displayError("Tout les mots ne sont pas liés à une relation");
+   		else
+   			sendGame();
+   				
+   		return false;
 		};
 		
 		var nbWordOK = function() {
@@ -121,24 +124,44 @@ $(function() {
 		};
 		
 		var badWord = function() {
+			console.log(wordsOK);
 			for (word in wordsOK)
-   			if (wordsOK[word] == false)
+   			if ($("#"+word).val() != "" && wordsOK[word] == false)
    				return true;
    			
    		return false;
    	}
    	
    	var relationsOK = function() {
-   		for(i = 0; i < numWord; i++)
+   		console.log(wordsOK);
+   		for(i = 1; i < numWord; i++) {
    			if(wordsOK["word-"+i]) {
-   				console.log("mot ok");
-   				if(!$("r1-"+i).is(":checked") && !$("r2-"+i).is(":checked") && !$("r3-"+i).is(":checked") && !$("r4-"+i).is(":checked"))
+   				if(!$("#r1-"+i).is(":checked") && !$("#r2-"+i).is(":checked") && !$("#r3-"+i).is(":checked") && !$("#r4-"+i).is(":checked"))
    					return false;
    			}
+   		}	
    					
    		return true;
    	}
+   	
+   	var sendGame = function() {
+   		var exit;
+			var cloud = "";
    		
+   		exit = {center:$("#centralWord").val(),
+   				  relations:[$("#relation1").val(),$("#relation2").val(),0,-1],
+   				  cloud:[]};
+   				  
+   		for(i=1;i<numWord;i++) {
+				if(i != 1)
+					cloud += ",";
+					   			
+   			exit.cloud.push({name:$("#word-"+i).val(),relations:[$("#r1-"+i).is(":checked"),$("#r2-"+i).is(":checked"),$("#r3-"+i).is(":checked"),$("#r4-"+i).is(":checked")]});
+   		}
+   		
+   		
+   		console.log(exit);
+   	}
 
 		var displayError = function(message) {
 			if (message != "")
@@ -148,7 +171,7 @@ $(function() {
 		};
 		
 		displayCentralWordAndRelations();	
-		displayNWordLines(10);
+		displayNWordLines(nbWordMin);
 		displayButtons();
 	});
 });

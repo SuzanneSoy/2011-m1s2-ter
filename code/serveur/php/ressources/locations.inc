@@ -6,6 +6,7 @@ $location_list['contact'] = "contact.php";
 $location_list['createGame'] = "createGame.php";
 $location_list['login'] = "login.php";
 $location_list['signup'] = "signup.php";
+$location_list['createGame'] = 'createGame.php';
 
 function return_to($location, $params = "") {
 	global $location_list;
