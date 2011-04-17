@@ -57,11 +57,12 @@ function sqlGetRandomCloudNode() {
 function sqlGetForwardOne($origin, $types = null, $forward = true) {
 	$dir_from = $forward ? 'start' : 'end';
 	$dir_to = $forward ? 'end' : 'start';
-	if (is_integer($types)) "= ".intval($types);
-	elseif (is_array($types)) "in (".implode(',', array_map("intval", $types)).")";
+	if (is_integer($types)) $types = "= ".intval($types);
+	elseif (is_array($types)) $types = "in (".implode(',', array_map("intval", $types)).")";
 	else $types = "not in (4, 12, 36, 18, 29, 45, 46, 47, 48, 1000, 1001)";
 	// TODO : vérifier que c'est compatible avec l'affectation list($a,$b) = ...()
-	return querySingle("select ".$dir_to.", type from relation where ".$dir_from." = ".intval($origin)." and type ".$types." order by random();", true);
+	$ret = querySingle("select ".$dir_to." as node, type from relation where ".$dir_from." = ".intval($origin)." and type ".$types." order by random();", true);
+	return array($ret["node"], $ret["type"]);
 }
 
 /** Selectionne un voisin un saut en arrière, avec une relation du type donné.
@@ -78,7 +79,7 @@ function sqlGetBackwardOne($origin, $types = null) {
  */
 function sourceOneForwardR1R2($centerEid, $r1, $r2) {
 	list($eid, $type) = sqlGetForwardOne($centerEid, array($r1, $r2));
-	return array($eid, $type == $r1, $type == $r2, 0, 0);
+	return array($eid, intval($type == $r1), intval($type == $r2), 0, 0);
 }
 
 /* Voisins 1 saut via r_associated (0), donc qu'on voudrait spécifier si possible.
@@ -164,7 +165,7 @@ function sqlGetNodeName($eid) {
 
 	return $res;
 }
-													  
+
 /** Retourne un identifiant de partie aléatoire de la liste de parties jouables
  * @return gid : Identifiant de partie.
  */

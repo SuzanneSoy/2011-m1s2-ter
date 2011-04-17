@@ -1,61 +1,68 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Tests unitaires simplistes pour PtiClic</title>
-		<style>
-table {
-	border-collapse: collapse;
-}
-table td {
-	border: thin solid black;
-	padding: 0.5em;
-}
-.fail {
-	color: red;
-}
-.pass {
-	color: green;
-}
-		</style>
+		<title>PtiClic - Console de test</title>
+		<meta charset="utf-8" />
 	</head>
 	<body>
-		<h1>Résultat des tests :</h1>
-		<table>
-			<thead>
-				<tr><th>État</th><th>Fonction</th><th>Résultat</th></tr>
-			</thead>
-			<tbody>
+		<h1>Console de test</h1>
 <?php
 require_once("db.php");
 require_once("ressources/sql.inc");
 
-function test($fname, $expected) {
-	$args = func_get_args();
-	$expected = $args[count($args)-1];
-	array_pop($args);
-	array_shift($args);
-	$result = call_user_func_array($fname, $args);
+function main_test() {
+	$randomnode = sqlGetRandomCenterNode();
+	$tests = array(
+		"sqlGetPasswd" => array("user" => "foo"),
+		"sqlGetRandomCenterNode" => array(),
+		"sqlGetRandomCloudNode" => array(),
+		"sqlGetForwardOne" => array("origin" => $randomnode),
+		"sqlGetBackwardOne" => array("origin" => $randomnode),
+		"sourceOneForwardR1R2" => array("centerEid" => $randomnode, "r1" => 5, "r2" => 10),
+		"sourceOneForwardAssociated" => array("centerEid" => $randomnode, "r1" => 5, "r2" => 10),
+		"sourceOneForwardAny" => array("centerEid" => $randomnode, "r1" => 5, "r2" => 10),
+		"sourceTwoForwardR1R2_R1R2" => array("centerEid" => $randomnode, "r1" => 5, "r2" => 10),
+		"sourceTwoForwardR1R2_Syn" => array("centerEid" => $randomnode, "r1" => 5, "r2" => 10),
+		"sourceTwoForwardSyn_R1R2" => array("centerEid" => $randomnode, "r1" => 5, "r2" => 10),
+		"sourceTwoForwardAny_Any" => array("centerEid" => $randomnode, "r1" => 5, "r2" => 10),
+		"sourceArrowheadAny_Any" => array("centerEid" => $randomnode, "r1" => 5, "r2" => 10),
+		"sqlGetRawNodeName" => array("eid" => $randomnode),
+	);
 
-	$pass = "fail";
-	if (is_callable($expected) && $expected($result)) $pass = "pass";
-	elseif ($result == $expected) $pass = "pass";
-	
-	echo '<tr>';
-	echo '<td class="'.$pass.'">'.$pass.'</td>';
-	echo '<td>' . $fname . '</td>';
-	echo '<td>' . var_export($result, true) . '</td>';
-	echo '</tr>';
+	if (isset($_GET["function"])) {
+		$fn = $_GET["function"];
+		$nbParams = intval($_GET["nbParams"]);
+		$params = array();
+		for ($i = 0; $i < $nbParams; $i++) {
+			$params[$i] = $_GET["param".$i];
+		}
+		if (array_key_exists($fn, $tests) && $nbParams == count($tests["$fn"])) {
+			$params_show = array();
+			foreach ($params as $p) {
+				$params_show[] = var_export($p, true);
+			}
+			echo "<p>".$fn."(".implode(", ", $params_show).") == ".var_export(call_user_func_array($fn, $params), true)."</p>";
+		}
+	}
+
+	$t = 0;
+	foreach ($tests as $fn => $params) {
+		echo '	<form action="#" method="GET">';
+		echo '		<input type="hidden" name="nbParams" value="'.count($params).'" />';
+		echo '		<input type="hidden" name="nonce" value="'.microtime().'" />';
+		$p = 0;
+		foreach ($params as $name => $default) {
+			echo '		<label for="test'.$t.'param'.$p.'">'.htmlspecialchars($name).' :</label>';
+			echo '		<input type="text" id="test'.$t.'param'.$p.'" name="param'.$p.'" value="'.htmlspecialchars($default).'" />';
+			$p++;
+		}
+		echo '		<input type="submit" name="function" value="'.$fn.'" />';
+		echo '	</form>';
+		$i++;
+	}
 }
 
-test("sqlGetPasswd", "foo", md5("bar"));
-test("sqlGetRandomCenterNode", function($x){return is_int($x);});
-test("sqlGetRandomCloudNode", function($x){return is_int($x);});
-test("sqlGetForwardOne", sqlGetRandomCenterNode(), function($x){return is_int($x);});
-test("sqlGetBackwardOne", sqlGetRandomCenterNode(), function($x){return is_int($x);});
-
+main_test();
 ?>
-			</tbody>
-		</table>
-		<p>End of tests.</p>
 	</body>
 </html>

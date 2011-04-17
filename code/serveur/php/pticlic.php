@@ -7,14 +7,15 @@ require_once("ressources/errors.inc")
 /* Les prototypes des fonctions :
 * ===============================>
 *   checkLogin($user, $passwd);
+*   randomGame();
+*   createGame($nbParties, $mode);
+*
 *   cgBuildResultSets($cloudSize, $centerEid, $r1, $r2);
 *   cgChooseRelations();
 *   cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights);
 *   cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
-*   randomGame();
 *   game2json($user, $gameId);
 *   game2array($user, $gameId);
-*   createGame($nbParties, $mode);
 *   createGameCore($cloudSize);
 *   getGame($user, $nbGames, $mode);
 *   computeScore($probas, $difficulty, $answer, $userReputation);
@@ -34,9 +35,33 @@ require_once("ressources/errors.inc")
 * @param passwd : Le mot de passe.
 * @return boolean : true si OK sinon false.
 */
-function checkLogin($user, $passwd) {
+function checkLogin($user, $passwd)
+{
 	return md5($passwd) == sqlGetPasswd($user);
 }
+
+/** Création de plusieurs parties.
+* @param nbParties : le nombre de parties à créer.
+* @param mode : Le mode de jeu pour les parties à créer.
+* @return gid : Le gid de la dernière partie générée.
+*/
+function createGame($nbParties)
+{
+	for ($i = 0; $i < $nbParties; $i++)
+		$gid = createGameCore(10);
+	return $gid;
+}
+
+/** Sélection aléatoire d'une partie de la base de données parmis les parties à jouer.
+* @return gid : Identifiant de la partie selectionnée.
+*/
+function randomGame()
+{
+	$gid = sqlGetRandomGID();
+	return ($gid !== null) ? $gid : createGame(100);
+}
+
+/* ========================================================================== */
 
 /**  Construit les sets de résultats qui serviront à la construction du nuage.
 * @param cloudSize : Taille du nuage.
@@ -210,6 +235,7 @@ function cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights)
 * @param r1 : Le type de la relation 1.
 * @param r2 : Le type de la relation 2.
 * @param totalDifficulty : La difficulté totale.
+* @return gid : le gid de la partie insérée.
 */
 function cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty)
 {
@@ -255,27 +281,36 @@ function cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty)
 	}
 
 	$db->exec("commit;");
-}
-
-/** Sélection aléatoire d'une partie de la base de données parmis les parties à jouer.
-* @return gid : Identifiant de la partie selectionnée.
-*/
-function randomGame()
-{
-	$gid = sqlGetRandomGID();
-
-	if ($gid === null) {
-		// TODO : séparer ces créations de parties dans une fonction qui détecte le mode toussa.
-		for ($i = 0; $i < 100; $i++)
-			createGameCore(10);
-
-		$gid = sqlGetRandomGID();
-
-		if ($gid === null)
-			errGetGame();
-	}
 	return $gid;
 }
+
+/*
+[
+	{
+		"gid":22,
+		"pgid":512,
+		"relations":[
+			{"id":10,"name":"%mc fait partie de %mn"},
+			{"id":9,"name":"%mn est une partie de %mc"},
+			{"id":0,"name":"%mc est en rapport avec %mn"},
+			{"id":-1,"name":"%mn n'est pas lié à %mc"}
+		],
+		"center":{"id":28282,"name":"transbahuter"},
+		"cloud":[
+				{"id":84632,"name":"camion"},
+				{"id":61939,"name":"transbahutage"},
+				{"id":104263,"name":"trimbaler"},
+				{"id":44654,"name":"transporter"},
+				{"id":38285,"name":"d\u00e9m\u00e9nageur"},
+				{"id":43404,"name":"porter"},
+				{"id":63192,"name":"transports"},
+				{"id":130473,"name":"enthousiasmer"},
+				{"id":90461,"name":"se trimbaler"},
+				{"id":134609,"name":"baguenauder"}
+		]
+	}
+]
+*/
 
 /** Formate une partie en JSON en l'imprimant.
 * @param user : l'utilisateur.
@@ -360,21 +395,10 @@ function game2array($user, $gameId)
 }
 
 
-/** Création d'un lot de parties suivant un mode donnée.
-* @param nbParties : le nombre de parties à créer.
-* @param mode : Le mode de jeu pour les parties à créer.
-*/
-function createGame($nbParties, $mode)
-{
-	for ($i = 0; $i < $nbParties; $i++)
-		createGameCore(10);
-}
-
 /** Génère une partie (mode normal pour l'instant) pour une certaine taille de nuage.
-* @param cloudSize : Taille du nuage.
-*
-* Est appelée par randomGame(), donc il faudra adapter quand on aura plusieurs modes, par exemple en ayant une fonction intermédiaire qui puisse être appelée par createGame et randomGame.
-*/
+ * @param cloudSize : Taille du nuage.
+ * @return gid : Le gid de la partie créée.
+ */
 function createGameCore($cloudSize)
 {
 	// select random node
@@ -383,7 +407,7 @@ function createGameCore($cloudSize)
 	$r1 = cgChooseRelations(); $r2 = $r1[1]; $r1 = $r1[0];
 	$sources = cgBuildResultSets($cloudSize, $centerEid, $r1, $r2); $sumWeights = $sources[1]; $sources = $sources[0];
 	$cloud = cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights); $totalDifficulty = $cloud[1]; $cloud = $cloud[0];
-	cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
+	return cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
 }
 
 /** Récupération d'une partie.
