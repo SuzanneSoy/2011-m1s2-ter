@@ -58,7 +58,7 @@ unset commands
 command "create table guessTransitivity2(TA,TB,TDeduction,weight,total);"
 for TA in 5 7 9 10 13 14 22; do
 	for TB in 5 7 9 10 13 14 22; do
-		command "insert into guessTransitivity2(TA,TB,TDeduction,weight,total) select $TA,$TB,C.type,sum(A.weight)+sum(B.weight),0 from relation as A, relation as B, relation as C where A.end = B.start and A.type = $TA and B.type = $TB and C.start = A.start and C.end = B.end group by C.type order by count(C.type);"
+		command "insert into guessTransitivity2(TA,TB,TDeduction,weight,total) select $TA,$TB,C.type,sum(A.weight)+sum(B.weight),0 from relation as A, relation as B, relation as C where A.end = B.start and A.type = $TA and B.type = $TB and C.start = A.start and C.end = B.end group by C.type;"
 		command "update guessTransitivity2 set total = (select sum(A.weight)+sum(B.weight) from relation as A, relation as B where A.end = B.start and A.type = $TA and B.type = $TB) where TA = $TA and TB = $TB;"
 	done
 done
@@ -70,8 +70,8 @@ command "create table guessTransitivity3(TA,TB,TC,TDeduction,weight,total);"
 for TA in 5 7 9 10 13 14 22; do
 	for TB in 5 7 9 10 13 14 22; do
 		for TC in 5 7 9 10 13 14 22; do
-			command "insert into guessTransitivity3(TA,TB,TC,TDeduction,weight,total) select $TA,$TB,$TC,D.type,sum(A.weight)+sum(B.weight)+sum(C.weight),0 from relation as A, relation as B, relation as C, relation as D where A.end = B.start and B.end = C.start and A.type = $TA and B.type = $TB and C.type = $TC and D.start = A.start and D.end = C.end group by D.type order by count(D.type);"
-			command "update guessTransitivity3 set total = (select sum(A.weight)+sum(B.weight)+sum(C.weight) from relation as A, relation as B, relation as C where A.end = B.start and B.end = C.start and A.type = $TA and B.type = $TB and C.type = $TC) where TA = $TA and TB = $TB and TC = $TC;"
+			command "insert into guessTransitivity3(TA,TB,TC,TDeduction,weight,total) select $TA,$TB,$TC,D.type,count(D.type),0 from relation as A, relation as B, relation as C, relation as D where A.end = B.start and B.end = C.start and A.type = $TA and B.type = $TB and C.type = $TC and D.start = A.start and D.end = C.end group by D.type;"
+			command "update guessTransitivity3 set total = (select count(*) from relation as A, relation as B, relation as C where A.end = B.start and B.end = C.start and A.type = $TA and B.type = $TB and C.type = $TC) where TA = $TA and TB = $TB and TC = $TC;"
 		done
 	done
 done
