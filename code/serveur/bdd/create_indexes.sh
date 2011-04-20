@@ -55,7 +55,7 @@ unset commands
 command "create index i_relation_start_end on relation(start,end);"
 command "create index i_relation_start_end_type on relation(start,end,type);"
 # Environ 0.2% des poids sont négatifs, donc on ne s'occupe pas de les traiter.
-command "create table guessTransitivity2(TA,TB,TDeduction,weight);"
+command "create table guessTransitivity2(TA,TB,TDeduction,weight,total);"
 for TA in 5 7 9 10 13 14 22; do
 	for TB in 5 7 9 10 13 14 22; do
 		command "insert into guessTransitivity2(TA,TB,TDeduction,weight,total) select $TA,$TB,C.type,sum(A.weight)+sum(B.weight),0 from relation as A, relation as B, relation as C where A.end = B.start and A.type = $TA and B.type = $TB and C.start = A.start and C.end = B.end group by C.type order by count(C.type);"
@@ -66,7 +66,7 @@ do_commands
 
 echo 3/3
 unset commands
-command "create table guessTransitivity3(TA,TB,TC,TDeduction,weight);"
+command "create table guessTransitivity3(TA,TB,TC,TDeduction,weight,total);"
 for TA in 5 7 9 10 13 14 22; do
 	for TB in 5 7 9 10 13 14 22; do
 		for TC in 5 7 9 10 13 14 22; do
