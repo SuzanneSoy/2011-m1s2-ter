@@ -20,9 +20,11 @@ echo 1/3
 unset commands
 command "create index i_relation_start on relation(start);"
 command "create index i_relation_end on relation(end);"
+command "create index i_relation_start_end on relation(start,end);"
 command "create index i_relation_type on relation(type);"
 command "create index i_relation_start_type on relation(start,type);"
 command "create index i_relation_end_type on relation(end,type);"
+command "create index i_relation_start_end_type on relation(start,end,type);"
 command "create index i_played_game_all on played_game(pgid, gid, login, timestamp);"
 command "create index i_colon_nodes_eid on colon_nodes(eid);"
 command "insert into colon_nodes(eid) select eid from node where name glob '::*';"
@@ -49,11 +51,9 @@ insert into random_center_node(eid) select eid from random_cloud_node where nbne
 EOF
 do_commands
 
+# «Réseau de neuronnes»
 echo 2/3
 unset commands
-# «Réseau de neuronnes»
-command "create index i_relation_start_end on relation(start,end);"
-command "create index i_relation_start_end_type on relation(start,end,type);"
 # Environ 0.2% des poids sont négatifs, donc on ne s'occupe pas de les traiter.
 command "create table guessTransitivity2(TA,TB,TDeduction,weight,total);"
 for TA in 5 7 9 10 13 14 22; do
