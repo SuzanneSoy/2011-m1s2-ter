@@ -38,6 +38,16 @@ create table random_center_node(eid);
 insert into user(login, mail, hash_passwd, score, ugroup) values('$(echo "$user" | sed -e "s/'/''/g")', 'foo@isp.com', '$(echo "$passwd" | dd bs=1 count="${#passwd}" | (if which md5sum >/dev/null 2>&1; then md5sum; else md5; fi) | cut -d ' ' -f 1)', 0, 1);
 EOF
 
+cat <<EOF
+create index i_relation_start on relation(start);
+create index i_relation_end on relation(end);
+create index i_relation_type on relation(type);
+create index i_relation_start_type on relation(start,type);
+create index i_relation_end_type on relation(end,type);
+create index i_played_game_all on played_game(pgid, gid, login, timestamp);
+create index i_colon_nodes_eid on colon_nodes(eid);
+EOF
+
 # tr : pour virer le CRLF qui traîne
 # Le gros tas de sed / tr : pour virer le newline dans une des description étendue
 cat "$1" \
@@ -56,14 +66,6 @@ cat "$1" \
 | grep -v '^$'
 
 cat <<EOF
-create index i_relation_start on relation(start);
-create index i_relation_end on relation(end);
-create index i_relation_type on relation(type);
-create index i_relation_start_type on relation(start,type);
-create index i_relation_end_type on relation(end,type);
-create index i_played_game_all on played_game(pgid, gid, login, timestamp);
-create index i_colon_nodes_eid on colon_nodes(eid);
-
 insert into colon_nodes(eid) select eid from node where name glob '::*';
 
 insert into random_cloud_node(eid,nbneighbors) select eid,sum(nb) from (

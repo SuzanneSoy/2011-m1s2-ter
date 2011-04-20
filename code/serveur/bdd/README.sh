@@ -20,20 +20,20 @@ echo "==============================="
 echo
 echo "Étape 4/5 : Insertion dans la bdd"
 echo "================================="
-pv sql | sqlite3 php/db.new
+pv sql | sqlite3 ../php/db.new
 
 
 echo
 echo "Étape 5/5 : Réglage des permissions"
 echo "==================================="
 : > /tmp/log-chmod-pticlic
-sudo chgrp -R www-data php > /tmp/log-chmod-pticlic || sudo chgrp -R www php > /tmp/log-chmod-pticlic || {
+sudo chgrp -R www-data ../php > /tmp/log-chmod-pticlic || sudo chgrp -R www ../php >> /tmp/log-chmod-pticlic || {
 	cat /tmp/log-chmod-pticlic
 	echo "ATTENTION : Les deux méthodes de chgrp ont échoué !"
 	exit 1
 }
-chmod 664 php/db.new
-chmod 775 php
+chmod 664 ../php/db.new
+chmod 775 ../php
 
-[ -e php/db ] && mv php/db php/db.old
-mv php/db.new php/db
+[ -e ../php/db ] && mv ../php/db ../php/db.old
+mv ../php/db.new ../php/db
