@@ -1,4 +1,8 @@
 db.old
+db.new
+db.new-journal
+db
+db-journal
 log.txt
 mails.txt
 unstable
