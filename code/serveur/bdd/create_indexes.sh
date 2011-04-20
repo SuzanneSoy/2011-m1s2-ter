@@ -71,7 +71,7 @@ for TA in 5 7 9 10 13 14 22; do
 	for TB in 5 7 9 10 13 14 22; do
 		for TC in 5 7 9 10 13 14 22; do
 			command "insert into guessTransitivity3(TA,TB,TC,TDeduction,weight,total) select $TA,$TB,$TC,D.type,sum(A.weight)+sum(B.weight)+sum(C.weight),0 from relation as A, relation as B, relation as C, relation as D where A.end = B.start and B.end = C.start and A.type = $TA and B.type = $TB and C.type = $TC and D.start = A.start and D.end = C.end group by D.type order by count(D.type);"
-			command "update guessTransitivity2 set total = (select sum(A.weight)+sum(B.weight)+sum(C.weight) from relation as A, relation as B, relation as C where A.end = B.start and B.end = C.start and A.type = $TA and B.type = $TB and C.type = $TC) where TA = $TA and TB = $TB and TC = $TC;"
+			command "update guessTransitivity3 set total = (select sum(A.weight)+sum(B.weight)+sum(C.weight) from relation as A, relation as B, relation as C where A.end = B.start and B.end = C.start and A.type = $TA and B.type = $TB and C.type = $TC) where TA = $TA and TB = $TB and TC = $TC;"
 		done
 	done
 done
