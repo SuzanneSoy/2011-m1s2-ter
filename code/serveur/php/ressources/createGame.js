@@ -153,12 +153,18 @@ $(function() {
    				  cloud:[]};
    				  
    		for(i=1;i<numWord;i++) {
-				if(i != 1)
-					cloud += ",";
-					   			
-   			exit.cloud.push({name:$("#word-"+i).val(),relations:[$("#r1-"+i).is(":checked"),$("#r2-"+i).is(":checked"),$("#r3-"+i).is(":checked"),$("#r4-"+i).is(":checked")]});
+   			exit.cloud.push({
+   				name:$("#word-"+i).val(),
+   				relations:[
+   					$("#r1-"+i).is(":checked"),
+   					$("#r2-"+i).is(":checked"),
+   					$("#r3-"+i).is(":checked"),
+   					$("#r4-"+i).is(":checked")
+  					]
+				});
    		}
    		
+   		$.get("server.php",{user:"foo",passwd:"bar",action:"6",game:exit},function (data) {console.log(data);});
    		
    		console.log(exit);
    	}

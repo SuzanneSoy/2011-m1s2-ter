@@ -84,6 +84,14 @@ function main()
 	}
 	else if($action == 5) {           // Get relations (JSON)
 		echo getGameRelationsJSON();
+	}
+	else if($action == 6) {
+		var_dump($_GET['game']);
+		if (!isset($_GET['game']))
+			errRequestIncomplete();
+		
+		//decodeGame($_GET['game']);
+		
 	} else {
 		throw new Exception("Commande inconnue", 2);
 	}
