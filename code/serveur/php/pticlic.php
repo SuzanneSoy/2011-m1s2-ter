@@ -2,7 +2,7 @@
 
 require_once("relations.php");
 require_once("db.php");
-require_once("ressources/errors.inc")
+require_once("ressources/errors.inc");
 
 /* Les prototypes des fonctions :
 * ===============================>
@@ -63,225 +63,19 @@ function randomGame()
 
 /* ========================================================================== */
 
-/**  Construit les sets de résultats qui serviront à la construction du nuage.
-* @param cloudSize : Taille du nuage.
-* @param centerEid : Identifiant du mot central.
-* @param r1 Type de la relation 1.
-* @param r2 Type de la relation 2.
-*/
-function cgBuildResultSets($cloudSize, $centerEid, $r1, $r2)
-{
-	$db = getDB();
-	// 'w' => weight (poids), 'd' => difficulté, 's' => select
-	// Le select doit ranvoyer trois colonnes :
-	//   eid => l'eid du mot à mettre dans le nuage,
-	//   r1 => la probabilité pour que le mot soit dans r1, entre -1 et 1 (négatif = ne devrait pas y être, positif = devrait y être à coup sûr, 0 = on sait pas).
-	
-	$sources = array(
-		array('w'=>40, 'd'=>1, 's'=>sql1JumpGoodType($r1, $r2, $centerEid)),
-		array('w'=>40, 'd'=>2, 's'=>sql1JumpViaRAssociated0($centerEid)),
-		array('w'=>20, 'd'=>3.1, 's'=>sql1JumpViaOtherRelation($centerEid, $r1, $r2, $banned_types)),
-		array('w'=>30, 'd'=>3.2, 's'=>sql2JumpWithMixR1R2ForLinks($r1, $r2, $centerEid)),
-		array('w'=>20, 'd'=>5, 's'=>sql1JumpR1DivR2Plus1JumpSynonymOneHopWithType($r1, $r2, $centerEid)),
-		array('w'=>20, 'd'=>6, 's'=>sql1JumpR1DivR2Plus1JumpSynonym($r1, $r2, $centerEid)),
-		array('w'=>10, 'd'=>8, 's'=>sql2JumpAll($centerEid, $cloudSize)),
-		array('w'=>10, 'd'=>8, 's'=>sqlXPointsToMMPointsToXTakeM($cloudSize)),
-		'rand' => array('w'=>5, 'd'=>10, 's'=>false) // random. Le r1 et r2 de random sont juste en-dessous
-	);
-
-	$sumWeights = 0;
-	
-	foreach ($sources as $k => $x)
-	{
-		$sumWeights += $x['w'];
-		$sources[$k]['rsPos'] = 0;
-		$sources[$k]['rsSize'] = 0;
-		
-		if ($x['s'] !== false)
-		{
-			$sources[$k]['resultSet'] = array();
-			$res = $db->query($x['s']);
-			$i = 0;
-			
-			while ($i < 10 && $sources[$k]['resultSet'][] = $res->fetchArray())
-			{
-				$i++;
-				$sources[$k]['rsSize']++;
-			}
-		} 
-		else
-		{
-			$sources[$k]['resultSet'] = array();
-			
-			for ($i = 0; $i < 10; $i++)
-			{
-				$sources[$k]['resultSet'][] = array('eid'=>sqlGetRandomCloudNode(), 'r1'=>0, 'r2'=>0, 'r0'=>0, 'trash'=>1);
-				$sources[$k]['rsSize']++;
-			}
-		}
-	}
-
-	return array($sources, $sumWeights);
-}
-
-
 /** Sélectionne aléatoirement deux relations.
 * @return array : Tableau avec la relation 1 et la relation 2.
 */
 function cgChooseRelations()
 {
-	$relations = array(5, 7, 9, 10);// /* Pas d'icônes pour celles-ci. */ 13, 14, 22);
+	$relations = get_game_relations();
 	$r1 = rand(0,count($relations)-1);
 	$r2 = rand(0,count($relations)-2);
 
 	if ($r2 >= $r1)
 		$r2++;
 
-	$r1 = $relations[$r1];
-	$r2 = $relations[$r2];
-
-	return array($r1, $r2);
-}
-
-/** Génération d'un nuage pour un mot central.
-* @param cloudSize : Taille du nuage.
-* @param sources Les sources.
-* @param sumWeights La somme des poids.
-* @return array : Tableau avec comme premier élément le nuage et comme second élément le total de difficulté.
-*/
-function cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights)
-{
-	$db = getDB();
-	// On boucle tant qu'il n'y a pas eu au moins 2 sources épuisées
-	$cloud = array();
-	$nbFailed = 0;
-	$i = 0;
-	$totalDifficulty = 0;
-	
-	while ($i < $cloudSize && $nbFailed < 10*$cloudSize)
-	{
-		// On choisit une source aléatoire en tennant compte des poids.
-		$rands = rand(1,$sumWeights);
-		$sumw = 0;
-		if (!isset($sources['rand'])) {
-			break;
-		}
-		$src = $sources['rand'];
-		$srck = 'rand';
-
-		// Sélection d'une source aléatoire
-		foreach ($sources as $k => $x)
-		{
-			$sumw += $x['w'];
-			
-			if ($rands < $sumw)
-			{
-				$src = $x;
-				$srck = $k;
-				break;
-			}
-		}
-		
-		// Vérification si on est à la fin du ResultSet de cette source.
-		if ($src['rsPos'] >= $src['rsSize'])
-		{
-			$nbFailed++;
-
-			$sumWeights -= $src['w'];
-			unset($sources[$srck]);
-
-			continue;
-		}
-		
-		// On récupère un résultat de cette source.
-		$res = $src['resultSet'][$src['rsPos']];
-		$sources[$srck]['rsPos']++;
-
-		// On vérifie si le mot n'a pas déjà été sélectionné.
-		$rejected = false;
-		// Ne pas mettre le mot central dans le nuage.
-		if ($res['eid'] == $centerEid) { continue; }
-		$nodeName = sqlGetRawNodeName($res['eid']);
-		if (substr($nodeName, 0, 2) == "::") { continue; }
-		foreach ($cloud as $c) {
-			if ($c['eid'] == $res['eid']) {
-				$nbFailed++;
-				$rejected = true;
-				break;
-			}
-		}
-		if ($rejected) { continue; }
-
-		// position dans le nuage, difficulté, eid, probaR1, probaR2
-		$totalDifficulty += $src['d'];
-		$cloud[$i] = array('pos'=>$i++, 'd'=>$src['d'], 'eid'=>$res['eid'], 'probaR1'=>$res['r1'], 'probaR2'=>$res['r2'], 'probaR0'=>$res['r0'], 'probaTrash'=>$res['trash']);
-	}
-
-	$res = $sources['rand']['resultSet'][0];
-	
-	while ($i < $cloudSize)
-	{
-		$totalDifficulty += $sources['rand']['d'];
-		$cloud[$i] = array('pos'=>$i++, 'd'=>$sources['rand']['d'], 'eid'=>sqlGetRandomCloudNode(), 'probaR1'=>$res['r1'], 'probaR2'=>$res['r2'], 'probaR0'=>$res['r0'], 'probaTrash'=>$res['trash']);
-	}
-
-	return array($cloud, $totalDifficulty);
-}
-
-
-/** Insère la partie dans la base de données.
-* @param centerEid : Identifiant du mot central.
-* @param cloud : Le nuage.
-* @param r1 : Le type de la relation 1.
-* @param r2 : Le type de la relation 2.
-* @param totalDifficulty : La difficulté totale.
-* @return gid : le gid de la partie insérée.
-*/
-function cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty)
-{
-	$db = getDB();
-	// Insère dans la base une partie avec le mot central $centerEid, le nuage $cloud et les relations $r1 et $r2
-	$db->exec("begin transaction;");
-	$db->exec("INSERT INTO game(gid, eid_central_word, relation_1, relation_2, difficulty)
-		   VALUES (null, $centerEid, $r1, $r2, $totalDifficulty);");
-	$gid = $db->lastInsertRowID();
-	
-	$t = time();
-	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)
-		   VALUES (null, $gid, null, $t);");
-	$pgid1 = $db->lastInsertRowID();
-	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)
-		   VALUES (null, $gid, null, $t);");
-	$pgid2 = $db->lastInsertRowID();
-	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)
-		   VALUES (null, $gid, null, $t);");
-	$pgid0 = $db->lastInsertRowID();
-	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)
-		   VALUES (null, $gid, null, $t);");
-	$pgidT = $db->lastInsertRowID();
-
-	// TODO : R0 et Trash + corrections
-	foreach ($cloud as $c)
-	{
-		$totalWeight = $c['probaR1'] + $c['probaR2'] + $c['probaR0'] + $c['probaTrash'];
-		$db->exec("INSERT INTO game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash)
-			   VALUES ($gid, ".$c['pos'].", ".$c['d'].", ".$c['eid'].", $totalWeight, ".$c['probaR1'].", ".$c['probaR2'].", ".$c['probaR0'].", ".$c['probaTrash'].");");
-		
-		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
-			   VALUES ($pgid1, $gid, 0, ".$c['pos'].", $r1, ".$c['probaR1'].", 0);");
-
-		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
-			   VALUES ($pgid2, $gid, 0, ".$c['pos'].", $r2, ".$c['probaR2'].", 0);");
-
-		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
-			   VALUES ($pgid0, $gid, 0, ".$c['pos'].", 0, ".$c['probaR0'].", 0);");
-
-		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
-			   VALUES ($pgidT, $gid, 0, ".$c['pos'].", -1, ".$c['probaTrash'].", 0);");
-	}
-
-	$db->exec("commit;");
-	return $gid;
+	return array($relations[$r1], $relations[$r2]);
 }
 
 /*
@@ -312,43 +106,74 @@ function cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty)
 ]
 */
 
-/** Formate une partie en JSON en l'imprimant.
-* @param user : l'utilisateur.
-* @param gameId : L'identifiant d'une partie.
-*/
-function game2json($user, $gameId)
-{
-	$db = getDB();
-	// TODO : factoriser avec game2array() .
-	// TODO : planter si la requête suivante échoue pour quelque raison que ce soit.
-	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp) VALUES (null, ".$gameId.", '$user', -1);");
-	$pgid = $db->lastInsertRowID();
-	
-	$game = sqlGetGameInfo($gameId);
-	
-	$retstr = "";
-	$retstr .= '{"gid":'.$gameId.',"pgid":'.$pgid.',"cat1":'.$game['relation_1'].',"cat2":'.$game['relation_2'].',"cat3":0,"cat4":-1,';
-	$retstr .= '"center":{"id":'.$game['eid_central_word'].',"name":'.json_encode(''.sqlGetNodeName($game['eid_central_word'])).'},';
-	$retstr .= '"cloudsize":10,"cloud":['; // TODO ! compter dynamiquement.
-	
-	$res = $db->query(sqlGetCloudWords($gameId));
-	$notfirst = false;
-	
-	while ($x = $res->fetchArray())
-	{
-		if ($notfirst) 
-			$retstr .= ",";
-		else
-			$notfirst=true;
-
-		$retstr .= '{"id":'.$x['eid_word'].',"name":'.json_encode("".sqlGetNodeName($x['eid_word'])).'}';
+// TODO : Comment je nettoie le nuage ????%ejrqdguiosj
+function resetCloud($eidCentralWord) {
+	querySingle("delete from cloud where eid_central_word = ".$eidCentralWord.";");
+	$cloud2 = sqlCloud2();
+	foreach ($cloud2 as $word) {
+		"insert into cloud values(…);";
 	}
-
-	$retstr .= "]}";
-	return $retstr;
 }
 
-/** Récupère une partie sous forme de tableau.
+/* Pour créer un nuage :
+ * Select tous les mots à 1 ou 2 (ou 3) de distance // sqlCloud1(), sqlCloud2()
+ * // While sur les résultats
+ *   Pour chacun, on cherche la chaîne de relations dans les triangles ou les path4. // select * from triangles where TA = $TA and TB = $TB;
+ *   On en déduit l'existance ou non d'un lien pour chaque colonne (5, 7, 9, 10, 13, 14, 22), avec un certain poids // Boucle while sur les résultats
+ *   insert into clouds(eidMotCentral, eidMotNuage, rel5, rel7, rel9, rel10, rel13, rel14, rel22) values(…);
+ */
+
+function createCloud($centerEID) {
+	$cloud2 = sqlCloud2($centerEID);
+	$guess = array();
+	foreach ($cloud2 as &$word) {
+		$node = intval($word["node"]);
+		$res = queryMultiple("select TDeduction,round(weight/(0.0+total),3) as weight from guessTransitivity2 where TA = ".$word["TA"]." and TB = ".$word["TB"]);
+		if (!isset($guess[$node])) $guess[$node] = array();
+		foreach ($res as $r) {
+			@$guess[$node][$r["TDeduction"]] += $r["weight"];
+		}
+	}
+	foreach ($guess as $_node => $weights) {
+		$q = "insert into clouds(eidCentralWord, eidCloudWord, rel5, rel7, rel9, rel10, rel13, rel14, rel22) values(".intval($centerEID).",".intval($_node);
+		$q .= ",".(0+@$weights[5]);
+		$q .= ",".(0+@$weights[7]);
+		$q .= ",".(0+@$weights[9]);
+		$q .= ",".(0+@$weights[10]);
+		$q .= ",".(0+@$weights[13]);
+		$q .= ",".(0+@$weights[14]);
+		$q .= ",".(0+@$weights[22]);
+		$q .= ");";
+		querySingle("delete from clouds where eidCloudWord = ".intval($centerEID).";");
+		querySingle($q);
+	}
+	return count($guess);
+}
+
+/* Pour créer une partie (motCentral, nbWords, relation1..4) :
+ * On select nbWords rangées aléatoirement dans clouds avec le motCentral, et sur les colonnes des relations
+ * insert into game(gid, creator, motCentral, nbWords, relation1..4)
+ * insert into game_cloud(gid, eidMotNuage) select …random…;
+ */
+
+/* Pour insérer une partie (motCentral, relation1..4, eidMotsNuage) :
+ * insert into game(gid, creator, motCentral, nbWords, relation1..4)
+ * insert into game_cloud(gid, eidMotNuage) …;
+ */
+
+/* Pour afficher une partie(gid) :
+ * On l'insère dans played_games
+ * On select le cloud dans game_cloud
+ * On select les infos dans game
+ * On renvoie : {gid, pgid, relations : [{id, name}], center, cloud : [{id,name}]}
+ */
+
+/* Pour enregistrer les résultats d'un joueur :
+ * On met à jour le timestamp dans played_game
+ * On stocke les réponses dans played_game_cloud(pgid, cloudId, catAnswer);
+ */
+
+/** Récupère une partie sous forme de tableau associatif.
 * @param db : descripteur de la bdd (obtenu avec getDB()).
 * @param user : Login de l'utilisateur demandant la partie.
 * @param gameId : L'identifiant d'une partie.
@@ -561,18 +386,8 @@ function getGameScores($user, $pgid, $gid) {
 /** Fourni l'ensembles des relations pouvant apparaître dans le jeu.
 * @return array : un tableau de realtions.
 */
-function get_game_relations()
-{
-		$reqlations = array();
-
-		$relations[] = 5;
-		$relations[] = 7;
-		$relations[] = 9;
-		$relations[] = 10;
-		$relations[] = 14;
-		$relations[] = 22;
-
-		return $relations;
+function get_game_relations() {
+	return array(5, 7, 9, 10, 13, 14, 22); /* Pas d'icônes pour celles-ci : 13, 14, 22 */
 }
 
 function getGameRelationsJSON() {

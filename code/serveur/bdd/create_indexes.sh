@@ -26,8 +26,11 @@ command "create index i_relation_start_type on relation(start,type);"
 command "create index i_relation_end_type on relation(end,type);"
 command "create index i_relation_start_end_type on relation(start,end,type);"
 command "create index i_played_game_all on played_game(pgid, gid, login, timestamp);"
+command <<EOF
+create table colon_nodes(eid);
+insert into colon_nodes(eid) select eid from node where name glob '::*';
+EOF
 command "create index i_colon_nodes_eid on colon_nodes(eid);"
-command "insert into colon_nodes(eid) select eid from node where name glob '::*';"
 command <<EOF
 create table random_cloud_node(eid,nbneighbors);
 insert into random_cloud_node(eid,nbneighbors) select eid,sum(nb) from (
@@ -55,6 +58,16 @@ do_commands
 echo 2/3
 unset commands
 # Environ 0.2% des poids sont négatifs, donc on ne s'occupe pas de les traiter.
+command "create table guessTransitivity1(TA,TDeduction,weight,total);"
+for TA in 5 7 9 10 13 14 22; do
+	command "insert into guessTransitivity1(TA,TDeduction,weight,total) select $TA,B.type,sum(A.weight),0 from relation as A, relation as B where A.type = $TA and B.start = A.start and B.end = A.end group by B.type;"
+	command "update guessTransitivity1 set total = (select sum(A.weight) from relation as A where A.type = $TA) where TA = $TA;"
+done
+do_commands
+
+echo 3/3
+unset commands
+# Environ 0.2% des poids sont négatifs, donc on ne s'occupe pas de les traiter.
 command "create table guessTransitivity2(TA,TB,TDeduction,weight,total);"
 for TA in 5 7 9 10 13 14 22; do
 	for TB in 5 7 9 10 13 14 22; do
@@ -64,15 +77,15 @@ for TA in 5 7 9 10 13 14 22; do
 done
 do_commands
 
-echo 3/3
-unset commands
-command "create table guessTransitivity3(TA,TB,TC,TDeduction,weight,total);"
-for TA in 5 7 9 10 13 14 22; do
-	for TB in 5 7 9 10 13 14 22; do
-		for TC in 5 7 9 10 13 14 22; do
-			command "insert into guessTransitivity3(TA,TB,TC,TDeduction,weight,total) select $TA,$TB,$TC,D.type,count(D.type),0 from relation as A, relation as B, relation as C, relation as D where A.end = B.start and B.end = C.start and A.type = $TA and B.type = $TB and C.type = $TC and D.start = A.start and D.end = C.end group by D.type;"
-			command "update guessTransitivity3 set total = (select count(*) from relation as A, relation as B, relation as C where A.end = B.start and B.end = C.start and A.type = $TA and B.type = $TB and C.type = $TC) where TA = $TA and TB = $TB and TC = $TC;"
-		done
-	done
-done
-do_commands
+#echo 3/3
+#unset commands
+#command "create table guessTransitivity3(TA,TB,TC,TDeduction,weight,total);"
+#for TA in 5 7 9 10 13 14 22; do
+#	for TB in 5 7 9 10 13 14 22; do
+#		for TC in 5 7 9 10 13 14 22; do
+#			command "insert into guessTransitivity3(TA,TB,TC,TDeduction,weight,total) select $TA,$TB,$TC,D.type,count(D.type),0 from relation as A, relation as B, relation as C, relation as D where A.end = B.start and B.end = C.start and A.type = $TA and B.type = $TB and C.type = $TC and D.start = A.start and D.end = C.end group by D.type;"
+#			command "update guessTransitivity3 set total = (select count(*) from relation as A, relation as B, relation as C where A.end = B.start and B.end = C.start and A.type = $TA and B.type = $TB and C.type = $TC) where TA = $TA and TB = $TB and TC = $TC;"
+#		done
+#	done
+#done
+#do_commands

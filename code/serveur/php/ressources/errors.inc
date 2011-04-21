@@ -1,3 +1,5 @@
+<?php
+
 function errRequestIncomplete() {
 	throw new Exception("La requête est incomplète", 1);
 }
@@ -27,17 +29,19 @@ function errGetGame() {
 }
 
 function errFollowingPointer($word) {
-	throw new Exception("Erreur lors du suivi des pointeurs de spécialisation du mot $word.", 8); }
+	throw new Exception("Erreur lors du suivi des pointeurs de spécialisation du mot $word.", 8);
 }
 
 function errLoopDetected($word) {
-	throw new Exception("Boucle rencontrée lors du suivi des pointeurs de spécialisation du mot $word.", 9); }
+	throw new Exception("Boucle rencontrée lors du suivi des pointeurs de spécialisation du mot $word.", 9);
 }
 
 function errTooMuchRecursion($word) {
-	throw new Exception("Trop de niveaux de récursions lors du suivi des pointeurs de spécialisation du mot $word.", 10); }
+	throw new Exception("Trop de niveaux de récursions lors du suivi des pointeurs de spécialisation du mot $word.", 10);
 }
 
 function errUnknownCommand() {
 	throw new Exception("Commande inconnue", 11);
 }
+
+?>

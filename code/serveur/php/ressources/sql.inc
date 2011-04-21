@@ -26,6 +26,15 @@ function querySingle($query, $wholeRow = false) {
 	return getDB()->querySingle($query, $wholeRow);
 }
 
+function queryMultiple($query) {
+	$q = getDB()->query($query);
+	$res = array();
+	while ($row = $q->fetchArray()) {
+		$res[] = $row;
+	}
+	return $res;
+}
+
 /** Sélectionne le mot de passe d'un utilisateur.
  * @param user : Le nom d'utilisateur.
  * @return string : Le mot de passe.
@@ -72,6 +81,24 @@ function sqlGetForwardOne($origin, $types = null, $forward = true) {
  */
 function sqlGetBackwardOne($origin, $types = null) {
 	return sqlGetForwardOne($origin, $types, false);
+}
+
+/* Voisins 1 saut
+ * @param centerEid : L'identifiant du noeud central
+ * @param cloud : Un nuage à étendre.
+ * @return array : {eid_node:{"types1":[type_hop_1]}, eid_node2:{…}, …}
+ */
+function sqlCloud1($centerEid, $cloud = array()) {
+	return queryMultiple("select end as node, type as TA from relation where start = ".intval($centerEid).";");
+}
+
+/* Voisins 2 sauts
+ * @param centerEid : L'identifiant du noeud central
+ * @param cloud : Un nuage à étendre.
+ * @return array : {eid_node:{"types2":[type_hop_1, type_hop_2]}, eid_node2:{…}, …}
+ */
+function sqlCloud2($centerEid, $cloud = array()) {
+	return queryMultiple("select A.type as TA, B.type as TB, B.end as node from relation as A, relation as B where A.end = B.start and A.start = ".intval($centerEid)." and A.type in (5, 7, 9, 10, 13, 14, 22) and B.type in (5, 7, 9, 10, 13, 14, 22);");
 }
 
 /* Voisins 1 saut du bon type (= relations déjà connues)

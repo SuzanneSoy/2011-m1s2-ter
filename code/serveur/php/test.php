@@ -6,11 +6,18 @@
 	</head>
 	<body>
 		<h1>Console de test</h1>
+		<form action="#" method="GET">
+			<input type="submit" value="Clear test console" />
+		</form>
 <?php
 require_once("db.php");
 require_once("ressources/sql.inc");
+require_once("pticlic.php");
 
-function main_test() {
+function voidTest() {
+}
+
+function mainTest() {
 	$randomnode = sqlGetRandomCenterNode();
 	$tests = array(
 		"sqlGetPasswd" => array("user" => "foo"),
@@ -27,6 +34,9 @@ function main_test() {
 		"sourceTwoForwardAny_Any" => array("centerEid" => $randomnode, "r1" => 5, "r2" => 10),
 		"sourceArrowheadAny_Any" => array("centerEid" => $randomnode, "r1" => 5, "r2" => 10),
 		"sqlGetRawNodeName" => array("eid" => $randomnode),
+		"sqlCloud1" => array("centerEid" => $randomnode),
+		"sqlCloud2" => array("centerEid" => $randomnode),
+		"createCloud" => array("centerEid" => $randomnode),
 	);
 
 	if (isset($_GET["function"])) {
@@ -41,10 +51,11 @@ function main_test() {
 			foreach ($params as $p) {
 				$params_show[] = var_export($p, true);
 			}
-			echo "<p>".$fn."(".implode(", ", $params_show).") == ".var_export(call_user_func_array($fn, $params), true)."</p>";
+			echo "<pre>".$fn."(".implode(", ", $params_show).") == ".var_export(call_user_func_array($fn, $params), true)."</pre>";
 		}
 	}
 
+	echo "<p>randomnode = ".sqlGetRawNodeName($randomnode)."</p>";
 	$t = 0;
 	foreach ($tests as $fn => $params) {
 		echo '	<form action="#" method="GET">';
@@ -58,11 +69,11 @@ function main_test() {
 		}
 		echo '		<input type="submit" name="function" value="'.$fn.'" />';
 		echo '	</form>';
-		$i++;
+		$t++;
 	}
 }
 
-main_test();
+mainTest();
 ?>
 	</body>
 </html>
