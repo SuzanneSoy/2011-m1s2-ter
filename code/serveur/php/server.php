@@ -90,8 +90,9 @@ function main()
 }
 
 function server() {
+	if(isset($_GET['callback']))
+		echo $_GET['callback'].'(';
 	ob_start();
-
 	try {
 		main();
 		ob_end_flush();
@@ -101,6 +102,8 @@ function server() {
 		logError($e->getCode(), $e->getMessage(), date("c"));
 		closeDB();
 	}
+	if(isset($_GET['callback']))
+		echo ')';
 }
 
 server();
