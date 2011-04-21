@@ -11,6 +11,10 @@ body {
 #screen {
 	background-color : #FFFFE0;
 }
+
+.button {
+	text-align: center;
+}
 		</style>
 		<script src="jquery-1.5.1.min.js"></script>
 		<script src="jquery-ui-1.8.11.custom.min.js"></script>
@@ -30,14 +34,26 @@ body {
 			<div id="about-text-block"></div>
 
 			<span id="title">PtiClic</span>
-			<img class="game icon" alt="" src="img/mode_normal.png" />
-			<span class="game text">Jouer</span>
-			<img class="prefs icon" alt="" src="img/config.png" />
-			<span class="prefs text">Configuration</span>
-			<img class="connection icon" alt="" src="img/config.png" />
-			<span class="connection text">Connexion</span>
-			<img class="about icon" alt="" src="img/rel/default.png" />
-			<span class="about text">A Propos</span>
+			<div class="button game">
+				<img class="icon" alt="" src="img/mode_normal.png" />
+				<br />
+				<span class="text">Jouer</span>
+			</div>
+			<div class="button prefs">
+				<img class="icon" alt="" src="img/config.png" />
+				<br />
+				<span class="text">Configuration</span>
+			</div>
+			<div class="button connection">
+				<img class="icon" alt="" src="img/config.png" />
+				<br />
+				<span class="text">Connexion</span>
+			</div>
+			<div class="button about">
+				<img class="icon" alt="" src="img/rel/default.png" />
+				<br />
+				<span class="text">A Propos</span>
+			</div>
 		</div>
 	</body>
 </html>

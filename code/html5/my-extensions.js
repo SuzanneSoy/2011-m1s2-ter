@@ -58,7 +58,6 @@ $.fn.fitIn = function(e, t, r, b, l) {
 	b *= h;
 	l *= w;
 	this.fitFont(w - r - l, h - t - b, 20).center(e.center());
-	console.log(this);
 	return this;
 }
 
