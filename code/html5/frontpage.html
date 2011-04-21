@@ -3,23 +3,41 @@
 	<head>
 		<title>Pticlic pre-alpha 0.2</title>
 		<meta charset="utf-8" />
+		<style>
+body {
+	background-color: black;
+}
+
+#screen {
+	background-color : #FFFFE0;
+}
+		</style>
+		<script src="jquery-1.5.1.min.js"></script>
+		<script src="jquery-ui-1.8.11.custom.min.js"></script>
+		<script src="my-extensions.js"></script>
+		<script src="frontpage.js"></script>
 	</head>
 	<body>
 		<div id="screen">
-			<div id="title"></div>
-			<div class="button">
-				<img class="gameIcon" alt="" src="img/mode_normal.png" />
-				<span class="gameText">Jouer</span>
-			</div>
-			<div class="button">
-				<img class="prefsIcon" alt="" src="img/config.png" />
-				<span class="prefsText">Configuration</span>
-			</div>
-			<div id="connection"></div>
-			<div class="button">
-				<img class="aboutIcon" alt="" src="img/rel/default.png" />
-				<span class="aboutText">A Propos</span>
-			</div>
+			<div id="title-block"></div>
+			<div id="game-icon-block"></div>
+			<div id="prefs-icon-block"></div>
+			<div id="connection-icon-block"></div>
+			<div id="about-icon-block"></div>
+			<div id="game-text-block"></div>
+			<div id="prefs-text-block"></div>
+			<div id="connection-text-block"></div>
+			<div id="about-text-block"></div>
+
+			<span id="title">PtiClic</span>
+			<img class="game icon" alt="" src="img/mode_normal.png" />
+			<span class="game text">Jouer</span>
+			<img class="prefs icon" alt="" src="img/config.png" />
+			<span class="prefs text">Configuration</span>
+			<img class="connection icon" alt="" src="img/config.png" />
+			<span class="connection text">Connexion</span>
+			<img class="about icon" alt="" src="img/rel/default.png" />
+			<span class="about text">A Propos</span>
 		</div>
 	</body>
 </html>

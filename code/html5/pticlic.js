@@ -59,7 +59,7 @@ function jss() {
 }
 
 $(function () {
-	var url = "http://www.pticlic.fr/unstable/code/serveur/php/server.php?action=0&nb=1&user=foo&passwd=bar&mode=normal";
+	var url = "http://www.pticlic.fr/unstable/code/serveur/php/server.php?action=0&nb=1&user=foo&passwd=bar&mode=normal&callback=?";
 	$.getJSON(url, function(data) {
 		var game = data[0];
 		var currentWordNb = 0;
