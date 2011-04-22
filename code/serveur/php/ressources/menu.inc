@@ -4,6 +4,7 @@
 			<span id="links">
 				<a href="index.php">Accueil</a>
 				<a href="download.php">Téléchargement</a>
+				<a href="jeu.html">Jouer en ligne</a>
 				<!-- <a href=".php">Créer des parties</a> -->
 			        <a href="contact.php">Contact</a>
 			<?php
