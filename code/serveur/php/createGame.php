@@ -49,6 +49,10 @@ if(!isset($_SESSION['userId']))
 	.wordLinesTable .lightLine {
 		background-color : #F0F0D0;
 	}
+	
+	.wordLinesTable td:first-child {
+		text-align : right;
+	}
 
 
 	#center {		

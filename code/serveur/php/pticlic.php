@@ -25,7 +25,7 @@ require_once("db.php");
 *   normalizeProbas($row);
 *   setGame($user, $pgid, $gid, $answers);
 *   get_game_relations();
-	getGameRelationsJSON();
+*   getGameRelationsJSON();
 *   setGameGetScore($user, $pgid, $gid, $answers);
 *   insertNode($node);
 *   getNodeEid($node);
@@ -252,6 +252,69 @@ function cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights)
 * @param totalDifficulty : La difficulté totale.
 */
 function cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty)
+{
+	$db = getDB();
+	// Insère dans la base une partie avec le mot central $centerEid, le nuage $cloud et les relations $r1 et $r2
+	$db->exec("begin transaction;");
+	$db->exec("INSERT INTO game(gid, eid_central_word, relation_1, relation_2, difficulty)
+		   VALUES (null, $centerEid, $r1, $r2, $totalDifficulty);");
+	$gid = $db->lastInsertRowID();
+	
+	$t = time();
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)
+		   VALUES (null, $gid, null, $t);");
+	$pgid1 = $db->lastInsertRowID();
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)
+		   VALUES (null, $gid, null, $t);");
+	$pgid2 = $db->lastInsertRowID();
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)
+		   VALUES (null, $gid, null, $t);");
+	$pgid0 = $db->lastInsertRowID();
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)
+		   VALUES (null, $gid, null, $t);");
+	$pgidT = $db->lastInsertRowID();
+
+	// TODO : R0 et Trash + corrections
+	foreach ($cloud as $c)
+	{
+		$totalWeight = $c['probaR1'] + $c['probaR2'] + $c['probaR0'] + $c['probaTrash'];
+		$db->exec("INSERT INTO game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash)
+			   VALUES ($gid, ".$c['pos'].", ".$c['d'].", ".$c['eid'].", $totalWeight, ".$c['probaR1'].", ".$c['probaR2'].", ".$c['probaR0'].", ".$c['probaTrash'].");");
+		
+		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
+			   VALUES ($pgid1, $gid, 0, ".$c['pos'].", $r1, ".$c['probaR1'].", 0);");
+
+		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
+			   VALUES ($pgid2, $gid, 0, ".$c['pos'].", $r2, ".$c['probaR2'].", 0);");
+
+		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
+			   VALUES ($pgid0, $gid, 0, ".$c['pos'].", 0, ".$c['probaR0'].", 0);");
+
+		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
+			   VALUES ($pgidT, $gid, 0, ".$c['pos'].", -1, ".$c['probaTrash'].", 0);");
+	}
+
+	$db->exec("commit;");
+}
+
+function decodeGame($json) {
+	$game = JSON_decode($json,true);
+	
+	$centerEid = getNodeEid($game['centralWord']);
+	foreach($game['cloud'] as $w)	
+		$cloud[] = Array("eid" => getNodeEid($w['name']),
+								"pos" => $key,
+								"d" => 5,
+								"probaR1" => $w['relations'][0] ? "1" : "0",
+								"probaR2" => $w['relations'][0] ? "1" : "0",
+								"probaR0" => $w['relations'][0] ? "1" : "0",
+								"probaTrash" => $w['relations'][0] ? "1" : "0");
+								
+	
+	print_r($cloud);
+}
+
+function insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty)
 {
 	$db = getDB();
 	// Insère dans la base une partie avec le mot central $centerEid, le nuage $cloud et les relations $r1 et $r2
