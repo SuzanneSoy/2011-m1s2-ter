@@ -1,7 +1,7 @@
 <?php
 
-require_once("relations.php");
-require_once("db.php");
+require_once("ressources/relations.inc");
+require_once("ressources/db.inc");
 
 /* Les prototypes des fonctions :
 * ===============================>
@@ -538,19 +538,9 @@ function createGameCore($cloudSize)
 * @param nbGames : Le nombre de parties à récupérer.
 * @param mode : Le mode de jeu des parties à récupérer.
 */
-function getGame($user, $nbGames, $mode)
+function getGame($user)
 {
-	echo "[";
-
-	for ($i=0; $i < $nbGames; $i)
-	{
-		echo game2json($user, randomGame());
-
-		if ((++$i) < $nbGames)
-			echo ",";
-	}
-	
-	echo "]";
+	echo game2json($user, randomGame());
 }
 
 

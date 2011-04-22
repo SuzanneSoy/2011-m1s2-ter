@@ -14,8 +14,8 @@
 			<?php include("ressources/showmsg.inc"); ?>
 			<h2>PtiClic : Affichage de parties</h2>
 			<?php
-				require_once("pticlic.php");
-				require_once("relations.php");
+				require_once("ressources/backend.inc");
+				require_once("ressources/relations.inc");
 				$gameId = randomGame();
 				if (isset($_GET['gid'])) $gameId = intval($_GET['gid']);
 				if (isset($_POST['gid'])) $gameId = intval($_POST['gid']);

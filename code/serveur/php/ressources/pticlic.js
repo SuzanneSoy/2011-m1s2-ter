@@ -1,4 +1,9 @@
+var state = "game"
 function jss() {
+	jss[state]();
+};
+
+jss.game = function() {
 	// TODO : réduire le nombre de fitIn ou fitFont, ou bien les précalculer.
 	var w, h;
 	w = $(window).width();
@@ -59,9 +64,10 @@ function jss() {
 }
 
 $(function () {
-	var url = "http://www.pticlic.fr/unstable/code/serveur/php/server.php?action=0&nb=1&user=foo&passwd=bar&mode=normal&callback=?";
-	$.getJSON(url, function(data) {
-		var game = data[0];
+	$.getJSON("getGame.php?callback=?", {
+		user:"foo",
+		passwd:"bar",
+	}, function(game) {
 		var currentWordNb = 0;
 		var answers = [];
 		
@@ -115,7 +121,7 @@ $(function () {
 					.html(relation.name.replace(/%(m[cn])/g, '<span class="$1"/>'))
 				.end()
 				.find(".icon")
-					.attr("src", "img/rel/"+relation.id+".png")
+					.attr("src", "ressources/img/rel/"+relation.id+".png")
 				.end()
 				.click(function(e) {
 					nextWord({left:e.pageX, top:e.pageY}, this);
@@ -126,6 +132,6 @@ $(function () {
 		$(window).resize(jss);
 		updateText();
 	}).error(function(x){
-		alert("Erreur fatale. Merci de nous envoyer ce message :\n"+x.status+"\n"+x.statusText+"\n"+x.responseText.substring(0,20)+"…");
+		alert("Erreur fatale. Merci de nous envoyer ce message : "+x.status+" - "+x.statusText+"\n"+x.responseText.substring(0,20)+((x.responseText == '') ? '': '…'));
 	});
 });

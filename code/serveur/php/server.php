@@ -1,7 +1,7 @@
 <?php
 
-require_once("pticlic.php");
-require_once("db.php");
+require_once("ressources/backend.inc");
+require_once("ressources/db.inc");
 
 /** Ecrit un rapport d'erreur dans un fichier.
 * @param errNum : Numéro de l'erreur.
@@ -59,11 +59,8 @@ function main()
 		echo '{"success":1}';
 	}
 	else if($action == 0) {           // "Get partie"
-		// Requête POST : http://serveur/server.php?action=0&nb=2&mode=normal&user=foo&passwd=bar
-		if(!isset($_GET['nb']) || !isset($_GET['mode'])) {
-			throw new Exception("La requête est incomplète", 2);
-		}
-		getGame($user, intval($_GET['nb']), $_GET['mode']);
+		// Requête POST : http://serveur/server.php?action=0&user=foo&passwd=bar
+		getGame($user);
 	}
 	else if($action == 1) {           // "Set partie"
 		// Requête POST : http://serveur/server.php?action=1&mode=normal&user=foo&passwd=bar&gid=1234&pgid=12357&0=0&1=-1&2=22&3=13&9=-1

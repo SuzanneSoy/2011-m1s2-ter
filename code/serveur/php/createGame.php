@@ -1,7 +1,7 @@
 <?php
 require_once("ressources/strings.inc");
-require_once("relations.php");
-require_once("server.php");
+require_once("ressources/relations.inc");
+require_once("ressources/backend.inc");
 session_start();
 
 if(!isset($_SESSION['userId']))
