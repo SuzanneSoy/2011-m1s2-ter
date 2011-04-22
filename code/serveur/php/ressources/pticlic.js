@@ -1,15 +1,14 @@
-var state = "game"
-function jss() {
-	jss[state]();
-};
+var state = "frontpage"
 
-jss.game = function() {
-	// TODO : réduire le nombre de fitIn ou fitFont, ou bien les précalculer.
-	var w, h;
-	w = $(window).width();
-	h = $(window).height();
+// ==== JavaScript Style général
+function jss() {
+	var w = $(window).width();
+	var h = $(window).height();
+	var iconSize = 72;
 	
-	var mch = h/8, mnh = h*0.075;
+	$(".screen")
+		.wh(w, h)
+		.northWest({top:0,left:0});
 	
 	$("body, html")
 		.css({
@@ -19,27 +18,60 @@ jss.game = function() {
 			textAlign: "left"
 		});
 	
-	$("#screen")
-		.wh(w, h)
-		.north($("body").north()); // TODO : par rapport à la fenêtre entière.
+	$(".screen").hide();
+	$("#"+state).show();
 	
-	$("#mc-caption-block")
+	jss[state](w, h, iconSize);
+};
+
+// ==== JavaScript Style pour la frontpage
+jss.frontpage = function(w, h, iconSize) {
+	var fp = $("#frontpage.screen");
+	var $fp = function() { return fp.find.apply(fp,arguments); };
+	$fp("#title-block")
+		.wh(w*0.5, h*0.2)
+		.north($("#frontpage.screen").north());
+	$fp("#title")
+		.fitIn("#title-block", 0.2);
+	
+	$fp(".text")
+		.fitFont(w*0.25,(h-(iconSize*4))*0.8*0.5,10);
+	$fp(".frontpage-button")
+		.width(w*0.4);
+
+	$fp(".frontpage-button.game")
+		.northEast({left:w*0.45,top:h*0.3});
+	$fp(".frontpage-button.about")
+		.northWest({left:w*0.55,top:h*0.3});
+	$fp(".frontpage-button.connection")
+		.southEast({left:w*0.45,top:h*0.9});
+	$fp(".frontpage-button.prefs")
+		.southWest({left:w*0.55,top:h*0.9});	
+}
+
+// ==== JavaScript Style pour le jeu
+jss.game = function(w, h, iconSize) {
+	var g = $("#game.screen");
+	var $g = function() { return g.find.apply(g,arguments); };
+	var mch = h/8, mnh = h*0.075;
+	
+	$g("#mc-caption-block")
 		.wh(w, mch)
-		.north($("#screen").north());
+		.north(g.north());
 	
-	$("#mc-caption")
+	$g("#mc-caption")
 		.fitIn("#mc-caption-block", 0.1);
 	
-	$("#mn-caption-block")
+	$g("#mn-caption-block")
 		.css({borderWidth: h/100})
 		.wh(w, mnh)
-		.north($("#mc-caption-block").south());
+		.north($g("#mc-caption-block").south());
 	
-	$("#mn-caption")
+	$g("#mn-caption")
 		.css({zIndex: 10})
 		.fitIn("#mn-caption-block");
 
-	$(".relationBox:visible")
+	$g(".relationBox:visible")
 		.css({
 			margin: 10,
 			padding: 10,
@@ -47,23 +79,40 @@ jss.game = function() {
 			WebkitBorderRadius: 10
 		});
 	
-	$(".relationBox:visible .icon")
-		.wh(72,72)
+	$g(".relationBox:visible .icon")
+		.wh(iconSize,iconSize)
 		.css({
 			float: "left",
-			marginRight: $(".relationBox").css("padding-left")
+			marginRight: $g(".relationBox").css("padding-left")
 		});
 	
-	$(".relations")
+	$g(".relations")
 		.width(w);
 
-	$(".relation:visible").fitFont($(".relationBox:visible").width(), 72, 10);
+	$g(".relation:visible").fitFont($g(".relationBox:visible").width(), iconSize, 10);
 	
-	$(".relations")
-		.south($("#screen").south());
+	$g(".relations")
+		.south(g.south());
 }
 
-$(function () {
+// ==== Code métier général
+$(function() {
+	$(window).resize(jss);
+	jss();
+	frontpage();
+});
+
+// ==== Code métier pour la frontpage
+function frontpage() {
+	state="frontpage";
+	$(".frontpage-button.game").click(function(){
+		game();
+	});
+}
+
+// ==== Code métier pour le jeu
+function game() {
+	state="game";
 	$.getJSON("getGame.php?callback=?", {
 		user:"foo",
 		passwd:"bar",
@@ -83,12 +132,13 @@ $(function () {
 				animateNext(click, button);
 			} else {
 				$(".relations").empty();
+				$('#mn-caption').stop().clearQueue();
 				alert("Partie terminée !");
 			}
 		}
 		
 		function animateNext(click, button) {
-			var duration = 700;
+			var duration = 7000;
 			
 			var mn = $("#mn-caption");
 			
@@ -129,9 +179,8 @@ $(function () {
 				.appendTo(".relations");
 		});
 		
-		$(window).resize(jss);
 		updateText();
 	}).error(function(x){
 		alert("Erreur fatale. Merci de nous envoyer ce message : "+x.status+" - "+x.statusText+"\n"+x.responseText.substring(0,20)+((x.responseText == '') ? '': '…'));
 	});
-});
+}

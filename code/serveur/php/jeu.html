@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>PtiClic pre-alpha 0.2</title>
-	<meta charset="utf-8" />
-	<style>
+	<head>
+		<title>PtiClic pre-alpha 0.2</title>
+		<meta charset="utf-8" />
+		<style>
 body {
 	background-color: black;
 }
 
-#screen {
+.screen {
 	background-color : #FFFFE0;
+	display: none;
 }
 
 #mc-caption {
@@ -38,25 +39,62 @@ body {
 .clearboth {
 	clear: both;
 }
-	</style>
-	<script src="ressources/jquery-1.5.1.min.js"></script>
-	<script src="ressources/jquery-ui-1.8.11.custom.min.js"></script>
-	<script src="ressources/my-extensions.js"></script>
-	<script src="ressources/pticlic.js"></script>
-</head>
-<body>
-<div id="screen">
-	<div id="mc-caption-block"></div>
-	<div id="mn-caption-block"></div>
-	<div id="mc-caption" class="mc"></div>
-	<div id="mn-caption" class="mn"></div>
-	<div class="relations"></div>
-	<div id="templates" style="display: none;">
-		<div class="relationBox">
-			<div class="relation"><img class="icon" alt="" src="ressources/img/rel/default.png" /><span class="text"></span></div>
-			<div class="clearboth"></div>
+
+.frontpage-button {
+	text-align: center;
+}
+		</style>
+		<script src="ressources/jquery-1.5.1.min.js"></script>
+		<script src="ressources/jquery-ui-1.8.11.custom.min.js"></script>
+		<script src="ressources/my-extensions.js"></script>
+		<script src="ressources/pticlic.js"></script>
+	</head>
+	<body>
+		<div class="screen" id="game">
+			<div id="mc-caption-block"></div>
+			<div id="mn-caption-block"></div>
+			<div id="mc-caption" class="mc"></div>
+			<div id="mn-caption" class="mn"></div>
+			<div class="relations"></div>
+			<div id="templates" style="display: none;">
+				<div class="relationBox">
+					<div class="relation"><img class="icon" alt="" src="ressources/img/rel/default.png" /><span class="text"></span></div>
+					<div class="clearboth"></div>
+				</div>
+			</div>
 		</div>
-	</div>
-</div>
-</body>
+		<div class="screen" id="frontpage">
+			<div id="title-block"></div>
+			<div id="game-icon-block"></div>
+			<div id="prefs-icon-block"></div>
+			<div id="connection-icon-block"></div>
+			<div id="about-icon-block"></div>
+			<div id="game-text-block"></div>
+			<div id="prefs-text-block"></div>
+			<div id="connection-text-block"></div>
+			<div id="about-text-block"></div>
+
+			<span id="title">PtiClic</span>
+			<div class="frontpage-button game">
+				<img class="icon" alt="" src="ressources/img/mode_normal.png" />
+				<br />
+				<span class="text">Jouer</span>
+			</div>
+			<div class="frontpage-button prefs">
+				<img class="icon" alt="" src="ressources/img/config.png" />
+				<br />
+				<span class="text">Configuration</span>
+			</div>
+			<div class="frontpage-button connection">
+				<img class="icon" alt="" src="ressources/img/config.png" />
+				<br />
+				<span class="text">Connexion</span>
+			</div>
+			<div class="frontpage-button about">
+				<img class="icon" alt="" src="ressources/img/rel/default.png" />
+				<br />
+				<span class="text">A Propos</span>
+			</div>
+		</div>
+	</body>
 </html>

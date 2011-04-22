@@ -36,12 +36,13 @@ $.fn.fitFont = function(w, h, minFont, maxFont) {
 	var that = this;
 	this.css("font-size", dichotomy(parseInt(this.css("font-size"), 10), function(x) {
 		that.css("fontSize", x);
+		fubar = wrappers;
 		return (wrappers.maxHeight() > h || wrappers.maxWidth() > w);
 	}).clip(minFont || 0, maxFont || Infinity));
 
 	// Restore stuff
 	this.css("position", oldpos);
-	wrappers.children().unwrap();
+	//wrappers.children().unwrap();
 	return this;
 }
 
