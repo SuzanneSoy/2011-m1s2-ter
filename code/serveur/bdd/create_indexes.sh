@@ -89,3 +89,6 @@ do_commands
 #	done
 #done
 #do_commands
+
+#create table twohops(A,TAB,B,TBC,C);
+#insert into twohops(A,TAB,B,TBC,C) select AB.start,AB.type,AB.end,BC.type,BC.end from relation as AB, relation as BC where AB.end = BC.start and AB.type in (0, 5, 7, 9, 10, 13, 14, 22) and BC.type in (0, 5, 7, 9, 10, 13, 14, 22);
