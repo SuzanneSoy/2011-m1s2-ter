@@ -138,7 +138,7 @@ function game() {
 		}
 		
 		function animateNext(click, button) {
-			var duration = 7000;
+			var duration = 700;
 			
 			var mn = $("#mn-caption");
 			
