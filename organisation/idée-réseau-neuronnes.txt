@@ -1,0 +1,1 @@
+neuronne a un ensemble de valeurs symboliques, auxquelles sont associées des poids par lesquels il va multiplier son entrée (par ex. synonyme = 1 (important), estUneSorteDe = 0 (pas important)).
