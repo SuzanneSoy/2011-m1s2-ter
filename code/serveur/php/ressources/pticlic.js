@@ -1,4 +1,4 @@
-var state = "frontpage"
+var state = "frontpage";
 
 // ==== JavaScript Style général
 function jss() {
@@ -22,7 +22,7 @@ function jss() {
 	$("#"+state).show();
 	
 	jss[state](w, h, iconSize);
-};
+}
 
 // ==== JavaScript Style pour la frontpage
 jss.frontpage = function(w, h, iconSize) {
@@ -47,7 +47,7 @@ jss.frontpage = function(w, h, iconSize) {
 		.southEast({left:w*0.45,top:h*0.9});
 	$fp(".frontpage-button.prefs")
 		.southWest({left:w*0.55,top:h*0.9});	
-}
+};
 
 // ==== JavaScript Style pour le jeu
 jss.game = function(w, h, iconSize) {
@@ -93,7 +93,10 @@ jss.game = function(w, h, iconSize) {
 	
 	$g(".relations")
 		.south(g.south());
-}
+};
+
+jss.score = function(w, h, iconSize) {
+};
 
 // ==== Code métier général
 $(function() {
@@ -102,85 +105,129 @@ $(function() {
 	frontpage();
 });
 
+function ajaxError(x) {
+	alert("Erreur fatale. Merci de nous envoyer ce message : "+x.status+" - "+x.statusText+"\n"+x.responseText.substring(0,20)+((x.responseText == '') ? '': '…'));
+}
+
 // ==== Code métier pour la frontpage
 function frontpage() {
 	state="frontpage";
-	$(".frontpage-button.game").click(function(){
-		game();
+	$("#frontpage .frontpage-button.game").click(function(){
+		getGame();
 	});
 }
 
 // ==== Code métier pour le jeu
-function game() {
+function getGame() {
 	state="game";
 	$.getJSON("getGame.php?callback=?", {
 		user:"foo",
 		passwd:"bar",
-	}, function(game) {
-		var currentWordNb = 0;
-		var answers = [];
-		
-		var updateText = function() {
-			$(".mn").text(game.cloud[currentWordNb].name);
-			$(".mc").text(game.center.name);
-			jss();
-		}
-		
-		var nextWord = function(click, button) {
-			answers[currentWordNb++] = $(button).data("rid");
-			if (currentWordNb < game.cloud.length) {
-				animateNext(click, button);
-			} else {
-				$(".relations").empty();
-				$('#mn-caption').stop().clearQueue();
-				alert("Partie terminée !");
-			}
-		}
-		
-		function animateNext(click, button) {
-			var duration = 700;
-			
-			var mn = $("#mn-caption");
-			
-			$(button).addClass("hot").removeClass("hot", duration);
-			
-			(mn)
-				.stop()       // Attention : stop() et clearQueue() ont aussi un effet
-				.clearQueue() // sur la 2e utilisation de mn (ci-dessous).
-				.clone()
-				.removeClass("mn") // Pour que le texte animé ne soit pas modifié.
-				.appendTo("body") // Append to body so we can animate the offset (instead of top/left).
-				.offset(mn.offset())
-				.animate({left:click.left, top:click.top, fontSize: 0}, duration)
-				.queue(function() { $(this).remove(); });
+	}, uiGame).error(ajaxError);
+	jss();
+}
 
-			updateText();
-			var fs = mn.css("fontSize");
-			var mncbCenter = $("#mn-caption-block").center();
-			
-			(mn)
-				.css("fontSize", 0)
-				.animate({fontSize: fs}, {duration:duration, step:function(){mn.center(mncbCenter);}});
+function uiGame(game) {
+	var currentWordNb = 0;
+	game.answers = [];
+	
+	var updateText = function() {
+		$("#game .mn").text(game.cloud[currentWordNb].name);
+		$("#game .mc").text(game.center.name);
+		jss();
+	}
+	
+	var nextWord = function(click, button) {
+		game.answers[currentWordNb++] = $(button).data("rid");
+		if (currentWordNb < game.cloud.length) {
+			animateNext(click, button);
+		} else {
+			$("#game .relations").empty();
+			$('#game #mn-caption').stop().clearQueue();
+			getScore(game);
 		}
+	}
+	
+	function animateNext(click, button) {
+		var duration = 700;
 		
-		$.each(game.relations, function(i, relation) {
-			$('#templates .relationBox')
-				.clone()
-				.data("rid", relation.id)
-				.find(".text")
-					.html(relation.name.replace(/%(m[cn])/g, '<span class="$1"/>'))
-				.end()
-				.find(".icon")
-					.attr("src", "ressources/img/rel/"+relation.id+".png")
-				.end()
-				.click(function(e) {
-					nextWord({left:e.pageX, top:e.pageY}, this);
-				})
-				.appendTo(".relations");
-		});
+		var mn = $("#game #mn-caption");
+		
+		$(button).addClass("hot").removeClass("hot", duration);
+		
+		(mn)
+			.stop()       // Attention : stop() et clearQueue() ont aussi un effet
+			.clearQueue() // sur la 2e utilisation de mn (ci-dessous).
+			.clone()
+			.removeClass("mn") // Pour que le texte animé ne soit pas modifié.
+			.appendTo("body") // Append to body so we can animate the offset (instead of top/left).
+			.offset(mn.offset())
+			.animate({left:click.left, top:click.top, fontSize: 0}, duration)
+			.queue(function() { $(this).remove(); });
 		
 		updateText();
-	}).error(function(x){
-		alert("Erreur fatale. Merci de nous envoyer ce message : "+x.status+" - "+x.statusText+"\n"+x.responseText.substring(0,20)+((x.responseText == '') ? '': '…'));
+		var fs = mn.css("fontSize");
+		var mncbCenter = $("#game #mn-caption-block").center();
+		
+		(mn)
+			.css("fontSize", 0)
+			.animate({fontSize: fs}, {duration:duration, step:function(){mn.center(mncbCenter);}});
+	}
+	
+	$.each(game.relations, function(i, relation) {
+		$('#templates .relationBox')
+			.clone()
+			.data("rid", relation.id)
+			.find(".text")
+				.html(relation.name.replace(/%(m[cn])/g, '<span class="$1"/>'))
+			.end()
+			.find(".icon")
+				.attr("src", "ressources/img/rel/"+relation.id+".png")
+			.end()
+			.click(function(e) {
+				nextWord({left:e.pageX, top:e.pageY}, this);
+			})
+			.appendTo("#game .relations");
+	});
+	
+	updateText();
+}
+
+// ==== Code métier pour les scores
+function getScore(game) {
+	state="score";
+	$.getJSON("server.php?callback=?", {
+		user: "foo",
+		passwd: "bar",
+		action: 1,
+		pgid: game.pgid,
+		gid: game.gid,
+		answers: game.answers
+	}, function(data) {
+		for (var i = 0; i < data.scores.length; i++) {
+			game.cloud[i].score = data.scores[i];
+		}
+		delete data.score;
+		uiScore($.extend(game, data));
+	}).error(ajaxError);
+	jss();
+}
+
+function uiScore(game) {
+	$.each(game.cloud, function(i,e) {
+		var percentScore = (e.score - game.minScore) / (game.maxScore - game.minScore);
+		u = $("#templates .scoreLine");
+		ee = e;
+		$("#templates .scoreLine")
+			.clone()
+			.find(".word")
+				.text(e.name)
+			.end()
+			.find(".score")
+				.text(e.score)
+				.css("color","rgb("+(255 - 255*percentScore).clip(0,255)+","+(191*percentScore).clip(0,255,true)+",0)")
+			.end()
+			.appendTo("#score .scores");
+		jss();
 	});
 }

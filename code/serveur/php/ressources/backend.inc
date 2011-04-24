@@ -572,7 +572,7 @@ function computeScore($probas, $difficulty, $answer, $userReputation) {
 * @param score : Le score du joueur.
 */
 function computeUserReputation($score) {
-	return max(round(log($score/10)*100)/100, 0);
+	return max(round(log(max($score/10,1))*100)/100, 0);
 }
 
 /** Formatage des probalitées dans un tableau.
@@ -596,7 +596,7 @@ function setGame($user, $pgid, $gid, $answers)
 		return getGameScores($user, $pgid, $gid);
 	}
 	
-	$userReputation = computeUserReputation($db->querySingle("SELECT score FROM user WHERE login='".$user."';"));
+	$userReputation = computeUserReputation($db->querySingle("SELECT score FROM user WHERE login='".SQLite3::escapeString($user)."';"));
 	
 	$db->exec("begin transaction;");
 	$db->exec("update played_game set timestamp = ".time()." where pgid = $pgid;");
@@ -609,12 +609,10 @@ function setGame($user, $pgid, $gid, $answers)
 	$res = $db->query("SELECT num, difficulty, totalWeight, probaR1, probaR2, probaR0, probaTrash FROM game_cloud WHERE gid = $gid;");
 	$gameScore = 0;
 	$scores = array();
-	$nbScores = 0;
 	
 	while ($row = $res->fetchArray())
 	{
 		$num = intval($row['num']);
-		$nbScores++;
 		if (!isset($answers[$num])) {
 			throw new Exception("Cette requête \"Set partie\" ne donne pas de réponse (une relation) pour le mot numéro $num de la partie.", 5);
 		}
@@ -640,10 +638,12 @@ function setGame($user, $pgid, $gid, $answers)
 	$db->exec("update user set score = score + ".$gameScore." where login = '$user';");
 
 	$db->exec("commit;");
-	$scores['total'] = $gameScore;
-	$scores['nb'] = $nbScores;
-	$scores['alreadyPlayed'] = 'false';
-	return $scores;
+	
+	return array(
+		'scoreTotal' => $gameScore,
+		'alreadyPlayed' => false,
+		'scores' => $scores
+	);
 }
 
 function getGameScores($user, $pgid, $gid) {
@@ -657,18 +657,17 @@ function getGameScores($user, $pgid, $gid) {
 	
 	$gameScore = 0;
 	$scores = array();
-	$nbScores = 0;
 	$res = $db->query("SELECT num,score from played_game_cloud where pgid = $pgid and gid = $gid;");
 	while ($row = $res->fetchArray())
 	{
-		$nbScores++;
 		$gameScore += $row['score'];
 		$scores[$row['num']] = $row['score'];
 	}
-	$scores['total'] = $gameScore;
-	$scores['nb'] = $nbScores;
-	$scores['alreadyPlayed'] = 'true';
-	return $scores;
+	return array(
+		'scoreTotal' => $gameScore,
+		'alreadyPlayed' => true,
+		'scores' => $scores
+	);
 }
 
 /** Fourni l'ensembles des relations pouvant apparaître dans le jeu.
@@ -706,16 +705,10 @@ function getGameRelationsJSON() {
 function setGameGetScore($user, $pgid, $gid, $answers) {
 	$scores = setGame($user, intval($pgid), intval($gid), $answers);
 	// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
-	echo '{"scoreTotal":'.$scores['total'];
-	echo ',"alreadyPlayed":'.$scores['alreadyPlayed'];
-	echo ',"scores":[';
-	for ($i = 0; $i < $scores['nb']; $i++) {
-		if ($i != 0) echo ',';
-		echo $scores[$i];
-	}
-	echo "],\"newGame\":";
-	echo json_encode("".game2json($user, randomGame()));
-	echo "}";
+	$scores['newGame'] = game2json($user, randomGame());
+	$scores['minScore'] = -5;
+	$scores['maxScore'] = 10;
+	echo json_encode($scores);
 }
 
 /** Insère dans la base de données le noeud si il n'existe pas encore.

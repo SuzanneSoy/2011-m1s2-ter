@@ -64,12 +64,10 @@ function main()
 	}
 	else if($action == 1) {           // "Set partie"
 		// Requête POST : http://serveur/server.php?action=1&mode=normal&user=foo&passwd=bar&gid=1234&pgid=12357&0=0&1=-1&2=22&3=13&9=-1
-		if (!isset($_GET['pgid']) || !isset($_GET['gid'])) {
+		if (!isset($_GET['pgid']) || !isset($_GET['gid']) || !isset($_GET['answers'])) {
 			throw new Exception("La requête est incomplète", 2);
 		}
-		// TODO : il faudrait filtrer les paramètres qui correspondent à une réponse
-		// au lieu d'envoyer $_GET en entier, mais on ne connaît pas leur nom à l'avance.
-		setGameGetScore($user, $_GET['pgid'], $_GET['gid'], $_GET);
+		setGameGetScore($user, $_GET['pgid'], $_GET['gid'], $_GET['answers']);
 	} else if($action == 4) {           // CheckWord
 		if (!isset($_GET['word']))
 			errRequestIncomplete();
