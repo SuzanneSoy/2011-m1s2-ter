@@ -1,0 +1,1 @@
+<?php header("location: code/serveur/php/"); ?>
