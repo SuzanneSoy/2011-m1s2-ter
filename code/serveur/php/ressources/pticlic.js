@@ -1,6 +1,35 @@
-var state = "frontpage";
+// ==== URL persistante
+function State(init) {
+	$.extend(this, init || {});
+	if (!this.screen) this.screen = 'frontpage';
+};
+State.prototype.commit = function() {
+	location.hash="#"+$.JSON.encode(this);
+	return this;
+};
+State.prototype.get = function(key) {
+	return this[key];
+};
+State.prototype.set = function(key, value) {
+	this[key] = value;
+	return this;
+};
+var state;
+var oldScreen = '';
+var enter = {};
+var leave = {};
+var ui = {};
+function hashchange() {
+	var stateJSON = location.hash.substring(location.hash.indexOf("#") + 1);
+	state = new State($.parseJSON(stateJSON));
+	if (oldScreen != state.screen) {
+		if (leave[oldScreen]) leave[oldScreen]();
+		oldScreen = state.screen;
+		if (enter[state.screen]) enter[state.screen]();
+	}
+}
 
-// ==== JavaScript Style gÃ©nÃ©ral
+// ==== JavaScript Style général
 function jss() {
 	var w = $(window).width();
 	var h = $(window).height();
@@ -19,9 +48,9 @@ function jss() {
 		});
 	
 	$(".screen").hide();
-	$("#"+state).show();
+	$("#"+state.screen+".screen").show();
 	
-	jss[state](w, h, iconSize);
+	jss[state.screen](w, h, iconSize);
 }
 
 // ==== JavaScript Style pour la frontpage
@@ -100,37 +129,6 @@ jss.score = function(w, h, iconSize) {
 		.css('text-align', 'center');
 };
 
-// ==== URL persistante
-
-function State(init) {
-	$.extend(this, init || {});
-	this.screen = 'frontpage';
-};
-State.prototype.commit = function() {
-	location.hash="#"+$.JSON.encode(this);
-	return this;
-};
-/*State.prototype.get = function(key) {
-	return this[key];
-};
-State.prototype.set = function(key, value) {
-	this[key] = value;
-	return this;
-};*/
-var state = new State().commit();
-var oldScreen = '';
-var enter = {};
-var leave = {};
-var ui = {};
-function hashchange() {
-	state = $.parseJSON(location.hash.substring(location.hash.indexOf("#") + 1));
-	if (oldScreen != state.screen) {
-		if (leave[oldScreen]) leave[oldScreen]();
-		oldScreen = state.screen;
-		if (enter[state.screen]) enter[state.screen]();
-	}
-}
-
 // ==== Interface Android
 var UI = {
 	setPreference: function() {},
@@ -148,7 +146,6 @@ if (typeof(PtiClicAndroid) != "undefined") {
 $(function() {
 	$(window).resize(jss);
 	$(window).hashchange(hashchange);
-	state.set('screen', 'frontpage').commit();
 	hashchange();
 });
 
@@ -173,7 +170,10 @@ enter.game = function () {
 		user:"foo",
 		passwd:"bar",
 		nonce:Math.random()
-	}, ui.game).error(ajaxError);
+	}, function(data) {
+		state.game = data;
+		ui.game();
+	}).error(ajaxError);
 	jss();
 };
 
@@ -182,22 +182,22 @@ leave.game = function () {
 	$('#game #mn-caption').stop().clearQueue();
 };
 
-ui.game = function (game) {
+ui.game = function () {
 	var currentWordNb = 0;
-	game.answers = [];
+	state.game.answers = [];
 	
 	var updateText = function() {
-		$("#game .mn").text(game.cloud[currentWordNb].name);
-		$("#game .mc").text(game.center.name);
+		$("#game .mn").text(state.game.cloud[currentWordNb].name);
+		$("#game .mc").text(state.game.center.name);
 		jss();
 	}
 	
 	var nextWord = function(click, button) {
-		game.answers[currentWordNb++] = $(button).data("rid");
-		if (currentWordNb < game.cloud.length) {
+		state.game.answers[currentWordNb++] = $(button).data("rid");
+		if (currentWordNb < state.game.cloud.length) {
 			animateNext(click, button);
 		} else {
-			//location.hash = "#score";
+			state.set('screen','score').commit();
 		}
 	}
 	
@@ -212,7 +212,7 @@ ui.game = function (game) {
 			.stop()       // Attention : stop() et clearQueue() ont aussi un effet
 			.clearQueue() // sur la 2e utilisation de mn (ci-dessous).
 			.clone()
-			.removeClass("mn") // Pour que le texte animÃ© ne soit pas modifiÃ©.
+			.removeClass("mn") // Pour que le texte animé ne soit pas modifié.
 			.appendTo("body") // Append to body so we can animate the offset (instead of top/left).
 			.offset(mn.offset())
 			.animate({left:click.left, top:click.top, fontSize: 0}, duration)
@@ -227,7 +227,7 @@ ui.game = function (game) {
 			.animate({fontSize: fs}, {duration:duration, step:function(){mn.center(mncbCenter);}});
 	}
 	
-	$.each(game.relations, function(i, relation) {
+	$.each(state.game.relations, function(i, relation) {
 		$('#templates .relationBox')
 			.clone()
 			.data("rid", relation.id)
@@ -247,31 +247,31 @@ ui.game = function (game) {
 	UI.dismiss();
 }
 
-// ==== Code mÃ©tier pour les scores
+// ==== Code métier pour les scores
 enter.score = function () {
-	var game = state.getGame();
 	UI.show("PtiClic", "Calcul de votre score");
 	$.getJSON("server.php?callback=?", {
 		user: "foo",
 		passwd: "bar",
 		action: 1,
-		pgid: game.pgid,
-		gid: game.gid,
-		answers: game.answers,
+		pgid: state.game.pgid,
+		gid: state.game.gid,
+		answers: state.game.answers,
 		nonce: Math.random()
 	}, function(data) {
 		for (var i = 0; i < data.scores.length; i++) {
-			game.cloud[i].score = data.scores[i];
+			state.game.cloud[i].score = data.scores[i];
 		}
 		delete data.score;
-		uiScore($.extend(game, data));
+		$.extend(state.game, data);
+		ui.score();
 	}).error(ajaxError);
 	jss();
 }
 
-ui.score = function (game) {
-	$.each(game.cloud, function(i,e) {
-		var percentScore = (e.score - game.minScore) / (game.maxScore - game.minScore);
+ui.score = function () {
+	$.each(state.game.cloud, function(i,e) {
+		var percentScore = (e.score - state.game.minScore) / (state.game.maxScore - state.game.minScore);
 		u = $("#templates .scoreLine");
 		ee = e;
 		$("#templates .scoreLine")
@@ -284,6 +284,9 @@ ui.score = function (game) {
 				.css("color","rgb("+(255 - 255*percentScore).clip(0,255)+","+(191*percentScore).clip(0,255,true)+",0)")
 			.end()
 			.appendTo("#score .scores");
+		$("#score #jaivu").click(function() {
+			state = new State().commit();
+		});
 		jss();
 	});
 	UI.dismiss();
