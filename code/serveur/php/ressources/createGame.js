@@ -156,10 +156,10 @@ $(function() {
    			exit.cloud.push({
    				name:$("#word-"+i).val(),
    				relations:[
-   					$("#r1-"+i).is(":checked"),
-   					$("#r2-"+i).is(":checked"),
-   					$("#r3-"+i).is(":checked"),
-   					$("#r4-"+i).is(":checked")
+   					$("#r1-"+i).is(":checked") ? "1":"0",
+   					$("#r2-"+i).is(":checked") ? "1":"0",
+   					$("#r3-"+i).is(":checked") ? "1":"0",
+   					$("#r4-"+i).is(":checked") ? "1":"0"
   					]
 				});
    		}
