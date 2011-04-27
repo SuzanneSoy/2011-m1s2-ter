@@ -1,6 +1,6 @@
 var state = "frontpage";
 
-// ==== JavaScript Style général
+// ==== JavaScript Style gÃ©nÃ©ral
 function jss() {
 	var w = $(window).width();
 	var h = $(window).height();
@@ -99,10 +99,34 @@ jss.score = function(w, h, iconSize) {
 };
 
 // ==== URL persistante
+oldhash = {};
 function hashchange() {
-	var info = location.hash.substring(location.hash.indexOf("#") + 1).split("/");;
-	screen[info[0]]();
-};
+	if(oldhash && typeof(oldhash.state) == 'string' && leave[oldhash.state]) leave[oldhash.state]();
+	oldhash = hash();
+	var h = hash();
+	if (enter[h.state]) enter[h.state]();
+}
+
+function state() {
+	var info = $.JSON.decode(location.hash.substring(location.hash.indexOf("#") + 1).split(","));
+	info.get = function (key) {
+		return this[key];
+	};
+	info.set = function(key, value) {
+		this[key] = value;
+	};
+	info.commit = function () {
+		var info = this;
+		delete info.get;
+		delete info.commit;
+		delete info.set;
+		location.hash="#"+$.JSON.encode(info);		
+	};
+	return info;
+}
+
+enter = {};
+leave = {};
 
 // ==== Interface Android
 var UI = {
@@ -117,7 +141,7 @@ if (typeof(PtiClicAndroid) != "undefined") {
 	UI = PtiClicAndroid;
 }
 
-// ==== Code métier général
+// ==== Code mÃ©tier gÃ©nÃ©ral
 $(function() {
 	$(window).resize(jss);
 	$(window).hashchange(hashchange);
@@ -127,13 +151,12 @@ $(function() {
 
 function ajaxError(x) {
 	UI.dismiss();
-	alert("Erreur fatale. Merci de nous envoyer ce message : "+x.status+" - "+x.statusText+"\n"+x.responseText.substring(0,20)+((x.responseText == '') ? '': '…'));
+	alert("Erreur fatale. Merci de nous envoyer ce message : "+x.status+" - "+x.statusText+"\n"+x.responseText.substring(0,20)+((x.responseText == '') ? '': 'âò  Š'));
 }
 
-// ==== Code métier pour la frontpage
-screen = {};
+// ==== Code mÃ©tier pour la frontpage
 ui = {};
-screen.frontpage = function () {
+enter.frontpage = function () {
 	state="frontpage";
 	$("#frontpage .frontpage-button.game").click(function(){
 		location.hash = "#game";
@@ -142,16 +165,21 @@ screen.frontpage = function () {
 	UI.dismiss();
 }
 
-// ==== Code métier pour le jeu
-screen.game = function () {
+// ==== Code mÃ©tier pour le jeu
+enter.game = function () {
 	state="game";
-	UI.show("PtiClic", "Récupération de la partie");
+	UI.show("PtiClic", "RÃ©cupÃ©ration de la partie");
 	$.getJSON("getGame.php?callback=?", {
 		user:"foo",
 		passwd:"bar",
 		nonce:Math.random()
 	}, ui.game).error(ajaxError);
 	jss();
+}
+
+leave.game = function () {
+	$("#game .relations").empty();
+	$('#game #mn-caption').stop().clearQueue();
 }
 
 ui.game = function (game) {
@@ -169,9 +197,7 @@ ui.game = function (game) {
 		if (currentWordNb < game.cloud.length) {
 			animateNext(click, button);
 		} else {
-			$("#game .relations").empty();
-			$('#game #mn-caption').stop().clearQueue();
-			ui.score(game);
+			location.hash = "#score";
 		}
 	}
 	
@@ -186,7 +212,7 @@ ui.game = function (game) {
 			.stop()       // Attention : stop() et clearQueue() ont aussi un effet
 			.clearQueue() // sur la 2e utilisation de mn (ci-dessous).
 			.clone()
-			.removeClass("mn") // Pour que le texte animé ne soit pas modifié.
+			.removeClass("mn") // Pour que le texte animÃ© ne soit pas modifiÃ©.
 			.appendTo("body") // Append to body so we can animate the offset (instead of top/left).
 			.offset(mn.offset())
 			.animate({left:click.left, top:click.top, fontSize: 0}, duration)
@@ -221,9 +247,9 @@ ui.game = function (game) {
 	UI.dismiss();
 }
 
-// ==== Code métier pour les scores
-screen.score = function (game) {
-	state="score";
+// ==== Code mÃ©tier pour les scores
+enter.score = function () {
+	var game = state.getGame();
 	UI.show("PtiClic", "Calcul de votre score");
 	$.getJSON("server.php?callback=?", {
 		user: "foo",
