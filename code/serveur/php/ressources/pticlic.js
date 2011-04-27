@@ -44,9 +44,9 @@ jss.frontpage = function(w, h, iconSize) {
 	$fp(".frontpage-button.about")
 		.northWest({left:w*0.55,top:h*0.3});
 	$fp(".frontpage-button.connection")
-		.southEast({left:w*0.45,top:h*0.9});
+		.southEast({left:w*0.45,top:h*0.8});
 	$fp(".frontpage-button.prefs")
-		.southWest({left:w*0.55,top:h*0.9});	
+		.southWest({left:w*0.55,top:h*0.8});	
 };
 
 // ==== JavaScript Style pour le jeu
@@ -98,6 +98,12 @@ jss.game = function(w, h, iconSize) {
 jss.score = function(w, h, iconSize) {
 };
 
+// ==== URL persistante
+function hashchange() {
+	var info = location.hash.substring(location.hash.indexOf("#") + 1).split("/");;
+	screen[info[0]]();
+};
+
 // ==== Interface Android
 var UI = {
 	setPreference: function() {},
@@ -114,7 +120,9 @@ if (typeof(PtiClicAndroid) != "undefined") {
 // ==== Code métier général
 $(function() {
 	$(window).resize(jss);
-	frontpage();
+	$(window).hashchange(hashchange);
+	location.hash="#frontpage";
+	hashchange();
 });
 
 function ajaxError(x) {
@@ -123,27 +131,30 @@ function ajaxError(x) {
 }
 
 // ==== Code métier pour la frontpage
-function frontpage() {
+screen = {};
+ui = {};
+screen.frontpage = function () {
 	state="frontpage";
 	$("#frontpage .frontpage-button.game").click(function(){
-		getGame();
+		location.hash = "#game";
 	});
 	jss();
 	UI.dismiss();
 }
 
 // ==== Code métier pour le jeu
-function getGame() {
+screen.game = function () {
 	state="game";
 	UI.show("PtiClic", "Récupération de la partie");
 	$.getJSON("getGame.php?callback=?", {
 		user:"foo",
 		passwd:"bar",
-	}, uiGame).error(ajaxError);
+		nonce:Math.random()
+	}, ui.game).error(ajaxError);
 	jss();
 }
 
-function uiGame(game) {
+ui.game = function (game) {
 	var currentWordNb = 0;
 	game.answers = [];
 	
@@ -160,7 +171,7 @@ function uiGame(game) {
 		} else {
 			$("#game .relations").empty();
 			$('#game #mn-caption').stop().clearQueue();
-			getScore(game);
+			ui.score(game);
 		}
 	}
 	
@@ -211,7 +222,7 @@ function uiGame(game) {
 }
 
 // ==== Code métier pour les scores
-function getScore(game) {
+screen.score = function (game) {
 	state="score";
 	UI.show("PtiClic", "Calcul de votre score");
 	$.getJSON("server.php?callback=?", {
@@ -220,7 +231,8 @@ function getScore(game) {
 		action: 1,
 		pgid: game.pgid,
 		gid: game.gid,
-		answers: game.answers
+		answers: game.answers,
+		nonce: Math.random()
 	}, function(data) {
 		for (var i = 0; i < data.scores.length; i++) {
 			game.cloud[i].score = data.scores[i];
@@ -231,7 +243,7 @@ function getScore(game) {
 	jss();
 }
 
-function uiScore(game) {
+ui.score = function (game) {
 	$.each(game.cloud, function(i,e) {
 		var percentScore = (e.score - game.minScore) / (game.maxScore - game.minScore);
 		u = $("#templates .scoreLine");
