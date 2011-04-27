@@ -96,37 +96,40 @@ jss.game = function(w, h, iconSize) {
 };
 
 jss.score = function(w, h, iconSize) {
+	$(".screen")
+		.css('text-align', 'center');
 };
 
 // ==== URL persistante
-oldhash = {};
+
+function State(init) {
+	$.extend(this, init || {});
+	this.screen = 'frontpage';
+};
+State.prototype.commit = function() {
+	location.hash="#"+$.JSON.encode(this);
+	return this;
+};
+/*State.prototype.get = function(key) {
+	return this[key];
+};
+State.prototype.set = function(key, value) {
+	this[key] = value;
+	return this;
+};*/
+var state = new State().commit();
+var oldScreen = '';
+var enter = {};
+var leave = {};
+var ui = {};
 function hashchange() {
-	if(oldhash && typeof(oldhash.state) == 'string' && leave[oldhash.state]) leave[oldhash.state]();
-	oldhash = hash();
-	var h = hash();
-	if (enter[h.state]) enter[h.state]();
+	state = $.parseJSON(location.hash.substring(location.hash.indexOf("#") + 1));
+	if (oldScreen != state.screen) {
+		if (leave[oldScreen]) leave[oldScreen]();
+		oldScreen = state.screen;
+		if (enter[state.screen]) enter[state.screen]();
+	}
 }
-
-function state() {
-	var info = $.JSON.decode(location.hash.substring(location.hash.indexOf("#") + 1).split(","));
-	info.get = function (key) {
-		return this[key];
-	};
-	info.set = function(key, value) {
-		this[key] = value;
-	};
-	info.commit = function () {
-		var info = this;
-		delete info.get;
-		delete info.commit;
-		delete info.set;
-		location.hash="#"+$.JSON.encode(info);		
-	};
-	return info;
-}
-
-enter = {};
-leave = {};
 
 // ==== Interface Android
 var UI = {
@@ -141,11 +144,11 @@ if (typeof(PtiClicAndroid) != "undefined") {
 	UI = PtiClicAndroid;
 }
 
-// ==== Code mÃ©tier gÃ©nÃ©ral
+// ==== Code métier général
 $(function() {
 	$(window).resize(jss);
 	$(window).hashchange(hashchange);
-	location.hash="#frontpage";
+	state.set('screen', 'frontpage').commit();
 	hashchange();
 });
 
@@ -154,33 +157,30 @@ function ajaxError(x) {
 	alert("Erreur fatale. Merci de nous envoyer ce message : "+x.status+" - "+x.statusText+"\n"+x.responseText.substring(0,20)+((x.responseText == '') ? '': 'âò  Š'));
 }
 
-// ==== Code mÃ©tier pour la frontpage
-ui = {};
+// ==== Code métier pour la frontpage
 enter.frontpage = function () {
-	state="frontpage";
 	$("#frontpage .frontpage-button.game").click(function(){
-		location.hash = "#game";
+		state.set('screen', 'game').commit();
 	});
 	jss();
 	UI.dismiss();
-}
+};
 
-// ==== Code mÃ©tier pour le jeu
+// ==== Code métier pour le jeu
 enter.game = function () {
-	state="game";
-	UI.show("PtiClic", "RÃ©cupÃ©ration de la partie");
+	UI.show("PtiClic", "Récupération de la partie");
 	$.getJSON("getGame.php?callback=?", {
 		user:"foo",
 		passwd:"bar",
 		nonce:Math.random()
 	}, ui.game).error(ajaxError);
 	jss();
-}
+};
 
 leave.game = function () {
 	$("#game .relations").empty();
 	$('#game #mn-caption').stop().clearQueue();
-}
+};
 
 ui.game = function (game) {
 	var currentWordNb = 0;
@@ -197,7 +197,7 @@ ui.game = function (game) {
 		if (currentWordNb < game.cloud.length) {
 			animateNext(click, button);
 		} else {
-			location.hash = "#score";
+			//location.hash = "#score";
 		}
 	}
 	
