@@ -22,7 +22,7 @@ public class FrontPage extends Activity {
 		WebSettings webSettings = webView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
 		
-		webView.addJavascriptInterface(new JavaScriptInterface(this), "Pticlic");
+		webView.addJavascriptInterface(new JavaScriptInterface(this), "PtiClicAndroid");
 		webView.loadUrl(Constant.SERVER + Constant.SERVER_URL);
 	}
 

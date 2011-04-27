@@ -1,10 +1,7 @@
 package org.pticlic.js;
 
-import org.pticlic.Preference;
-
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -16,13 +13,16 @@ public class JavaScriptInterface {
     public JavaScriptInterface(Context c) {
         mContext = c;
     }
-
-    /** Permet d'afficher la page des preferences qui est directement
-     * implemente sur le telephone
+    
+    /**
+     * Permet de setter une valeur dans les preferences
      * 
+     * @param aName Le nom de la preference
+     * @param aValue La valeur que l'on veux pour la preference
      */
-    public void goToPreferences() {
-    	mContext.startActivity(new Intent(mContext, Preference.class));
+    public void setPreference(String aName, String aValue) {
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+    	prefs.edit().putString(aName, aValue).commit();
     }
     
     /** Permet de recupere une des preferences du systeme.
@@ -30,9 +30,9 @@ public class JavaScriptInterface {
      * @param pref La preference que l'on veux recupere
      * @return La preference a recupere.
      */
-    public String getPreference(String pref) {
+    public String getPreference(String aName) {
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-    	return prefs.getString(pref, "");
+    	return prefs.getString(aName, "");
     }
     
     /** Permet d'afficher une progressbar 
@@ -47,8 +47,8 @@ public class JavaScriptInterface {
      * 
      */
     public void dismiss() {
-    	if (dialog.isShowing())
-    		dialog.dismiss();
+        if (dialog.isShowing())
+        	dialog.dismiss();
     }
     
     /** Permet de quitter l'application
