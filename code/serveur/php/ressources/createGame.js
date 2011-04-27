@@ -15,7 +15,7 @@ $(function() {
 		var user = "foo";
 		var passwd = "bar";
 		var relations = data;
-		var nbWordMin = 3;
+		var nbWordMin = 5;
 		var wordsOK = new Array();
 		var centerOK = false;
 		
@@ -38,8 +38,6 @@ $(function() {
 			numWord += nb;
 			
 			displayRelations();
-			// truc.children("option:nth-child(2)");
-			// $(truc.children("option").get(2 /* ou 1 */))
 		};
 		
 		var updateRelationLabels = function() {
@@ -85,6 +83,8 @@ $(function() {
 					
 				displayRelations();
 			});
+			$("select#relation1").val(5);
+			$("select#relation2").val(7);
 			displayRelations();
 		};
 		
@@ -101,7 +101,7 @@ $(function() {
 			var input = $(this);
 			var word = input.val();
 
-			input.parent("td, #center").removeClass("valid invalid");
+			input.closest(".wordLine, #center").removeClass("valid invalid");
 
 			if (word != "") {
 				$.ajax({
@@ -109,7 +109,7 @@ $(function() {
 					url: "server.php?",
    					data: "action=4&word="+word+"&user="+user+"&passwd="+passwd,
    					success: function(msg){
-   						input.parent("td, #center").addClass((msg == false) ? "invalid" : "valid");
+   						input.closest(".wordLine, #center").addClass((msg == false) ? "invalid" : "valid");
    						wordsOK[input.attr("id")] = !(msg == false);
     				}});
     		}
@@ -145,7 +145,6 @@ $(function() {
 		};
 		
 		var badWord = function() {
-			console.log(wordsOK);
 			for (word in wordsOK)
    			if ($("#"+word).val() != "" && wordsOK[word] == false)
    				return true;
@@ -185,9 +184,24 @@ $(function() {
 				});
    		}
    		
-   		$.get("server.php",{user:"foo",passwd:"bar",action:"6",game:exit},function (data) {console.log(data);});
-   		
-   		console.log(exit);
+   		$.get("server.php",{user:"foo",passwd:"bar",action:"6",game:exit},function (data) {
+   			$(".word").closest(".wordLine, #center").removeClass("valid invalid");
+				if(data === true) {
+					alert("Partie envoyée avec succès");
+				} else if (data === false) {
+					displayError("Le nuage doit contenir au moins "+nbWordMin+" mots valides.");
+				} else if (data !== true) {
+					$('input').removeAttr('disabled');
+					var that = $(this);
+					$.each(data,function(i,e) {
+						$('.word')
+							.filter(function() { return that.val() == e; })
+							.closest(".wordLine, #center")
+							.addClass("invalid");
+					});
+				}
+   		});
+   		$('input').attr('disabled', 'disabled');
    	}
 
 		var displayError = function(message) {
@@ -198,7 +212,7 @@ $(function() {
 		};
 		
 		displayCentralWordAndRelations();	
-		displayNWordLines(nbWordMin);
+		displayNWordLines(nbWordMin+5);
 		displayButtons();
 	});
 });

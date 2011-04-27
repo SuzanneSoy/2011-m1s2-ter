@@ -73,9 +73,9 @@ function main()
 			errRequestIncomplete();
 
 		if(wordExist($_GET['word']))
-			echo true;
+			echo "true";
 		else
-			echo false;
+			echo "false";
 	}
 	else if($action == 5) {           // Get relations (JSON)
 		echo getGameRelationsJSON();

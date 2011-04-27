@@ -130,7 +130,9 @@ if(!isset($_SESSION['userId']))
 									<label for="word-"></label>
 								</td>
 								<td>
-									<input class="word" type="text" id="word-"/>
+									<input value="" class="word" type="text" id="word-"/>
+								</td>
+								<td>
 									<span class="status">●</span>
 								</td>
 								<td>
