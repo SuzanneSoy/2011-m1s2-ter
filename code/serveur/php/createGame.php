@@ -130,20 +130,20 @@ if(!isset($_SESSION['userId']))
 									<label for="word-"></label>
 								</td>
 								<td>
-									<input type="text" id="word-"/>
+									<input class="word" type="text" id="word-"/>
 									<span class="status">●</span>
 								</td>
 								<td>
-									<input type="checkbox" id="r1-"/><label class="r1" for="r1-">Blabla</label>
+									<input type="checkbox" id="r1-"/><label class="r1 relationLabel" for="r1-">Blabla</label>
 								</td>
 								<td>
-									<input type="checkbox" id="r2-"/><label class="r2" for="r2-">Blabla</label>
+									<input type="checkbox" id="r2-"/><label class="r2 relationLabel" for="r2-">Blabla</label>
 								</td>
 								<td>
-									<input type="checkbox" id="r3-"/><label class="r3" for="r3-">Blabla</label>
+									<input type="checkbox" id="r3-"/><label class="r3 relationLabel" for="r3-">Blabla</label>
 								</td>
 								<td>
-									<input type="checkbox" id="r4-"/><label class="r4" for="r4-">Blabla</label>
+									<input type="checkbox" id="r4-"/><label class="r4 relationLabel" for="r4-">Blabla</label>
 								</td>
 							</tr>
 						</tbody>

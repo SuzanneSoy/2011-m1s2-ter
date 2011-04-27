@@ -27,8 +27,6 @@ $(function() {
 					.clone()
 					.changeId(i)
 					.addClass(i%2==0 ? "lightLine" : "")
-//					.find("label").attr("for", "word"+i).text(i).end()
-//					.find("input").attr("id", "word"+i).end()
 					.appendTo(".wordLinesTable tbody");
 				
 				(function (i) {
@@ -44,19 +42,40 @@ $(function() {
 			// $(truc.children("option").get(2 /* ou 1 */))
 		};
 		
-		var displayRelations = function() {
-			$(".r1").text(relations[$("#relation1").val()]);
-			$(".r2").text(relations[$("#relation2").val()]);
-			$(".r3").text(relations[0]);
-			$(".r4").text(relations[-1]);
+		var updateRelationLabels = function() {
+			$('#relations option').each(function(i,e) {
+				$(e).text(applyFormat($(e).data("format"), $('#centralWord').val() || 'mot central', '…'));
+			});
+			
+			$('.relationLabel').each(function(i,e) {
+				$(e).text(applyFormat(
+					$(e).data("format"),
+					$('#centralWord').val() || 'mot central',
+					$(e).closest('.wordLine').find('.word').val() || '…'));
+			});
 		}
+		
+		var displayRelations = function() {
+			$(".r1").data("format", relations[$("#relation1").val()]);
+			$(".r2").data("format", relations[$("#relation2").val()]);
+			$(".r3").data("format", relations[0]);
+			$(".r4").data("format", relations[-1]);
+			updateRelationLabels();
+		}
+		
+		var applyFormat = function(str, mc, mn) {
+			return str.replace(/%mc/g, mc).replace(/%mn/g, mn);
+		};
 		
 		var displayCentralWordAndRelations = function() {
 			$("#centralWord").focusout(checkWord);
 			
 			$.each(relations, function(i, value) {
 				if(i != 0 && i != -1)
-					$('<option/>').val(i).text(value).appendTo("#relations select");
+					$('<option/>')
+						.val(i)
+						.data("format", value)
+						.appendTo("#relations select");
 			});
 			$("#relation1, #relation2").change(function() {
 				if ($("#relation1").val() == $("#relation2").val())
@@ -66,6 +85,7 @@ $(function() {
 					
 				displayRelations();
 			});
+			displayRelations();
 		};
 		
 		var displayButtons = function () {
@@ -77,6 +97,7 @@ $(function() {
 		};
 		
 		var checkWord = function () {
+			updateRelationLabels();
 			var input = $(this);
 			var word = input.val();
 
