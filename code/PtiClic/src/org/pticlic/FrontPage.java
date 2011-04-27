@@ -11,6 +11,7 @@ import android.webkit.WebView;
 public class FrontPage extends Activity {
 
 	private WebView webView;
+	private JavaScriptInterface js = null;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -22,13 +23,15 @@ public class FrontPage extends Activity {
 		WebSettings webSettings = webView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
 		
-		webView.addJavascriptInterface(new JavaScriptInterface(this), "PtiClicAndroid");
+		js = new JavaScriptInterface(this);
+		js.show("PtiClic", "Démarrage de l'application");
+		webView.addJavascriptInterface(js, "PtiClicAndroid");
 		webView.loadUrl(Constant.SERVER + Constant.SERVER_URL);
 	}
-
+	
 	@Override
 	public void onBackPressed() {
-		System.exit(0);
+		webView.goBack();
 	}
 
 }

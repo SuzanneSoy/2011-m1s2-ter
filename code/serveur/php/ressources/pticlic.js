@@ -114,7 +114,6 @@ if (PtiClicAndroid) {
 // ==== Code métier général
 $(function() {
 	$(window).resize(jss);
-	jss();
 	frontpage();
 });
 
@@ -129,6 +128,8 @@ function frontpage() {
 	$("#frontpage .frontpage-button.game").click(function(){
 		getGame();
 	});
+	jss();
+	UI.dismiss();
 }
 
 // ==== Code métier pour le jeu
