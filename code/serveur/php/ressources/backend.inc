@@ -297,21 +297,21 @@ function cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty)
 	$db->exec("commit;");
 }
 
-function decodeGame($json) {
-	$game = JSON_decode($json,true);
-	
-	$centerEid = getNodeEid($game['centralWord']);
-	foreach($game['cloud'] as $w)	
+function decodeAndInsertGame($game) {	
+	$centerEid = getNodeEid($game['center']);
+	$r1 = $game['relations'][0];
+	$r2 = $game['relations'][1];
+	foreach($game['cloud'] as $key => $w)	
 		$cloud[] = Array("eid" => getNodeEid($w['name']),
 								"pos" => $key,
 								"d" => 5,
 								"probaR1" => $w['relations'][0] ? "1" : "0",
-								"probaR2" => $w['relations'][0] ? "1" : "0",
-								"probaR0" => $w['relations'][0] ? "1" : "0",
-								"probaTrash" => $w['relations'][0] ? "1" : "0");
+								"probaR2" => $w['relations'][1] ? "1" : "0",
+								"probaR0" => $w['relations'][2] ? "1" : "0",
+								"probaTrash" => $w['relations'][3] ? "1" : "0");
 								
 	
-	print_r($cloud);
+	insertCreatedGame($centerEid,$cloud,$r1,$r2,10);
 }
 
 function insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty)

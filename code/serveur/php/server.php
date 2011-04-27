@@ -81,11 +81,10 @@ function main()
 		echo getGameRelationsJSON();
 	}
 	else if($action == 6) {
-		var_dump($_GET['game']);
 		if (!isset($_GET['game']))
 			errRequestIncomplete();
 		
-		//decodeGame($_GET['game']);
+		decodeAndInsertGame($_GET['game']);
 		
 	} else {
 		throw new Exception("Commande inconnue", 2);
