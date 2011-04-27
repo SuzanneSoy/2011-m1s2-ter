@@ -107,7 +107,7 @@ var UI = {
 	exit: function() {}
 };
 
-if (PtiClicAndroid) {
+if (typeof(PtiClicAndroid) != "undefined") {
 	UI = PtiClicAndroid;
 }
 
