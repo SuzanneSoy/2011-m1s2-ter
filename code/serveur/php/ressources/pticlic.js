@@ -98,14 +98,27 @@ jss.game = function(w, h, iconSize) {
 jss.score = function(w, h, iconSize) {
 };
 
+// ==== Interface Android
+var UI = {
+	setPreference: function() {},
+	getPreference: function() {return "";},
+	show: function() {},
+	dismiss: function() {},
+	exit: function() {}
+};
+
+if (typeof(PtiClicAndroid) != "undefined") {
+	UI = PtiClicAndroid;
+}
+
 // ==== Code métier général
 $(function() {
 	$(window).resize(jss);
-	jss();
 	frontpage();
 });
 
 function ajaxError(x) {
+	UI.dismiss();
 	alert("Erreur fatale. Merci de nous envoyer ce message : "+x.status+" - "+x.statusText+"\n"+x.responseText.substring(0,20)+((x.responseText == '') ? '': '…'));
 }
 
@@ -115,11 +128,14 @@ function frontpage() {
 	$("#frontpage .frontpage-button.game").click(function(){
 		getGame();
 	});
+	jss();
+	UI.dismiss();
 }
 
 // ==== Code métier pour le jeu
 function getGame() {
 	state="game";
+	UI.show("PtiClic", "Récupération de la partie");
 	$.getJSON("getGame.php?callback=?", {
 		user:"foo",
 		passwd:"bar",
@@ -191,11 +207,13 @@ function uiGame(game) {
 	});
 	
 	updateText();
+	UI.dismiss();
 }
 
 // ==== Code métier pour les scores
 function getScore(game) {
 	state="score";
+	UI.show("PtiClic", "Calcul de votre score");
 	$.getJSON("server.php?callback=?", {
 		user: "foo",
 		passwd: "bar",
@@ -230,4 +248,5 @@ function uiScore(game) {
 			.appendTo("#score .scores");
 		jss();
 	});
+	UI.dismiss();
 }
