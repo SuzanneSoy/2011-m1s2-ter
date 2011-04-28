@@ -5,10 +5,12 @@ function State(init) {
 	if (!this.screen) this.screen = 'frontpage';
 	} catch(e) {alert("Error State");alert(e);}
 };
+var futureHashChange = null;
 State.prototype.commit = function() {
 	try {
-    location.hash="#"+encodeURI($.JSON.encode(this));
-	return this;
+		futureHashChange = "#"+encodeURI($.JSON.encode(this));
+		location.hash = futureHashChange;
+		return this;
 	} catch(e) {alert("Error State.prototype.commit");alert(e);}
 };
 State.prototype.get = function(key) {
@@ -41,37 +43,47 @@ var oldScreen = '';
 var ui = {};
 function hashchange() {
 	try {
-	var stateJSON = decodeURI(location.hash.substring(location.hash.indexOf("#") + 1));
-	state = new State($.parseJSON(stateJSON)).validate();
+		if (futureHashChange === location.hash) {
+			futureHashChange = null;
+		} else {
+			var stateJSON = decodeURI(location.hash.substring(location.hash.indexOf("#") + 1));
+			state = new State($.parseJSON(stateJSON)).validate();
+		}
 	} catch(e) {alert("Error hashchange");alert(e);}
 }
 
 // ==== JavaScript Style général
 function jss() {
 	try {
-	var w = $(window).width();
-	var h = $(window).height();
-	var iconSize;
-	if (h > 600) iconSize = 72;
-	else if(h > 500) iconSize = 48;
-	else iconSize = 36;
-	
-	$(".screen")
-		.wh(w, h)
-		.northWest({top:0,left:0});
-	
-	$("body, html")
-		.css({
-			padding: 0,
-			margin: 0,
-			overflow: "hidden",
-			textAlign: "left"
+		var w = $(window).width();
+		var h = $(window).height();
+		var iconSize;
+		if (h > 600) iconSize = 72;
+		else if(h > 500) iconSize = 48;
+		else iconSize = 36;
+		
+		$(".screen")
+			.wh(w, h)
+			.northWest({top:0,left:0});
+		
+		$("body, html")
+			.css({
+				padding: 0,
+				margin: 0,
+				overflow: "hidden",
+				textAlign: "left"
+			});
+		
+		$(".screen").hide();
+		$("#"+state.screen+".screen").show();
+		
+		if (window[state.screen] && window[state.screen].jss) window[state.screen].jss(w, h, iconSize);
+		
+		$("img.icon").each(function(i,e) {
+			e=$(e);
+			if (typeof(e.data('image')) != 'undefined')
+				e.attr("src", "ressources/img/"+iconSize+"/"+e.data('image')+".png");
 		});
-	
-	$(".screen").hide();
-	$("#"+state.screen+".screen").show();
-	
-	if (window[state.screen] && window[state.screen].jss) window[state.screen].jss(w, h, iconSize);
 	} catch(e) {alert("Error jss");alert(e);}
 }
 // ==== Interface Android
@@ -87,7 +99,7 @@ function UI () {
 			show: function(title, text) {},
 			dismiss: function() {},
 			exit: function() {},
-			log: function() {},
+			log: function(msg) { window.console && console.log(msg); },
 			setScreen: function() {}
 		};
 	}
@@ -141,8 +153,15 @@ frontpage.jss = function(w, h, iconSize) {
 	
 	$fp(".text")
 		.fitFont(buttonWidth, labelHeight, 10);
+	
 	$fp(".icon")
 		.wh(iconSize);
+	
+	$fp(".game .icon").data('image', 'mode_normal');
+	$fp(".prefs .icon").data('image', 'config');
+	$fp(".connection .icon").data('image', 'config');
+	$fp(".about .icon").data('image', 'aide');
+	
 	$fp(".frontpage-button")
 		.css('text-align', 'center')
 		.width(buttonWidth);
@@ -266,7 +285,6 @@ game.enter = function () {
 	} else {
 		game.buildUi();
 	}
-	jss();
 	} catch(e) {alert("Error game.enter");alert(e);}
 };
 
@@ -290,7 +308,7 @@ game.buildUi = function () {
 				.html(relation.name.replace(/%(m[cn])/g, '<span class="$1"/>'))
 			.end()
 			.find(".icon")
-				.attr("src", "ressources/img/rel/"+relation.id+".png")
+				.data("image",relation.id)
 			.end()
 			.click(function(e) {
 				game.nextWord({left:e.pageX, top:e.pageY}, this);
