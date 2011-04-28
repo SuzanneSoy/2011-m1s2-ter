@@ -113,3 +113,7 @@ $.each({
 	var y = e.y;
 	$.fn[i] = function(to, justCss) { return this.relativePos(x, y, to, justCss); };
 });
+
+$.fn.clickOnce = function(fn) {
+	this.unbind("click",fn).click(fn);
+};
