@@ -121,7 +121,7 @@ function cgBuildResultSets($cloudSize, $centerEid, $r1, $r2)
 			$res = $db->query($x['s']);
 			$i = 0;
 			
-			while ($i < 10 && $sources[$k]['resultSet'][] = $res->fetchArray())
+			while ($i < $cloudSize && $sources[$k]['resultSet'][] = $res->fetchArray())
 			{
 				$i++;
 				$sources[$k]['rsSize']++;
@@ -131,7 +131,7 @@ function cgBuildResultSets($cloudSize, $centerEid, $r1, $r2)
 		{
 			$sources[$k]['resultSet'] = array();
 			
-			for ($i = 0; $i < 10; $i++)
+			for ($i = 0; $i < $cloudSize; $i++)
 			{
 				$sources[$k]['resultSet'][] = array('eid'=>randomCloudNode(), 'r1'=>0, 'r2'=>0, 'r0'=>0, 'trash'=>1);
 				$sources[$k]['rsSize']++;
@@ -398,7 +398,7 @@ function randomGame()
 	if ($gid === null) {
 		// TODO : séparer ces créations de parties dans une fonction qui détecte le mode toussa.
 		for ($i = 0; $i < 100; $i++)
-			createGameCore(10);
+			createGameCore(rand(5,15));
 
 		$gid = randomGameCore();
 
@@ -460,21 +460,24 @@ function game2json($user, $gameId)
 	$retstr .= ', {"id":-1, "name":'.json_encode(''.formatWord($stringRelations[-1])).'}],';
 	//	$retstr .= '{"gid":'.$gameId.',"pgid":'.$pgid.',"cat1":'.$game['relation_1'].',"cat2":'.$game['relation_2'].',"cat3":0,"cat4":-1,';
 	$retstr .= '"center":{"id":'.$game['eid_central_word'].',"name":'.json_encode(''.formatWord($game['name_central_word'])).'},';
-	$retstr .= '"cloudsize":10,"cloud":['; // TODO ! compter dynamiquement.
-	
-	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word from game_cloud where gid = ".$gameId.";");
+
+	$cloudsize = 0;
+	$tmp_retstr = '';
 	$notfirst = false;
-	
+	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word from game_cloud where gid = ".$gameId.";");
 	while ($x = $res->fetchArray())
 	{
 		if ($notfirst) 
-			$retstr .= ",";
+			$tmp_retstr .= ",";
 		else
 			$notfirst=true;
 
-		$retstr .= '{"id":'.$x['eid_word'].',"name":'.json_encode("".formatWord($x['name_word'])).'}';
+		$tmp_retstr .= '{"id":'.$x['eid_word'].',"name":'.json_encode("".formatWord($x['name_word'])).'}';
+		$cloudsize++;
 	}
-
+	$retstr .= '"cloudsize":'.$cloudsize.',"cloud":[';
+	$retstr .= $tmp_retstr;
+	
 	$retstr .= "]}";
 	return $retstr;
 }
@@ -534,7 +537,7 @@ function game2array($user, $gameId)
 function createGame($nbParties, $mode)
 {
 	for ($i = 0; $i < $nbParties; $i++)
-		createGameCore(10);
+		createGameCore(rand(5,15));
 }
 
 /** Génère une partie (mode normal pour l'instant) pour une certaine taille de nuage.
