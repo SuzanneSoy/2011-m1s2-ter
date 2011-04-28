@@ -106,6 +106,8 @@ if(!isset($_SESSION['userId']))
 			<h2>Création de parties</h2>
 			<p>Cette page vous permet de créer des parties personalisées en indiquant les mots qui seront affiché pour un mot central.<br /><br />
 			<div id="errorDiv" class="message warning" style="display:none;"></div>
+			<div id="successDiv" class="message success" style="display:none;"></div>
+			<a id="newCreationLink" style="display:none;" href="createGame.php">Créer une autre partie</a>
 			
 			<div id="center">
 				<label for="centralWord"> Le mot central : </label>

@@ -188,7 +188,12 @@ $(function() {
    		$.get("server.php",{action:"6",game:exit},function (data) {
    			//$(".word").closest(".wordLine, #center").removeClass("valid invalid");
 				if(data == "true") {
-					alert("Partie enregistrée avec succès");
+					displaySuccess("La partie à bien été enregistrée");
+					$('#newCreationLink').show();
+					$('#center').hide();
+					$('#relations').hide();
+					$('#wordLines').hide();
+					$('#button').hide();
 				} else if (data == "false") {
 					displayError("Le nuage doit contenir au moins "+nbWordMin+" mots valides.");
 				} else if (data != "true") {
@@ -211,6 +216,13 @@ $(function() {
 				$("#errorDiv").text(message).show();
 			else
 				$("#errorDiv").hide();
+		};
+		
+		var displaySuccess = function(message) {
+			if (message != "")
+				$("#successDiv").text(message).show();
+			else
+				$("#successDiv").hide();
 		};
 		
 		displayCentralWordAndRelations();	
