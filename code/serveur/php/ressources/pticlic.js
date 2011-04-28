@@ -2,7 +2,7 @@
 function State(init) {
 	try {
 	$.extend(this, init || {});
-	if (!this.screen) this.screen = 'frontpage';
+	if (!this.screen) this.screen = 'splash';
 	} catch(e) {alert("Error State");alert(e);}
 };
 var futureHashChange = null;
@@ -88,6 +88,7 @@ function jss() {
 		});
 	} catch(e) {alert("Error jss");alert(e);}
 }
+
 // ==== Interface Android
 function UI () {
 	try {
@@ -126,6 +127,40 @@ function ajaxError(x) {
 		UI().exit();
 	} catch(e) {alert("Error ajaxError");alert(e);}
 }
+
+// ==== Code métier pour le splash
+
+splash = {};
+
+splash.jss = function(w,h,iconSize) {
+	try {
+		var splashW = 320;
+		var splashH = 480;
+		var ratio = Math.min(w / splashW, h / splashH);
+		$('#splash.screen img')
+			.wh(splashW * ratio, splashH * ratio)
+			.center($('#splash.screen').center());
+	} catch(e) {alert("Error splash.jss");alert(e);}
+}
+
+splash.enter = function() {
+	// Si l'application est déjà chargée, on zappe directement jusqu'à la frontpage.
+	if (runstate.skipSplash) {
+		splash.click.goFrontpage();
+	} else {
+		runstate.skipSplash = true;
+		jss();
+		$('#splash.screen').clickOnce(splash.click.goFrontpage);
+	}
+}
+
+splash.click = {};
+splash.click.goFrontpage = function() {
+	try {
+		UI().show("PtiClic", "Chargement…");
+		state.set('screen', 'frontpage').validate();
+	} catch(e) {alert("Error splash.click.goFrontpage");alert(e);}
+};
 
 // ==== Code métier pour la frontpage
 frontpage = {};
@@ -458,12 +493,15 @@ score.ui = function () {
 			.appendTo("#score .scores");
 		} catch(e) {alert("Error anonymous 1 in score.ui");alert(e);}
 	});
-	$("#score #jaivu").clickOnce(function() {
-		try {
-		state = new State().validate();
-		} catch(e) {alert("Error anonymous 2 in score.ui");alert(e);}
-	});
+	$("#score #jaivu").clickOnce(score.click.jaivu);
 	jss();
 	UI().dismiss();
 	} catch(e) {alert("Error score.ui");alert(e);}
 }
+
+score.click = {};
+score.click.jaivu = function() {
+	try {
+		state = new State().validate();
+	} catch(e) {alert("Error score.click.jaivu");alert(e);}
+};
