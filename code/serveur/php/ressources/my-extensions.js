@@ -25,6 +25,12 @@ $.fn.maxHeight = function() {
 	return max;
 }
 
+$.fn.sumHeight = function() {
+	sum = 0;
+	this.each(function(i,e){ sum += $(e).height(); });
+	return sum;
+}
+
 $.fn.fitFont = function(w, h, minFont, maxFont) {
 	var oldpos = this.css("position");
 	this.css({
@@ -113,3 +119,7 @@ $.each({
 	var y = e.y;
 	$.fn[i] = function(to, justCss) { return this.relativePos(x, y, to, justCss); };
 });
+
+$.fn.clickOnce = function(fn) {
+	this.unbind("click",fn).click(fn);
+};

@@ -15,27 +15,33 @@ State.prototype.set = function(key, value) {
 	return this;
 };
 State.prototype.validate = function () {
-	if (oldScreen != state.screen) {
+	state = this;
+	if (oldScreen != this.screen) {
+		UI.show("PtiClic", "Chargement…");
 		if (window[oldScreen] && window[oldScreen].leave) window[oldScreen].leave();
-		oldScreen = state.screen;
+		oldScreen = this.screen;
 	}
-	if (window[state.screen] && window[state.screen].enter) window[state.screen].enter();
+	if (window[this.screen] && window[this.screen].enter) window[this.screen].enter();
+	return this;
 };
 
+var runstate = {};
 var state;
 var oldScreen = '';
 var ui = {};
 function hashchange() {
 	var stateJSON = location.hash.substring(location.hash.indexOf("#") + 1);
-	state = new State($.parseJSON(stateJSON));
-	state.validate();
+	state = new State($.parseJSON(stateJSON)).validate();
 }
 
 // ==== JavaScript Style général
 function jss() {
 	var w = $(window).width();
 	var h = $(window).height();
-	var iconSize = 72;
+	var iconSize;
+	if (h > 600) iconSize = 72;
+	else if(h > 500) iconSize = 48;
+	else iconSize = 36;
 	
 	$(".screen")
 		.wh(w, h)
@@ -59,8 +65,8 @@ function jss() {
 var UI = {
 	setPreference: function() {},
 	getPreference: function() {return "";},
-	show: function() {},
-	dismiss: function() {},
+	show: function(title, text) {},// { if (typeof console != 'undefined') console.log(title, text);},
+	dismiss: function() {},// {if (typeof console != 'undefined') console.log('dismiss');},
 	exit: function() {}
 };
 
@@ -86,34 +92,55 @@ frontpage = {};
 frontpage.jss = function(w, h, iconSize) {
 	var fp = $("#frontpage.screen");
 	var $fp = function() { return fp.find.apply(fp,arguments); };
+	var nbIcons = $fp(".icon").size();
+	var nbRows = Math.ceil(nbIcons / 2)
+	var ww = w - 2 * iconSize;
+	var hh = h - nbRows * iconSize;
+	var titleHeight = hh*0.4;
+	var labelHeight = hh*0.4 / nbRows;
+	var buttonHeight = labelHeight + iconSize;
+	var buttonWidth = Math.max(w*0.25,iconSize);
+	var freeSpace = h - titleHeight;
 	$fp("#title-block")
-		.wh(w*0.5, h*0.2)
+		.wh(w*0.5, titleHeight)
 		.north($("#frontpage.screen").north());
 	$fp("#title")
 		.fitIn("#title-block", 0.2);
 	
 	$fp(".text")
-		.fitFont(w*0.25,(h-(iconSize*4))*0.8*0.5,10);
+		.fitFont(buttonWidth, labelHeight, 10);
+	$fp(".icon")
+		.wh(iconSize);
 	$fp(".frontpage-button")
-		.width(w*0.4);
-
-	$fp(".frontpage-button.game")
-		.northEast({left:w*0.45,top:h*0.3});
-	$fp(".frontpage-button.about")
-		.northWest({left:w*0.55,top:h*0.3});
-	$fp(".frontpage-button.connection")
-		.southEast({left:w*0.45,top:h*0.8});
-	$fp(".frontpage-button.prefs")
-		.southWest({left:w*0.55,top:h*0.8});	
+		.css('text-align', 'center')
+		.width(buttonWidth);
+	
+	$fp(".frontpage-button > div").css('display', 'block');
+	
+	$fp(".frontpage-button").each(function(i,e){
+		e=$(e);
+		var currentRow = Math.floor(i/2);
+		var currentColumn = i % 2;
+		var interIconSpace = (freeSpace - nbRows * buttonHeight) / (nbRows + 1);
+		var iconOffset = titleHeight + ((currentRow+1) * interIconSpace) + (currentRow * buttonHeight);
+		if (currentColumn == 0) {
+			e.northEast({left:w/2-ww*0.05,top:iconOffset});
+		} else {
+			e.northWest({left:w/2+ww*0.05,top:iconOffset});
+		}
+	});
 };
 
 frontpage.enter = function () {
-	state.commit();
-	$("#frontpage .frontpage-button.game").click(function(){
-		state.set('screen', 'game').validate();
-	});
+	if (location.hash != '') state.commit();
+	$("#frontpage .frontpage-button.game").clickOnce(frontpage.click.game);
 	jss();
 	UI.dismiss();
+};
+
+frontpage.click = {};
+frontpage.click.game = function(){
+	state.set('screen', 'game').validate();
 };
 
 // ==== Code métier pour le jeu
@@ -166,23 +193,38 @@ game.jss = function(w, h, iconSize) {
 
 game.enter = function () {
 	if (!state.game) {
-		UI.show("PtiClic", "Récupération de la partie");
-		$.getJSON("getGame.php?callback=?", {
-			user:"foo",
-			passwd:"bar",
-			nonce:Math.random()
-		}, function(data) {
+		var notAlreadyFetching = !runstate.gameFetched;
+		runstate.gameFetched = function(data) {
 			state.game = data;
 			state.currentWordNb = 0;
 			state.game.answers = [];
 			state.commit();
 			game.buildUi();
-		}).error(ajaxError);
+		};
+		if (notAlreadyFetching) {
+			UI.show("PtiClic", "Récupération de la partie");
+			$.getJSON("getGame.php?callback=?", {
+				user:"foo",
+				passwd:"bar",
+				nonce:Math.random()
+			}, function(data) {
+				var fn = runstate.gameFetched;
+				runstate.gameFetched = false;
+				fn(data);
+			}).error(ajaxError);
+		}
 	} else {
 		game.buildUi();
 	}
 	jss();
 };
+
+game.leave = function () {
+	$("#game .relations").empty();
+	$('#game #mn-caption').stop().clearQueue();
+	if (runstate.gameFetched) runstate.gameFetched = function() {};
+};
+
 game.buildUi = function () {
 	$("#game .relations").empty();
 	$.each(state.game.relations, function(i, relation) {
@@ -201,18 +243,13 @@ game.buildUi = function () {
 			.appendTo("#game .relations");
 	});
 	game.updateText();
-	UI.dismiss();
 }
-
-game.leave = function () {
-	$("#game .relations").empty();
-	$('#game #mn-caption').stop().clearQueue();
-};
 
 game.updateText = function() {
 	$("#game .mn").text(state.game.cloud[state.currentWordNb].name);
 	$("#game .mc").text(state.game.center.name);
 	jss();
+	UI.dismiss();
 }
 
 game.animateNext = function (click, button) {
@@ -261,17 +298,9 @@ score.jss = function(w, h, iconSize) {
 
 score.enter = function () {
 	if (!state.hasScore) {
-		UI.show("PtiClic", "Calcul de votre score");
-		$.getJSON("server.php?callback=?", {
-			user: "foo",
-			passwd: "bar",
-			action: 1,
-			pgid: state.game.pgid,
-			gid: state.game.gid,
-			answers: state.game.answers,
-			nonce: Math.random()
-		}, function(data) {
-			for (var i = 0; i < data.scores.length; i++) {
+		var notAlreadyFetching = !runstate.scoreFetched;
+		runstate.scoreFetched = function(data) {
+			for (var i = 0; i < data.scores.length; ++i) {
 				state.game.cloud[i].score = data.scores[i];
 			}
 			delete data.score;
@@ -279,12 +308,32 @@ score.enter = function () {
 			state.hasScore = true;
 			state.commit();
 			score.ui();
-		}).error(ajaxError);
+		};
+		if (notAlreadyFetching) {
+			UI.show("PtiClic", "Calcul de votre score");
+			$.getJSON("server.php?callback=?", {
+				user: "foo",
+				passwd: "bar",
+				action: 1,
+				pgid: state.game.pgid,
+				gid: state.game.gid,
+				answers: state.game.answers,
+				nonce: Math.random()
+			}, function(data){
+				var fn = runstate.scoreFetched;
+				runstate.scoreFetched = false;
+				fn(data);
+			}).error(ajaxError);
+		}
 	} else {
 		score.ui();
 	}
 	jss();
 }
+
+score.leave = function () {
+	if (runstate.scoreFetched) runstate.scoreFetched = function() {};
+};
 
 score.ui = function () {
 	$("#score .scores").empty();
@@ -302,10 +351,10 @@ score.ui = function () {
 				.css("color","rgb("+(255 - 255*percentScore).clip(0,255)+","+(191*percentScore).clip(0,255,true)+",0)")
 			.end()
 			.appendTo("#score .scores");
-		$("#score #jaivu").click(function() {
-			state = new State().validate();
-		});
-		jss();
 	});
+	$("#score #jaivu").clickOnce(function() {
+		state = new State().validate();
+	});
+	jss();
 	UI.dismiss();
 }
