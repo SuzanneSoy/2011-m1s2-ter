@@ -433,17 +433,19 @@ score.enter = function () {
 score.leave = function () {
 	try {
 	if (runstate.scoreFetched) runstate.scoreFetched = function() {};
+	$("#score .scores").empty();
+	$("#templates .scoreTotal").empty();
 	} catch(e) {alert("Error score.leave");alert(e);}
 };
 
 score.ui = function () {
 	try {
 	$("#score .scores").empty();
+	$("#score .scoreTotal")
+		.text(state.game.scoreTotal)
+		.goodBad(-50,100,{r:255,g:0,b:0},{r:0,g:192,b:0});
 	$.each(state.game.cloud, function(i,e) {
 		try {
-		var percentScore = (e.score - state.game.minScore) / (state.game.maxScore - state.game.minScore);
-		u = $("#templates .scoreLine");
-		ee = e;
 		$("#templates .scoreLine")
 			.clone()
 			.find(".word")
@@ -451,7 +453,7 @@ score.ui = function () {
 			.end()
 			.find(".score")
 				.text(e.score)
-				.css("color","rgb("+(255 - 255*percentScore).clip(0,255)+","+(191*percentScore).clip(0,255,true)+",0)")
+				.goodBad(-5,10,{r:255,g:0,b:0},{r:0,g:192,b:0})
 			.end()
 			.appendTo("#score .scores");
 		} catch(e) {alert("Error anonymous 1 in score.ui");alert(e);}

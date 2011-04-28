@@ -4,6 +4,10 @@ Number.prototype.clip = function(min, max, floor) {
 	} catch(e) {alert("Error Number.prototype.clip");alert(e);}
 };
 
+Number.prototype.mapInterval = function(a,b,x,y) {
+	return x + ((this-a) / (b-a) * (y-x));
+}
+	
 function dichotomy(start, isBigger, foo) {
 	try {
 	var i = 0, min = 0, max, half;
@@ -152,4 +156,17 @@ $.fn.clickOnce = function(fn) {
 	try {
 	this.unbind("click",fn).click(fn);
 	} catch(e) {alert("Error $.fn.clickOnce");alert(e);}
+};
+
+/**
+* startcolor et endcolor sont de la forme {r:0,g:255,b:127}
+*/
+$.fn.goodBad = function(min, max, startcolor, endcolor) {
+	var val = parseInt(this.text(), 10);
+	if (isNaN(val)) return this;
+	this.css("color","rgb("
+						  +(val.mapInterval(min,max,startcolor.r,endcolor.r).clip(0, 255, true))+","
+						  +(val.mapInterval(min,max,startcolor.g,endcolor.g).clip(0, 255, true))+","
+						  +(val.mapInterval(min,max,startcolor.b,endcolor.b).clip(0, 255, true))+")");
+	return this;
 };
