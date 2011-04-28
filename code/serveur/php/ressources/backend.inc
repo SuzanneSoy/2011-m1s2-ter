@@ -38,6 +38,9 @@ require_once("ressources/db.inc");
 * @return boolean : true si OK sinon false.
 */
 function checkLogin($user, $passwd) {
+	if(isset($_SESSION['userId']))
+		return true;
+		
 	$db = getDB();
 	$hashPasswd = md5($passwd);
 	$loginIsOk = ($hashPasswd == $db->querySingle("SELECT hash_passwd FROM user WHERE login='".$user."';"));
@@ -297,7 +300,7 @@ function cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty)
 	$db->exec("commit;");
 }
 
-function decodeAndInsertGame($game) {	
+function decodeAndInsertGame($user,$game) {
 	$badWords = Array();	
 	$centerEid = getNodeEid($game['center']);
 	$r1 = $game['relations'][0];
@@ -326,18 +329,18 @@ function decodeAndInsertGame($game) {
 	} else if (count($cloud) < 5) {
 		echo "false";
 	} else {
-		insertCreatedGame($centerEid,$cloud,$r1,$r2,10);
+		insertCreatedGame($centerEid,$cloud,$r1,$r2,10,$user);
 		echo "true";
 	}
 }
 
-function insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty)
+function insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty,$userName)
 {
 	$db = getDB();
 	// Insère dans la base une partie avec le mot central $centerEid, le nuage $cloud et les relations $r1 et $r2
 	$db->exec("begin transaction;");
-	$db->exec("INSERT INTO game(gid, eid_central_word, relation_1, relation_2, difficulty)
-		   VALUES (null, $centerEid, $r1, $r2, $totalDifficulty);");
+	$db->exec("INSERT INTO game(gid, eid_central_word, relation_1, relation_2, difficulty, author)
+		   VALUES (null, $centerEid, $r1, $r2, $totalDifficulty, '$userName');");
 	$gid = $db->lastInsertRowID();
 	
 	$t = time();

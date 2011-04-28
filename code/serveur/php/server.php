@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 require_once("ressources/backend.inc");
 require_once("ressources/db.inc");
@@ -30,14 +31,21 @@ function logError($errNum, $msg, $other="")
 */
 function main()
 {
-	if(!isset($_GET['action']) || !isset($_GET['user']) || !isset($_GET['passwd'])) {
+	if(!isset($_GET['action']))
 		throw new Exception("La requête est incomplète", 2);
+	else if(!isset($_SESSION['userId']) && (!isset($_GET['user']) || !isset($_GET['passwd'])))
+		throw new Exception("La requête est incomplète", 2);
+	else if(isset($_SESSION['userId'])) {
+		$user = $_SESSION['userId'];
+		$loginIsOk = true;
+	}
+	else {
+		$user = SQLite3::escapeString($_GET['user']);
+		$loginIsOk = checkLogin($user, $_GET['passwd']);
 	}
 	
-	// Login
 	$action = $_GET['action'];
-	$user = SQLite3::escapeString($_GET['user']);
-	$loginIsOk = checkLogin($user, $_GET['passwd']);
+	
 	if ($action != 3 && (!$loginIsOk)) {
 		throw new Exception("Utilisateur non enregistré ou mauvais mot de passe", 3);
 	}
@@ -84,7 +92,7 @@ function main()
 		if (!isset($_GET['game']))
 			errRequestIncomplete();
 		
-		decodeAndInsertGame($_GET['game']);
+		decodeAndInsertGame($user,$_GET['game']);
 		
 	} else {
 		throw new Exception("Commande inconnue", 2);
