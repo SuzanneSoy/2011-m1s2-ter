@@ -83,7 +83,7 @@ if(count($msg) == 0 && $newpage == false)
 		. "', '" . SQLite3::escapeString($signupid)
 		. "', '" . SQLite3::escapeString(md5($signuppswd1))
 		. "', 0, 1);"));
-	
+
 	if($ok == true) {
 		$_SESSION['userId'] = $signupid;
 		return_to($location, "?show_msg=ok_signup_registered");

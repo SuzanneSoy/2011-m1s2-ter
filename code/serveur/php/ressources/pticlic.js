@@ -1,10 +1,13 @@
+if (typeof(console) == 'undefined')
+    console = {log: function() {}};
+
 // ==== URL persistante
 function State(init) {
 	$.extend(this, init || {});
 	if (!this.screen) this.screen = 'frontpage';
 };
 State.prototype.commit = function() {
-	location.hash="#"+$.JSON.encode(this);
+    location.hash="#"+encodeURI($.JSON.encode(this));
 	return this;
 };
 State.prototype.get = function(key) {
@@ -15,14 +18,14 @@ State.prototype.set = function(key, value) {
 	return this;
 };
 State.prototype.validate = function () {
-	state = this;
-	if (oldScreen != this.screen) {
-		UI.show("PtiClic", "Chargement…");
-		if (window[oldScreen] && window[oldScreen].leave) window[oldScreen].leave();
-		oldScreen = this.screen;
-	}
-	if (window[this.screen] && window[this.screen].enter) window[this.screen].enter();
-	return this;
+    state = this;
+    UI().setScreen(this.screen);
+    if (oldScreen != this.screen) {
+	if (window[oldScreen] && window[oldScreen].leave) window[oldScreen].leave();
+	oldScreen = this.screen;
+    }
+    if (window[this.screen] && window[this.screen].enter) window[this.screen].enter();
+    return this;
 };
 
 var runstate = {};
@@ -30,7 +33,7 @@ var state;
 var oldScreen = '';
 var ui = {};
 function hashchange() {
-	var stateJSON = location.hash.substring(location.hash.indexOf("#") + 1);
+	var stateJSON = decodeURI(location.hash.substring(location.hash.indexOf("#") + 1));
 	state = new State($.parseJSON(stateJSON)).validate();
 }
 
@@ -62,16 +65,21 @@ function jss() {
 }
 
 // ==== Interface Android
-var UI = {
-	setPreference: function() {},
-	getPreference: function() {return "";},
-	show: function(title, text) {},// { if (typeof console != 'undefined') console.log(title, text);},
-	dismiss: function() {},// {if (typeof console != 'undefined') console.log('dismiss');},
-	exit: function() {}
-};
-
-if (typeof(PtiClicAndroid) != "undefined") {
-	UI = PtiClicAndroid;
+function UI () {
+	if (typeof(PtiClicAndroid) != "undefined") {
+		return PtiClicAndroid;
+	} else {
+		return {
+			isAndroid: function() { return false; },
+			setPreference: function() {},
+			getPreference: function() {return "";},
+			show: function(title, text) {},// { if (typeof console != 'undefined') console.log(title, text);},
+			dismiss: function() {},// {if (typeof console != 'undefined') console.log('dismiss');},
+			exit: function() {},
+			log: function() {},
+			setScreen: function() {}
+		};
+	}
 }
 
 // ==== Code métier général
@@ -82,8 +90,14 @@ $(function() {
 });
 
 function ajaxError(x) {
-	UI.dismiss();
-	alert("Erreur fatale. Merci de nous envoyer ce message : "+x.status+" - "+x.statusText+"\n"+x.responseText.substring(0,20)+((x.responseText == '') ? '': '…'));
+	UI().dismiss();
+	var msg = "Erreur fatale. Merci de nous envoyer ce message : ";
+	msg += x.status+" - "+x.statusText+"\n"+x.responseText.substring(0,20)+((x.responseText == '') ? '': '…');
+	if (UI().isAndroid)
+	    true;
+	else
+	    alert(msg);
+	UI().exit();
 }
 
 // ==== Code métier pour la frontpage
@@ -135,7 +149,7 @@ frontpage.enter = function () {
 	if (location.hash != '') state.commit();
 	$("#frontpage .frontpage-button.game").clickOnce(frontpage.click.game);
 	jss();
-	UI.dismiss();
+	UI().dismiss();
 };
 
 frontpage.click = {};
@@ -202,7 +216,7 @@ game.enter = function () {
 			game.buildUi();
 		};
 		if (notAlreadyFetching) {
-			UI.show("PtiClic", "Récupération de la partie");
+			UI().show("PtiClic", "Récupération de la partie");
 			$.getJSON("getGame.php?callback=?", {
 				user:"foo",
 				passwd:"bar",
@@ -249,7 +263,7 @@ game.updateText = function() {
 	$("#game .mn").text(state.game.cloud[state.currentWordNb].name);
 	$("#game .mc").text(state.game.center.name);
 	jss();
-	UI.dismiss();
+	UI().dismiss();
 }
 
 game.animateNext = function (click, button) {
@@ -268,7 +282,7 @@ game.animateNext = function (click, button) {
 		.offset(mn.offset())
 		.animate({left:click.left, top:click.top, fontSize: 0}, duration)
 		.queue(function() { $(this).remove(); });
-	
+
 	game.updateText();
 	var fs = mn.css("fontSize");
 	var mncbCenter = $("#game #mn-caption-block").center();
@@ -310,7 +324,7 @@ score.enter = function () {
 			score.ui();
 		};
 		if (notAlreadyFetching) {
-			UI.show("PtiClic", "Calcul de votre score");
+			UI().show("PtiClic", "Calcul de votre score");
 			$.getJSON("server.php?callback=?", {
 				user: "foo",
 				passwd: "bar",
@@ -356,5 +370,5 @@ score.ui = function () {
 		state = new State().validate();
 	});
 	jss();
-	UI.dismiss();
+	UI().dismiss();
 }
