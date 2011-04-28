@@ -14,19 +14,21 @@ State.prototype.set = function(key, value) {
 	this[key] = value;
 	return this;
 };
+State.prototype.validate = function () {
+	if (oldScreen != state.screen) {
+		if (window[oldScreen] && window[oldScreen].leave) window[oldScreen].leave();
+		oldScreen = state.screen;
+	}
+	if (window[state.screen] && window[state.screen].enter) window[state.screen].enter();
+};
+
 var state;
 var oldScreen = '';
-var enter = {};
-var leave = {};
 var ui = {};
 function hashchange() {
 	var stateJSON = location.hash.substring(location.hash.indexOf("#") + 1);
 	state = new State($.parseJSON(stateJSON));
-	if (oldScreen != state.screen) {
-		if (leave[oldScreen]) leave[oldScreen]();
-		oldScreen = state.screen;
-		if (enter[state.screen]) enter[state.screen]();
-	}
+	state.validate();
 }
 
 // ==== JavaScript Style général
@@ -50,11 +52,38 @@ function jss() {
 	$(".screen").hide();
 	$("#"+state.screen+".screen").show();
 	
-	jss[state.screen](w, h, iconSize);
+	if (window[state.screen] && window[state.screen].jss) window[state.screen].jss(w, h, iconSize);
 }
 
-// ==== JavaScript Style pour la frontpage
-jss.frontpage = function(w, h, iconSize) {
+// ==== Interface Android
+var UI = {
+	setPreference: function() {},
+	getPreference: function() {return "";},
+	show: function() {},
+	dismiss: function() {},
+	exit: function() {}
+};
+
+if (typeof(PtiClicAndroid) != "undefined") {
+	UI = PtiClicAndroid;
+}
+
+// ==== Code métier général
+$(function() {
+	$(window).resize(jss);
+	$(window).hashchange(hashchange);
+	hashchange();
+});
+
+function ajaxError(x) {
+	UI.dismiss();
+	alert("Erreur fatale. Merci de nous envoyer ce message : "+x.status+" - "+x.statusText+"\n"+x.responseText.substring(0,20)+((x.responseText == '') ? '': '…'));
+}
+
+// ==== Code métier pour la frontpage
+frontpage = {};
+
+frontpage.jss = function(w, h, iconSize) {
 	var fp = $("#frontpage.screen");
 	var $fp = function() { return fp.find.apply(fp,arguments); };
 	$fp("#title-block")
@@ -78,8 +107,19 @@ jss.frontpage = function(w, h, iconSize) {
 		.southWest({left:w*0.55,top:h*0.8});	
 };
 
-// ==== JavaScript Style pour le jeu
-jss.game = function(w, h, iconSize) {
+frontpage.enter = function () {
+	state.commit();
+	$("#frontpage .frontpage-button.game").click(function(){
+		state.set('screen', 'game').validate();
+	});
+	jss();
+	UI.dismiss();
+};
+
+// ==== Code métier pour le jeu
+game = {};
+
+game.jss = function(w, h, iconSize) {
 	var g = $("#game.screen");
 	var $g = function() { return g.find.apply(g,arguments); };
 	var mch = h/8, mnh = h*0.075;
@@ -124,110 +164,27 @@ jss.game = function(w, h, iconSize) {
 		.south(g.south());
 };
 
-jss.score = function(w, h, iconSize) {
-	$(".screen")
-		.css('text-align', 'center');
-};
-
-// ==== Interface Android
-var UI = {
-	setPreference: function() {},
-	getPreference: function() {return "";},
-	show: function() {},
-	dismiss: function() {},
-	exit: function() {}
-};
-
-if (typeof(PtiClicAndroid) != "undefined") {
-	UI = PtiClicAndroid;
-}
-
-// ==== Code métier général
-$(function() {
-	$(window).resize(jss);
-	$(window).hashchange(hashchange);
-	hashchange();
-});
-
-function ajaxError(x) {
-	UI.dismiss();
-	alert("Erreur fatale. Merci de nous envoyer ce message : "+x.status+" - "+x.statusText+"\n"+x.responseText.substring(0,20)+((x.responseText == '') ? '': 'âò  Š'));
-}
-
-// ==== Code métier pour la frontpage
-enter.frontpage = function () {
-	$("#frontpage .frontpage-button.game").click(function(){
-		state.set('screen', 'game').commit();
-	});
-	jss();
-	UI.dismiss();
-};
-
-// ==== Code métier pour le jeu
-enter.game = function () {
-	UI.show("PtiClic", "Récupération de la partie");
-	$.getJSON("getGame.php?callback=?", {
-		user:"foo",
-		passwd:"bar",
-		nonce:Math.random()
-	}, function(data) {
-		state.game = data;
-		ui.game();
-	}).error(ajaxError);
+game.enter = function () {
+	if (!state.game) {
+		UI.show("PtiClic", "Récupération de la partie");
+		$.getJSON("getGame.php?callback=?", {
+			user:"foo",
+			passwd:"bar",
+			nonce:Math.random()
+		}, function(data) {
+			state.game = data;
+			state.currentWordNb = 0;
+			state.game.answers = [];
+			state.commit();
+			game.buildUi();
+		}).error(ajaxError);
+	} else {
+		game.buildUi();
+	}
 	jss();
 };
-
-leave.game = function () {
+game.buildUi = function () {
 	$("#game .relations").empty();
-	$('#game #mn-caption').stop().clearQueue();
-};
-
-ui.game = function () {
-	var currentWordNb = 0;
-	state.game.answers = [];
-	
-	var updateText = function() {
-		$("#game .mn").text(state.game.cloud[currentWordNb].name);
-		$("#game .mc").text(state.game.center.name);
-		jss();
-	}
-	
-	var nextWord = function(click, button) {
-		state.game.answers[currentWordNb++] = $(button).data("rid");
-		if (currentWordNb < state.game.cloud.length) {
-			animateNext(click, button);
-		} else {
-			state.set('screen','score');
-		}
-		state.commit();
-	}
-	
-	function animateNext(click, button) {
-		var duration = 700;
-		
-		var mn = $("#game #mn-caption");
-		
-		$(button).addClass("hot").removeClass("hot", duration);
-		
-		(mn)
-			.stop()       // Attention : stop() et clearQueue() ont aussi un effet
-			.clearQueue() // sur la 2e utilisation de mn (ci-dessous).
-			.clone()
-			.removeClass("mn") // Pour que le texte animé ne soit pas modifié.
-			.appendTo("body") // Append to body so we can animate the offset (instead of top/left).
-			.offset(mn.offset())
-			.animate({left:click.left, top:click.top, fontSize: 0}, duration)
-			.queue(function() { $(this).remove(); });
-		
-		updateText();
-		var fs = mn.css("fontSize");
-		var mncbCenter = $("#game #mn-caption-block").center();
-		
-		(mn)
-			.css("fontSize", 0)
-			.animate({fontSize: fs}, {duration:duration, step:function(){mn.center(mncbCenter);}});
-	}
-	
 	$.each(state.game.relations, function(i, relation) {
 		$('#templates .relationBox')
 			.clone()
@@ -239,17 +196,68 @@ ui.game = function () {
 				.attr("src", "ressources/img/rel/"+relation.id+".png")
 			.end()
 			.click(function(e) {
-				nextWord({left:e.pageX, top:e.pageY}, this);
+				game.nextWord({left:e.pageX, top:e.pageY}, this);
 			})
 			.appendTo("#game .relations");
 	});
+	game.updateText();
+}
+
+game.leave = function () {
+	$("#game .relations").empty();
+	$('#game #mn-caption').stop().clearQueue();
+};
+
+game.updateText = function() {
+	$("#game .mn").text(state.game.cloud[state.currentWordNb].name);
+	$("#game .mc").text(state.game.center.name);
+	jss();
+}
+
+game.animateNext = function (click, button) {
+	var duration = 700;
 	
+	var mn = $("#game #mn-caption");
+	
+	$(button).addClass("hot").removeClass("hot", duration);
+	
+	(mn)
+		.stop()       // Attention : stop() et clearQueue() ont aussi un effet
+		.clearQueue() // sur la 2e utilisation de mn (ci-dessous).
+		.clone()
+		.removeClass("mn") // Pour que le texte animé ne soit pas modifié.
+		.appendTo("body") // Append to body so we can animate the offset (instead of top/left).
+		.offset(mn.offset())
+		.animate({left:click.left, top:click.top, fontSize: 0}, duration)
+		.queue(function() { $(this).remove(); });
+	
+	game.updateText();
+	var fs = mn.css("fontSize");
+	var mncbCenter = $("#game #mn-caption-block").center();
+	
+	(mn)
+		.css("fontSize", 0)
+		.animate({fontSize: fs}, {duration:duration, step:function(){mn.center(mncbCenter);}});
+}
+
+game.nextWord = function(click, button) {
+	state.game.answers[state.currentWordNb++] = $(button).data("rid");
+	if (state.currentWordNb < state.game.cloud.length) {
+		game.animateNext(click, button);
+		state.commit();
+	} else {
+		state.set('screen','score').validate();
+	}
+}
+
+game.ui = function () {	
 	updateText();
 	UI.dismiss();
 }
 
 // ==== Code métier pour les scores
-enter.score = function () {
+score = {};
+score.enter = function () {
 	UI.show("PtiClic", "Calcul de votre score");
 	$.getJSON("server.php?callback=?", {
 		user: "foo",
@@ -265,12 +273,18 @@ enter.score = function () {
 		}
 		delete data.score;
 		$.extend(state.game, data);
-		ui.score();
+		state.commit();
+		score.ui();
 	}).error(ajaxError);
 	jss();
 }
 
-ui.score = function () {
+score.jss = function(w, h, iconSize) {
+	$(".screen")
+		.css('text-align', 'center');
+};
+
+score.ui = function () {
 	$("#score .scores").empty();
 	$.each(state.game.cloud, function(i,e) {
 		var percentScore = (e.score - state.game.minScore) / (state.game.maxScore - state.game.minScore);
@@ -287,7 +301,7 @@ ui.score = function () {
 			.end()
 			.appendTo("#score .scores");
 		$("#score #jaivu").click(function() {
-			state = new State().commit();
+			state = new State().validate();
 		});
 		jss();
 	});
