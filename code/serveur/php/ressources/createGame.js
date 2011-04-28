@@ -10,7 +10,7 @@ $.fn.changeId = function(append) {
 };
 
 $(function() {
-	$.getJSON("server.php", {action:"5", user:"foo", passwd:"bar"}, function (data) {
+	$.getJSON("server.php", {action:"5"}, function (data) {
 		var numWord = 1;
 		var user = "foo";
 		var passwd = "bar";
@@ -107,7 +107,7 @@ $(function() {
 				$.ajax({
 					type: "GET",
 					url: "server.php?",
-   					data: "action=4&word="+word+"&user="+user+"&passwd="+passwd,
+   					data: "action=4&word="+word, //+"&user="+user+"&passwd="+passwd,
    					success: function(msg){
 						console.log(msg);
    						input.closest(".wordLine, #center").addClass(msg == "false" ? "invalid" : "valid");
@@ -185,7 +185,7 @@ $(function() {
 				});
    		}
    		
-   		$.get("server.php",{user:"foo",passwd:"bar",action:"6",game:exit},function (data) {
+   		$.get("server.php",{action:"6",game:exit},function (data) {
    			//$(".word").closest(".wordLine, #center").removeClass("valid invalid");
 				if(data == "true") {
 					alert("Partie enregistrée avec succès");
