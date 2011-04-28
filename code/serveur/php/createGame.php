@@ -25,11 +25,11 @@ if(!isset($_SESSION['userId']))
 		visibility: hidden;
 	}
 	.valid .status, #center.valid .status {
-		color: green;
+		color: #20FF20;
 		visibility: visible;
 	}
 	.invalid .status, #center.invalid .status, #center .status {
-		color: red;
+		color: #FF2020;
 		visibility: visible;
 	}
 	

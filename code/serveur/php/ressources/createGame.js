@@ -109,7 +109,8 @@ $(function() {
 					url: "server.php?",
    					data: "action=4&word="+word+"&user="+user+"&passwd="+passwd,
    					success: function(msg){
-   						input.closest(".wordLine, #center").addClass((msg == false) ? "invalid" : "valid");
+						console.log(msg);
+   						input.closest(".wordLine, #center").addClass(msg == "false" ? "invalid" : "valid");
    						wordsOK[input.attr("id")] = !(msg == false);
     				}});
     		}
@@ -185,18 +186,19 @@ $(function() {
    		}
    		
    		$.get("server.php",{user:"foo",passwd:"bar",action:"6",game:exit},function (data) {
-   			$(".word").closest(".wordLine, #center").removeClass("valid invalid");
-				if(data === true) {
-					alert("Partie envoyée avec succès");
-				} else if (data === false) {
+   			//$(".word").closest(".wordLine, #center").removeClass("valid invalid");
+				if(data == "true") {
+					alert("Partie enregistrée avec succès");
+				} else if (data == "false") {
 					displayError("Le nuage doit contenir au moins "+nbWordMin+" mots valides.");
-				} else if (data !== true) {
+				} else if (data != "true") {
 					$('input').removeAttr('disabled');
 					var that = $(this);
 					$.each(data,function(i,e) {
 						$('.word')
 							.filter(function() { return that.val() == e; })
 							.closest(".wordLine, #center")
+							.removeClass("valid invalid")
 							.addClass("invalid");
 					});
 				}
