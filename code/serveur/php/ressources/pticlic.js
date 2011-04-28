@@ -197,8 +197,9 @@ ui.game = function () {
 		if (currentWordNb < state.game.cloud.length) {
 			animateNext(click, button);
 		} else {
-			state.set('screen','score').commit();
+			state.set('screen','score');
 		}
+		state.commit();
 	}
 	
 	function animateNext(click, button) {
@@ -270,6 +271,7 @@ enter.score = function () {
 }
 
 ui.score = function () {
+	$("#score .scores").empty();
 	$.each(state.game.cloud, function(i,e) {
 		var percentScore = (e.score - state.game.minScore) / (state.game.maxScore - state.game.minScore);
 		u = $("#templates .scoreLine");
