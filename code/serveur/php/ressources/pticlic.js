@@ -8,7 +8,7 @@ function State(init) {
 var futureHashChange = null;
 State.prototype.commit = function() {
 	try {
-		futureHashChange = "#"+encodeURI($.JSON.encode(this));
+		futureHashChange = "#"+encodeURI('"'+$.JSON.encode(this));
 		location.hash = futureHashChange;
 		return this;
 	} catch(e) {alert("Error State.prototype.commit");alert(e);}
@@ -46,8 +46,10 @@ function hashchange() {
 		if (futureHashChange === location.hash) {
 			futureHashChange = null;
 		} else {
-			var stateJSON = decodeURI(location.hash.substring(location.hash.indexOf("#") + 1));
-			state = new State($.parseJSON(stateJSON)).validate();
+            var stateJSON = location.hash.substring(location.hash.indexOf("#") + 1);
+            if (stateJSON.charAt(0) != '"') { stateJSON = decodeURI(stateJSON); }
+            stateJSON = stateJSON.substring(1);
+            state = new State($.parseJSON(stateJSON || '{}')).validate();
 		}
 	} catch(e) {alert("Error hashchange");alert(e);}
 }
