@@ -17,6 +17,7 @@ State.prototype.set = function(key, value) {
 State.prototype.validate = function () {
 	state = this;
 	if (oldScreen != this.screen) {
+		UI.show("PtiClic", "Chargement…");
 		if (window[oldScreen] && window[oldScreen].leave) window[oldScreen].leave();
 		oldScreen = this.screen;
 	}
@@ -65,7 +66,7 @@ var UI = {
 	setPreference: function() {},
 	getPreference: function() {return "";},
 	show: function(title, text) {},// { if (typeof console != 'undefined') console.log(title, text);},
-	dismiss: function() {},//{if (typeof console != 'undefined') console.log('dismiss');},
+	dismiss: function() {},// {if (typeof console != 'undefined') console.log('dismiss');},
 	exit: function() {}
 };
 
@@ -123,9 +124,9 @@ frontpage.jss = function(w, h, iconSize) {
 		var interIconSpace = (freeSpace - nbRows * buttonHeight) / (nbRows + 1);
 		var iconOffset = titleHeight + ((currentRow+1) * interIconSpace) + (currentRow * buttonHeight);
 		if (currentColumn == 0) {
-			e.northEast({left:ww*0.45,top:iconOffset});
+			e.northEast({left:w/2-ww*0.05,top:iconOffset});
 		} else {
-			e.northWest({left:ww*0.55,top:iconOffset});
+			e.northWest({left:w/2+ww*0.05,top:iconOffset});
 		}
 	});
 };
