@@ -13,8 +13,7 @@ function dichotomy(start, isBigger, foo) {
 		if (!isBigger(half)) min = half;
 		else                 max = half;
 	}
-	while (half > 1 && isBigger(half)) { --half; ++i; }
-		console.log(i,foo);
+	while (half > 1 && isBigger(half)) { --half; }
 	return half;
 	} catch(e) {alert("Error dichotomy");alert(e);}
 }

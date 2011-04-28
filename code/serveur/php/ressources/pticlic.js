@@ -55,31 +55,36 @@ function hashchange() {
 // ==== JavaScript Style général
 function jss() {
 	try {
-	var w = $(window).width();
-	var h = $(window).height();
-	var iconSize;
-	if (h > 600) iconSize = 72;
-	else if(h > 500) iconSize = 48;
-	else iconSize = 36;
-	
-	$(".screen")
-		.wh(w, h)
-		.northWest({top:0,left:0});
-	
-	$("body, html")
-		.css({
-			padding: 0,
-			margin: 0,
-			overflow: "hidden",
-			textAlign: "left"
+		var w = $(window).width();
+		var h = $(window).height();
+		var iconSize;
+		if (h > 600) iconSize = 72;
+		else if(h > 500) iconSize = 48;
+		else iconSize = 36;
+		
+		$(".screen")
+			.wh(w, h)
+			.northWest({top:0,left:0});
+		
+		$("body, html")
+			.css({
+				padding: 0,
+				margin: 0,
+				overflow: "hidden",
+				textAlign: "left"
+			});
+		
+		$(".screen").hide();
+		$("#"+state.screen+".screen").show();
+		
+		if (window[state.screen] && window[state.screen].jss) window[state.screen].jss(w, h, iconSize);
+		
+		$("img.icon").each(function(i,e) {
+			e=$(e);
+			if (typeof(e.data('image')) != 'undefined')
+				e.attr("src", "ressources/img/"+iconSize+"/"+e.data('image')+".png");
 		});
-	
-	$(".screen").hide();
-	$("#"+state.screen+".screen").show();
-	
-	if (window[state.screen] && window[state.screen].jss) window[state.screen].jss(w, h, iconSize);
 	} catch(e) {alert("Error jss");alert(e);}
-	window.console && console.log("ok");
 }
 // ==== Interface Android
 function UI () {
@@ -148,8 +153,15 @@ frontpage.jss = function(w, h, iconSize) {
 	
 	$fp(".text")
 		.fitFont(buttonWidth, labelHeight, 10);
+	
 	$fp(".icon")
 		.wh(iconSize);
+	
+	$fp(".game .icon").data('image', 'mode_normal');
+	$fp(".prefs .icon").data('image', 'config');
+	$fp(".connection .icon").data('image', 'config');
+	$fp(".about .icon").data('image', 'aide');
+	
 	$fp(".frontpage-button")
 		.css('text-align', 'center')
 		.width(buttonWidth);
@@ -296,7 +308,7 @@ game.buildUi = function () {
 				.html(relation.name.replace(/%(m[cn])/g, '<span class="$1"/>'))
 			.end()
 			.find(".icon")
-				.attr("src", "ressources/img/rel/"+relation.id+".png")
+				.data("image",relation.id)
 			.end()
 			.click(function(e) {
 				game.nextWord({left:e.pageX, top:e.pageY}, this);
