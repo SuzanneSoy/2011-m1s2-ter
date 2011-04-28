@@ -340,7 +340,7 @@ function insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty,$userN
 	// Insère dans la base une partie avec le mot central $centerEid, le nuage $cloud et les relations $r1 et $r2
 	$db->exec("begin transaction;");
 	$db->exec("INSERT INTO game(gid, eid_central_word, relation_1, relation_2, difficulty, author)
-		   VALUES (null, $centerEid, $r1, $r2, $totalDifficulty, $userName);");
+		   VALUES (null, $centerEid, $r1, $r2, $totalDifficulty, '$userName');");
 	$gid = $db->lastInsertRowID();
 	
 	$t = time();
