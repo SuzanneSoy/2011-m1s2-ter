@@ -37,7 +37,10 @@ function hashchange() {
 function jss() {
 	var w = $(window).width();
 	var h = $(window).height();
-	var iconSize = 72;
+	var iconSize;
+	if (h > 600) iconSize = 72;
+	else if(h > 500) iconSize = 48;
+	else iconSize = 36;
 	
 	$(".screen")
 		.wh(w, h)
@@ -88,25 +91,43 @@ frontpage = {};
 frontpage.jss = function(w, h, iconSize) {
 	var fp = $("#frontpage.screen");
 	var $fp = function() { return fp.find.apply(fp,arguments); };
+	var nbIcons = $fp(".icon").size();
+	var nbRows = Math.ceil(nbIcons / 2)
+	var ww = w - 2 * iconSize;
+	var hh = h - nbRows * iconSize;
+	var titleHeight = hh*0.4;
+	var labelHeight = hh*0.4 / nbRows;
+	var buttonHeight = labelHeight + iconSize;
+	var buttonWidth = Math.max(w*0.25,iconSize);
+	var freeSpace = h - titleHeight;
 	$fp("#title-block")
-		.wh(w*0.5, h*0.2)
+		.wh(w*0.5, titleHeight)
 		.north($("#frontpage.screen").north());
 	$fp("#title")
 		.fitIn("#title-block", 0.2);
 	
 	$fp(".text")
-		.fitFont(w*0.25,(h-(iconSize*4))*0.8*0.5,10);
+		.fitFont(buttonWidth, labelHeight, 10);
+	$fp(".icon")
+		.wh(iconSize);
 	$fp(".frontpage-button")
-		.width(w*0.4);
-
-	$fp(".frontpage-button.game")
-		.northEast({left:w*0.45,top:h*0.3});
-	$fp(".frontpage-button.about")
-		.northWest({left:w*0.55,top:h*0.3});
-	$fp(".frontpage-button.connection")
-		.southEast({left:w*0.45,top:h*0.8});
-	$fp(".frontpage-button.prefs")
-		.southWest({left:w*0.55,top:h*0.8});	
+		.css('text-align', 'center')
+		.width(buttonWidth);
+	
+	$fp(".frontpage-button > div").css('display', 'block');
+	
+	$fp(".frontpage-button").each(function(i,e){
+		e=$(e);
+		var currentRow = Math.floor(i/2);
+		var currentColumn = i % 2;
+		var interIconSpace = (freeSpace - nbRows * buttonHeight) / (nbRows + 1);
+		var iconOffset = titleHeight + ((currentRow+1) * interIconSpace) + (currentRow * buttonHeight);
+		if (currentColumn == 0) {
+			e.northEast({left:ww*0.45,top:iconOffset});
+		} else {
+			e.northWest({left:ww*0.55,top:iconOffset});
+		}
+	});
 };
 
 frontpage.enter = function () {
