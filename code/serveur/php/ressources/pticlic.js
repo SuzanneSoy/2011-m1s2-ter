@@ -443,7 +443,7 @@ score.ui = function () {
 	$("#score .scores").empty();
 	$("#score .scoreTotal")
 		.text(state.game.scoreTotal)
-		.goodBad(-50,100,{r:255,g:0,b:0},{r:0,g:192,b:0});
+		.goodBad(state.game.minScore*state.game.cloud.length,state.game.maxScore*state.game.cloud.length,{r:255,g:0,b:0},{r:0,g:192,b:0});
 	$.each(state.game.cloud, function(i,e) {
 		try {
 		$("#templates .scoreLine")
@@ -453,7 +453,7 @@ score.ui = function () {
 			.end()
 			.find(".score")
 				.text(e.score)
-				.goodBad(-5,10,{r:255,g:0,b:0},{r:0,g:192,b:0})
+				.goodBad(state.game.minScore,state.game.maxScore,{r:255,g:0,b:0},{r:0,g:192,b:0})
 			.end()
 			.appendTo("#score .scores");
 		} catch(e) {alert("Error anonymous 1 in score.ui");alert(e);}
