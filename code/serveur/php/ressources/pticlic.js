@@ -201,6 +201,7 @@ game.buildUi = function () {
 			.appendTo("#game .relations");
 	});
 	game.updateText();
+	UI.dismiss();
 }
 
 game.leave = function () {
@@ -250,39 +251,40 @@ game.nextWord = function(click, button) {
 	}
 }
 
-game.ui = function () {	
-	updateText();
-	UI.dismiss();
-}
-
 // ==== Code métier pour les scores
 score = {};
-score.enter = function () {
-	UI.show("PtiClic", "Calcul de votre score");
-	$.getJSON("server.php?callback=?", {
-		user: "foo",
-		passwd: "bar",
-		action: 1,
-		pgid: state.game.pgid,
-		gid: state.game.gid,
-		answers: state.game.answers,
-		nonce: Math.random()
-	}, function(data) {
-		for (var i = 0; i < data.scores.length; i++) {
-			state.game.cloud[i].score = data.scores[i];
-		}
-		delete data.score;
-		$.extend(state.game, data);
-		state.commit();
-		score.ui();
-	}).error(ajaxError);
-	jss();
-}
 
 score.jss = function(w, h, iconSize) {
 	$(".screen")
 		.css('text-align', 'center');
 };
+
+score.enter = function () {
+	if (!state.hasScore) {
+		UI.show("PtiClic", "Calcul de votre score");
+		$.getJSON("server.php?callback=?", {
+			user: "foo",
+			passwd: "bar",
+			action: 1,
+			pgid: state.game.pgid,
+			gid: state.game.gid,
+			answers: state.game.answers,
+			nonce: Math.random()
+		}, function(data) {
+			for (var i = 0; i < data.scores.length; i++) {
+				state.game.cloud[i].score = data.scores[i];
+			}
+			delete data.score;
+			$.extend(state.game, data);
+			state.hasScore = true;
+			state.commit();
+			score.ui();
+		}).error(ajaxError);
+	} else {
+		score.ui();
+	}
+	jss();
+}
 
 score.ui = function () {
 	$("#score .scores").empty();
