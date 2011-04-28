@@ -756,6 +756,6 @@ function getNodeEid($node) {
 function wordExist($node) {
 	$db = getDB();
 
-	return getNodeEid($node) === null ? true : false;
+	return getNodeEid($node) === null ? "0" : "1";
 }
 ?>
