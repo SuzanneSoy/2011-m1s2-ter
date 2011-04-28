@@ -4,7 +4,7 @@ Number.prototype.clip = function(min, max, floor) {
 	} catch(e) {alert("Error Number.prototype.clip");alert(e);}
 };
 
-function dichotomy(start, isBigger) {
+function dichotomy(start, isBigger, foo) {
 	try {
 	var i = 0, min = 0, max, half;
 
@@ -13,7 +13,8 @@ function dichotomy(start, isBigger) {
 		if (!isBigger(half)) min = half;
 		else                 max = half;
 	}
-	while (half > 1 && isBigger(half)) { --half; }
+	while (half > 1 && isBigger(half)) { --half; ++i; }
+		console.log(i,foo);
 	return half;
 	} catch(e) {alert("Error dichotomy");alert(e);}
 }
@@ -57,7 +58,7 @@ $.fn.fitFont = function(w, h, minFont, maxFont) {
 		fubar = wrappers;
 		return (wrappers.maxHeight() > h || wrappers.maxWidth() > w);
 		} catch(e) {alert("Error anonymous in $.fn.fitFont");alert(e);}
-	}).clip(minFont || 0, maxFont || Infinity));
+	},this).clip(minFont || 0, maxFont || Infinity));
 
 	// Restore stuff
 	this.css("position", oldpos);

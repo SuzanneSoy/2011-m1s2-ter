@@ -5,10 +5,12 @@ function State(init) {
 	if (!this.screen) this.screen = 'frontpage';
 	} catch(e) {alert("Error State");alert(e);}
 };
+var futureHashChange = null;
 State.prototype.commit = function() {
 	try {
-    location.hash="#"+encodeURI($.JSON.encode(this));
-	return this;
+		futureHashChange = "#"+encodeURI($.JSON.encode(this));
+		location.hash = futureHashChange;
+		return this;
 	} catch(e) {alert("Error State.prototype.commit");alert(e);}
 };
 State.prototype.get = function(key) {
@@ -41,8 +43,12 @@ var oldScreen = '';
 var ui = {};
 function hashchange() {
 	try {
-	var stateJSON = decodeURI(location.hash.substring(location.hash.indexOf("#") + 1));
-	state = new State($.parseJSON(stateJSON)).validate();
+		if (futureHashChange === location.hash) {
+			futureHashChange = null;
+		} else {
+			var stateJSON = decodeURI(location.hash.substring(location.hash.indexOf("#") + 1));
+			state = new State($.parseJSON(stateJSON)).validate();
+		}
 	} catch(e) {alert("Error hashchange");alert(e);}
 }
 
@@ -73,6 +79,7 @@ function jss() {
 	
 	if (window[state.screen] && window[state.screen].jss) window[state.screen].jss(w, h, iconSize);
 	} catch(e) {alert("Error jss");alert(e);}
+	window.console && console.log("ok");
 }
 // ==== Interface Android
 function UI () {
@@ -87,7 +94,7 @@ function UI () {
 			show: function(title, text) {},
 			dismiss: function() {},
 			exit: function() {},
-			log: function() {},
+			log: function(msg) { window.console && console.log(msg); },
 			setScreen: function() {}
 		};
 	}
@@ -266,7 +273,6 @@ game.enter = function () {
 	} else {
 		game.buildUi();
 	}
-	jss();
 	} catch(e) {alert("Error game.enter");alert(e);}
 };
 
