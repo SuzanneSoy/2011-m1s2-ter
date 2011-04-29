@@ -24,7 +24,6 @@ public class FrontPage extends Activity {
 		webSettings.setJavaScriptEnabled(true);
 		
 		js = new JavaScriptInterface(this);
-		js.show("PtiClic", "Démarrage de l'application");
 		webView.addJavascriptInterface(js, "PtiClicAndroid");
 		webView.loadUrl(Constant.SERVER + Constant.SERVER_URL);
 	}
