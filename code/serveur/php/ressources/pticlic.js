@@ -82,9 +82,11 @@ function jss() {
 		if (window[state.screen] && window[state.screen].jss) window[state.screen].jss(w, h, iconSize);
 		
 		$("img.icon").each(function(i,e) {
+			try {
 			e=$(e);
 			if (typeof(e.data('image')) != 'undefined')
 				e.attr("src", "ressources/img/"+iconSize+"/"+e.data('image')+".png");
+			} catch(e) {alert("Error anonymous in jss");alert(e);}
 		});
 	} catch(e) {alert("Error jss");alert(e);}
 }
@@ -102,7 +104,11 @@ function UI () {
 			show: function(title, text) {},
 			dismiss: function() {},
 			exit: function() {},
-			log: function(msg) { window.console && console.log(msg); },
+			log: function(msg) {
+				try {
+					window.console && console.log(msg);
+				} catch(e) {alert("Error UI.log");alert(e);}
+			},
 			setScreen: function() {}
 		};
 	}
@@ -144,6 +150,7 @@ splash.jss = function(w,h,iconSize) {
 }
 
 splash.enter = function() {
+	try {
 	// Si l'application est déjà chargée, on zappe directement jusqu'à la frontpage.
 	if (runstate.skipSplash) {
 		splash.click.goFrontpage();
@@ -152,6 +159,7 @@ splash.enter = function() {
 		jss();
 		$('#splash.screen').clickOnce(splash.click.goFrontpage);
 	}
+	} catch(e) {alert("Error splash.enter");alert(e);}
 }
 
 splash.click = {};
@@ -171,7 +179,7 @@ frontpage.jss = function(w, h, iconSize) {
 	var $fp = function() {
 		try {
 			return fp.find.apply(fp,arguments);
-		} catch(e) {alert("Error anonymous in frontpage.jss");alert(e);}
+		} catch(e) {alert("Error anonymous 1 in frontpage.jss");alert(e);}
 	};
 	var nbIcons = $fp(".icon").size();
 	var nbRows = Math.ceil(nbIcons / 2)
@@ -217,7 +225,7 @@ frontpage.jss = function(w, h, iconSize) {
 		} else {
 			e.northWest({left:w/2+ww*0.05,top:iconOffset});
 		}
-		} catch(e) {alert("Error anonymous in frontpage.jss");alert(e);}
+		} catch(e) {alert("Error anonymous 2 in frontpage.jss");alert(e);}
 	});
 	} catch(e) {alert("Error frontpage.jss");alert(e);}
 };
@@ -348,10 +356,12 @@ game.buildUi = function () {
 				.data("image",relation.id)
 			.end()
 			.click(function(e) {
+				try {
 				game.nextWord({left:e.pageX, top:e.pageY}, this);
+				} catch(e) {alert("Error anonymous 2 click in game.buildUi");alert(e);}
 			})
 			.appendTo("#game .relations");
-		} catch(e) {alert("Error anonymous in game.buildUi");alert(e);}
+		} catch(e) {alert("Error anonymous 1 in game.buildUi");alert(e);}
 	});
 	game.updateText();
 	} catch(e) {alert("Error game.buildUi");alert(e);}
