@@ -64,7 +64,7 @@ function jss() {
 		else if(h > 500) iconSize = 48;
 		else iconSize = 36;
 		
-		$(".screen")
+		$("#"+"state.screen"+".screen")
 			.wh(w, h)
 			.northWest({top:0,left:0});
 		
