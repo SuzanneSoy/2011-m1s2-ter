@@ -5,7 +5,7 @@ import org.pticlic.model.Constant;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.webkit.WebSettings;
+import android.util.Log;
 import android.webkit.WebView;
 
 public class FrontPage extends Activity {
@@ -20,15 +20,14 @@ public class FrontPage extends Activity {
 		setContentView(R.layout.frontpage);
 
 		webView = (WebView) findViewById(R.id.webview);
-		WebSettings webSettings = webView.getSettings();
-		webSettings.setJavaScriptEnabled(true);
+		webView.getSettings().setJavaScriptEnabled(true);
 		
 		js = new JavaScriptInterface(this);
-		js.show("PtiClic", "Démarrage de l'application");
 		webView.addJavascriptInterface(js, "PtiClicAndroid");
+		Log.i("[INFO]", Constant.SERVER + Constant.SERVER_URL);
 		webView.loadUrl(Constant.SERVER + Constant.SERVER_URL);
 	}
-	
+		
 	@Override
 	public void onBackPressed() {
 		webView.goBack();
