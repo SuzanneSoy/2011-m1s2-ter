@@ -1,23 +1,24 @@
 package org.pticlic.js;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class JavaScriptInterface {
-	private Context mContext;
+	private Activity mContext;
 	private ProgressDialog dialog;
+	private String screen;
 
     /** Instantie l'interface et initialise le context */
-    public JavaScriptInterface(Context c) {
+    public JavaScriptInterface(Activity c) {
         mContext = c;
     }
     
     /**
      * Permet de setter une valeur dans les preferences
      * 
-     * @param aName Le nom de la preference
+     * @param aName Le nom de la preference 
      * @param aValue La valeur que l'on veux pour la preference
      */
     public void setPreference(String aName, String aValue) {
@@ -55,6 +56,14 @@ public class JavaScriptInterface {
      * 
      */
     public void exit() {
-    	System.exit(0);
+    	mContext.finish();
     }
+
+	public void setScreen(String screen) {
+		this.screen = screen;
+	}
+
+	public String getScreen() {
+		return screen;
+	}
 }
