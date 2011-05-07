@@ -1,0 +1,36 @@
+/* Colors */
+
+html, body {
+	background-color: black;
+	color: black;
+}
+
+.screen {
+	background-color: #FFFFE0;
+}
+
+#splash.screen {
+	background-color: black;
+}
+
+#mc-caption {
+	color: #8b4;
+}
+
+#mn-caption {
+	color: #4a4;
+}
+
+#mn-caption-block {
+	border-color: #44AA44;
+	background-color: #F0F8D0;
+}
+
+.relationBox {
+	border-color: #44AA44;
+	background-color: #F0F8D0;
+}
+
+.relations .hot {
+	background-color: yellow;
+}

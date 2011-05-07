@@ -104,10 +104,15 @@ function main()
 			throw new Exception("La requête est incomplète", 2);
 		
 		decodeAndInsertGame($user,$_GET['game']);
+	} elseif ($action == 7) {         // Get user prefs
+		userPrefs($user);
+	} elseif ($action == 8) {         // Set user pref
+		if (!isset($_GET['key']) || !isset($_GET['value']))
+			throw new Exception("La requête est incomplète", 2);
+		setUserPref($user, $_GET['key'], $_GET['value']);
 	} else {
 		throw new Exception("Commande inconnue", 2);
 	}
-	// Attention, il y a une $action == 7, mais plus haut.
 }
 
 function server() {

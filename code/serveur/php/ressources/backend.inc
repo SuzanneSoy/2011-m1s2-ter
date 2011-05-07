@@ -766,4 +766,35 @@ function wordExist($node) {
 
 	return getNodeEid($node) === null ? "0" : "1";
 }
+
+function getUserInfo($user, $key) {
+	return getdb()->querySingle("SELECT value FROM user_info WHERE user = '".sqlite3::escapestring($user)."' AND key = '".SQLite3::escapeString($key)."';");
+}
+
+function setUserInfo($user, $key, $value) {
+	getDB()->exec("UPDATE user_info SET value = '".SQLite3::escapeString($value)
+				  ."' WHERE user = '".SQLite3::escapeString($user)
+				  ."' AND key = '".SQLite3::escapeString($key)."';");
+}
+
+function userPrefsDefaults() {
+	$prefs = Array(
+		"theme" => "green"
+	);
+}
+
+function userPrefs($user) {
+	$res = userPrefsDefaults();
+	foreach ($res as $k => &$v) {
+		$x = getUserInfo($user, $k);
+		if ($x !== null) $v = $x;
+	}
+	echo json_encode($res);
+}
+
+function setUserPref($user, $key, $value) {
+	if (array_key_exists($key, userPrefsDefaults()))
+		setUserInfo($user, $key, $value);
+}
+
 ?>

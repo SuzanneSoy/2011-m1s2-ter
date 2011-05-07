@@ -1,4 +1,6 @@
 // ==== URL persistante
+var nullFunction = function(){};
+
 function State(init) {
 	try {
 	$.extend(this, init || {});
@@ -109,6 +111,7 @@ function UI () {
 					window.console && console.log(msg);
 				} catch(e) {alert("Error UI.log");alert(e);}
 			},
+			info: function(title, msg) { alert(msg); },
 			setScreen: function() {}
 		};
 	}
@@ -173,7 +176,7 @@ ajaj.bigError = function(x) {
 ajaj.error = function(msg) {
 	try {
 		UI().dismiss();
-		alert(msg);
+		UI().info("Erreur !", msg);
 		UI().exit();
 	} catch(e) {alert("Error ajaj.error");alert(e);}
 }
@@ -277,6 +280,7 @@ frontpage.jss = function(w, h, iconSize) {
 frontpage.enter = function () {
 	try {
 	if (location.hash != '') state.commit();
+		console.log("fubar");
 	$("#frontpage .frontpage-button.game").clickOnce(frontpage.click.goGame);
 	$("#frontpage .frontpage-button.connection").clickOnce(frontpage.click.goConnection);
 	$("#frontpage .frontpage-button.info").clickOnce(frontpage.click.goInfo);
@@ -288,6 +292,7 @@ frontpage.enter = function () {
 frontpage.click = {};
 frontpage.click.goGame = function(){
 	try {
+		console.log("goGame");
 	state.set('screen', 'game').validate();
 	} catch(e) {alert("Error frontpage.click.goGame");alert(e);}
 };
@@ -364,7 +369,7 @@ game.jss = function(w, h, iconSize) {
 game.enter = function () {
 	try {
 	if (!state.game) {
-		var notAlreadyFetching = !runstate.gameFetched;
+		var notAlreadyFetching = !runstate.gameFetched || runstate.gameFetched == nullFunction;
 		runstate.gameFetched = function(data) {
 			try {
 			state.game = data;
@@ -396,7 +401,7 @@ game.leave = function () {
 	try {
 	$("#game .relations").empty();
 	$('#game #mn-caption').stop().clearQueue();
-	if (runstate.gameFetched) runstate.gameFetched = function() {};
+	if (runstate.gameFetched) runstate.gameFetched = nullFunction;
 	} catch(e) {alert("Error game.leave");alert(e);}
 };
 
@@ -496,7 +501,7 @@ score.jss = function(w, h, iconSize) {
 score.enter = function () {
 	try {
 	if (!state.hasScore) {
-		var notAlreadyFetching = !runstate.scoreFetched;
+		var notAlreadyFetching = !runstate.scoreFetched || runstate.scoreFetched == nullFunction;
 		runstate.scoreFetched = function(data) {
 			try {
 			for (var i = 0; i < data.scores.length; ++i) {
@@ -534,7 +539,7 @@ score.enter = function () {
 
 score.leave = function () {
 	try {
-	if (runstate.scoreFetched) runstate.scoreFetched = function() {};
+	if (runstate.scoreFetched) runstate.scoreFetched = nullFunction;
 	$("#score .scores").empty();
 	$("#templates .scoreTotal").empty();
 	} catch(e) {alert("Error score.leave");alert(e);}
@@ -625,9 +630,9 @@ connection.connect = function() {
 connection.connectFetched = function(data) {
 	try {
 		if (data && data.loginOk) {
-			alert("Vous êtes connecté !");
+			UI().info("Connexion", "Vous êtes connecté !");
 		} else if (data && data.isError && data.error == 3) {
-			alert(data.msg);
+			UI().info("Connexion", data.msg);
 		} else {
 			ajaj.smallError(data);
 		}
