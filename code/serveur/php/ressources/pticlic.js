@@ -64,7 +64,7 @@ function jss() {
 		else if(h > 500) iconSize = 48;
 		else iconSize = 36;
 		
-		$("#"+"state.screen"+".screen")
+		$("#"+state.screen+".screen")
 			.wh(w, h)
 			.northWest({top:0,left:0});
 		
@@ -124,14 +124,58 @@ $(function() {
 	} catch(e) {alert("Error main function");alert(e);}
 });
 
-function ajaxError(x) {
+// ==== Asynchronous Javascript And Json.
+ajaj = {};
+ajaj.request = function(url, data, okFunction, smallErrorFunction, bigErrorFunction) {
+	smallErrorFunction = smallErrorFunction || ajaj.smallError;
+	bigErrorFunction = bigErrorFunction || ajaj.bigError;
+	var user = UI().getPreference("user");
+	var passwd = UI().getPreference("passwd");
+	if (user != '' && passwd != '') {
+		// TODO : on transfère le user/passwd à chaque fois ici… c'est pas très bon.
+		data = $.extend({user:user, passwd:passwd}, data);
+	}
+	try {
+		return $.getJSON(url, data, function(data) {
+			if (data && data.isError) {
+				smallErrorFunction(data);
+			} else {
+				okFunction(data);
+			}
+		}).error(bigErrorFunction);
+	} catch(e) {alert("Error ajaj.request");alert(e);}
+}
+ajaj.smallError = function(x) {
+	try {
+		if (x.error == 10) {
+			state.set('screen', 'connection').commit().validate();
+		} else {
+			ajaj.error(
+				"Erreur fatale. Merci de nous envoyer ce message : \n"
+					+ "Erreur signalée par le serveur\n"
+					+ "Code:"+x.error+"\n"
+					+ "Message:"+x.msg+"\n"
+			);
+		}
+	} catch(e) {alert("Error ajaj.smallError");alert(e);}
+}
+ajaj.bigError = function(x) {
+	try {
+		ajaj.error(
+			"Erreur fatale. Merci de nous envoyer ce message : \n"
+				+ "Erreur de transmission\n"
+				+ "Code:"+x.status+"\n"
+				+ "État:"+x.statusText+"\n"
+				+ "Message:"+x.responseText.substring(0,20)+" ("+x.responseText.length+")"
+		);
+	} catch(e) {alert("Error ajaj.bigError");alert(e);}
+}
+ajaj.error = function(msg) {
 	try {
 		UI().dismiss();
-		var msg = "Erreur fatale. Merci de nous envoyer ce message : ";
-		msg += x.status+" - "+x.statusText+"\n"+x.responseText.substring(0,20)+((x.responseText == '') ? '': '…');
 		alert(msg);
 		UI().exit();
-	} catch(e) {alert("Error ajaxError");alert(e);}
+	} catch(e) {alert("Error ajaj.error");alert(e);}
 }
 
 // ==== Code métier pour le splash
@@ -205,7 +249,7 @@ frontpage.jss = function(w, h, iconSize) {
 	$fp(".game .icon").data('image', 'mode_normal');
 	$fp(".prefs .icon").data('image', 'config');
 	$fp(".connection .icon").data('image', 'config');
-	$fp(".about .icon").data('image', 'aide');
+	$fp(".info .icon").data('image', 'aide');
 	
 	$fp(".frontpage-button")
 		.css('text-align', 'center')
@@ -233,18 +277,35 @@ frontpage.jss = function(w, h, iconSize) {
 frontpage.enter = function () {
 	try {
 	if (location.hash != '') state.commit();
-	$("#frontpage .frontpage-button.game").clickOnce(frontpage.click.game);
+	$("#frontpage .frontpage-button.game").clickOnce(frontpage.click.goGame);
+	$("#frontpage .frontpage-button.connection").clickOnce(frontpage.click.goConnection);
+	$("#frontpage .frontpage-button.info").clickOnce(frontpage.click.goInfo);
 	jss();
 	UI().dismiss();
 	} catch(e) {alert("Error frontpage.enter");alert(e);}
 };
 
 frontpage.click = {};
-frontpage.click.game = function(){
+frontpage.click.goGame = function(){
 	try {
 	state.set('screen', 'game').validate();
-	} catch(e) {alert("Error frontpage.click.game");alert(e);}
+	} catch(e) {alert("Error frontpage.click.goGame");alert(e);}
 };
+
+frontpage.click.goConnection = function() {
+	try {
+		UI().show("PtiClic", "Chargement…");
+		state.set('screen', 'connection').commit().validate();
+	} catch(e) {alert("Error frontpage.click.goConnection");alert(e);}
+};
+
+frontpage.click.goInfo = function() {
+	try {
+		UI().show("PtiClic", "Chargement…");
+		state.set('screen', 'info').commit().validate();
+	} catch(e) {alert("Error frontpage.click.goInfo");alert(e);}
+};
+
 
 // ==== Code métier pour le jeu
 game = {};
@@ -315,9 +376,7 @@ game.enter = function () {
 		};
 		if (notAlreadyFetching) {
 			UI().show("PtiClic", "Récupération de la partie");
-			$.getJSON("getGame.php?callback=?", {
-				user:"foo",
-				passwd:"bar",
+			ajaj.request("getGame.php?callback=?", {
 				nonce:Math.random()
 			}, function(data) {
 				try {
@@ -325,7 +384,7 @@ game.enter = function () {
 				runstate.gameFetched = false;
 				fn(data);
 				} catch(e) {alert("Error anonymous 2 in game.enter");alert(e);}
-			}).error(ajaxError);
+			});
 		}
 	} else {
 		game.buildUi();
@@ -429,7 +488,7 @@ score = {};
 
 score.jss = function(w, h, iconSize) {
 	try {
-	$(".screen")
+	$("#score.screen")
 		.css('text-align', 'center');
 	} catch(e) {alert("Error score.jss");alert(e);}
 };
@@ -452,9 +511,7 @@ score.enter = function () {
 		};
 		if (notAlreadyFetching) {
 			UI().show("PtiClic", "Calcul de votre score");
-			$.getJSON("server.php?callback=?", {
-				user: "foo",
-				passwd: "bar",
+			ajaj.request("server.php?callback=?", {
 				action: 1,
 				pgid: state.game.pgid,
 				gid: state.game.gid,
@@ -466,7 +523,7 @@ score.enter = function () {
 				runstate.scoreFetched = false;
 				fn(data);
 				} catch(e) {alert("Error anonymous 2 in score.enter");alert(e);}
-			}).error(ajaxError);
+			});
 		}
 	} else {
 		score.ui();
@@ -514,4 +571,89 @@ score.click.jaivu = function() {
 	try {
 		state = new State().validate();
 	} catch(e) {alert("Error score.click.jaivu");alert(e);}
+};
+
+// ==== Code métier pour la connexion
+connection = {};
+
+connection.jss = function(w, h, iconSize) {
+	try {
+		var c = $("#connection.screen");
+		var $c = function() {
+			try {
+				return c.find.apply(c,arguments);
+			} catch(e) {alert("Error anonymous 1 in connection.jss");alert(e);}
+		};
+		
+		(c)
+			.css('text-align', 'center');
+		
+		$c("label")
+			.css("white-space", "nowrap");
+		$c("input, label")
+			.css('position', 'absolute')
+			.fitFont(w*0.3, h*0.25);
+		$c("#user-label").east({left:w/2,top:h*0.25});
+		$c("#user").west({left:w/2,top:h*0.25});
+		$c("#passwd-label").east({left:w/2,top:h*0.5});
+		$c("#passwd").west({left:w/2,top:h*0.5});
+		$c("#connect").center({left:w/2,top:h*0.75});
+	} catch(e) {alert("Error connection.jss");alert(e);}
+};
+
+connection.enter = function() {
+	try {
+		jss();
+		$("#connect-form").unbind("submit", connection.connect).submit(connection.connect);
+		UI().dismiss();
+	} catch(e) {alert("Error connection.enter");alert(e);}
+};
+
+connection.connect = function() {
+	try {
+		UI().setPreference("user", $("#user").val());
+		UI().setPreference("passwd", $("#passwd").val());
+		ajaj.request("server.php?callback=?", {
+			action: 3,
+			user: $("#user").val(),
+			passwd: $("#passwd").val(),
+		}, connection.connectFetched, connection.connectFetched);
+		return false
+	} catch(e) {alert("Error connection.connect");alert(e);}
+}
+
+connection.connectFetched = function(data) {
+	try {
+		if (data && data.loginOk) {
+			alert("Vous êtes connecté !");
+		} else if (data && data.isError && data.error == 3) {
+			alert(data.msg);
+		} else {
+			ajaj.smallError(data);
+		}
+		state.set('screen', 'frontpage').validate();
+	} catch(e) {alert("Error connection.connectFetched");alert(e);}
+}
+
+// ==== Code métier pour la page d'info
+info = {};
+
+info.jss = function(w,h,iconSize) {
+	$("#info-back-p").css('text-align', 'center');
+	$("#info.screen .container input").css('font-size', 'inherit');
+	$("#info.screen .container")
+		.fitFont(w*0.9, h*0.9, null, null, true)
+		.center($("#info.screen"));
+}
+
+info.enter = function() {
+	try {
+		jss();
+		$("#info-back").clickOnce(function(){
+			try {
+			state.set('screen', 'frontpage').validate();
+			} catch(e) {alert("Error anonymous in info.enter");alert(e);}
+		});
+		UI().dismiss();
+	} catch(e) {alert("Error info.enter");alert(e);}
 };

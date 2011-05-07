@@ -45,27 +45,30 @@ $.fn.sumHeight = function() {
 	} catch(e) {alert("Error sumHeight");alert(e);}
 }
 
-$.fn.fitFont = function(w, h, minFont, maxFont) {
+$.fn.fitFont = function(w, h, minFont, maxFont, noContainer) {
 	try {
 	var oldpos = this.css("position");
 	this.css({
 		position: "absolute",
 		maxWidth: w
 	});
-	var wrappers = this.wrapInner("<span/>").children();
+	if (noContainer) {
+		var wrappers = this;
+	} else {
+		var wrappers = this.wrapInner("<span/>").children();
+	}
 	
 	var that = this;
 	this.css("font-size", dichotomy(parseInt(this.css("font-size"), 10), function(x) {
 		try {
 		that.css("fontSize", x);
-		fubar = wrappers;
 		return (wrappers.maxHeight() > h || wrappers.maxWidth() > w);
 		} catch(e) {alert("Error anonymous in $.fn.fitFont");alert(e);}
 	},this).clip(minFont || 0, maxFont || Infinity));
 
 	// Restore stuff
 	this.css("position", oldpos);
-	//wrappers.children().unwrap();
+	if (!noContainer) wrappers.children().unwrap();
 	return this;
 	} catch(e) {alert("Error $.fn.fitFont");alert(e);}
 }
