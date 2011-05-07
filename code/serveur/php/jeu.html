@@ -124,6 +124,17 @@ html, body {
 				</p>
 			</div>
 		</div>
+		<div class="screen" id="prefs">
+			<form id="prefs-form" action="#" method="GET">
+				<label id="theme-label" for="theme">Thème : </label>
+				<select name="theme" id="theme">
+					<option value="green">Colline verdoyante</option>
+					<option value="black">Bas-fond de cachot</option>
+				</select>
+				<input type="submit" name="prefs-apply" id="prefs-apply" value="Appliquer" />
+				<input type="reset" name="prefs-cancel" id="prefs-cancel" value="Annuler" />
+			</form>
+		</div>
 		<div id="templates" style="display: none;">
 			<div class="relationBox">
 				<div class="relation"><img class="icon" alt="" src="ressources/img/72/default.png" /><span class="text"></span></div>
