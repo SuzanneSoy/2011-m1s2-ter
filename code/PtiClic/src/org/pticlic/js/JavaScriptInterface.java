@@ -1,7 +1,9 @@
 package org.pticlic.js;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -42,6 +44,19 @@ public class JavaScriptInterface {
      */
     public void show(String title, String message) {
     	dialog = ProgressDialog.show(mContext, title, message);
+    }
+    
+    public void info(String title, String message) {
+    	AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+    	builder.setMessage(message)
+    	       .setCancelable(false)
+    	       .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+    	           public void onClick(DialogInterface dialog, int id) {
+    	                dialog.dismiss();
+    	           }
+    	       });
+    	AlertDialog alert = builder.create();
+    	alert.show();
     }
     
     /** Permet de retirer l'affichage de la boite de dialog
