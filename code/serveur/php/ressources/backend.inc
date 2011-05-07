@@ -40,7 +40,10 @@ require_once("ressources/db.inc");
 function checkLogin($user, $passwd) {
 	if(isset($_SESSION['userId']))
 		return true;
-		
+	connect($user, $passwd);
+}
+
+function connect($user, $passwd) {
 	$db = getDB();
 	$hashPasswd = md5($passwd);
 	$loginIsOk = ($hashPasswd == $db->querySingle("SELECT hash_passwd FROM user WHERE login='".$user."';"));
@@ -752,7 +755,6 @@ function insertNode($node) {
 /** retourne l'eid d'un mot.
 * @param node : le mot dont on veut obtenir l'eid.
 */
-
 function getNodeEid($node) {
 	$db = getDB();
 

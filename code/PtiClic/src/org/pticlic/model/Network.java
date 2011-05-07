@@ -24,14 +24,14 @@ public class Network {
 
 	public static class Check implements Serializable {
 		private static final long serialVersionUID = 1L;
-		private boolean login_ok = false;
+		private boolean loginOk = false;
 
-		public boolean isLogin_ok() {
-			return login_ok;
+		public boolean isLoginOk() {
+			return loginOk;
 		}
 
-		public void setLogin_ok(boolean login_ok) {
-			this.login_ok = login_ok;
+		public void setLoginOk(boolean loginOk) {
+			this.loginOk = loginOk;
 		}
 	}
 
@@ -97,7 +97,7 @@ public class Network {
 		json = HttpClient.SendHttpPost(urlS);
 
 		Check check = gson.fromJson(json, Check.class);
-		res = check.isLogin_ok();
+		res = check.isLoginOk();
 
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putBoolean(Constant.SERVER_AUTH, res);

@@ -31,27 +31,38 @@ function logError($errNum, $msg, $other="")
 */
 function main()
 {
-	if(!isset($_GET['action']))
-		throw new Exception("La requête est incomplète", 2);
-	else if(!isset($_SESSION['userId']) && (!isset($_GET['user']) || !isset($_GET['passwd'])))
-		throw new Exception("La requête est incomplète", 2);
-	else if(isset($_SESSION['userId'])) {
+	$loginIsOk = false;
+	$user = 'nobody';
+	if(!isset($_GET['action'])) {
+		throw new Exception("La requête est incomplète.", 2);
+	}
+	if(isset($_GET['user']) && isset($_GET['passwd'])) {
+		unset($_SESSION['userId']);
+		$user = SQLite3::escapeString($_GET['user']);
+		$loginIsOk = connect($user, $_GET['passwd']);
+		if ($loginIsOk) {
+			$_SESSION['userId'] = $user;
+		} else {
+			throw new Exception("Utilisateur non enregistré ou mauvais mot de passe.", 3);
+		}
+	} elseif(isset($_SESSION['userId'])) {
 		$user = $_SESSION['userId'];
 		$loginIsOk = true;
-	}
-	else {
-		$user = SQLite3::escapeString($_GET['user']);
-		$loginIsOk = checkLogin($user, $_GET['passwd']);
 	}
 	
 	$action = $_GET['action'];
 	
 	if ($action != 3 && (!$loginIsOk)) {
-		throw new Exception("Utilisateur non enregistré ou mauvais mot de passe", 3);
+		throw new Exception("Vous n'êtes pas connecté.", 10);
 	}
 	if ($action == 3) {
-		echo '{"login_ok":' . ($loginIsOk ? 'true' : 'false') . '}';
-		exit;
+		echo json_encode(
+			Array(
+				"loginOk" => !!$loginIsOk,
+				"whoami" => "".$user
+			)
+		);
+		return;
 	}
 	
 	// Sinon tout est bon on effectue l'opération correspondant à la commande passée.
@@ -78,7 +89,7 @@ function main()
 		setGameGetScore($user, $_GET['pgid'], $_GET['gid'], $_GET['answers']);
 	} else if($action == 4) {           // CheckWord
 		if (!isset($_GET['word']))
-			errRequestIncomplete();
+			throw new Exception("La requête est incomplète", 2);
 
 		if(wordExist($_GET['word']))
 			echo "true";
@@ -90,13 +101,13 @@ function main()
 	}
 	else if($action == 6) {
 		if (!isset($_GET['game']))
-			errRequestIncomplete();
+			throw new Exception("La requête est incomplète", 2);
 		
 		decodeAndInsertGame($user,$_GET['game']);
-		
 	} else {
 		throw new Exception("Commande inconnue", 2);
 	}
+	// Attention, il y a une $action == 7, mais plus haut.
 }
 
 function server() {
@@ -108,7 +119,13 @@ function server() {
 		ob_end_flush();
 	} catch (Exception $e) {
 		ob_end_clean();
-		echo "{\"error\":".$e->getCode().",\"msg\":".json_encode("".$e->getMessage())."}";
+		echo json_encode(
+			Array(
+				"error" => $e->getCode(),
+				"msg" => "".$e->getMessage(),
+				"isError" => true
+			)
+		);
 		logError($e->getCode(), $e->getMessage(), date("c"));
 		closeDB();
 	}
