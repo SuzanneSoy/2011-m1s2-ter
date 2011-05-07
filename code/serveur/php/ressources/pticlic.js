@@ -249,7 +249,7 @@ frontpage.jss = function(w, h, iconSize) {
 	$fp(".game .icon").data('image', 'mode_normal');
 	$fp(".prefs .icon").data('image', 'config');
 	$fp(".connection .icon").data('image', 'config');
-	$fp(".about .icon").data('image', 'aide');
+	$fp(".info .icon").data('image', 'aide');
 	
 	$fp(".frontpage-button")
 		.css('text-align', 'center')
@@ -279,6 +279,7 @@ frontpage.enter = function () {
 	if (location.hash != '') state.commit();
 	$("#frontpage .frontpage-button.game").clickOnce(frontpage.click.goGame);
 	$("#frontpage .frontpage-button.connection").clickOnce(frontpage.click.goConnection);
+	$("#frontpage .frontpage-button.info").clickOnce(frontpage.click.goInfo);
 	jss();
 	UI().dismiss();
 	} catch(e) {alert("Error frontpage.enter");alert(e);}
@@ -296,6 +297,13 @@ frontpage.click.goConnection = function() {
 		UI().show("PtiClic", "Chargement…");
 		state.set('screen', 'connection').commit().validate();
 	} catch(e) {alert("Error frontpage.click.goConnection");alert(e);}
+};
+
+frontpage.click.goInfo = function() {
+	try {
+		UI().show("PtiClic", "Chargement…");
+		state.set('screen', 'info').commit().validate();
+	} catch(e) {alert("Error frontpage.click.goInfo");alert(e);}
 };
 
 
@@ -626,3 +634,26 @@ connection.connectFetched = function(data) {
 		state.set('screen', 'frontpage').validate();
 	} catch(e) {alert("Error connection.connectFetched");alert(e);}
 }
+
+// ==== Code métier pour la page d'info
+info = {};
+
+info.jss = function(w,h,iconSize) {
+	$("#info-back-p").css('text-align', 'center');
+	$("#info.screen .container input").css('font-size', 'inherit');
+	$("#info.screen .container")
+		.fitFont(w*0.9, h*0.9, null, null, true)
+		.center($("#info.screen"));
+}
+
+info.enter = function() {
+	try {
+		jss();
+		$("#info-back").clickOnce(function(){
+			try {
+			state.set('screen', 'frontpage').validate();
+			} catch(e) {alert("Error anonymous in info.enter");alert(e);}
+		});
+		UI().dismiss();
+	} catch(e) {alert("Error info.enter");alert(e);}
+};
