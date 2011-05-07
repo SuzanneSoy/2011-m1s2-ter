@@ -1,4 +1,6 @@
 // ==== URL persistante
+var nullFunction = function(){};
+
 function State(init) {
 	try {
 	$.extend(this, init || {});
@@ -109,6 +111,7 @@ function UI () {
 					window.console && console.log(msg);
 				} catch(e) {alert("Error UI.log");alert(e);}
 			},
+			info: function(title, msg) { alert(msg); },
 			setScreen: function() {}
 		};
 	}
@@ -173,7 +176,7 @@ ajaj.bigError = function(x) {
 ajaj.error = function(msg) {
 	try {
 		UI().dismiss();
-		alert(msg);
+		UI().info("Erreur !", msg);
 		UI().exit();
 	} catch(e) {alert("Error ajaj.error");alert(e);}
 }
@@ -280,6 +283,7 @@ frontpage.enter = function () {
 	$("#frontpage .frontpage-button.game").clickOnce(frontpage.click.goGame);
 	$("#frontpage .frontpage-button.connection").clickOnce(frontpage.click.goConnection);
 	$("#frontpage .frontpage-button.info").clickOnce(frontpage.click.goInfo);
+	$("#frontpage .frontpage-button.prefs").clickOnce(frontpage.click.goPrefs);
 	jss();
 	UI().dismiss();
 	} catch(e) {alert("Error frontpage.enter");alert(e);}
@@ -306,6 +310,12 @@ frontpage.click.goInfo = function() {
 	} catch(e) {alert("Error frontpage.click.goInfo");alert(e);}
 };
 
+frontpage.click.goPrefs = function() {
+	try {
+		UI().show("PtiClic", "Chargement…");
+		state.set('screen', 'prefs').commit().validate();
+	} catch(e) {alert("Error frontpage.click.goPrefs");alert(e);}
+};
 
 // ==== Code métier pour le jeu
 game = {};
@@ -364,7 +374,7 @@ game.jss = function(w, h, iconSize) {
 game.enter = function () {
 	try {
 	if (!state.game) {
-		var notAlreadyFetching = !runstate.gameFetched;
+		var notAlreadyFetching = !runstate.gameFetched || runstate.gameFetched == nullFunction;
 		runstate.gameFetched = function(data) {
 			try {
 			state.game = data;
@@ -396,7 +406,7 @@ game.leave = function () {
 	try {
 	$("#game .relations").empty();
 	$('#game #mn-caption').stop().clearQueue();
-	if (runstate.gameFetched) runstate.gameFetched = function() {};
+	if (runstate.gameFetched) runstate.gameFetched = nullFunction;
 	} catch(e) {alert("Error game.leave");alert(e);}
 };
 
@@ -496,7 +506,7 @@ score.jss = function(w, h, iconSize) {
 score.enter = function () {
 	try {
 	if (!state.hasScore) {
-		var notAlreadyFetching = !runstate.scoreFetched;
+		var notAlreadyFetching = !runstate.scoreFetched || runstate.scoreFetched == nullFunction;
 		runstate.scoreFetched = function(data) {
 			try {
 			for (var i = 0; i < data.scores.length; ++i) {
@@ -534,7 +544,7 @@ score.enter = function () {
 
 score.leave = function () {
 	try {
-	if (runstate.scoreFetched) runstate.scoreFetched = function() {};
+	if (runstate.scoreFetched) runstate.scoreFetched = nullFunction;
 	$("#score .scores").empty();
 	$("#templates .scoreTotal").empty();
 	} catch(e) {alert("Error score.leave");alert(e);}
@@ -585,12 +595,8 @@ connection.jss = function(w, h, iconSize) {
 			} catch(e) {alert("Error anonymous 1 in connection.jss");alert(e);}
 		};
 		
-		(c)
-			.css('text-align', 'center');
-		
-		$c("label")
-			.css("white-space", "nowrap");
 		$c("input, label")
+			.css("white-space", "nowrap")
 			.css('position', 'absolute')
 			.fitFont(w*0.3, h*0.25);
 		$c("#user-label").east({left:w/2,top:h*0.25});
@@ -603,8 +609,8 @@ connection.jss = function(w, h, iconSize) {
 
 connection.enter = function() {
 	try {
-		jss();
 		$("#connect-form").unbind("submit", connection.connect).submit(connection.connect);
+		jss();
 		UI().dismiss();
 	} catch(e) {alert("Error connection.enter");alert(e);}
 };
@@ -618,16 +624,16 @@ connection.connect = function() {
 			user: $("#user").val(),
 			passwd: $("#passwd").val(),
 		}, connection.connectFetched, connection.connectFetched);
-		return false
+		return false;
 	} catch(e) {alert("Error connection.connect");alert(e);}
 }
 
 connection.connectFetched = function(data) {
 	try {
 		if (data && data.loginOk) {
-			alert("Vous êtes connecté !");
+			UI().info("Connexion", "Vous êtes connecté !");
 		} else if (data && data.isError && data.error == 3) {
-			alert(data.msg);
+			UI().info("Connexion", data.msg);
 		} else {
 			ajaj.smallError(data);
 		}
@@ -648,12 +654,61 @@ info.jss = function(w,h,iconSize) {
 
 info.enter = function() {
 	try {
+		$("#info-back").clickOnce(info.click.goBack);
 		jss();
-		$("#info-back").clickOnce(function(){
-			try {
-			state.set('screen', 'frontpage').validate();
-			} catch(e) {alert("Error anonymous in info.enter");alert(e);}
-		});
 		UI().dismiss();
 	} catch(e) {alert("Error info.enter");alert(e);}
+};
+
+info.click = {};
+info.click.goBack = function(){
+	try {
+		state.set('screen', 'frontpage').validate();
+	} catch(e) {alert("Error anonymous in info.enter");alert(e);}
+};
+
+// ==== Code métier pour la page de configuration
+prefs = {};
+
+prefs.jss = function(w,h,iconSize) {
+	try {
+		var p = $("#prefs.screen");
+		var $p = function() {
+			try {
+				return p.find.apply(p,arguments);
+			} catch(e) {alert("Error anonymous 1 in prefs.jss");alert(e);}
+		};
+		
+		$("input, label, select")
+			.css("white-space", "nowrap")
+			.css('position', 'absolute')
+			.fitFont(w*0.4, h*0.1);
+		$p("#theme-label").east({left:w/2,top:h*0.25});
+		$p("#theme").west({left:w/2,top:h*0.25});
+		$p("#prefs-cancel").east({left:w*0.45,top:h*0.5});
+		$p("#prefs-apply").west({left:w*0.55,top:h*0.5});
+	} catch(e) {alert("Error prefs.jss");alert(e);}
+}
+
+prefs.enter = function() {
+	try {
+		$("#prefs-form").unbind('submit', prefs.apply).submit(prefs.apply);
+		$("#prefs-cancel").clickOnce(prefs.cancel);
+		jss();
+		UI().dismiss();
+	} catch(e) {alert("Error prefs.enter");alert(e);}
+};
+
+prefs.apply = function(){
+	try {
+		alert($("#theme").val());
+		state.set('screen', 'frontpage').validate();
+		return false;
+	} catch(e) {alert("Error anonymous in prefs.click.apply");alert(e);}
+};
+
+prefs.cancel = function(){
+	try {
+		state.set('screen', 'frontpage').validate();
+	} catch(e) {alert("Error anonymous in prefs.click.cancel");alert(e);}
 };
