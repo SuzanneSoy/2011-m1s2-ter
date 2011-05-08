@@ -1,22 +1,24 @@
 package org.pticlic.js;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.webkit.WebView;
+import android.widget.Toast;
 
 public class JavaScriptInterface {
 	private Activity mContext;
 	private ProgressDialog dialog;
 	private String screen;
+	private WebView webView;
 
-    /** Instantie l'interface et initialise le context */
-    public JavaScriptInterface(Activity c) {
+    /** Instantie l'interface et initialise le context */ 
+    public JavaScriptInterface(Activity c, WebView webView) {
         mContext = c;
+        this.webView = webView;
     }
-    
+   
     /**
      * Permet de setter une valeur dans les preferences
      * 
@@ -35,7 +37,8 @@ public class JavaScriptInterface {
      */
     public String getPreference(String aName) {
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-    	return prefs.getString(aName, "");
+    	String res = prefs.getString(aName, "");
+    	return res;
     }
     
     /** Permet d'afficher une progressbar 
@@ -47,16 +50,7 @@ public class JavaScriptInterface {
     }
     
     public void info(String title, String message) {
-    	AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-    	builder.setMessage(message)
-    	       .setCancelable(false)
-    	       .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-    	           public void onClick(DialogInterface dialog, int id) {
-    	                dialog.dismiss();
-    	           }
-    	       });
-    	AlertDialog alert = builder.create();
-    	alert.show();
+    	Toast.makeText(mContext, message, Toast.LENGTH_SHORT);
     }
     
     /** Permet de retirer l'affichage de la boite de dialog
@@ -65,6 +59,10 @@ public class JavaScriptInterface {
     public void dismiss() {
         if (dialog.isShowing())
         	dialog.dismiss();
+    }
+    
+    public void switchCSS(String newTheme) {
+    	webView.reload();
     }
     
     /** Permet de quitter l'application
