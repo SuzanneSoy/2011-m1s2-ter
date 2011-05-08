@@ -128,7 +128,15 @@ function UI () {
 					window.console && console.log(msg);
 				} catch(e) {alert("Error UI().log");alert(e);}
 			},
-			setScreen: function() {}
+			info: function(title, msg) { alert(msg); }
+			setScreen: function() {},
+			switchCSS: function(newtheme) {
+				$("link[@rel*=stylesheet][title]").each(function(i,e){
+					// Il semblerait que pour qu'un "aleternate stylesheet" puisse être activé, il faut d'abord qu'il ait été désactivé…
+					e.disabled = true;
+					e.disabled = (e.getAttribute('title') != newtheme);
+				});
+			}
 		};
 	}
 	} catch(e) {alert("Error UI");alert(e);}
@@ -210,8 +218,7 @@ ajaj.bigError = function(x) {
 ajaj.error = function(msg) {
 	try {
 		UI().dismiss();
-		UIInfo("Erreur !", msg);
-		UI().exit();
+		UI().info("Erreur !", msg);
 	} catch(e) {alert("Error ajaj.error");alert(e);}
 }
 
@@ -698,13 +705,13 @@ connection.connect = function() {
 connection.connectFetched = function(data) {
 	try {
 		if (data && data.theme) {
-			switchCSS(data.theme || "green");
+			UI().switchCSS(data.theme || "green");
 			UIInfo("Connexion", "Vous êtes connecté !");
 		} else if (data && data.isError && data.error == 3) {
-			switchCSS("green");
+			UI().switchCSS("green");
 			UIInfo("Connexion", data.msg);
 		} else {
-			switchCSS("green");
+			UI().switchCSS("green");
 			ajaj.smallError(data);
 		}
 		state.set('screen', 'frontpage').validate();
@@ -750,24 +757,17 @@ prefs.apply = function(){
 			key: 'theme',
 			value: newtheme
 		}, function(data) {
-			if (data)
+			if (data) {
 				UIInfo("Préférences", "Les préférences ont été enregistrées.");
-			else
+				UI().switchCSS(newtheme);
+			} else {
 				UIInfo("Préférences", "Les préférences n'ont pas pu être enregistrées.");
+			}
 		});
-		switchCSS(newtheme);
 		state.set('screen', 'frontpage').validate();
 		return false;
 	} catch(e) {alert("Error anonymous in prefs.apply");alert(e);}
 };
-
-function switchCSS(newtheme) {
-	$("link[@rel*=stylesheet][title]").each(function(i,e){
-		// Il semblerait que pour qu'un "aleternate stylesheet" puisse être activé, il faut d'abord qu'il ait été désactivé…
-		e.disabled = true;
-		e.disabled = (e.getAttribute('title') != newtheme);
-	});
-}
 
 prefs.cancel = function(){
 	try {
