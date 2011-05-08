@@ -75,11 +75,11 @@ function jss() {
 				borderStyle: 'solid',
 				MozBorderRadius: 10,
 				WebkitBorderRadius: 10,
-				padding: 10,
 				textAlign: 'center'
 			})
-			.wh(w/2, h*0.1)
 			.fitFont(w/2, h*0.1)
+			.css('max-width', w*0.6)
+			.width(w*0.6)
 			.center({left: w/2, top:h*0.1});
 		
 		$("#"+state.screen+".screen")
@@ -108,7 +108,89 @@ function jss() {
 				e.attr("src", "ressources/img/"+iconSize+"/"+e.data('image')+".png");
 			} catch(e) {alert("Error anonymous in jss");alert(e);}
 		});
+		
+		jssTheme(runstate.prefs.theme);
 	} catch(e) {alert("Error jss");alert(e);}
+}
+
+function jssTheme(theme) {
+	if (theme == "black") {
+		var bg1 = "black";
+		var fg1 = "white";
+		var bg2 = "#222222";
+		var fg2 = "#cccccc";
+		var fg3 = "white";
+		var hot = "#aaaaaa";
+	} else {
+		var bg1 = "#ffffe0";
+		var fg1 = "black";
+		var bg2 = "#f0f8d0";
+		var fg2 = "#4a4";
+		var fg3 = "#8b4";
+		var hot = "yellow";
+	}
+	var splashbg = "black";
+	var splashfg = "white";
+	var screenbg = bg1;
+	var screenfg = fg1;
+	var messagebg = bg2;
+	var messagefg = fg1;
+	var messagebd = fg2;
+	var centralfg = fg3;
+	var cloudbg = bg2;
+	var cloudfg = fg2;
+	var cloudbd = fg2;
+	var relationbg = bg2;
+	var relationbd = fg2;
+	var fphoverbg = bg2;
+	var fphoverbd = fg2;
+	var hotbg = hot;
+
+	$('.screen').css({
+		color: screenfg,
+		backgroundColor: screenbg
+	});
+
+	$('html, body, #splash.screen').css({
+		backgroundColor: splashbg,
+		color: splashfg
+	});
+
+	$("#message").css({
+		backgroundColor: messagebg,
+		color: messagefg,
+		borderColor: messagebd
+	});
+
+	$(".frontpage-button").hover(function() {
+		$(this).css({
+			backgroundColor: fphoverbg,
+			outline: "medium solid "+fphoverbd
+		});
+	}, function() {
+		$(this).css({
+			outline: '',
+			backgroundColor: "transparent"
+		});
+	});
+
+	$('#mc-caption').css({color: centralfg});
+
+	$('#mn-caption').css({color: cloudfg});
+
+	$('#mn-caption-block').css({
+		borderColor: cloudbd,
+		backgroundColor: cloudbg
+	});
+
+	$('.relationBox').css({
+		borderColor: relationbd,
+		backgroundColor: relationbg
+	});
+
+	$('.relations .hot').css({backgroundColor: hotbg});
+
+	$("a, a:visited").css({color: "#8888ff"});
 }
 
 // ==== Interface Android
@@ -131,19 +213,8 @@ function UI () {
 			},
 			info: function(title, msg) {
 				try {
-					$('#message')
-						.qCss('opacity',0)
-						.qShow()
-						.queue(function(next){
-							$('#message')
-								.text(msg);
-							jss();
-							next();
-						})
-						.animate({opacity:0.9}, 700)
-						.delay(1000)
-						.animate({opacity:0}, 700);
-				} catch(e) {alert("Error UI().info");alert(e);}
+					alert(msg);
+ 				} catch(e) {alert("Error UI().info");alert(e);}
 			},
 			setScreen: function() {}
 		};
@@ -151,40 +222,64 @@ function UI () {
 	} catch(e) {alert("Error UI");alert(e);}
 }
 
+function UIInfo(title, msg) {
+	try {
+		$('#message')
+			.qCss('opacity',0)
+			.qShow()
+			.queue(function(next){
+				try {
+				$('#message')
+					.text(msg);
+				jss();
+				next();
+				} catch(e) {alert("Error anonymous in UIInfo");alert(e);}
+			})
+			.animate({opacity:0.9}, 700)
+			.delay(5000)
+			.animate({opacity:0}, 700);
+	} catch(e) {alert("Error UI().info");alert(e);}
+}
+
 // ==== Code métier général
 $(function() {
 	try {
-	$(window).resize(jss);
-	$(window).hashchange(hashchange);
-	hashchange();
+		$(window).resize(jss);
+		$(window).hashchange(hashchange);
+		hashchange();
+		runstate.loaded = true;
 	} catch(e) {alert("Error main function");alert(e);}
 });
 
 // ==== Asynchronous Javascript And Json.
 ajaj = {};
 ajaj.request = function(url, data, okFunction, smallErrorFunction, bigErrorFunction) {
-	smallErrorFunction = smallErrorFunction || ajaj.smallError;
-	bigErrorFunction = bigErrorFunction || ajaj.bigError;
-	var user = UI().getPreference("user");
-	var passwd = UI().getPreference("passwd");
-	if (user != '' && passwd != '') {
-		// TODO : on transfère le user/passwd à chaque fois ici… c'est pas très bon.
-		data = $.extend({user:user, passwd:passwd}, data);
-	}
 	try {
+		smallErrorFunction = smallErrorFunction || ajaj.smallError;
+		bigErrorFunction = bigErrorFunction || ajaj.bigError;
+		var user = "" + UI().getPreference("user");
+		var passwd = "" + UI().getPreference("passwd");
+		if (user != '' && passwd != '') {
+			if (!data.user) data.user = user;
+			if (!data.passwd) data.passwd = passwd;
+		}
+		
 		return $.getJSON(url, data, function(data) {
+			try {
 			if (data && data.isError) {
 				smallErrorFunction(data);
 			} else {
 				okFunction(data);
 			}
+			} catch(e) {alert("Error anonymous in ajaj.request");alert(e);}
 		}).error(bigErrorFunction);
 	} catch(e) {alert("Error ajaj.request");alert(e);}
 }
-ajaj.smallError = function(x) {
+ajaj.smallError = function(x, ignoreConnect) {
 	try {
 		if (x.error == 10) {
-			state.set('screen', 'connection').commit().validate();
+			if (!ignoreConnect)
+				state.set('screen', 'connection').commit().validate();
 		} else {
 			ajaj.error(
 				"Erreur fatale. Merci de nous envoyer ce message : \n"
@@ -210,7 +305,6 @@ ajaj.error = function(msg) {
 	try {
 		UI().dismiss();
 		UI().info("Erreur !", msg);
-		UI().exit();
 	} catch(e) {alert("Error ajaj.error");alert(e);}
 }
 
@@ -232,10 +326,9 @@ splash.jss = function(w,h,iconSize) {
 splash.enter = function() {
 	try {
 	// Si l'application est déjà chargée, on zappe directement jusqu'à la frontpage.
-	if (runstate.skipSplash) {
+	if (runstate.loaded) {
 		splash.click.goFrontpage();
 	} else {
-		runstate.skipSplash = true;
 		jss();
 		$('#splash.screen').clickOnce(splash.click.goFrontpage);
 	}
@@ -267,7 +360,8 @@ frontpage.jss = function(w, h, iconSize) {
 	var hh = h - nbRows * iconSize;
 	var titleHeight = hh*0.4;
 	var labelHeight = hh*0.4 / nbRows;
-	var buttonHeight = labelHeight + iconSize;
+	var buttonPadding = hh*0.05/nbRows;
+	var buttonHeight = labelHeight + iconSize + buttonPadding;
 	var buttonWidth = Math.max(w*0.25,iconSize);
 	var freeSpace = h - titleHeight;
 	$fp("#title-block")
@@ -288,17 +382,20 @@ frontpage.jss = function(w, h, iconSize) {
 	$fp(".info .icon").data('image', 'aide');
 	
 	$fp(".frontpage-button")
-		.css('text-align', 'center')
+		.css({
+			textAlign: 'center',
+			paddingTop: buttonPadding
+		})
 		.width(buttonWidth);
 	
 	$fp(".frontpage-button > div").css('display', 'block');
 	
+	var interIconSpace = (freeSpace - nbRows * buttonHeight) / (nbRows + 1);
 	$fp(".frontpage-button").each(function(i,e){
 		try {
 		e=$(e);
 		var currentRow = Math.floor(i/2);
 		var currentColumn = i % 2;
-		var interIconSpace = (freeSpace - nbRows * buttonHeight) / (nbRows + 1);
 		var iconOffset = titleHeight + ((currentRow+1) * interIconSpace) + (currentRow * buttonHeight);
 		if (currentColumn == 0) {
 			e.northEast({left:w/2-ww*0.05,top:iconOffset});
@@ -621,73 +718,17 @@ score.click.jaivu = function() {
 	} catch(e) {alert("Error score.click.jaivu");alert(e);}
 };
 
-// ==== Code métier pour la connexion
-connection = {};
-
-connection.jss = function(w, h, iconSize) {
-	try {
-		var c = $("#connection.screen");
-		var $c = function() {
-			try {
-				return c.find.apply(c,arguments);
-			} catch(e) {alert("Error anonymous 1 in connection.jss");alert(e);}
-		};
-		
-		$c("input, label")
-			.css("white-space", "nowrap")
-			.css('position', 'absolute')
-			.fitFont(w*0.3, h*0.06);
-		$c("#user-label").east({left:w*0.45,top:h*0.25});
-		$c("#user").west({left:w*0.55,top:h*0.25});
-		$c("#passwd-label").east({left:w*0.45,top:h*0.5});
-		$c("#passwd").west({left:w*0.55,top:h*0.5});
-		$c("#connect").center({left:w/2,top:h*0.75});
-	} catch(e) {alert("Error connection.jss");alert(e);}
-};
-
-connection.enter = function() {
-	try {
-		$("#connect-form").unbind("submit", connection.connect).submit(connection.connect);
-		jss();
-		UI().dismiss();
-	} catch(e) {alert("Error connection.enter");alert(e);}
-};
-
-connection.connect = function() {
-	try {
-		UI().setPreference("user", $("#user").val());
-		UI().setPreference("passwd", $("#passwd").val());
-		ajaj.request("server.php?callback=?", {
-			action: 3,
-			user: $("#user").val(),
-			passwd: $("#passwd").val(),
-		}, connection.connectFetched, connection.connectFetched);
-		return false;
-	} catch(e) {alert("Error connection.connect");alert(e);}
-}
-
-connection.connectFetched = function(data) {
-	try {
-		if (data && data.loginOk) {
-			UI().info("Connexion", "Vous êtes connecté !");
-		} else if (data && data.isError && data.error == 3) {
-			UI().info("Connexion", data.msg);
-		} else {
-			ajaj.smallError(data);
-		}
-		state.set('screen', 'frontpage').validate();
-	} catch(e) {alert("Error connection.connectFetched");alert(e);}
-}
-
 // ==== Code métier pour la page d'info
 info = {};
 
 info.jss = function(w,h,iconSize) {
+	try {
 	$("#info-back-p").css('text-align', 'center');
 	$("#info.screen .container input").css('font-size', 'inherit');
 	$("#info.screen .container")
 		.fitFont(w*0.9, h*0.9, null, null, true)
 		.center($("#info.screen"));
+	} catch(e) {alert("Error info.jss");alert(e);}
 }
 
 info.enter = function() {
@@ -705,6 +746,65 @@ info.click.goBack = function(){
 	} catch(e) {alert("Error anonymous in info.enter");alert(e);}
 };
 
+// ==== Code métier pour la connexion
+connection = {};
+
+connection.jss = function(w, h, iconSize) {
+	try {
+		var c = $("#connection.screen");
+		var $c = function() {
+			try {
+				return c.find.apply(c,arguments);
+			} catch(e) {alert("Error anonymous 1 in connection.jss");alert(e);}
+		};
+		
+		$c("input, label")
+			.fitFont(w*0.45, h*0.06, null, null, true, true);
+		$c("#user-label").east({left:w*0.475,top:h*0.25});
+		$c("#user").west({left:w*0.525,top:h*0.25});
+		$c("#passwd-label").east({left:w*0.475,top:h*0.5});
+		$c("#passwd").west({left:w*0.525,top:h*0.5});
+		$c("#connect").center({left:w/2,top:h*0.75});
+	} catch(e) {alert("Error connection.jss");alert(e);}
+};
+
+connection.enter = function() {
+	try {
+		$("#connect-form").unbind("submit", connection.connect).submit(connection.connect);
+		jss();
+		UI().dismiss();
+	} catch(e) {alert("Error connection.enter");alert(e);}
+};
+
+connection.connect = function() {
+	try {
+		UI().setPreference("user", $("#user").val());
+		UI().setPreference("passwd", $("#passwd").val());
+		ajaj.request("server.php?callback=?", {
+			action: 7,
+			user: $("#user").val(),
+			passwd: $("#passwd").val(),
+		}, connection.connectFetched, connection.connectFetched);
+		return false;
+	} catch(e) {alert("Error connection.connect");alert(e);}
+}
+
+connection.connectFetched = function(data) {
+	try {
+		if (data && data.theme) {
+			prefs.loadPrefs();
+			UIInfo("Connexion", "Vous êtes connecté !");
+		} else if (data && data.isError && data.error == 3) {
+			prefs.loadPrefs();
+			UIInfo("Connexion", data.msg);
+		} else {
+			prefs.loadPrefs();
+			ajaj.smallError(data);
+		}
+		state.set('screen', 'frontpage').validate();
+	} catch(e) {alert("Error connection.connectFetched");alert(e);}
+}
+
 // ==== Code métier pour la page de configuration
 prefs = {};
 
@@ -717,14 +817,13 @@ prefs.jss = function(w,h,iconSize) {
 			} catch(e) {alert("Error anonymous 1 in prefs.jss");alert(e);}
 		};
 		
-		$("input, label, select")
-			.css("white-space", "nowrap")
-			.css('position', 'absolute')
-			.fitFont(w*0.3, h*0.06);
-		$p("#theme-label").east({left:w*0.45,top:h*0.25});
-		$p("#theme").west({left:w*0.55,top:h*0.25});
-		$p("#prefs-cancel").east({left:w*0.45,top:h*0.5});
-		$p("#prefs-apply").west({left:w*0.55,top:h*0.5});
+		$p("input, label")
+			.fitFont(w*0.45, h*0.06, null, null, true, true);
+		$p("legend")
+			.fitFont(w*0.3, h*0.05, null, null, true, true);
+		$p("#theme").center({left:w*0.5,top:h*0.25});
+		$p("#prefs-cancel").east({left:w*0.475,top:h*0.5});
+		$p("#prefs-apply").west({left:w*0.525,top:h*0.5});
 	} catch(e) {alert("Error prefs.jss");alert(e);}
 }
 
@@ -732,6 +831,9 @@ prefs.enter = function() {
 	try {
 		$("#prefs-form").unbind('submit', prefs.apply).submit(prefs.apply);
 		$("#prefs-cancel").clickOnce(prefs.cancel);
+		$("#prefs-form input:radio[name=theme]").attr('checked', function(i,val) {
+			return $(this).val() == runstate.prefs.theme;
+		});
 		jss();
 		UI().dismiss();
 	} catch(e) {alert("Error prefs.enter");alert(e);}
@@ -739,32 +841,42 @@ prefs.enter = function() {
 
 prefs.apply = function(){
 	try {
-		var newtheme = $("#theme").val();
+		var newtheme = $("#prefs-form input:radio[name=theme]:checked").val();
 		ajaj.request("server.php?callback=?", {
 			action: 8,
 			key: 'theme',
 			value: newtheme
 		}, function(data) {
-			if (data)
-				UI().info("Préférences", "Les préférences ont été enregistrées.");
-			else
-				UI().info("Préférences", "Les préférences n'ont pas pu être enregistrées.");
-		});
-		$("link[@rel*=stylesheet][title]").each(function(i,e){
-			// Il semblerait que pour qu'un "aleternate stylesheet" puisse être activé, il faut d'abord qu'il ait été désactivé…
-			e.disabled = true;
-			e.disabled = (e.getAttribute('title') != newtheme);
+			try {
+			if (data.theme) {
+				UIInfo("Préférences", "Les préférences ont été enregistrées.");
+				prefs.loadPrefs(data);
+			} else {
+				UIInfo("Préférences", "Les préférences n'ont pas pu être enregistrées.");
+			}
+			} catch(e) {alert("Error anonymous in prefs.apply");alert(e);}
 		});
 		state.set('screen', 'frontpage').validate();
 		return false;
 	} catch(e) {alert("Error anonymous in prefs.apply");alert(e);}
 };
 
-function switchStylestyle(styleName) {
-}
-
 prefs.cancel = function(){
 	try {
 		state.set('screen', 'frontpage').validate();
 	} catch(e) {alert("Error anonymous in prefs.cancel");alert(e);}
+};
+
+prefs.loadPrefs = function(data) {
+	try {
+		console.log('loadPrefs');
+		if (data && data.theme) {
+			runstate.prefs = data;
+		} else {
+			runstate.prefs = {
+				theme: "green"
+			};
+		}
+		if (runstate.loaded) jss();
+	} catch(e) {alert("Error anonymous in prefs.loadPrefs");alert(e);}
 };

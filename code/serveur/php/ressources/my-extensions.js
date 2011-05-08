@@ -45,19 +45,22 @@ $.fn.sumHeight = function() {
 	} catch(e) {alert("Error sumHeight");alert(e);}
 }
 
-$.fn.fitFont = function(w, h, minFont, maxFont, noContainer) {
+$.fn.fitFont = function(w, h, minFont, maxFont, noContainer, oneline) {
 	try {
 	var oldpos = this.css("position");
-	this.css({
-		position: "absolute",
-		maxWidth: w
-	});
+	this.css({position: "absolute"});
+	
+	if (oneline)
+		this.css("white-space", "nowrap");
+	else
+		this.css({maxWidth: w});
+	
 	if (noContainer) {
 		var wrappers = this;
 	} else {
 		var wrappers = this.wrapInner("<span/>").children();
 	}
-	
+
 	var that = this;
 	this.css("font-size", dichotomy(parseInt(this.css("font-size"), 10), function(x) {
 		try {

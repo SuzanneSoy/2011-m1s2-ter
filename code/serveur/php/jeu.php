@@ -5,14 +5,13 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="target-densitydpi=device-dpi" />
 		<style>.screen { display: none; }</style>
-		<link rel="stylesheet" href="ressources/green.css" title="green" />
-		<link rel="alternate stylesheet" href="ressources/black.css" title="black" />
 		<script src="ressources/jquery-1.5.1.min.js"></script>
 		<script src="ressources/jquery-ui-1.8.11.custom.min.js"></script>
 		<script src="ressources/jquery.ba-hashchange.min.js"></script>
 		<script src="ressources/jquery.JSON.js"></script>
 		<script src="ressources/my-extensions.js"></script>
 		<script src="ressources/pticlic.js"></script>
+		<script src="server.php?callback=prefs.loadPrefs&action=7"></script>
 	</head>
 	<body>
 		<div id="nojs">Chargement…</div>
@@ -97,11 +96,11 @@
 		</div>
 		<div class="screen" id="prefs">
 			<form id="prefs-form" action="#" method="GET">
-				<label id="theme-label" for="theme">Thème : </label>
-				<select name="theme" id="theme">
-					<option value="green">Colline verdoyante</option>
-					<option value="black">Bas-fond de cachot</option>
-				</select>
+				<fieldset id="theme">
+					<legend>Thème</legend>
+					<input type="radio" id="theme-green" name="theme" value="green" /><label for="theme-green">Colline verdoyante</label><br/>
+					<input type="radio" id="theme-black" name="theme" value="black" /><label for="theme-black">Bas-fond de cachot</label>
+				</fieldset>
 				<input type="submit" name="prefs-apply" id="prefs-apply" value="Appliquer" />
 				<input type="reset" name="prefs-cancel" id="prefs-cancel" value="Annuler" />
 			</form>

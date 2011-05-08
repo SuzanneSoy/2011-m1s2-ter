@@ -65,10 +65,6 @@ function main()
 		return;
 	}
 	
-	// Sinon tout est bon on effectue l'opération correspondant à la commande passée.
-	// TODO : en production, utiliser : header("Content-Type: application/json; charset=utf-8");
-	header("Content-Type: text/plain; charset=utf-8");
-	
 	if  ($action == 2) {                // "Create partie"
 		// Requête POST : http://serveur/server.php?action=2&nb=2&mode=normal&user=foo&passwd=bar
 		if (!isset($_GET['nb']) || !isset($_GET['mode'])) {
@@ -110,14 +106,19 @@ function main()
 		if (!isset($_GET['key']) || !isset($_GET['value']))
 			throw new Exception("La requête est incomplète", 2);
 		setUserPref($user, $_GET['key'], $_GET['value']);
+		userPrefs($user);
 	} else {
 		throw new Exception("Commande inconnue", 2);
 	}
 }
 
 function server() {
-	if(isset($_GET['callback']))
+	if(isset($_GET['callback'])) {
 		echo $_GET['callback'].'(';
+		header("Content-Type: application/javascript; charset=utf-8");
+	} else {
+		header("Content-Type: application/json; charset=utf-8");
+	}
 	ob_start();
 	try {
 		main();
