@@ -77,8 +77,9 @@ function jss() {
 				WebkitBorderRadius: 10,
 				textAlign: 'center'
 			})
-			.width(w*0.5)
 			.fitFont(w/2, h*0.1)
+			.css('max-width', w*0.6)
+			.width(w*0.6)
 			.center({left: w/2, top:h*0.1});
 		
 		$("#"+state.screen+".screen")
