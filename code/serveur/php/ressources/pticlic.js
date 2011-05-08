@@ -257,12 +257,13 @@ ajaj.request = function(url, data, okFunction, smallErrorFunction, bigErrorFunct
 	try {
 		smallErrorFunction = smallErrorFunction || ajaj.smallError;
 		bigErrorFunction = bigErrorFunction || ajaj.bigError;
-		var user = UI().getPreference("user");
-		var passwd = UI().getPreference("passwd");
+		var user = "" + UI().getPreference("user");
+		var passwd = "" + UI().getPreference("passwd");
 		if (user != '' && passwd != '') {
-			// TODO : on transfère le user/passwd à chaque fois ici… c'est pas très bon.
-			data = $.extend({user:user, passwd:passwd}, data);
+			if (!data.user) data.user = user;
+			if (!data.passwd) data.passwd = passwd;
 		}
+		
 		return $.getJSON(url, data, function(data) {
 			try {
 			if (data && data.isError) {
