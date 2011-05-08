@@ -216,16 +216,7 @@ function UI () {
 					alert(msg);
  				} catch(e) {alert("Error UI().info");alert(e);}
 			},
-			setScreen: function() {},
-			switchCSS: function(newtheme) {
-				try {
-				$("link[@rel*=stylesheet][title]").each(function(i,e){
-					// Il semblerait que pour qu'un "aleternate stylesheet" puisse être activé, il faut d'abord qu'il ait été désactivé…
-					e.disabled = true;
-					e.disabled = (e.getAttribute('title') != newtheme);
-				});
-				} catch(e) {alert("Error UI().switchCSS");alert(e);}
-			}
+			setScreen: function() {}
 		};
 	}
 	} catch(e) {alert("Error UI");alert(e);}
@@ -256,6 +247,7 @@ $(function() {
 		$(window).resize(jss);
 		$(window).hashchange(hashchange);
 		hashchange();
+		runstate.loaded = true;
 	} catch(e) {alert("Error main function");alert(e);}
 });
 
@@ -336,7 +328,6 @@ splash.enter = function() {
 	if (runstate.loaded) {
 		splash.click.goFrontpage();
 	} else {
-		runstate.loaded = true;
 		jss();
 		$('#splash.screen').clickOnce(splash.click.goFrontpage);
 	}
@@ -877,6 +868,7 @@ prefs.cancel = function(){
 
 prefs.loadPrefs = function(data) {
 	try {
+		console.log('loadPrefs');
 		if (data && data.theme) {
 			runstate.prefs = data;
 		} else {
