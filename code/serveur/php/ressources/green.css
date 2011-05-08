@@ -5,6 +5,10 @@ html, body {
 	color: black;
 }
 
+#nojs {
+	color: white;
+}
+
 .screen {
 	background-color: #FFFFE0;
 }
@@ -26,7 +30,7 @@ html, body {
 	background-color: #F0F8D0;
 }
 
-.relationBox {
+#message, .relationBox {
 	border-color: #44AA44;
 	background-color: #F0F8D0;
 }

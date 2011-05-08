@@ -772,13 +772,13 @@ function getUserInfo($user, $key) {
 }
 
 function setUserInfo($user, $key, $value) {
-	getDB()->exec("UPDATE user_info SET value = '".SQLite3::escapeString($value)
-				  ."' WHERE user = '".SQLite3::escapeString($user)
-				  ."' AND key = '".SQLite3::escapeString($key)."';");
+	getDB()->exec("INSERT OR REPLACE INTO user_info(user, key, value) values('".SQLite3::escapeString($user)
+				  ."', '".SQLite3::escapeString($key)
+				  ."', '".SQLite3::escapeString($value)."');");
 }
 
 function userPrefsDefaults() {
-	$prefs = Array(
+	return Array(
 		"theme" => "green"
 	);
 }
@@ -793,8 +793,12 @@ function userPrefs($user) {
 }
 
 function setUserPref($user, $key, $value) {
-	if (array_key_exists($key, userPrefsDefaults()))
+	if (array_key_exists($key, userPrefsDefaults())) {
 		setUserInfo($user, $key, $value);
+		echo 'true';
+	} else {
+		echo 'false';
+	}
 }
 
 ?>
