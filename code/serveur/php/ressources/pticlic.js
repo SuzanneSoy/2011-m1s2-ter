@@ -66,6 +66,22 @@ function jss() {
 		else if(h > 500) iconSize = 48;
 		else iconSize = 36;
 		
+		$('#nojs').hide();
+
+		$('#message:visible')
+			.css({
+				position: 'absolute',
+				borderWidth: 'thin',
+				borderStyle: 'solid',
+				MozBorderRadius: 10,
+				WebkitBorderRadius: 10,
+				padding: 10,
+				textAlign: 'center'
+			})
+			.wh(w/2, h*0.1)
+			.fitFont(w/2, h*0.1)
+			.center({left: w/2, top:h*0.1});
+		
 		$("#"+state.screen+".screen")
 			.wh(w, h)
 			.northWest({top:0,left:0});
@@ -77,6 +93,8 @@ function jss() {
 				overflow: "hidden",
 				textAlign: "left"
 			});
+		
+		$(".clearboth").css('clear', 'both');
 		
 		$(".screen").hide();
 		$("#"+state.screen+".screen").show();
@@ -109,9 +127,24 @@ function UI () {
 			log: function(msg) {
 				try {
 					window.console && console.log(msg);
-				} catch(e) {alert("Error UI.log");alert(e);}
+				} catch(e) {alert("Error UI().log");alert(e);}
 			},
-			info: function(title, msg) { alert(msg); },
+			info: function(title, msg) {
+				try {
+					$('#message')
+						.qCss('opacity',0)
+						.qShow()
+						.queue(function(next){
+							$('#message')
+								.text(msg);
+							jss();
+							next();
+						})
+						.animate({opacity:0.9}, 700)
+						.delay(1000)
+						.animate({opacity:0}, 700);
+				} catch(e) {alert("Error UI().info");alert(e);}
+			},
 			setScreen: function() {}
 		};
 	}
@@ -338,7 +371,10 @@ game.jss = function(w, h, iconSize) {
 		.fitIn("#mc-caption-block", 0.1);
 	
 	$g("#mn-caption-block")
-		.css({borderWidth: h/100})
+		.css({
+			borderWidth: h/100,
+			borderStyle: 'solid none'
+		})
 		.wh(w, mnh)
 		.north($g("#mc-caption-block").south());
 	
@@ -351,7 +387,9 @@ game.jss = function(w, h, iconSize) {
 			margin: 10,
 			padding: 10,
 			MozBorderRadius: 10,
-			WebkitBorderRadius: 10
+			WebkitBorderRadius: 10,
+			borderWidth: 'thin',
+			borderStyle: 'solid',
 		});
 	
 	$g(".relationBox:visible .icon")
@@ -598,11 +636,11 @@ connection.jss = function(w, h, iconSize) {
 		$c("input, label")
 			.css("white-space", "nowrap")
 			.css('position', 'absolute')
-			.fitFont(w*0.3, h*0.25);
-		$c("#user-label").east({left:w/2,top:h*0.25});
-		$c("#user").west({left:w/2,top:h*0.25});
-		$c("#passwd-label").east({left:w/2,top:h*0.5});
-		$c("#passwd").west({left:w/2,top:h*0.5});
+			.fitFont(w*0.3, h*0.06);
+		$c("#user-label").east({left:w*0.45,top:h*0.25});
+		$c("#user").west({left:w*0.55,top:h*0.25});
+		$c("#passwd-label").east({left:w*0.45,top:h*0.5});
+		$c("#passwd").west({left:w*0.55,top:h*0.5});
 		$c("#connect").center({left:w/2,top:h*0.75});
 	} catch(e) {alert("Error connection.jss");alert(e);}
 };
@@ -682,9 +720,9 @@ prefs.jss = function(w,h,iconSize) {
 		$("input, label, select")
 			.css("white-space", "nowrap")
 			.css('position', 'absolute')
-			.fitFont(w*0.4, h*0.1);
-		$p("#theme-label").east({left:w/2,top:h*0.25});
-		$p("#theme").west({left:w/2,top:h*0.25});
+			.fitFont(w*0.3, h*0.06);
+		$p("#theme-label").east({left:w*0.45,top:h*0.25});
+		$p("#theme").west({left:w*0.55,top:h*0.25});
 		$p("#prefs-cancel").east({left:w*0.45,top:h*0.5});
 		$p("#prefs-apply").west({left:w*0.55,top:h*0.5});
 	} catch(e) {alert("Error prefs.jss");alert(e);}
@@ -701,14 +739,32 @@ prefs.enter = function() {
 
 prefs.apply = function(){
 	try {
-		alert($("#theme").val());
+		var newtheme = $("#theme").val();
+		ajaj.request("server.php?callback=?", {
+			action: 8,
+			key: 'theme',
+			value: newtheme
+		}, function(data) {
+			if (data)
+				UI().info("Préférences", "Les préférences ont été enregistrées.");
+			else
+				UI().info("Préférences", "Les préférences n'ont pas pu être enregistrées.");
+		});
+		$("link[@rel*=stylesheet][title]").each(function(i,e){
+			// Il semblerait que pour qu'un "aleternate stylesheet" puisse être activé, il faut d'abord qu'il ait été désactivé…
+			e.disabled = true;
+			e.disabled = (e.getAttribute('title') != newtheme);
+		});
 		state.set('screen', 'frontpage').validate();
 		return false;
-	} catch(e) {alert("Error anonymous in prefs.click.apply");alert(e);}
+	} catch(e) {alert("Error anonymous in prefs.apply");alert(e);}
 };
+
+function switchStylestyle(styleName) {
+}
 
 prefs.cancel = function(){
 	try {
 		state.set('screen', 'frontpage').validate();
-	} catch(e) {alert("Error anonymous in prefs.click.cancel");alert(e);}
+	} catch(e) {alert("Error anonymous in prefs.cancel");alert(e);}
 };

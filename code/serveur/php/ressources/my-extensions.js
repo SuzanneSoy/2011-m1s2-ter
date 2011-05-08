@@ -95,8 +95,9 @@ function queueize(method) {
 	try {
 	return function() {
 		var $this = this;
+		var args = arguments;
 		return this.queue(function(next) {
-			$this[method].apply($this,arguments);
+			$this[method].apply($this,args);
 			next();
 		});
 	};
@@ -105,6 +106,9 @@ function queueize(method) {
 
 $.fn.qAddClass = queueize("addClass");
 $.fn.qRemoveClass = queueize("removeClass");
+$.fn.qShow = queueize("show");
+$.fn.qHide = queueize("hide");
+$.fn.qCss = queueize("css");
 
 $.fn.wh = function(w, h) {
 	try {

@@ -3,40 +3,10 @@
 	<head>
 		<title>PtiClic pre-alpha 0.2</title>
 		<meta charset="utf-8" />
-		<style>
-html, body {
-	overflow: hidden;
-}
-
-.screen {
-	display: none;
-}
-
-#splash.screen {
-	display: block;
-}
-
-#mn-caption-block {
-	border-top-width: medium;
-	border-top-style: solid;
-	border-bottom-width: medium;
-	border-bottom-style: solid;
-}
-
-.relationBox {
-	border-width: thin;
-	border-style: solid;
-}
-
-.clearboth {
-	clear: both;
-}
-
-.frontpage-button {
-	text-align: center;
-}
-		</style>
-		<link rel="stylesheet" href="ressources/green.css" />
+		<meta name="viewport" content="target-densitydpi=device-dpi" />
+		<style>.screen { display: none; }</style>
+		<link rel="stylesheet" href="ressources/green.css" title="green" />
+		<link rel="alternate stylesheet" href="ressources/black.css" title="black" />
 		<script src="ressources/jquery-1.5.1.min.js"></script>
 		<script src="ressources/jquery-ui-1.8.11.custom.min.js"></script>
 		<script src="ressources/jquery.ba-hashchange.min.js"></script>
@@ -45,6 +15,7 @@ html, body {
 		<script src="ressources/pticlic.js"></script>
 	</head>
 	<body>
+		<div id="nojs">Chargement…</div>
 		<div class="screen" id="splash">
 			<img src="ressources/img/splash.png" />
 		</div>
@@ -143,6 +114,8 @@ html, body {
 			<div class="scoreLine">
 				<span class="word"></span> (<span class="score"></span>)
 			</div>
+		</div>
+		<div id="message" style="display: none;">
 		</div>
 	</body>
 </html>
