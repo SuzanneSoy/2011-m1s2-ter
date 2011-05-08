@@ -624,6 +624,32 @@ score.click.jaivu = function() {
 	} catch(e) {alert("Error score.click.jaivu");alert(e);}
 };
 
+// ==== Code métier pour la page d'info
+info = {};
+
+info.jss = function(w,h,iconSize) {
+	$("#info-back-p").css('text-align', 'center');
+	$("#info.screen .container input").css('font-size', 'inherit');
+	$("#info.screen .container")
+		.fitFont(w*0.9, h*0.9, null, null, true)
+		.center($("#info.screen"));
+}
+
+info.enter = function() {
+	try {
+		$("#info-back").clickOnce(info.click.goBack);
+		jss();
+		UI().dismiss();
+	} catch(e) {alert("Error info.enter");alert(e);}
+};
+
+info.click = {};
+info.click.goBack = function(){
+	try {
+		state.set('screen', 'frontpage').validate();
+	} catch(e) {alert("Error anonymous in info.enter");alert(e);}
+};
+
 // ==== Code métier pour la connexion
 connection = {};
 
@@ -639,11 +665,11 @@ connection.jss = function(w, h, iconSize) {
 		$c("input, label")
 			.css("white-space", "nowrap")
 			.css('position', 'absolute')
-			.fitFont(w*0.3, h*0.06);
-		$c("#user-label").east({left:w*0.45,top:h*0.25});
-		$c("#user").west({left:w*0.55,top:h*0.25});
-		$c("#passwd-label").east({left:w*0.45,top:h*0.5});
-		$c("#passwd").west({left:w*0.55,top:h*0.5});
+			.fitFont(w*0.45, h*0.06, null, null, true, true);
+		$c("#user-label").east({left:w*0.475,top:h*0.25});
+		$c("#user").west({left:w*0.525,top:h*0.25});
+		$c("#passwd-label").east({left:w*0.475,top:h*0.5});
+		$c("#passwd").west({left:w*0.525,top:h*0.5});
 		$c("#connect").center({left:w/2,top:h*0.75});
 	} catch(e) {alert("Error connection.jss");alert(e);}
 };
@@ -682,32 +708,6 @@ connection.connectFetched = function(data) {
 	} catch(e) {alert("Error connection.connectFetched");alert(e);}
 }
 
-// ==== Code métier pour la page d'info
-info = {};
-
-info.jss = function(w,h,iconSize) {
-	$("#info-back-p").css('text-align', 'center');
-	$("#info.screen .container input").css('font-size', 'inherit');
-	$("#info.screen .container")
-		.fitFont(w*0.9, h*0.9, null, null, true)
-		.center($("#info.screen"));
-}
-
-info.enter = function() {
-	try {
-		$("#info-back").clickOnce(info.click.goBack);
-		jss();
-		UI().dismiss();
-	} catch(e) {alert("Error info.enter");alert(e);}
-};
-
-info.click = {};
-info.click.goBack = function(){
-	try {
-		state.set('screen', 'frontpage').validate();
-	} catch(e) {alert("Error anonymous in info.enter");alert(e);}
-};
-
 // ==== Code métier pour la page de configuration
 prefs = {};
 
@@ -721,13 +721,12 @@ prefs.jss = function(w,h,iconSize) {
 		};
 		
 		$("input, label, select")
-			.css("white-space", "nowrap")
 			.css('position', 'absolute')
-			.fitFont(w*0.3, h*0.06);
-		$p("#theme-label").east({left:w*0.45,top:h*0.25});
-		$p("#theme").west({left:w*0.55,top:h*0.25});
-		$p("#prefs-cancel").east({left:w*0.45,top:h*0.5});
-		$p("#prefs-apply").west({left:w*0.55,top:h*0.5});
+			.fitFont(w*0.45, h*0.06, null, null, true, true);
+		$p("#theme-label").east({left:w*0.475,top:h*0.25});
+		$p("#theme").west({left:w*0.525,top:h*0.25});
+		$p("#prefs-cancel").east({left:w*0.475,top:h*0.5});
+		$p("#prefs-apply").west({left:w*0.525,top:h*0.5});
 	} catch(e) {alert("Error prefs.jss");alert(e);}
 }
 
