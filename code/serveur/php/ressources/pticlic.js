@@ -128,7 +128,7 @@ function UI () {
 					window.console && console.log(msg);
 				} catch(e) {alert("Error UI().log");alert(e);}
 			},
-			info: function(title, msg) { alert(msg); }
+			info: function(title, msg) { alert(msg); },
 			setScreen: function() {},
 			switchCSS: function(newtheme) {
 				$("link[@rel*=stylesheet][title]").each(function(i,e){
