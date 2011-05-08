@@ -795,9 +795,6 @@ function userPrefs($user) {
 function setUserPref($user, $key, $value) {
 	if (array_key_exists($key, userPrefsDefaults())) {
 		setUserInfo($user, $key, $value);
-		echo 'true';
-	} else {
-		echo 'false';
 	}
 }
 

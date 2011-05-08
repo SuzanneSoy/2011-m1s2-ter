@@ -108,7 +108,89 @@ function jss() {
 				e.attr("src", "ressources/img/"+iconSize+"/"+e.data('image')+".png");
 			} catch(e) {alert("Error anonymous in jss");alert(e);}
 		});
+		
+		jssTheme(runstate.prefs.theme);
 	} catch(e) {alert("Error jss");alert(e);}
+}
+
+function jssTheme(theme) {
+	if (theme == "black") {
+		var bg1 = "black";
+		var fg1 = "white";
+		var bg2 = "#222222";
+		var fg2 = "#cccccc";
+		var fg3 = "white";
+		var hot = "#aaaaaa";
+	} else {
+		var bg1 = "#ffffe0";
+		var fg1 = "black";
+		var bg2 = "#f0f8d0";
+		var fg2 = "#4a4";
+		var fg3 = "#8b4";
+		var hot = "yellow";
+	}
+	var splashbg = "black";
+	var splashfg = "white";
+	var screenbg = bg1;
+	var screenfg = fg1;
+	var messagebg = bg2;
+	var messagefg = fg1;
+	var messagebd = fg2;
+	var centralfg = fg3;
+	var cloudbg = bg2;
+	var cloudfg = fg2;
+	var cloudbd = fg2;
+	var relationbg = bg2;
+	var relationbd = fg2;
+	var fphoverbg = bg2;
+	var fphoverbd = fg2;
+	var hotbg = hot;
+
+	$('.screen').css({
+		color: screenfg,
+		backgroundColor: screenbg
+	});
+
+	$('html, body, #splash.screen').css({
+		backgroundColor: splashbg,
+		color: splashfg
+	});
+
+	$("#message").css({
+		backgroundColor: messagebg,
+		color: messagefg,
+		borderColor: messagebd
+	});
+
+	$(".frontpage-button").hover(function() {
+		$(this).css({
+			backgroundColor: fphoverbg,
+			outline: "medium solid "+fphoverbd
+		});
+	}, function() {
+		$(this).css({
+			outline: '',
+			backgroundColor: "transparent"
+		});
+	});
+
+	$('#mc-caption').css({color: centralfg});
+
+	$('#mn-caption').css({color: cloudfg});
+
+	$('#mn-caption-block').css({
+		borderColor: cloudbd,
+		backgroundColor: cloudbg
+	});
+
+	$('.relationBox').css({
+		borderColor: relationbd,
+		backgroundColor: relationbg
+	});
+
+	$('.relations .hot').css({backgroundColor: hotbg});
+
+	$("a, a:visited").css({color: "#8888ff"});
 }
 
 // ==== Interface Android
@@ -251,10 +333,10 @@ splash.jss = function(w,h,iconSize) {
 splash.enter = function() {
 	try {
 	// Si l'application est déjà chargée, on zappe directement jusqu'à la frontpage.
-	if (runstate.skipSplash) {
+	if (runstate.loaded) {
 		splash.click.goFrontpage();
 	} else {
-		runstate.skipSplash = true;
+		runstate.loaded = true;
 		jss();
 		$('#splash.screen').clickOnce(splash.click.goFrontpage);
 	}
@@ -718,13 +800,13 @@ connection.connect = function() {
 connection.connectFetched = function(data) {
 	try {
 		if (data && data.theme) {
-			UI().switchCSS(data.theme || "green");
+			prefs.loadPrefs();
 			UIInfo("Connexion", "Vous êtes connecté !");
 		} else if (data && data.isError && data.error == 3) {
-			UI().switchCSS("green");
+			prefs.loadPrefs();
 			UIInfo("Connexion", data.msg);
 		} else {
-			UI().switchCSS("green");
+			prefs.loadPrefs();
 			ajaj.smallError(data);
 		}
 		state.set('screen', 'frontpage').validate();
@@ -757,6 +839,9 @@ prefs.enter = function() {
 	try {
 		$("#prefs-form").unbind('submit', prefs.apply).submit(prefs.apply);
 		$("#prefs-cancel").clickOnce(prefs.cancel);
+		$("#prefs-form input:radio[name=theme]").attr('checked', function(i,val) {
+			return $(this).val() == runstate.prefs.theme;
+		});
 		jss();
 		UI().dismiss();
 	} catch(e) {alert("Error prefs.enter");alert(e);}
@@ -764,16 +849,16 @@ prefs.enter = function() {
 
 prefs.apply = function(){
 	try {
-		var newtheme = $("input:radio[name=theme]:checked").val();
+		var newtheme = $("#prefs-form input:radio[name=theme]:checked").val();
 		ajaj.request("server.php?callback=?", {
 			action: 8,
 			key: 'theme',
 			value: newtheme
 		}, function(data) {
 			try {
-			if (data) {
+			if (data.theme) {
 				UIInfo("Préférences", "Les préférences ont été enregistrées.");
-				UI().switchCSS(newtheme);
+				prefs.loadPrefs(data);
 			} else {
 				UIInfo("Préférences", "Les préférences n'ont pas pu être enregistrées.");
 			}
@@ -788,4 +873,17 @@ prefs.cancel = function(){
 	try {
 		state.set('screen', 'frontpage').validate();
 	} catch(e) {alert("Error anonymous in prefs.cancel");alert(e);}
+};
+
+prefs.loadPrefs = function(data) {
+	try {
+		if (data && data.theme) {
+			runstate.prefs = data;
+		} else {
+			runstate.prefs = {
+				theme: "green"
+			};
+		}
+		if (runstate.loaded) jss();
+	} catch(e) {alert("Error anonymous in prefs.loadPrefs");alert(e);}
 };

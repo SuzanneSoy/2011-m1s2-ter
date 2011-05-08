@@ -1,26 +1,17 @@
 <!DOCTYPE html>
-<?php
-require_once("ressources/backend.inc");
-session_start();
-
-$theme = "green";
-if(isset($_SESSION['userId']))
-	$theme = getUserInfo($_SESSION['userId'], "theme");
-?>
 <html>
 	<head>
 		<title>PtiClic pre-alpha 0.2</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="target-densitydpi=device-dpi" />
 		<style>.screen { display: none; }</style>
-		<link rel="<?php if ($theme != "green") echo "alternate "; ?>stylesheet" href="ressources/green.css" title="green" />
-		<link rel="<?php if ($theme != "black") echo "alternate "; ?>stylesheet" href="ressources/black.css" title="black" />
 		<script src="ressources/jquery-1.5.1.min.js"></script>
 		<script src="ressources/jquery-ui-1.8.11.custom.min.js"></script>
 		<script src="ressources/jquery.ba-hashchange.min.js"></script>
 		<script src="ressources/jquery.JSON.js"></script>
 		<script src="ressources/my-extensions.js"></script>
 		<script src="ressources/pticlic.js"></script>
+		<script src="server.php?callback=prefs.loadPrefs&action=7"></script>
 	</head>
 	<body>
 		<div id="nojs">Chargement…</div>
@@ -107,8 +98,8 @@ if(isset($_SESSION['userId']))
 			<form id="prefs-form" action="#" method="GET">
 				<fieldset id="theme">
 					<legend>Thème</legend>
-					<input type="radio" id="theme-green" name="theme" value="green" <?php if ($theme == "green") echo 'checked="checked" '; ?>/><label for="theme-green">Colline verdoyante</label><br/>
-					<input type="radio" id="theme-black" name="theme" value="black" <?php if ($theme == "black") echo 'checked="checked" '; ?>/><label for="theme-black">Bas-fond de cachot</label>
+					<input type="radio" id="theme-green" name="theme" value="green" /><label for="theme-green">Colline verdoyante</label><br/>
+					<input type="radio" id="theme-black" name="theme" value="black" /><label for="theme-black">Bas-fond de cachot</label>
 				</fieldset>
 				<input type="submit" name="prefs-apply" id="prefs-apply" value="Appliquer" />
 				<input type="reset" name="prefs-cancel" id="prefs-cancel" value="Annuler" />
