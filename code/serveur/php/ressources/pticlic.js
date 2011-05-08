@@ -663,8 +663,6 @@ connection.jss = function(w, h, iconSize) {
 		};
 		
 		$c("input, label")
-			.css("white-space", "nowrap")
-			.css('position', 'absolute')
 			.fitFont(w*0.45, h*0.06, null, null, true, true);
 		$c("#user-label").east({left:w*0.475,top:h*0.25});
 		$c("#user").west({left:w*0.525,top:h*0.25});
@@ -720,11 +718,11 @@ prefs.jss = function(w,h,iconSize) {
 			} catch(e) {alert("Error anonymous 1 in prefs.jss");alert(e);}
 		};
 		
-		$("input, label, select")
-			.css('position', 'absolute')
+		$p("input, label")
 			.fitFont(w*0.45, h*0.06, null, null, true, true);
-		$p("#theme-label").east({left:w*0.475,top:h*0.25});
-		$p("#theme").west({left:w*0.525,top:h*0.25});
+		$p("legend")
+			.fitFont(w*0.3, h*0.05, null, null, true, true);
+		$p("#theme").center({left:w*0.5,top:h*0.25});
 		$p("#prefs-cancel").east({left:w*0.475,top:h*0.5});
 		$p("#prefs-apply").west({left:w*0.525,top:h*0.5});
 	} catch(e) {alert("Error prefs.jss");alert(e);}
@@ -741,7 +739,7 @@ prefs.enter = function() {
 
 prefs.apply = function(){
 	try {
-		var newtheme = $("#theme").val();
+		var newtheme = $("input:radio[name=theme]:checked").val();
 		ajaj.request("server.php?callback=?", {
 			action: 8,
 			key: 'theme',
