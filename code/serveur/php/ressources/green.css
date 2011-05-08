@@ -13,6 +13,11 @@ html, body {
 	background-color: #FFFFE0;
 }
 
+.frontpage-button:hover {
+	background-color: #F0F8D0;
+	outline: medium solid #44AA44;
+}
+
 #splash.screen {
 	background-color: black;
 }

@@ -75,10 +75,9 @@ function jss() {
 				borderStyle: 'solid',
 				MozBorderRadius: 10,
 				WebkitBorderRadius: 10,
-				padding: 10,
 				textAlign: 'center'
 			})
-			.wh(w/2, h*0.1)
+			.width(w*0.5)
 			.fitFont(w/2, h*0.1)
 			.center({left: w/2, top:h*0.1});
 		
@@ -141,7 +140,7 @@ function UI () {
 							next();
 						})
 						.animate({opacity:0.9}, 700)
-						.delay(1000)
+						.delay(5000)
 						.animate({opacity:0}, 700);
 				} catch(e) {alert("Error UI().info");alert(e);}
 			},
@@ -267,7 +266,8 @@ frontpage.jss = function(w, h, iconSize) {
 	var hh = h - nbRows * iconSize;
 	var titleHeight = hh*0.4;
 	var labelHeight = hh*0.4 / nbRows;
-	var buttonHeight = labelHeight + iconSize;
+	var buttonPadding = hh*0.05/nbRows;
+	var buttonHeight = labelHeight + iconSize + buttonPadding;
 	var buttonWidth = Math.max(w*0.25,iconSize);
 	var freeSpace = h - titleHeight;
 	$fp("#title-block")
@@ -288,17 +288,20 @@ frontpage.jss = function(w, h, iconSize) {
 	$fp(".info .icon").data('image', 'aide');
 	
 	$fp(".frontpage-button")
-		.css('text-align', 'center')
+		.css({
+			textAlign: 'center',
+			paddingTop: buttonPadding
+		})
 		.width(buttonWidth);
 	
 	$fp(".frontpage-button > div").css('display', 'block');
 	
+	var interIconSpace = (freeSpace - nbRows * buttonHeight) / (nbRows + 1);
 	$fp(".frontpage-button").each(function(i,e){
 		try {
 		e=$(e);
 		var currentRow = Math.floor(i/2);
 		var currentColumn = i % 2;
-		var interIconSpace = (freeSpace - nbRows * buttonHeight) / (nbRows + 1);
 		var iconOffset = titleHeight + ((currentRow+1) * interIconSpace) + (currentRow * buttonHeight);
 		if (currentColumn == 0) {
 			e.northEast({left:w/2-ww*0.05,top:iconOffset});
