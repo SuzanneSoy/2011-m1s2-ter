@@ -129,14 +129,20 @@ function UI () {
 					window.console && console.log(msg);
 				} catch(e) {alert("Error UI().log");alert(e);}
 			},
-			info: function(title, msg) { alert(msg); },
+			info: function(title, msg) {
+				try {
+					alert(msg);
+ 				} catch(e) {alert("Error UI().info");alert(e);}
+			},
 			setScreen: function() {},
 			switchCSS: function(newtheme) {
+				try {
 				$("link[@rel*=stylesheet][title]").each(function(i,e){
 					// Il semblerait que pour qu'un "aleternate stylesheet" puisse être activé, il faut d'abord qu'il ait été désactivé…
 					e.disabled = true;
 					e.disabled = (e.getAttribute('title') != newtheme);
 				});
+				} catch(e) {alert("Error UI().switchCSS");alert(e);}
 			}
 		};
 	}
@@ -149,10 +155,12 @@ function UIInfo(title, msg) {
 			.qCss('opacity',0)
 			.qShow()
 			.queue(function(next){
+				try {
 				$('#message')
 					.text(msg);
 				jss();
 				next();
+				} catch(e) {alert("Error anonymous in UIInfo");alert(e);}
 			})
 			.animate({opacity:0.9}, 700)
 			.delay(5000)
@@ -172,21 +180,23 @@ $(function() {
 // ==== Asynchronous Javascript And Json.
 ajaj = {};
 ajaj.request = function(url, data, okFunction, smallErrorFunction, bigErrorFunction) {
-	smallErrorFunction = smallErrorFunction || ajaj.smallError;
-	bigErrorFunction = bigErrorFunction || ajaj.bigError;
-	var user = UI().getPreference("user");
-	var passwd = UI().getPreference("passwd");
-	if (user != '' && passwd != '') {
-		// TODO : on transfère le user/passwd à chaque fois ici… c'est pas très bon.
-		data = $.extend({user:user, passwd:passwd}, data);
-	}
 	try {
+		smallErrorFunction = smallErrorFunction || ajaj.smallError;
+		bigErrorFunction = bigErrorFunction || ajaj.bigError;
+		var user = UI().getPreference("user");
+		var passwd = UI().getPreference("passwd");
+		if (user != '' && passwd != '') {
+			// TODO : on transfère le user/passwd à chaque fois ici… c'est pas très bon.
+			data = $.extend({user:user, passwd:passwd}, data);
+		}
 		return $.getJSON(url, data, function(data) {
+			try {
 			if (data && data.isError) {
 				smallErrorFunction(data);
 			} else {
 				okFunction(data);
 			}
+			} catch(e) {alert("Error anonymous in ajaj.request");alert(e);}
 		}).error(bigErrorFunction);
 	} catch(e) {alert("Error ajaj.request");alert(e);}
 }
@@ -638,11 +648,13 @@ score.click.jaivu = function() {
 info = {};
 
 info.jss = function(w,h,iconSize) {
+	try {
 	$("#info-back-p").css('text-align', 'center');
 	$("#info.screen .container input").css('font-size', 'inherit');
 	$("#info.screen .container")
 		.fitFont(w*0.9, h*0.9, null, null, true)
 		.center($("#info.screen"));
+	} catch(e) {alert("Error info.jss");alert(e);}
 }
 
 info.enter = function() {
@@ -758,12 +770,14 @@ prefs.apply = function(){
 			key: 'theme',
 			value: newtheme
 		}, function(data) {
+			try {
 			if (data) {
 				UIInfo("Préférences", "Les préférences ont été enregistrées.");
 				UI().switchCSS(newtheme);
 			} else {
 				UIInfo("Préférences", "Les préférences n'ont pas pu être enregistrées.");
 			}
+			} catch(e) {alert("Error anonymous in prefs.apply");alert(e);}
 		});
 		state.set('screen', 'frontpage').validate();
 		return false;
