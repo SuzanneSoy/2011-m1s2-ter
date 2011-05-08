@@ -128,34 +128,35 @@ function UI () {
 					window.console && console.log(msg);
 				} catch(e) {alert("Error UI().log");alert(e);}
 			},
-			info: function(title, msg) {
-				try {
-					$('#message')
-						.qCss('opacity',0)
-						.qShow()
-						.queue(function(next){
-							$('#message')
-								.text(msg);
-							jss();
-							next();
-						})
-						.animate({opacity:0.9}, 700)
-						.delay(5000)
-						.animate({opacity:0}, 700);
-				} catch(e) {alert("Error UI().info");alert(e);}
-			},
 			setScreen: function() {}
 		};
 	}
 	} catch(e) {alert("Error UI");alert(e);}
 }
 
+function UIInfo(title, msg) {
+	try {
+		$('#message')
+			.qCss('opacity',0)
+			.qShow()
+			.queue(function(next){
+				$('#message')
+					.text(msg);
+				jss();
+				next();
+			})
+			.animate({opacity:0.9}, 700)
+			.delay(5000)
+			.animate({opacity:0}, 700);
+	} catch(e) {alert("Error UI().info");alert(e);}
+}
+
 // ==== Code métier général
 $(function() {
 	try {
-	$(window).resize(jss);
-	$(window).hashchange(hashchange);
-	hashchange();
+		$(window).resize(jss);
+		$(window).hashchange(hashchange);
+		hashchange();
 	} catch(e) {alert("Error main function");alert(e);}
 });
 
@@ -180,10 +181,11 @@ ajaj.request = function(url, data, okFunction, smallErrorFunction, bigErrorFunct
 		}).error(bigErrorFunction);
 	} catch(e) {alert("Error ajaj.request");alert(e);}
 }
-ajaj.smallError = function(x) {
+ajaj.smallError = function(x, ignoreConnect) {
 	try {
 		if (x.error == 10) {
-			state.set('screen', 'connection').commit().validate();
+			if (!ignoreConnect)
+				state.set('screen', 'connection').commit().validate();
 		} else {
 			ajaj.error(
 				"Erreur fatale. Merci de nous envoyer ce message : \n"
@@ -208,7 +210,7 @@ ajaj.bigError = function(x) {
 ajaj.error = function(msg) {
 	try {
 		UI().dismiss();
-		UI().info("Erreur !", msg);
+		UIInfo("Erreur !", msg);
 		UI().exit();
 	} catch(e) {alert("Error ajaj.error");alert(e);}
 }
@@ -685,7 +687,7 @@ connection.connect = function() {
 		UI().setPreference("user", $("#user").val());
 		UI().setPreference("passwd", $("#passwd").val());
 		ajaj.request("server.php?callback=?", {
-			action: 3,
+			action: 7,
 			user: $("#user").val(),
 			passwd: $("#passwd").val(),
 		}, connection.connectFetched, connection.connectFetched);
@@ -695,11 +697,14 @@ connection.connect = function() {
 
 connection.connectFetched = function(data) {
 	try {
-		if (data && data.loginOk) {
-			UI().info("Connexion", "Vous êtes connecté !");
+		if (data && data.theme) {
+			switchCSS(data.theme || "green");
+			UIInfo("Connexion", "Vous êtes connecté !");
 		} else if (data && data.isError && data.error == 3) {
-			UI().info("Connexion", data.msg);
+			switchCSS("green");
+			UIInfo("Connexion", data.msg);
 		} else {
+			switchCSS("green");
 			ajaj.smallError(data);
 		}
 		state.set('screen', 'frontpage').validate();
@@ -746,21 +751,22 @@ prefs.apply = function(){
 			value: newtheme
 		}, function(data) {
 			if (data)
-				UI().info("Préférences", "Les préférences ont été enregistrées.");
+				UIInfo("Préférences", "Les préférences ont été enregistrées.");
 			else
-				UI().info("Préférences", "Les préférences n'ont pas pu être enregistrées.");
+				UIInfo("Préférences", "Les préférences n'ont pas pu être enregistrées.");
 		});
-		$("link[@rel*=stylesheet][title]").each(function(i,e){
-			// Il semblerait que pour qu'un "aleternate stylesheet" puisse être activé, il faut d'abord qu'il ait été désactivé…
-			e.disabled = true;
-			e.disabled = (e.getAttribute('title') != newtheme);
-		});
+		switchCSS(newtheme);
 		state.set('screen', 'frontpage').validate();
 		return false;
 	} catch(e) {alert("Error anonymous in prefs.apply");alert(e);}
 };
 
-function switchStylestyle(styleName) {
+function switchCSS(newtheme) {
+	$("link[@rel*=stylesheet][title]").each(function(i,e){
+		// Il semblerait que pour qu'un "aleternate stylesheet" puisse être activé, il faut d'abord qu'il ait été désactivé…
+		e.disabled = true;
+		e.disabled = (e.getAttribute('title') != newtheme);
+	});
 }
 
 prefs.cancel = function(){

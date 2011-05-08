@@ -9,6 +9,10 @@ html, body {
 	color: white;
 }
 
+a, a:hover, a:visited, a:link, a:active {
+	color: #8888ff;
+}
+
 .screen {
 	background-color: black;
 }
