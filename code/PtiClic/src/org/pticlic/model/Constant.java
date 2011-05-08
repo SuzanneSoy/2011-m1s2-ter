@@ -1,7 +1,7 @@
 package org.pticlic.model;
 
 public class Constant {
-	public static final String SERVER_URL = "unstable/code/serveur/php/jeu.html";
+	public static final String SERVER_URL = "unstable/code/serveur/php/jeu.php";
 	public static final String SERVER_AUTH = "SERVER_AUTH";
 	public static final String SERVER = "http://www.pticlic.fr/";
 	
