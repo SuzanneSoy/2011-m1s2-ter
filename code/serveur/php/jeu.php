@@ -12,56 +12,109 @@
 		<script src="ressources/my-extensions.js"></script>
 		<script src="ressources/pticlic.js"></script>
 		<script src="server.php?callback=prefs.loadPrefs&action=7"></script>
+		<style>
+			body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+			.screen { width:100%; height:100%; position:absolute; }
+			.highlight { display:none; width:100%; height:100%; border-width:medium; border-style:solid; border-radius:2em; position:absolute; }
+			a:hover .highlight { display:block; }
+			#frontpage .icon-container { width:100%; bottom: 40%; height:50%; position:absolute; }
+			#frontpage .icon-container img { display:block; margin: 0 auto; }
+			#frontpage .icon-label { width:100%; height:30%; bottom:5%; position:absolute; }
+			#frontpage a { color: black; text-decoration: none; display:inline-block; width: 30%; height: 32%; top: 32%; position:absolute; }
+			a.button {
+				color: black; text-decoration: none;
+				padding: 0.4em; margin: 0.4em; display: inline-block;
+				border: medium solid #4a4; background-color:#f0f8d0; border-radius:0.4em;
+			}
+			.relationBox { border-width: 3px; border-style: solid; border-radius:1em; padding: 0.5em; width: 95%; margin: 0 auto; }
+			.relationBox table { border-collapse: collapse; }
+			.relationBox img { display:block; }
+			.relationBox td { padding:0; }
+			.formElement { width:30%; height: 10%; position:absolute; }
+			.fitFont, .subFitFont { overflow:auto; }
+			#score { text-align:center; }
+			.marginBox { width: 90%; height: 90%; top: 5%; left:5%; position:absolute; }
+			#message { left:5%; top:5%; width:90%; height:10%; position:absolute; border-radius:1em; text-align:center; opacity:0.9; }
+			
+			html, body, #splash, #nojs { background-color:black; color: white; }
+			/* couleurs green */
+			.screen { background-color:#ffffe0; color: black; }
+			#message { background-color:#f0f8d0; color:black; border:medium solid #4a4; }
+			#mc-caption { color:#8b4; }
+			#mn-caption-box { background-color:#f0f8d0; }
+			#mn-caption { color: #4a4; }
+			.borderbar { background-color: #4a4; }
+			.relationBox { background-color:#f0f8d0; border-color: #4a4; }
+			.highlight { background-color:#f0f8d0; border-color:#4a4; }
+			.hot { background-color:yellow; }
+
+			/* couleurs black */
+			.black .screen { background-color:black; color: white; }
+			.black #message { background-color:#222; color:white; border:medium solid #ccc; }
+			.black #mc-caption { color:white; }
+			.black #mn-caption-box { background-color:#222; }
+			.black #mn-caption { color: #ccc; }
+			.black .borderbar { background-color: #ccc; }
+			.black .relationBox { background-color:#222; border-color: #ccc; }
+			.black .highlight { background-color:#222; border-color:#ccc; }
+			.black .hot { background-color:#aaa; }
+		</style>
 	</head>
 	<body>
-		<div id="nojs">Chargement…</div>
-		<div class="screen" id="splash">
-			<img src="ressources/img/splash.png" />
+		<div id="splash" class="screen" style="display:block">
+			<img src="ressources/img/splash.png" class="center" style="width:320px; height: 480px;"/>
 		</div>
-		<div class="screen" id="game">
-			<div id="mc-caption-block"></div>
-			<div id="mn-caption-block"></div>
-			<div id="mc-caption" class="mc"></div>
-			<div id="mn-caption" class="mn"></div>
-			<div class="relations"></div>
-		</div>
-		<div class="screen" id="frontpage">
-			<div id="title-block"></div>
-
-			<span id="title">PtiClic</span>
-			<div class="frontpage-button game">
-				<div><img class="icon" alt="" src="ressources/img/72/default.png" /></div>
-				<div class="text">Jouer</div>
+		<div id="game" class="screen">
+			<div style="width: 100%; height:40%; position:absolute;">
+				<div style="width: 90%; height:37.5%; top:7.5%; left:5%; position:absolute;" class="fitFont">
+					<div id="mc-caption" class="mc center">Mot central</div>
+				</div>
+				<div class="borderbar" style="height:5%; width:100%; top:52.5%; position:absolute;"></div>
+				<div id="mn-caption-box" style="top:57.5%; height:37.5%; width:100%; position:absolute;"></div>
+				<div style="width: 90%; height:25%; top:63.75%; left: 5%; position:absolute;" class="fitFont">
+					<div id="mn-caption" class="mn center">Mot du nuage</div>
+				</div>
+				<div class="borderbar" style="height:5%; width:100%; top:95%; position:absolute;"></div>
 			</div>
-			<div class="frontpage-button prefs">
-				<div><img class="icon" alt="" src="ressources/img/72/default.png" /></div>
-				<div class="text">Configuration</div>
-			</div>
-			<div class="frontpage-button connection">
-				<div><img class="icon" alt="" src="ressources/img/72/default.png" /></div>
-				<div class="text">Connexion</div>
-			</div>
-			<div class="frontpage-button info">
-				<div><img class="icon" alt="" src="ressources/img/72/default.png" /></div>
-				<div class="text">A Propos</div>
+			<div class="relations fitFontGroup" style="height:60%; width:100%; top:40%; position:absolute;">
 			</div>
 		</div>
-		<div class="screen" id="score">
-			<h1>Score total : <span class="scoreTotal"></span></h1>
-			<div class="scores"></div>
-			<input type="button" value="J'ai vu !" id="jaivu"/>
+		<div id="frontpage" class="screen fitFontGroup">
+			<div style="width:50%; height:24%; top:4%; left:25%; position:absolute;" class="fitFont">
+				<span class="center">PtiClic</span>
+			</div>
+			<a href="#game" style="right:55%; top:33%;">
+				<div class="highlight"></div>
+				<div class="icon-container"><img class="iconFitParent" alt="" src="ressources/img/72/default.png" /></div>
+				<div class="icon-label subFitFont"><span class="text center">Jouer</span></div>
+			</a>
+			<a href="#prefs" style="left:55%; top:33%;">
+				<div class="highlight"></div>
+				<div class="icon-container"><img class="iconFitParent" alt="" src="ressources/img/72/default.png" /></div>
+				<div class="icon-label subFitFont"><span class="text center">Configuration</span></div>
+			</a>
+			<a href="#connect" style="right:55%; top:66%;">
+				<div class="highlight"></div>
+				<div class="icon-container"><img class="iconFitParent" alt="" src="ressources/img/72/default.png" /></div>
+				<div class="icon-label subFitFont"><span class="text center">Connexion</span></div>
+			</a>
+			<a hred="#info" style="left:55%; top:66%;">
+				<div class="highlight"></div>
+				<div class="icon-container"><img class="iconFitParent" alt="" src="ressources/img/72/default.png" /></div>
+				<div class="icon-label subFitFont"><span class="text center">À propos</span></div>
+			</a>
 		</div>
-		<div class="screen" id="connection">
-			<form id="connect-form" action="#" method="GET">
-				<label id="user-label" for="user">Login : </label>
-				<input type="text" name="user" id="user" />
-				<label id="passwd-label" for="passwd">Mot de passe : </label>
-				<input type="password" name="passwd" id="passwd" />
-				<input type="submit" name="connect" id="connect" value="Se connecter" />
-			</form>
+		<div id="score" class="screen">
+			<div class="marginBox fitFont">
+				<h1>Score total : <span class="scoreTotal"></span></h1>
+				<div class="scores"></div>
+				<p style="text-align: center;">
+					<a class="button" href="#">J'ai vu !</a>
+				</p>
+			</div>
 		</div>
-		<div class="screen" id="info">
-			<div class="container">
+		<div id="info" class="screen">
+			<div class="marginBox fitFont">
 				<p>
 					PtiClic a été conçu et développé par Mathieu Lafourcade
 					(LIRMM - Université Montpellier 2) et Virginie Zampa
@@ -89,33 +142,50 @@
 					de vos commentaires, vous pouvez nous contacter par
 					courriel à l'adresse suivante : <a href="mailto:pticlic.android.beta@gmail.com">pticlic.android.beta@gmail.com</a>
 				</p>
-				<p id="info-back-p">
-					<input id="info-back" type="button" value="Retour" />
+				<p style="text-align: center;">
+					<a class="button" href="#">Retour</a>
 				</p>
 			</div>
 		</div>
-		<div class="screen" id="prefs">
-			<form id="prefs-form" action="#" method="GET">
-				<fieldset id="theme">
+		<div id="connection" class="screen">
+			<form id="connect-form" action="#" method="GET" style="width:100%; height:100%;" class="fitFontGroup">
+				<div class="formElement subFitFont" style="right: 55%; top: 25%;"><label id="user-label" for="user">Login : </label></div>
+				<div class="formElement subFitFont" style="left: 55%; top: 25%;"><input type="text" name="user" id="user" class="setFont" /></div>
+				<div class="formElement subFitFont" style="right: 55%; top: 50%;"><label id="passwd-label" for="passwd">Mot de passe : </label></div>
+				<div class="formElement subFitFont" style="left: 55%; top: 50%;"><input type="password" name="passwd" id="passwd" class="setFont" /></div>
+				<div class="formElement subFitFont" style="left: 25%; width:50%; top: 75%;">
+					<input type="submit" name="connect" id="connect" value="Se connecter" class="center setFont" />
+				</div>
+			</form>
+		</div>
+		<div id="prefs" class="screen">
+			<form id="prefs-form" action="#" method="GET" class="fitFontGroup">
+				<fieldset id="theme" class="subFitFont" style="width:50%; height:25%; left:25%; top:25%; position:absolute;">
 					<legend>Thème</legend>
 					<input type="radio" id="theme-green" name="theme" value="green" /><label for="theme-green">Colline verdoyante</label><br/>
 					<input type="radio" id="theme-black" name="theme" value="black" /><label for="theme-black">Bas-fond de cachot</label>
 				</fieldset>
-				<input type="submit" name="prefs-apply" id="prefs-apply" value="Appliquer" />
-				<input type="reset" name="prefs-cancel" id="prefs-cancel" value="Annuler" />
+				<div class="formElement subFitFont" style="top:75%; right:55%"><input class="center setFont" type="reset" name="prefs-cancel" id="prefs-cancel" value="Annuler" /></div>
+				<div class="formElement subFitFont" style="top:75%; left:55%"><input class="center setFont" type="submit" name="prefs-apply" id="prefs-apply" value="Appliquer" /></div>
 			</form>
 		</div>
 		<div id="templates" style="display: none;">
 			<div class="relationBox">
-				<div class="relation"><img class="icon" alt="" src="ressources/img/72/default.png" /><span class="text"></span></div>
-				<div class="clearboth"></div>
+				<table style="width:100%; position:relative;">
+					<tr>
+						<td>
+							<img class="icon" alt="" src="ressources/img/72/default.png" style="width:72px; height:72px;" />
+						</td>
+						<td>
+							<div class="text subFitFont"></div>
+						</td>
+					</tr>
+				</table>
 			</div>
 			<div class="scoreLine">
 				<span class="word"></span> (<span class="score"></span>)
 			</div>
 		</div>
-		<div id="message" style="display: none;">
-		</div>
+		<div id="message" class="fitFont"><span class="text center">PtiClic…</span></div>
 	</body>
 </html>
-<html>

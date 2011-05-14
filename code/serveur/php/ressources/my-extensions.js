@@ -8,7 +8,7 @@ Number.prototype.mapInterval = function(a,b,x,y) {
 	return x + ((this-a) / (b-a) * (y-x));
 }
 	
-function dichotomy(start, isBigger, foo) {
+function dichotomy(start, isBigger) {
 	try {
 	var i = 0, min = 0, max, half;
 
@@ -22,77 +22,51 @@ function dichotomy(start, isBigger, foo) {
 	} catch(e) {alert("Error dichotomy");alert(e);}
 }
 
-$.fn.maxWidth = function() {
+$.fn.fold = function(acc, fn) {
 	try {
-	max = 0;
-	this.each(function(i,e){ max = Math.max(max, $(e).width()); });
-	return max;
-	} catch(e) {alert("Error $.fn.maxWidth");alert(e);}
-}
-$.fn.maxHeight = function() {
-	try {
-	max = 0;
-	this.each(function(i,e){ max = Math.max(max, $(e).height()); });
-	return max;
-	} catch(e) {alert("Error $.fn.maxHeight");alert(e);}
-}
+	this.each(function(i,e) { acc = fn(acc, i, e); });
+	return acc;
+	} catch(e) {alert("Error $.fn.fold");alert(e);}
+};
 
-$.fn.sumHeight = function() {
-	try {
-	sum = 0;
-	this.each(function(i,e){ sum += $(e).height(); });
-	return sum;
-	} catch(e) {alert("Error sumHeight");alert(e);}
+$.fn.maxWidth = function() { return this.fold(0, function(acc,i,e){ return Math.max(acc, $(e).width()); }); };
+$.fn.maxHeight = function() { return this.fold(0, function(acc,i,e){ return Math.max(acc, $(e).height()); }); };
+$.fn.sumHeight = function() { return this.fold(0, function(acc,i,e){ return acc + $(e).height(); }); };
+$.fn.sumOuterHeight = function() { return this.fold(0, function(acc,i,e){ return acc + $(e).outerHeight(); }); };
+
+$.fn.hasScroll = function() {
+	var e = this.get(0);
+	return (e.clientHeight != e.scrollHeight) || (e.clientWidth != e.scrollWidth);
 }
 
-$.fn.fitFont = function(w, h, minFont, maxFont, noContainer, oneline) {
+$.fn.fitFont = function() {
 	try {
-	var oldpos = this.css("position");
-	this.css({position: "absolute"});
-	
-	if (oneline)
-		this.css("white-space", "nowrap");
-	else
-		this.css({maxWidth: w});
-	
-	if (noContainer) {
-		var wrappers = this;
-	} else {
-		var wrappers = this.wrapInner("<span/>").children();
-	}
-
 	var that = this;
-	this.css("font-size", dichotomy(parseInt(this.css("font-size"), 10), function(x) {
-		try {
-		that.css("fontSize", x);
-		return (wrappers.maxHeight() > h || wrappers.maxWidth() > w);
-		} catch(e) {alert("Error anonymous in $.fn.fitFont");alert(e);}
-	},this).clip(minFont || 0, maxFont || Infinity));
-
-	// Restore stuff
-	this.css("position", oldpos);
-	if (!noContainer) wrappers.children().unwrap();
+	var setFont = this.find('.setFont').andSelf();
+	var size = dichotomy(parseInt(this.css("font-size"), 10), function(x) {
+		setFont.css("fontSize", x);
+		return that.$ormap(function(i,e) { return e.hasScroll(); });
+	});
+	this.css("font-size", Math.max(0, size));
 	return this;
 	} catch(e) {alert("Error $.fn.fitFont");alert(e);}
-}
+};
 
-$.fn.fitIn = function(e, t, r, b, l) {
-	try {
-	e = $(e);
-	if (isNaN(+t)) t = 0;
-	if (isNaN(+r)) r = t;
-	if (isNaN(+b)) b = t;
-	if (isNaN(+l)) l = r;
-	var w = e.width();
-	var h = e.height();
-	t *= h;
-	r *= w;
-	b *= h;
-	l *= w;
-	this.fitFont(w - r - l, h - t - b, 20).center(e.center());
-	return this;
-	} catch(e) {alert("Error $.fn.fitIn");alert(e);}
-}
+$.fn.swapCSS = function(k,v) {
+	var old = this.css(k);
+	this.css(k, v);
+	return old;
+};
+
+$.fn.$each = function(fn) {
+	this.each(function(i,e) { return fn(i, $(e)); });
+};
+
+$.fn.$ormap = function(fn) {
+	var ret = false;
+	this.each(function(i,e) { if (fn(i, $(e))) { ret = true; return false; } });
+	return ret;
+};
 
 function queueize(method) {
 	try {
@@ -115,9 +89,9 @@ $.fn.qCss = queueize("css");
 
 $.fn.wh = function(w, h) {
 	try {
-	return this.width(w).height(h);
+		return this.width(w).height(isNaN(+h) ? w : h);
 	} catch(e) {alert("Error $.fn.wh");alert(e);}
-}
+};
 
 $.fn.relativePos = function(xAnchor, yAnchor, to, justCss) {
 	try {
@@ -180,3 +154,17 @@ $.fn.goodBad = function(min, max, startcolor, endcolor) {
 						  +(val.mapInterval(min,max,startcolor.b,endcolor.b).clip(0, 255, true))+")");
 	return this;
 };
+
+var PtiClic = $({});
+PtiClic.queueJSON = function(url, data, ok, error) {
+};
+
+/* Enchaînement des écrans
+Aller sur un écran donné.
+Recevoir des données avant d'entrer dans un écran.
+Envoyer des données avant de quiter un écran.
+Vérouiller l'écran courant pendant qu'on attend un transfert ou bien des écrans d'«attente».
+Lorsqu'un transfert a échoué car non logué, on va sur l'écran de connexion et on retente le transfert ensuite.
+Stocker uniquement les données importantes dans l'url (état, numéro de partie, réponses).
+Pouvoir basculer sur un écran et exécuter quelque chose une fois qu'il est chargé (exécuter le commit pour l'url).
+*/

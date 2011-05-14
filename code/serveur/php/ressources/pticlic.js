@@ -56,143 +56,6 @@ function hashchange() {
 	} catch(e) {alert("Error hashchange");alert(e);}
 }
 
-// ==== JavaScript Style général
-function jss() {
-	try {
-		var w = $(window).width();
-		var h = $(window).height();
-		var iconSize;
-		if (h > 600) iconSize = 72;
-		else if(h > 500) iconSize = 48;
-		else iconSize = 36;
-		
-		$('#nojs').hide();
-
-		$('#message:visible')
-			.css({
-				position: 'absolute',
-				borderWidth: 'thin',
-				borderStyle: 'solid',
-				MozBorderRadius: 10,
-				WebkitBorderRadius: 10,
-				textAlign: 'center'
-			})
-			.fitFont(w/2, h*0.1)
-			.css('max-width', w*0.6)
-			.width(w*0.6)
-			.center({left: w/2, top:h*0.1});
-		
-		$("#"+state.screen+".screen")
-			.wh(w, h)
-			.northWest({top:0,left:0});
-		
-		$("body, html")
-			.css({
-				padding: 0,
-				margin: 0,
-				overflow: "hidden",
-				textAlign: "left"
-			});
-		
-		$(".clearboth").css('clear', 'both');
-		
-		$(".screen").hide();
-		$("#"+state.screen+".screen").show();
-		
-		if (window[state.screen] && window[state.screen].jss) window[state.screen].jss(w, h, iconSize);
-		
-		$("img.icon").each(function(i,e) {
-			try {
-			e=$(e);
-			if (typeof(e.data('image')) != 'undefined')
-				e.attr("src", "ressources/img/"+iconSize+"/"+e.data('image')+".png");
-			} catch(e) {alert("Error anonymous in jss");alert(e);}
-		});
-		
-		jssTheme(runstate.prefs.theme);
-	} catch(e) {alert("Error jss");alert(e);}
-}
-
-function jssTheme(theme) {
-	if (theme == "black") {
-		var bg1 = "black";
-		var fg1 = "white";
-		var bg2 = "#222222";
-		var fg2 = "#cccccc";
-		var fg3 = "white";
-		var hot = "#aaaaaa";
-	} else {
-		var bg1 = "#ffffe0";
-		var fg1 = "black";
-		var bg2 = "#f0f8d0";
-		var fg2 = "#4a4";
-		var fg3 = "#8b4";
-		var hot = "yellow";
-	}
-	var splashbg = "black";
-	var splashfg = "white";
-	var screenbg = bg1;
-	var screenfg = fg1;
-	var messagebg = bg2;
-	var messagefg = fg1;
-	var messagebd = fg2;
-	var centralfg = fg3;
-	var cloudbg = bg2;
-	var cloudfg = fg2;
-	var cloudbd = fg2;
-	var relationbg = bg2;
-	var relationbd = fg2;
-	var fphoverbg = bg2;
-	var fphoverbd = fg2;
-	var hotbg = hot;
-
-	$('.screen').css({
-		color: screenfg,
-		backgroundColor: screenbg
-	});
-
-	$('html, body, #splash.screen').css({
-		backgroundColor: splashbg,
-		color: splashfg
-	});
-
-	$("#message").css({
-		backgroundColor: messagebg,
-		color: messagefg,
-		borderColor: messagebd
-	});
-
-	$(".frontpage-button").hover(function() {
-		$(this).css({
-			backgroundColor: fphoverbg,
-			outline: "medium solid "+fphoverbd
-		});
-	}, function() {
-		$(this).css({
-			outline: '',
-			backgroundColor: "transparent"
-		});
-	});
-
-	$('#mc-caption').css({color: centralfg});
-
-	$('#mn-caption').css({color: cloudfg});
-
-	$('#mn-caption-block').css({
-		borderColor: cloudbd,
-		backgroundColor: cloudbg
-	});
-
-	$('.relationBox').css({
-		borderColor: relationbd,
-		backgroundColor: relationbg
-	});
-
-	$('.relations .hot').css({backgroundColor: hotbg});
-
-	$("a, a:visited").css({color: "#8888ff"});
-}
-
 // ==== Interface Android
 function UI () {
 	try {
@@ -229,8 +92,7 @@ function UIInfo(title, msg) {
 			.qShow()
 			.queue(function(next){
 				try {
-				$('#message')
-					.text(msg);
+				$('#message .text').text(msg);
 				jss();
 				next();
 				} catch(e) {alert("Error anonymous in UIInfo");alert(e);}
@@ -241,12 +103,48 @@ function UIInfo(title, msg) {
 	} catch(e) {alert("Error UI().info");alert(e);}
 }
 
+// ==== Nouveau jss
+function jss() {
+	try {
+		if ($("#splash img").is(':visible')) {
+			var ratio = Math.min($('#splash').width() / 320, $('#splash').height() / 480);
+			$('#splash.screen img')
+				.wh(320 * ratio, 480 * ratio);
+		}
+		if ($('#game.screen').is(':visible')) {
+			var iconSize = 72;
+			var rel = $('#game.screen .relations');
+			var rb = rel.find('.relationBox');
+			$('.relationBox').css({
+				borderWidth: ({72:3,48:2,36:1})[iconSize],
+				padding: 10/72*iconSize,
+				borderRadius: 20/72*iconSize,
+				marginTop: (rel.height() - rb.sumOuterHeight()) / (rb.size() + 1)
+			});
+			$('.relationBox .icon').css({paddingRight: 10/72*iconSize});
+		}
+		$('.iconFitParent').wh(0,0).each(function(i,e) {
+			e=$(e);
+			var p = e.parent();
+			var size = Math.min(p.width(), p.height());
+			if (size >= 72) { e.wh(72); }
+			else if (size >= 48) e.wh(48);
+			else if (size >= 36) e.wh(36);
+			else e.wh(0);
+		});
+		$('.fitFont:visible').$each(function(i,e) { e.fitFont(); });
+		$('.fitFontGroup:visible').each(function(i,e) { $(e).find('.subFitFont').fitFont(); });
+		$('.center').$each(function(i,e) { e.center(e.parent().center()); });
+	} catch(e) {alert("Error jss");alert(e);}
+}
+
 // ==== Code métier général
 $(function() {
 	try {
 		$(window).resize(jss);
-		$(window).hashchange(hashchange);
-		hashchange();
+		$(window).hashchange(function(){alert("hashchange !");});
+		//hashchange();
+		jss();
 		runstate.loaded = true;
 	} catch(e) {alert("Error main function");alert(e);}
 });
@@ -311,17 +209,6 @@ ajaj.error = function(msg) {
 
 splash = {};
 
-splash.jss = function(w,h,iconSize) {
-	try {
-		var splashW = 320;
-		var splashH = 480;
-		var ratio = Math.min(w / splashW, h / splashH);
-		$('#splash.screen img')
-			.wh(splashW * ratio, splashH * ratio)
-			.center($('#splash.screen').center());
-	} catch(e) {alert("Error splash.jss");alert(e);}
-}
-
 splash.enter = function() {
 	try {
 	// Si l'application est déjà chargée, on zappe directement jusqu'à la frontpage.
@@ -344,67 +231,6 @@ splash.click.goFrontpage = function() {
 
 // ==== Code métier pour la frontpage
 frontpage = {};
-
-frontpage.jss = function(w, h, iconSize) {
-	try {
-	var fp = $("#frontpage.screen");
-	var $fp = function() {
-		try {
-			return fp.find.apply(fp,arguments);
-		} catch(e) {alert("Error anonymous 1 in frontpage.jss");alert(e);}
-	};
-	var nbIcons = $fp(".icon").size();
-	var nbRows = Math.ceil(nbIcons / 2)
-	var ww = w - 2 * iconSize;
-	var hh = h - nbRows * iconSize;
-	var titleHeight = hh*0.4;
-	var labelHeight = hh*0.4 / nbRows;
-	var buttonPadding = hh*0.05/nbRows;
-	var buttonHeight = labelHeight + iconSize + buttonPadding;
-	var buttonWidth = Math.max(w*0.25,iconSize);
-	var freeSpace = h - titleHeight;
-	$fp("#title-block")
-		.wh(w*0.5, titleHeight)
-		.north($("#frontpage.screen").north());
-	$fp("#title")
-		.fitIn("#title-block", 0.2);
-	
-	$fp(".text")
-		.fitFont(buttonWidth, labelHeight, 10);
-	
-	$fp(".icon")
-		.wh(iconSize);
-	
-	$fp(".game .icon").data('image', 'mode_normal');
-	$fp(".prefs .icon").data('image', 'config');
-	$fp(".connection .icon").data('image', 'config');
-	$fp(".info .icon").data('image', 'aide');
-	
-	$fp(".frontpage-button")
-		.css({
-			textAlign: 'center',
-			paddingTop: buttonPadding
-		})
-		.width(buttonWidth);
-	
-	$fp(".frontpage-button > div").css('display', 'block');
-	
-	var interIconSpace = (freeSpace - nbRows * buttonHeight) / (nbRows + 1);
-	$fp(".frontpage-button").each(function(i,e){
-		try {
-		e=$(e);
-		var currentRow = Math.floor(i/2);
-		var currentColumn = i % 2;
-		var iconOffset = titleHeight + ((currentRow+1) * interIconSpace) + (currentRow * buttonHeight);
-		if (currentColumn == 0) {
-			e.northEast({left:w/2-ww*0.05,top:iconOffset});
-		} else {
-			e.northWest({left:w/2+ww*0.05,top:iconOffset});
-		}
-		} catch(e) {alert("Error anonymous 2 in frontpage.jss");alert(e);}
-	});
-	} catch(e) {alert("Error frontpage.jss");alert(e);}
-};
 
 frontpage.enter = function () {
 	try {
@@ -448,62 +274,6 @@ frontpage.click.goPrefs = function() {
 
 // ==== Code métier pour le jeu
 game = {};
-
-game.jss = function(w, h, iconSize) {
-	try {
-	var g = $("#game.screen");
-	var $g = function() {
-		try {
-		return g.find.apply(g,arguments);
-		} catch(e) {alert("Error anonymous in game.jss");alert(e);}
-	};
-	var mch = h/8, mnh = h*0.075;
-	
-	$g("#mc-caption-block")
-		.wh(w, mch)
-		.north(g.north());
-	
-	$g("#mc-caption")
-		.fitIn("#mc-caption-block", 0.1);
-	
-	$g("#mn-caption-block")
-		.css({
-			borderWidth: h/100,
-			borderStyle: 'solid none'
-		})
-		.wh(w, mnh)
-		.north($g("#mc-caption-block").south());
-	
-	$g("#mn-caption")
-		.css({zIndex: 10})
-		.fitIn("#mn-caption-block");
-
-	$g(".relationBox:visible")
-		.css({
-			margin: 10,
-			padding: 10,
-			MozBorderRadius: 10,
-			WebkitBorderRadius: 10,
-			borderWidth: 'thin',
-			borderStyle: 'solid',
-		});
-	
-	$g(".relationBox:visible .icon")
-		.wh(iconSize,iconSize)
-		.css({
-			float: "left",
-			marginRight: $g(".relationBox").css("padding-left")
-		});
-	
-	$g(".relations")
-		.width(w);
-
-	$g(".relation:visible").fitFont($g(".relationBox:visible").width(), iconSize, 10);
-	
-	$g(".relations")
-		.south(g.south());
-	} catch(e) {alert("Error game.jss");alert(e);}
-};
 
 game.enter = function () {
 	try {
@@ -630,13 +400,6 @@ game.nextWord = function(click, button) {
 // ==== Code métier pour les scores
 score = {};
 
-score.jss = function(w, h, iconSize) {
-	try {
-	$("#score.screen")
-		.css('text-align', 'center');
-	} catch(e) {alert("Error score.jss");alert(e);}
-};
-
 score.enter = function () {
 	try {
 	if (!state.hasScore) {
@@ -720,16 +483,6 @@ score.click.jaivu = function() {
 // ==== Code métier pour la page d'info
 info = {};
 
-info.jss = function(w,h,iconSize) {
-	try {
-	$("#info-back-p").css('text-align', 'center');
-	$("#info.screen .container input").css('font-size', 'inherit');
-	$("#info.screen .container")
-		.fitFont(w*0.9, h*0.9, null, null, true)
-		.center($("#info.screen"));
-	} catch(e) {alert("Error info.jss");alert(e);}
-}
-
 info.enter = function() {
 	try {
 		$("#info-back").clickOnce(info.click.goBack);
@@ -747,25 +500,6 @@ info.click.goBack = function(){
 
 // ==== Code métier pour la connexion
 connection = {};
-
-connection.jss = function(w, h, iconSize) {
-	try {
-		var c = $("#connection.screen");
-		var $c = function() {
-			try {
-				return c.find.apply(c,arguments);
-			} catch(e) {alert("Error anonymous 1 in connection.jss");alert(e);}
-		};
-		
-		$c("input, label")
-			.fitFont(w*0.45, h*0.06, null, null, true, true);
-		$c("#user-label").east({left:w*0.475,top:h*0.25});
-		$c("#user").west({left:w*0.525,top:h*0.25});
-		$c("#passwd-label").east({left:w*0.475,top:h*0.5});
-		$c("#passwd").west({left:w*0.525,top:h*0.5});
-		$c("#connect").center({left:w/2,top:h*0.75});
-	} catch(e) {alert("Error connection.jss");alert(e);}
-};
 
 connection.enter = function() {
 	try {
@@ -806,25 +540,6 @@ connection.connectFetched = function(data) {
 
 // ==== Code métier pour la page de configuration
 prefs = {};
-
-prefs.jss = function(w,h,iconSize) {
-	try {
-		var p = $("#prefs.screen");
-		var $p = function() {
-			try {
-				return p.find.apply(p,arguments);
-			} catch(e) {alert("Error anonymous 1 in prefs.jss");alert(e);}
-		};
-		
-		$p("input, label")
-			.fitFont(w*0.45, h*0.06, null, null, true, true);
-		$p("legend")
-			.fitFont(w*0.3, h*0.05, null, null, true, true);
-		$p("#theme").center({left:w*0.5,top:h*0.25});
-		$p("#prefs-cancel").east({left:w*0.475,top:h*0.5});
-		$p("#prefs-apply").west({left:w*0.525,top:h*0.5});
-	} catch(e) {alert("Error prefs.jss");alert(e);}
-}
 
 prefs.enter = function() {
 	try {
@@ -868,7 +583,6 @@ prefs.cancel = function(){
 
 prefs.loadPrefs = function(data) {
 	try {
-		console.log('loadPrefs');
 		if (data && data.theme) {
 			runstate.prefs = data;
 		} else {
