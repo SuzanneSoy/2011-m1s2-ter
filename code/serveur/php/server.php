@@ -75,7 +75,7 @@ function main()
 	}
 	else if($action == 0) {           // "Get partie"
 		// Requête POST : http://serveur/server.php?action=0&user=foo&passwd=bar
-		getGame($user);
+		getGame($user, isset($_GET['pgid']) ? $_GET['pgid'] : null);
 	}
 	else if($action == 1) {           // "Set partie"
 		// Requête POST : http://serveur/server.php?action=1&mode=normal&user=foo&passwd=bar&gid=1234&pgid=12357&0=0&1=-1&2=22&3=13&9=-1

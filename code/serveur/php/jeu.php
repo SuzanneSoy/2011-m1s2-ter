@@ -27,18 +27,15 @@
 				border: medium solid #4a4; background-color:#f0f8d0; border-radius:0.4em;
 			}
 			.relationBox { border-width: 3px; border-style: solid; border-radius:1em; padding: 0.5em; width: 95%; margin: 0 auto; }
-			.relationBox table { border-collapse: collapse; }
-			.relationBox img { display:block; }
-			.relationBox td { padding:0; }
 			.formElement { width:30%; height: 10%; position:absolute; }
 			.fitFont, .subFitFont { overflow:auto; }
 			#score { text-align:center; }
 			.marginBox { width: 90%; height: 90%; top: 5%; left:5%; position:absolute; }
-			#message { left:5%; top:5%; width:90%; height:10%; position:absolute; border-radius:1em; text-align:center; opacity:0.9; }
+			#message { left:25%; top:5%; width:50%; height:15%; position:absolute; border-radius:0.5em; text-align:center; opacity:0.9; }
 			
-			html, body, #splash, #nojs { background-color:black; color: white; }
+			#splash, #nojs { background-color:black; color: white; }
 			/* couleurs green */
-			.screen { background-color:#ffffe0; color: black; }
+			body, .screen { background-color:#ffffe0; color: black; }
 			#message { background-color:#f0f8d0; color:black; border:medium solid #4a4; }
 			#mc-caption { color:#8b4; }
 			#mn-caption-box { background-color:#f0f8d0; }
@@ -49,7 +46,7 @@
 			.hot { background-color:yellow; }
 
 			/* couleurs black */
-			.black .screen { background-color:black; color: white; }
+			body.black, .black .screen { background-color:black; color: white; }
 			.black #message { background-color:#222; color:white; border:medium solid #ccc; }
 			.black #mc-caption { color:white; }
 			.black #mn-caption-box { background-color:#222; }
@@ -61,7 +58,7 @@
 		</style>
 	</head>
 	<body>
-		<div id="splash" class="screen" style="display:block">
+		<div id="splash" class="screen">
 			<img src="ressources/img/splash.png" class="center" style="width:320px; height: 480px;"/>
 		</div>
 		<div id="game" class="screen">
@@ -93,12 +90,12 @@
 				<div class="icon-container"><img class="iconFitParent" alt="" src="ressources/img/72/default.png" /></div>
 				<div class="icon-label subFitFont"><span class="text center">Configuration</span></div>
 			</a>
-			<a href="#connect" style="right:55%; top:66%;">
+			<a href="#connection" style="right:55%; top:66%;">
 				<div class="highlight"></div>
 				<div class="icon-container"><img class="iconFitParent" alt="" src="ressources/img/72/default.png" /></div>
 				<div class="icon-label subFitFont"><span class="text center">Connexion</span></div>
 			</a>
-			<a hred="#info" style="left:55%; top:66%;">
+			<a href="#info" style="left:55%; top:66%;">
 				<div class="highlight"></div>
 				<div class="icon-container"><img class="iconFitParent" alt="" src="ressources/img/72/default.png" /></div>
 				<div class="icon-label subFitFont"><span class="text center">À propos</span></div>
@@ -117,14 +114,14 @@
 			<div class="marginBox fitFont">
 				<p>
 					PtiClic a été conçu et développé par Mathieu Lafourcade
-					(LIRMM - Université Montpellier 2) et Virginie Zampa
-					(LIDILEM - Université Stendhal Grenoble 3)
+					(LIRMM - Université Montpellier 2) et Virginie Zampa
+					(LIDILEM - Université Stendhal Grenoble 3)
 				</p>
 				<p>
 					La présente version pour SmartPhone sous Android, en cours
 					de développement a été conçue et réalisée par des
-					étudiants en Master 1 à l'Université Montpellier II :
-					Yoann BONAVERO, Bertrand BRUN, John CHARRON et
+					étudiants en Master 1 à l'Université Montpellier 2 :
+					Yoann BONAVERO, Bertrand BRUN, John CHARRON et
 					Georges DUPÉRON.
 				</p>
 				<p>
@@ -170,17 +167,9 @@
 			</form>
 		</div>
 		<div id="templates" style="display: none;">
-			<div class="relationBox">
-				<table style="width:100%; position:relative;">
-					<tr>
-						<td>
-							<img class="icon" alt="" src="ressources/img/72/default.png" style="width:72px; height:72px;" />
-						</td>
-						<td>
-							<div class="text subFitFont"></div>
-						</td>
-					</tr>
-				</table>
+			<div class="relationBox subFitFont">
+				<img class="icon" alt="" src="ressources/img/72/default.png" style="width:72px; height:72px; display:inline-block; vertical-align:middle;" />
+				<span class="text" style="vertical-align:middle;"></span>
 			</div>
 			<div class="scoreLine">
 				<span class="word"></span> (<span class="score"></span>)

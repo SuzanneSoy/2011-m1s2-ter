@@ -1,13 +1,269 @@
 // ==== URL persistante
 var nullFunction = function(){};
+var futureHashChange = null;
+var runstate = {
+	screen: 'none',
+};
+var state = decodeHash("");
+var oldstate = decodeHash("");
 
-function State(init) {
+$.screen = function (name) {
+	return $(document.getElementById(name)).filter('.screen');
+}
+
+function hashchange() {
+	oldstate = state;
+	state = decodeHash(location.hash);
+	$.screen(state.screen).trigger(state.screen != runstate.screen ? "goto" : "update");
+}
+
+function init(fn) {
+	$(window).queue('init', function(next) {fn(); next();});
+}
+
+// ==== Code métier général
+$(function() {
+	$(window).dequeue('init');
+	$(window).resize(jss);
+	$(window).hashchange(hashchange);
+	hashchange();
+	jss();
+	runstate.loaded = true;
+});
+
+// ==== Nouveau jss
+function jss() {
+	try {
+		if ($("#splash img").is(':visible')) {
+			var ratio = Math.min($('#splash').width() / 320, $('#splash').height() / 480);
+			$('#splash.screen img')
+				.wh(320 * ratio, 480 * ratio);
+		}
+		if ($('#game.screen').is(':visible')) {
+			var iconSize = 72;
+			var rel = $('#game.screen .relations');
+			var rb = rel.find('.relationBox');
+			rb.css({
+				borderWidth: ({72:3,48:2,36:1})[iconSize],
+				padding: 10/72*iconSize,
+				borderRadius: 20/72*iconSize,
+			}).height(iconSize);
+			rb.css({ marginTop: (rel.height() - rb.sumOuterHeight()) / (rb.size() + 1) });
+			rb.find('.icon').css({paddingRight: 10/72*iconSize});
+		}
+		$('.iconFitParent').wh(0,0).each(function(i,e) {
+			e=$(e);
+			var p = e.parent();
+			var size = Math.min(p.width(), p.height());
+			if (size >= 72) { e.wh(72); }
+			else if (size >= 48) e.wh(48);
+			else if (size >= 36) e.wh(36);
+			else e.wh(0);
+		});
+		$('.fitFont:visible').$each(function(i,e) { e.fitFont(); });
+		$('.fitFontGroup:visible').each(function(i,e) { $(e).find('.subFitFont').fitFont(); });
+		$('.center:visible').$each(function(i,e) { e.center(e.parent().center()); });
+	} catch(e) {alert("Error jss");alert(e);}
+}
+
+// ==== Passage d'un écran à l'autre
+
+init(function() {
+	$('.screen').live('goto', function() {
+		var screen = this.id;
+		if (screen == '') return;
+		// Afficher "Chargement…"
+		/* location.hash = "#" + screen; */
+		$.screen(runstate.screen).trigger('leave').hide();
+		runstate.screen = screen;
+		$(this).trigger('pre-enter');
+	});
+	
+	$('.screen').live('pre-enter', function() {
+		$(this).trigger('enter');
+	});
+	
+	$('.screen').live('enter', function() {
+		$(this).show();
+		jss();
+	});
+	
+	$('.screen').live('leave', function() {
+		$(this).hide();
+	});
+});
+
+// ==== Bulle pour les messages
+init(function() {
+	$('#message').hide();
+});
+
+function message(title, msg) {
+	try {
+		$('#message')
+			.qCss('opacity',0).qShow()
+			.queue(function(next){ $('#message .text').text(msg); jss(); next(); })
+			.fadeTo(700, 0.9).delay(5000).fadeOut(700);
+	} catch(e) {alert("Error UI().info");alert(e);}
+}
+
+// ==== Écran splash
+init(function() {
+	$('#splash.screen').click(function(){ $('#frontpage').trigger('goto'); });
+	$('#splash.screen').bind('goto', function(e){
+		if (runstate.loaded) {
+			$('#frontpage').trigger('goto');
+			return false;
+		}
+	});
+	
+});
+
+// ==== Écran game
+runstate.gameCache = new Cache(function(k, dfd, cache) {
+	$.getJSON("getGame.php?callback=?", {pgid:k}, function(data) {
+		if (data.error == 10) {
+			$('#connection.screen').trigger('goto');
+		} else if (data.isError) {
+			location.hash = "#frontpage";
+			message("Erreur", "Une erreur est survenue, veuillez nous en excuser.");
+		} else {
+			cache.alias(data.pgid, k);
+			dfd.resolve(data);
+		}
+	});
+});
+
+init(function() {
+	var game = $('#game.screen');
+	$('a[href="#game"]').click(function() {
+		location.hash = '#game/-' + $.now();
+		return false;
+	});
+
+	game.bind('pre-enter', function() {
+		runstate.gameCache.get(state.pgid).done(function(data) {
+			runstate.game = data
+			if (runstate.screen == 'game') { game.trigger('enter'); }
+		});
+		return false;
+	});
+
+	game.bind('enter', function() {
+		$("#game .relations").empty();
+		var game = runstate.game;
+		$.each(game.relations, function(i, relation) {
+			$('#templates .relationBox')
+				.clone()
+				.find(".text").html(relation.name.replace(/%(m[cn])/g, '<span class="$1"/>')).end()
+				.find(".icon").data("image",relation.id).end()
+				.click(function(e) {
+					state.pgid = game.pgid;
+					state.answers.push(relation.id);
+					location.hash = encodeHash(state);
+					$(this).addClass("hot").removeClass("hot", 1000);
+/*					try {
+						game.nextWord({left:e.pageX, top:e.pageY}, this);
+					} catch(e) {alert("Error anonymous 2 click in game.buildUi");alert(e);}*/
+				})
+				.appendTo("#game .relations");
+		});
+		$("#game .mn").text(game.cloud[state.answers.length].name);
+		$("#game .mc").text(game.center.name);
+	});
+
+	game.bind('update', function(e) {
+		$("#game .mn").text(runstate.game.cloud[state.answers.length].name);
+		jss();
+		console.log('update');
+	});
+});
+
+
+game = {};
+game.leave = function () {
+	try {
+	$("#game .relations").empty();
+	$('#game #mn-caption').stop().clearQueue();
+	if (runstate.gameFetched) runstate.gameFetched = nullFunction;
+	} catch(e) {alert("Error game.leave");alert(e);}
+};
+
+game.buildUi = function () {
+	try {
+	$("#game .relations").empty();
+	$.each(state.game.relations, function(i, relation) {
+		try {
+		} catch(e) {alert("Error anonymous 1 in game.buildUi");alert(e);}
+	});
+	game.updateText();
+	} catch(e) {alert("Error game.buildUi");alert(e);}
+}
+
+game.updateText = function() {
+	try {
+	$("#game .mn").text(state.game.cloud[state.currentWordNb].name);
+	$("#game .mc").text(state.game.center.name);
+	jss();
+	UI().dismiss();
+	} catch(e) {alert("Error game.updateText");alert(e);}
+}
+
+game.animateNext = function (click, button) {
+	try {
+	var duration = 700;
+	
+	var mn = $("#game #mn-caption");
+	
+	$(button).addClass("hot").removeClass("hot", duration);
+	
+	(mn)
+		.stop()       // Attention : stop() et clearQueue() ont aussi un effet
+		.clearQueue() // sur la 2e utilisation de mn (ci-dessous).
+		.clone()
+		.removeClass("mn") // Pour que le texte animé ne soit pas modifié.
+		.appendTo("body") // Append to body so we can animate the offset (instead of top/left).
+		.offset(mn.offset())
+		.animate({left:click.left, top:click.top, fontSize: 0}, duration)
+		.queue(function() {
+			try {
+			$(this).remove();
+			} catch(e) {alert("Error anonymous 1 in game.animateNext");alert(e);}
+		});
+
+	game.updateText();
+	var fs = mn.css("fontSize");
+	var mncbCenter = $("#game #mn-caption-block").center();
+	
+	(mn)
+		.css("fontSize", 0)
+		.animate({fontSize: fs}, {duration:duration, step:function(){
+			try {
+			mn.center(mncbCenter);
+			} catch(e) {alert("Error anonymous 2 in game.animateNext");alert(e);}
+		}});
+	} catch(e) {alert("Error game.animateNext");alert(e);}
+}
+
+game.nextWord = function(click, button) {
+	try {
+	state.game.answers[state.currentWordNb++] = $(button).data("rid");
+	if (state.currentWordNb < state.game.cloud.length) {
+		game.animateNext(click, button);
+		state.commit();
+	} else {
+		state.set('screen','score').validate();
+	}
+	} catch(e) {alert("Error game.nextWord");alert(e);}
+}
+
+
+/*function State(init) {
 	try {
 	$.extend(this, init || {});
 	if (!this.screen) this.screen = 'splash';
 	} catch(e) {alert("Error State");alert(e);}
 };
-var futureHashChange = null;
 State.prototype.commit = function() {
 	try {
 		futureHashChange = "#"+encodeURI('"'+$.JSON.encode(this));
@@ -37,21 +293,13 @@ State.prototype.validate = function () {
     if (window[this.screen] && window[this.screen].enter) window[this.screen].enter();
     return this;
 	} catch(e) {alert("Error State.prototype.validate");alert(e);}
-};
+};*/
 
-var runstate = {};
-var state;
-var oldScreen = '';
-var ui = {};
-function hashchange() {
+function _hashchange() {
 	try {
-		if (futureHashChange === location.hash) {
-			futureHashChange = null;
-		} else {
-            var stateJSON = location.hash.substring(location.hash.indexOf("#") + 1);
-            if (stateJSON.charAt(0) != '"') { stateJSON = decodeURI(stateJSON); }
-            stateJSON = stateJSON.substring(1);
-            state = new State($.parseJSON(stateJSON || '{}')).validate();
+		if (futureHashChange !== location.hash) {
+            state = decodeHash(location.hash);
+			// Appliquer le changement de screen etc.
 		}
 	} catch(e) {alert("Error hashchange");alert(e);}
 }
@@ -84,70 +332,6 @@ function UI () {
 	}
 	} catch(e) {alert("Error UI");alert(e);}
 }
-
-function UIInfo(title, msg) {
-	try {
-		$('#message')
-			.qCss('opacity',0)
-			.qShow()
-			.queue(function(next){
-				try {
-				$('#message .text').text(msg);
-				jss();
-				next();
-				} catch(e) {alert("Error anonymous in UIInfo");alert(e);}
-			})
-			.animate({opacity:0.9}, 700)
-			.delay(5000)
-			.animate({opacity:0}, 700);
-	} catch(e) {alert("Error UI().info");alert(e);}
-}
-
-// ==== Nouveau jss
-function jss() {
-	try {
-		if ($("#splash img").is(':visible')) {
-			var ratio = Math.min($('#splash').width() / 320, $('#splash').height() / 480);
-			$('#splash.screen img')
-				.wh(320 * ratio, 480 * ratio);
-		}
-		if ($('#game.screen').is(':visible')) {
-			var iconSize = 72;
-			var rel = $('#game.screen .relations');
-			var rb = rel.find('.relationBox');
-			$('.relationBox').css({
-				borderWidth: ({72:3,48:2,36:1})[iconSize],
-				padding: 10/72*iconSize,
-				borderRadius: 20/72*iconSize,
-				marginTop: (rel.height() - rb.sumOuterHeight()) / (rb.size() + 1)
-			});
-			$('.relationBox .icon').css({paddingRight: 10/72*iconSize});
-		}
-		$('.iconFitParent').wh(0,0).each(function(i,e) {
-			e=$(e);
-			var p = e.parent();
-			var size = Math.min(p.width(), p.height());
-			if (size >= 72) { e.wh(72); }
-			else if (size >= 48) e.wh(48);
-			else if (size >= 36) e.wh(36);
-			else e.wh(0);
-		});
-		$('.fitFont:visible').$each(function(i,e) { e.fitFont(); });
-		$('.fitFontGroup:visible').each(function(i,e) { $(e).find('.subFitFont').fitFont(); });
-		$('.center').$each(function(i,e) { e.center(e.parent().center()); });
-	} catch(e) {alert("Error jss");alert(e);}
-}
-
-// ==== Code métier général
-$(function() {
-	try {
-		$(window).resize(jss);
-		$(window).hashchange(function(){alert("hashchange !");});
-		//hashchange();
-		jss();
-		runstate.loaded = true;
-	} catch(e) {alert("Error main function");alert(e);}
-});
 
 // ==== Asynchronous Javascript And Json.
 ajaj = {};
@@ -306,97 +490,6 @@ game.enter = function () {
 	} catch(e) {alert("Error game.enter");alert(e);}
 };
 
-game.leave = function () {
-	try {
-	$("#game .relations").empty();
-	$('#game #mn-caption').stop().clearQueue();
-	if (runstate.gameFetched) runstate.gameFetched = nullFunction;
-	} catch(e) {alert("Error game.leave");alert(e);}
-};
-
-game.buildUi = function () {
-	try {
-	$("#game .relations").empty();
-	$.each(state.game.relations, function(i, relation) {
-		try {
-		$('#templates .relationBox')
-			.clone()
-			.data("rid", relation.id)
-			.find(".text")
-				.html(relation.name.replace(/%(m[cn])/g, '<span class="$1"/>'))
-			.end()
-			.find(".icon")
-				.data("image",relation.id)
-			.end()
-			.click(function(e) {
-				try {
-				game.nextWord({left:e.pageX, top:e.pageY}, this);
-				} catch(e) {alert("Error anonymous 2 click in game.buildUi");alert(e);}
-			})
-			.appendTo("#game .relations");
-		} catch(e) {alert("Error anonymous 1 in game.buildUi");alert(e);}
-	});
-	game.updateText();
-	} catch(e) {alert("Error game.buildUi");alert(e);}
-}
-
-game.updateText = function() {
-	try {
-	$("#game .mn").text(state.game.cloud[state.currentWordNb].name);
-	$("#game .mc").text(state.game.center.name);
-	jss();
-	UI().dismiss();
-	} catch(e) {alert("Error game.updateText");alert(e);}
-}
-
-game.animateNext = function (click, button) {
-	try {
-	var duration = 700;
-	
-	var mn = $("#game #mn-caption");
-	
-	$(button).addClass("hot").removeClass("hot", duration);
-	
-	(mn)
-		.stop()       // Attention : stop() et clearQueue() ont aussi un effet
-		.clearQueue() // sur la 2e utilisation de mn (ci-dessous).
-		.clone()
-		.removeClass("mn") // Pour que le texte animé ne soit pas modifié.
-		.appendTo("body") // Append to body so we can animate the offset (instead of top/left).
-		.offset(mn.offset())
-		.animate({left:click.left, top:click.top, fontSize: 0}, duration)
-		.queue(function() {
-			try {
-			$(this).remove();
-			} catch(e) {alert("Error anonymous 1 in game.animateNext");alert(e);}
-		});
-
-	game.updateText();
-	var fs = mn.css("fontSize");
-	var mncbCenter = $("#game #mn-caption-block").center();
-	
-	(mn)
-		.css("fontSize", 0)
-		.animate({fontSize: fs}, {duration:duration, step:function(){
-			try {
-			mn.center(mncbCenter);
-			} catch(e) {alert("Error anonymous 2 in game.animateNext");alert(e);}
-		}});
-	} catch(e) {alert("Error game.animateNext");alert(e);}
-}
-
-game.nextWord = function(click, button) {
-	try {
-	state.game.answers[state.currentWordNb++] = $(button).data("rid");
-	if (state.currentWordNb < state.game.cloud.length) {
-		game.animateNext(click, button);
-		state.commit();
-	} else {
-		state.set('screen','score').validate();
-	}
-	} catch(e) {alert("Error game.nextWord");alert(e);}
-}
-
 // ==== Code métier pour les scores
 score = {};
 
@@ -526,10 +619,10 @@ connection.connectFetched = function(data) {
 	try {
 		if (data && data.theme) {
 			prefs.loadPrefs();
-			UIInfo("Connexion", "Vous êtes connecté !");
+			message("Connexion", "Vous êtes connecté !");
 		} else if (data && data.isError && data.error == 3) {
 			prefs.loadPrefs();
-			UIInfo("Connexion", data.msg);
+			message("Connexion", data.msg);
 		} else {
 			prefs.loadPrefs();
 			ajaj.smallError(data);
@@ -563,10 +656,10 @@ prefs.apply = function(){
 		}, function(data) {
 			try {
 			if (data.theme) {
-				UIInfo("Préférences", "Les préférences ont été enregistrées.");
+				message("Préférences", "Les préférences ont été enregistrées.");
 				prefs.loadPrefs(data);
 			} else {
-				UIInfo("Préférences", "Les préférences n'ont pas pu être enregistrées.");
+				message("Préférences", "Les préférences n'ont pas pu être enregistrées.");
 			}
 			} catch(e) {alert("Error anonymous in prefs.apply");alert(e);}
 		});
