@@ -1,8 +1,4 @@
 // ==== URL persistante
-function trace() {
-//	console.log('trace', arguments.callee.caller.toString().substring(0,100));
-}
-
 var nullFunction = function(){};
 var futureHashChange = null;
 var runstate = {

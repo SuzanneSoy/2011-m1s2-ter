@@ -109,7 +109,6 @@ $(function() {
 					url: "server.php?",
    					data: "action=4&word="+word, //+"&user="+user+"&passwd="+passwd,
    					success: function(msg){
-						console.log(msg);
    						input.closest(".wordLine, #center").addClass(msg == "false" ? "invalid" : "valid");
    						wordsOK[input.attr("id")] = !(msg == false);
     				}});
@@ -154,7 +153,6 @@ $(function() {
    	}
    	
    	var relationsOK = function() {
-   		console.log(wordsOK);
    		for(i = 1; i < numWord; i++) {
    			if(wordsOK["word-"+i]) {
    				if(!$("#r1-"+i).is(":checked") && !$("#r2-"+i).is(":checked") && !$("#r3-"+i).is(":checked") && !$("#r4-"+i).is(":checked"))
