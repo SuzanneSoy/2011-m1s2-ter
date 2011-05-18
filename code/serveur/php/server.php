@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 require_once("ressources/backend.inc");
 require_once("ressources/db.inc");
 
@@ -17,6 +16,7 @@ function logError($errNum, $msg, $other="")
 	$dumpParameters = str_replace("(\n","",print_r($_GET,true));
 	$dumpParameters = str_replace(")\n","",$dumpParameters);
 
+	// Ecriture dans le fichier.
 	fwrite($file,"\nErreur n° ".$errNum);
 	fwrite($file," : ".$msg);
 	if(!empty($other))	
@@ -52,9 +52,9 @@ function main()
 	
 	$action = $_GET['action'];
 	
-	if ($action != 3 && (!$loginIsOk)) {
+	if ($action != 3 && (!$loginIsOk))
 		throw new Exception("Vous n'êtes pas connecté.", 10);
-	}
+
 	if ($action == 3) {
 		echo json_encode(
 			Array(
@@ -67,9 +67,9 @@ function main()
 	
 	if  ($action == 2) {                // "Create partie"
 		// Requête POST : http://serveur/server.php?action=2&nb=2&mode=normal&user=foo&passwd=bar
-		if (!isset($_GET['nb']) || !isset($_GET['mode'])) {
+		if (!isset($_GET['nb']) || !isset($_GET['mode']))
 			throw new Exception("La requête est incomplète", 2);
-		}
+
 		createGame(intval($_GET['nb']), $_GET['mode']);
 		echo '{"success":1}';
 	}
@@ -79,9 +79,9 @@ function main()
 	}
 	else if($action == 1) {           // "Set partie"
 		// Requête POST : http://serveur/server.php?action=1&mode=normal&user=foo&passwd=bar&gid=1234&pgid=12357&0=0&1=-1&2=22&3=13&9=-1
-		if (!isset($_GET['pgid']) || !isset($_GET['gid']) || !isset($_GET['answers'])) {
+		if (!isset($_GET['pgid']) || !isset($_GET['gid']) || !isset($_GET['answers']))
 			throw new Exception("La requête est incomplète", 2);
-		}
+
 		setGameGetScore($user, $_GET['pgid'], $_GET['gid'], $_GET['answers']);
 	} else if($action == 4) {           // CheckWord
 		if (!isset($_GET['word']))
@@ -93,7 +93,7 @@ function main()
 			echo "false";
 	}
 	else if($action == 5) {           // Get relations (JSON)
-		echo getGameRelationsJSON();
+		echo getGameRelations();
 	}
 	else if($action == 6) {
 		if (!isset($_GET['game']))
@@ -105,6 +105,7 @@ function main()
 	} elseif ($action == 8) {         // Set user pref
 		if (!isset($_GET['key']) || !isset($_GET['value']))
 			throw new Exception("La requête est incomplète", 2);
+			
 		setUserPref($user, $_GET['key'], $_GET['value']);
 		userPrefs($user);
 	} else {
@@ -119,7 +120,9 @@ function server() {
 	} else {
 		header("Content-Type: application/json; charset=utf-8");
 	}
+	
 	ob_start();
+	
 	try {
 		main();
 		ob_end_flush();
@@ -132,6 +135,7 @@ function server() {
 				"isError" => true
 			)
 		);
+		
 		logError($e->getCode(), $e->getMessage(), date("c"));
 		closeDB();
 	}
