@@ -84,6 +84,7 @@ function queueize(method) {
 
 $.fn.qAddClass = queueize("addClass");
 $.fn.qRemoveClass = queueize("removeClass");
+$.fn.qRemove = queueize("remove");
 $.fn.qShow = queueize("show");
 $.fn.qHide = queueize("hide");
 $.fn.qCss = queueize("css");
@@ -166,16 +167,20 @@ function decodeHash(hash) {
 	hash = hash.substring(1).split('/');
 	return {
 		screen:hash[0] || 'splash',
-		pgid:hash[1] || -1,
+		pgid:hash[1] || 0,
 		answers:(hash[2] ? hash[2].split(',') : [])
 	};
+}
+
+function appendAnswer(data, answer) {
+	return $.extend({}, data, { answers: data.answers.concat([answer]) });
 }
 
 function encodeHash(data) {
 	var hash = "#";
 	if (data.screen == '') return hash;
 	hash += data.screen
-	if (data.pgid == -1) return hash;
+	if (data.pgid == 0) return hash;
 	hash += '/'+data.pgid;
 	if (data.answers.length == 0) return hash;
 	hash += '/'+data.answers.join(',');

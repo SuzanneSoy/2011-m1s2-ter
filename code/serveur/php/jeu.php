@@ -32,6 +32,9 @@
 			#score { text-align:center; }
 			.marginBox { width: 90%; height: 90%; top: 5%; left:5%; position:absolute; }
 			#message { left:25%; top:5%; width:50%; height:15%; position:absolute; border-radius:0.5em; text-align:center; opacity:0.9; }
+
+			.transition { transition: all 0.7s linear; -moz-transition: all 0.7s linear; -webkit-transition: all 0.7s linear; }
+			.transition-bg { transition: background-color 0.7s linear; -moz-transition: background-color 0.7s linear; -webkit-transition: background-color 0.7s linear; }
 			
 			#splash, #nojs { background-color:black; color: white; }
 			/* couleurs green */
@@ -39,7 +42,7 @@
 			#message { background-color:#f0f8d0; color:black; border:medium solid #4a4; }
 			#mc-caption { color:#8b4; }
 			#mn-caption-box { background-color:#f0f8d0; }
-			#mn-caption { color: #4a4; }
+			.mn-caption { color: #4a4; }
 			.borderbar { background-color: #4a4; }
 			.relationBox { background-color:#f0f8d0; border-color: #4a4; }
 			.highlight { background-color:#f0f8d0; border-color:#4a4; }
@@ -50,7 +53,7 @@
 			.black #message { background-color:#222; color:white; border:medium solid #ccc; }
 			.black #mc-caption { color:white; }
 			.black #mn-caption-box { background-color:#222; }
-			.black #mn-caption { color: #ccc; }
+			.black .mn-caption { color: #ccc; }
 			.black .borderbar { background-color: #ccc; }
 			.black .relationBox { background-color:#222; border-color: #ccc; }
 			.black .highlight { background-color:#222; border-color:#ccc; }
@@ -69,7 +72,7 @@
 				<div class="borderbar" style="height:5%; width:100%; top:52.5%; position:absolute;"></div>
 				<div id="mn-caption-box" style="top:57.5%; height:37.5%; width:100%; position:absolute;"></div>
 				<div style="width: 90%; height:25%; top:63.75%; left: 5%; position:absolute;" class="fitFont">
-					<div id="mn-caption" class="mn center">Mot du nuage</div>
+					<div class="mn mn-caption center setFont">Mot du nuage</div>
 				</div>
 				<div class="borderbar" style="height:5%; width:100%; top:95%; position:absolute;"></div>
 			</div>

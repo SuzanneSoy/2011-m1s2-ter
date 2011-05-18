@@ -1,4 +1,8 @@
 // ==== URL persistante
+function trace() {
+//	console.log('trace', arguments.callee.caller.toString().substring(0,100));
+}
+
 var nullFunction = function(){};
 var futureHashChange = null;
 var runstate = {
@@ -137,7 +141,7 @@ runstate.gameCache = new Cache(function(k, dfd, cache) {
 init(function() {
 	var game = $('#game.screen');
 	$('a[href="#game"]').click(function() {
-		location.hash = '#game/-' + $.now();
+		location.hash = '#game/' + $.now();
 		return false;
 	});
 
@@ -152,19 +156,16 @@ init(function() {
 	game.bind('enter', function() {
 		$("#game .relations").empty();
 		var game = runstate.game;
+		runstate.relationBox = [];
 		$.each(game.relations, function(i, relation) {
-			$('#templates .relationBox')
+			runstate.relationBox[relation.id] = $('#templates .relationBox')
 				.clone()
 				.find(".text").html(relation.name.replace(/%(m[cn])/g, '<span class="$1"/>')).end()
 				.find(".icon").data("image",relation.id).end()
 				.click(function(e) {
-					state.pgid = game.pgid;
-					state.answers.push(relation.id);
-					location.hash = encodeHash(state);
-					$(this).addClass("hot").removeClass("hot", 1000);
-/*					try {
-						game.nextWord({left:e.pageX, top:e.pageY}, this);
-					} catch(e) {alert("Error anonymous 2 click in game.buildUi");alert(e);}*/
+					location.hash = encodeHash(appendAnswer(state, relation.id));
+					window.document.title = "PtiClic "+state.answers.length+' / '+game.cloud.length;
+					$(this).addClass("hot");
 				})
 				.appendTo("#game .relations");
 		});
@@ -173,9 +174,40 @@ init(function() {
 	});
 
 	game.bind('update', function(e) {
-		$("#game .mn").text(runstate.game.cloud[state.answers.length].name);
+		var direction = state.answers.length - oldstate.answers.length;
+		var mn = $("#game .mn-caption");
+		var clone = $();
+		if (direction != 0) {
+			clone = (mn)
+				.stop().clearQueue()
+				.clone().removeClass('center')
+				.appendTo("body") // Append to body so we can animate the offset (instead of top/left)
+				.offset(mn.offset());
+		}
+		mn.text(runstate.game.cloud[state.answers.length].name);
 		jss();
-		console.log('update');
+		if (direction != 0) {
+			// window.setTimeout pour éviter que le offset (ci-dessus) ne soit animé, et pour que le temps de rendu de la page ne soit pas inclus dans le temps d'animation.
+			window.setTimeout(function() {
+				(clone)
+					.addClass("transition")
+					.css(runstate.relationBox[state.answers[state.answers.length - 1]].center())
+					.css({fontSize: 0})
+					.delay(700)
+					.qRemove();
+				$('.relationBox.hot').addClass('transition-bg').removeClass('hot').delay(700).qRemoveClass('transition-bg');
+			}, 0);
+		}
+/*			var fs = mn.css("fontSize");
+			var mncbCenter = $("#game #mn-caption-box").center();
+			
+			(mn)
+				.css("fontSize", 0)
+				.animate({fontSize: fs}, {duration:700, step:function(){
+					try {
+						mn.center(mncbCenter);
+					} catch(e) {alert("Error anonymous 2 in game.animateNext");alert(e);}
+				}}); */
 	});
 });
 

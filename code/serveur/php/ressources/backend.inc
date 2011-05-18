@@ -11,12 +11,11 @@ require_once("ressources/db.inc");
 *   cgBuildResultSets($cloudSize, $centerEid, $r1, $r2);
 *   cgChooseRelations();
 *   cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights);
-*   cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
+*   insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty, $userName);
 *   randomGameCore();
 *   randomGame();
 *   formatWord($word);
-*   game2json($user, $gameId, $pgidNonce = "-1", $doPlayedGame = true);
-*   game2array($user, $gameId, $pgidNonce = "-1", $doPlayedGame = true);
+*   game2json($user, $pgid);
 *   createGame($nbParties, $mode);
 *   createGameCore($cloudSize);
 *   getGame($user, $nbGames, $mode);
@@ -31,6 +30,9 @@ require_once("ressources/db.inc");
 *   getNodeEid($node);
 */
 
+function longStrVal($str) {
+	return preg_match('/^-?[0-9]+$/', ''.$str) ? ''.$str : '0';
+}
 
 /**  Vérifie la validité du couple nom d'utilisateur / mot de passe.
 * @param user : Le nom d'utilisateur.
@@ -151,7 +153,8 @@ function cgBuildResultSets($cloudSize, $centerEid, $r1, $r2)
 */
 function cgChooseRelations()
 {
-	$relations = array(5, 7, 9, 10, 13, 14, 22);
+	global $stringRelations;
+	$relations = array_values(array_diff(array_keys($stringRelations), array(-1, 0)));
 	$r1 = rand(0,count($relations)-1);
 	$r2 = rand(0,count($relations)-2);
 
@@ -250,57 +253,10 @@ function cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights)
 }
 
 
-/** Insère la partie dans la base de données.
-* @param centerEid : Identifiant du mot central.
-* @param cloud : Le nuage.
-* @param r1 : Le type de la relation 1.
-* @param r2 : Le type de la relation 2.
-* @param totalDifficulty : La difficulté totale.
-*/
-function cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty)
-{
+function getSequencePlayedGame() {
 	$db = getDB();
-	// Insère dans la base une partie avec le mot central $centerEid, le nuage $cloud et les relations $r1 et $r2
-	$db->exec("begin transaction;");
-	$db->exec("INSERT INTO game(gid, eid_central_word, relation_1, relation_2, difficulty)
-		   VALUES (null, $centerEid, $r1, $r2, $totalDifficulty);");
-	$gid = $db->lastInsertRowID();
-	
-	$t = time();
-	$db->exec("INSERT INTO played_game(pgid, gid, nonce, login, timestamp)
-		   VALUES (null, $gid, -1, null, $t);");
-	$pgid1 = $db->lastInsertRowID();
-	$db->exec("INSERT INTO played_game(pgid, gid, nonce, login, timestamp)
-		   VALUES (null, $gid, -1, null, $t);");
-	$pgid2 = $db->lastInsertRowID();
-	$db->exec("INSERT INTO played_game(pgid, gid, nonce, login, timestamp)
-		   VALUES (null, $gid, -1, null, $t);");
-	$pgid0 = $db->lastInsertRowID();
-	$db->exec("INSERT INTO played_game(pgid, gid, nonce, login, timestamp)
-		   VALUES (null, $gid, -1, null, $t);");
-	$pgidT = $db->lastInsertRowID();
-
-	// TODO : R0 et Trash + corrections
-	foreach ($cloud as $c)
-	{
-		$totalWeight = $c['probaR1'] + $c['probaR2'] + $c['probaR0'] + $c['probaTrash'];
-		$db->exec("INSERT INTO game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash)
-			   VALUES ($gid, ".$c['pos'].", ".$c['d'].", ".$c['eid'].", $totalWeight, ".$c['probaR1'].", ".$c['probaR2'].", ".$c['probaR0'].", ".$c['probaTrash'].");");
-		
-		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
-			   VALUES ($pgid1, $gid, 0, ".$c['pos'].", $r1, ".$c['probaR1'].", 0);");
-
-		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
-			   VALUES ($pgid2, $gid, 0, ".$c['pos'].", $r2, ".$c['probaR2'].", 0);");
-
-		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
-			   VALUES ($pgid0, $gid, 0, ".$c['pos'].", 0, ".$c['probaR0'].", 0);");
-
-		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
-			   VALUES ($pgidT, $gid, 0, ".$c['pos'].", -1, ".$c['probaTrash'].", 0);");
-	}
-
-	$db->exec("commit;");
+	$db->exec("INSERT INTO played_game_sequence(id) values(null);");
+	return -intval($db->lastInsertRowID());
 }
 
 function decodeAndInsertGame($user,$game) {
@@ -337,28 +293,29 @@ function decodeAndInsertGame($user,$game) {
 	}
 }
 
-function insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty,$userName)
+function insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty, $userName)
 {
 	$db = getDB();
+	$sqlUserName = SQLite3::escapeString($userName);
 	// Insère dans la base une partie avec le mot central $centerEid, le nuage $cloud et les relations $r1 et $r2
 	$db->exec("begin transaction;");
 	$db->exec("INSERT INTO game(gid, eid_central_word, relation_1, relation_2, difficulty, author)
-		   VALUES (null, $centerEid, $r1, $r2, $totalDifficulty, '$userName');");
+		   VALUES (null, $centerEid, $r1, $r2, $totalDifficulty, '".$sqlUserName."');");
 	$gid = $db->lastInsertRowID();
 	
 	$t = time();
-	$db->exec("INSERT INTO played_game(pgid, gid, nonce, login, timestamp)
-		   VALUES (null, $gid, -1, null, $t);");
-	$pgid1 = $db->lastInsertRowID();
-	$db->exec("INSERT INTO played_game(pgid, gid, nonce, login, timestamp)
-		   VALUES (null, $gid, -1, null, $t);");
-	$pgid2 = $db->lastInsertRowID();
-	$db->exec("INSERT INTO played_game(pgid, gid, nonce, login, timestamp)
-		   VALUES (null, $gid, -1, null, $t);");
-	$pgid0 = $db->lastInsertRowID();
-	$db->exec("INSERT INTO played_game(pgid, gid, nonce, login, timestamp)
-		   VALUES (null, $gid, -1, null, $t);");
-	$pgidT = $db->lastInsertRowID();
+	$pgid1 = getSequencePlayedGame();
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)"
+			  ." VALUES ($pgid1, $gid, '".$sqlUserName."', $t);");
+	$pgid2 = getSequencePlayedGame();
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)"
+			  ." VALUES ($pgid2, $gid, '".$sqlUserName."', $t);");
+	$pgid0 = getSequencePlayedGame();
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)"
+			  ." VALUES ($pgid0, $gid, '".$sqlUserName."', $t);");
+	$pgidT = getSequencePlayedGame();
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)"
+			  ." VALUES ($pgidT, $gid, '".$sqlUserName."', $t);");
 
 	// TODO : R0 et Trash + corrections
 	foreach ($cloud as $c)
@@ -367,17 +324,17 @@ function insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty,$userN
 		$db->exec("INSERT INTO game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash)
 			   VALUES ($gid, ".$c['pos'].", ".$c['d'].", ".$c['eid'].", $totalWeight, ".$c['probaR1'].", ".$c['probaR2'].", ".$c['probaR0'].", ".$c['probaTrash'].");");
 		
-		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
-			   VALUES ($pgid1, $gid, 0, ".$c['pos'].", $r1, ".$c['probaR1'].", 0);");
+		$db->exec("INSERT INTO played_game_cloud(pgid, login, gid, type, num, relation, weight, score)
+			   VALUES ($pgid1, '".$sqlUserName."', $gid, 0, ".$c['pos'].", $r1, ".$c['probaR1'].", 0);");
 
-		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
-			   VALUES ($pgid2, $gid, 0, ".$c['pos'].", $r2, ".$c['probaR2'].", 0);");
+		$db->exec("INSERT INTO played_game_cloud(pgid, login, gid, type, num, relation, weight, score)
+			   VALUES ($pgid2, '".$sqlUserName."', $gid, 0, ".$c['pos'].", $r2, ".$c['probaR2'].", 0);");
 
-		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
-			   VALUES ($pgid0, $gid, 0, ".$c['pos'].", 0, ".$c['probaR0'].", 0);");
+		$db->exec("INSERT INTO played_game_cloud(pgid, login, gid, type, num, relation, weight, score)
+			   VALUES ($pgid0, '".$sqlUserName."', $gid, 0, ".$c['pos'].", 0, ".$c['probaR0'].", 0);");
 
-		$db->exec("INSERT INTO played_game_cloud(pgid, gid, type, num, relation, weight, score)
-			   VALUES ($pgidT, $gid, 0, ".$c['pos'].", -1, ".$c['probaTrash'].", 0);");
+		$db->exec("INSERT INTO played_game_cloud(pgid, login, gid, type, num, relation, weight, score)
+			   VALUES ($pgidT, '".$sqlUserName."', $gid, 0, ".$c['pos'].", -1, ".$c['probaTrash'].", 0);");
 	}
 
 	$db->exec("commit;");
@@ -438,107 +395,71 @@ function formatWord($word) {
 	return $res;
 }
 
+function makePlayedGameRow($user, $gid, $pgid) {
+	// TODO : planter si la requête suivante échoue pour quelque raison que ce soit.
+	getDB()->exec("INSERT INTO played_game(pgid, gid, login, timestamp) VALUES (".longStrVal($pgid).", ".intval($gid).", '".SQLite3::escapeString($user)."', -1);");
+}
+
+function getGidFromPgid($user, $pgid) {
+	return getDB()->querySingle("SELECT gid FROM played_game WHERE pgid = ".longStrVal($pgid)." and login = '".SQLite3::escapeString($user)."';");
+}
+
+function makePgid($user, $gid = null, $pgid = null) {
+	if ($gid === null && $pgid === null) {
+		$gid = randomGame();
+		$pgid = getSequencePlayedGame();
+		makePlayedGameRow($user, $gid, $pgid);
+	} elseif ($gid === null) {
+		// On essaie de voir si ce pgid est déjà connu.
+		$gid = getGidFromPgid($user, $pgid);
+		if ($gid === null) {
+			$gid = randomGame();
+			makePlayedGameRow($user, $gid, $pgid);
+		}
+	} elseif ($pgid === null) {
+		$pgid = getSequencePlayedGame();
+		makePlayedGameRow($user, $gid, $pgid);
+	} else {
+		if ($gid != getGidFromPgid($user, $pgid)) throw new Exception("Cette partie n'est pas associée à votre nom d'utilisateur.", 4);
+	}
+	return array($gid, $pgid);
+}
+
 /** Formate une partie en JSON en l'imprimant.
 * @param user : l'utilisateur.
 * @param gameId : L'identifiant d'une partie.
-* @param pgidNonce : pgid ou nonce de la partie. Peut être -1 uniquement si $doPlayedGame = true
-* @param doPlayedGame : enregistrer un nouveau pgid ?
 */
-function game2json($user, $gameId, $pgidNonce = "-1", $doPlayedGame = true)
+function game2json($user, $pgid = null)
 {
 	global $stringRelations;
 	$db = getDB();
-	// TODO : factoriser avec game2array().
-	// TODO : planter si la requête suivante échoue pour quelque raison que ce soit.
-	if ($doPlayedGame) {
-		$db->exec("INSERT INTO played_game(pgid, gid, nonce, login, timestamp) VALUES (null, ".intval($gameId).", ".$pgidNonce.", '".SQLite3::escapeString($user)."', -1);");
-		$pgidNonce = $db->lastInsertRowID();
-	}
+
+	list($gid, $pgid) = makePgid($user, null, $pgid);
 	
 	// TODO Yoann : faire des tests d'erreur pour ces select ?
-	$game = $db->query("select gid, (select name from node where eid = eid_central_word) as name_central_word, eid_central_word, relation_1, relation_2 from game where gid = ".$gameId.";");
+	$game = $db->query("select gid, (select name from node where eid = eid_central_word) as name_central_word, eid_central_word, relation_1, relation_2 from game where gid = ".$gid.";");
 	$game = $game->fetchArray();
 
-	$retstr = "";
-	$retstr .= '{"gid":'.$gameId.',"pgid":'.$pgidNonce.',"relations":[';
-	$retstr .= '{"id":'.$game['relation_1'].', "name":'.json_encode(''.formatWord($stringRelations[$game['relation_1']])).'}';
-	$retstr .= ', {"id":'.$game['relation_2'].', "name":'.json_encode(''.formatWord($stringRelations[$game['relation_2']])).'}';
-	$retstr .= ', {"id":0, "name":'.json_encode(''.formatWord($stringRelations[0])).'}';
-	$retstr .= ', {"id":-1, "name":'.json_encode(''.formatWord($stringRelations[-1])).'}],';
-	//	$retstr .= '{"gid":'.$gameId.',"pgid":'.$pgidNonce.',"cat1":'.$game['relation_1'].',"cat2":'.$game['relation_2'].',"cat3":0,"cat4":-1,';
-	$retstr .= '"center":{"id":'.$game['eid_central_word'].',"name":'.json_encode(''.formatWord($game['name_central_word'])).'},';
+	$ret = array(
+		"gid" => $gid,
+		"pgid" => $pgid,
+		"relations" => array(
+			array("id" => $game['relation_1'], "name" => ''.$stringRelations[$game['relation_1']]),
+			array("id" => $game['relation_2'], "name" => ''.$stringRelations[$game['relation_2']]),
+			array("id" => 0,                   "name" => ''.$stringRelations[0]),
+			array("id" => -1,                  "name" => ''.$stringRelations[-1])
+		),
+		"center" => array("id" => $game['eid_central_word'], "name" => formatWord($game['name_central_word'])),
+		"cloud" => array()
+	);
 
-	$cloudsize = 0;
-	$tmp_retstr = '';
-	$notfirst = false;
-	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word from game_cloud where gid = ".$gameId.";");
+	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word from game_cloud where gid = ".$gid.";");
 	while ($x = $res->fetchArray())
 	{
-		if ($notfirst) 
-			$tmp_retstr .= ",";
-		else
-			$notfirst=true;
-
-		$tmp_retstr .= '{"id":'.$x['eid_word'].',"name":'.json_encode("".formatWord($x['name_word'])).'}';
-		$cloudsize++;
+		$ret['cloud'][] = array("id" => $x['eid_word'], "name" => ''.formatWord($x['name_word']));
 	}
-	$retstr .= '"cloudsize":'.$cloudsize.',"cloud":[';
-	$retstr .= $tmp_retstr;
-	
-	$retstr .= "]}";
-	return $retstr;
+	return json_encode($ret);
 }
-
-/** Récupère une partie sous forme de tableau.
-* @param user : Login de l'utilisateur demandant la partie.
-* @param gameId : L'identifiant d'une partie.
-* @param pgidNonce : pgid ou nonce de la partie. Peut être -1 uniquement si $doPlayedGame = true
-* @param doPlayedGame : enregistrer un nouveau pgid ?
-*/
-function game2array($user, $gameId, $pgidNonce = "-1", $doPlayedGame = true)
-{
-	$db = getDB();
-	// TODO : planter si la requête suivante échoue pour quelque raison que ce soit.
-	if ($doPlayedGame) {
-		$db->exec("INSERT INTO played_game(pgid, gid, nonce, login, timestamp) VALUES (null, ".intval($gameId).", ".$pgidNonce.", '".SQLite3::escapeString($user)."', -1);");
-		$pgidNonce = $db->lastInsertRowID();
-	}
-	
-	// TODO Yoann : faire des tests d'erreur pour ces select ?
-	$game = $db->query("select gid, (select name from node where eid = eid_central_word) as name_central_word, eid_central_word, relation_1, relation_2 from game where gid = ".$gameId.";");
-	$game = $game->fetchArray();
-
-	$ret = array();
-	$ret['gid'] = $gameId;
-	$ret['pgid'] = $pgidNonce;
-	$ret['cat1'] = $game['relation_1'];
-	$ret['cat2'] = $game['relation_2'];
-	$ret['cat3'] = 0;
-	$ret['cat4'] = -1;
-	$ret['center'] = array('id' => $game['eid_central_word'], 'name' => formatWord($game['name_central_word']));
-	$ret['cloud'] = array(); // TODO ! compter dynamiquement.
-	
-	$res = $db->query("select eid_word,(select name from node where eid=eid_word) as name_word, num, difficulty, totalWeight, probaR1, probaR2, probaR0, probaTrash from game_cloud where gid = ".$gameId.";");
-	
-	while ($x = $res->fetchArray())
-	{
-		$ret['cloud'][$x['num']] = array(
-			'id' => $x['eid_word'],
-			'name' => formatWord($x['name_word']),
-			'difficulty' => $x['difficulty'],
-			'totalWeight' => $x['totalWeight'],
-			'probaR1' => $x['probaR1'],
-			'probaR2' => $x['probaR2'],
-			'probaR0' => $x['probaR0'],
-			'probaTrash' => $x['probaTrash'],
-			'probas' => normalizeProbas($x)
-		);
-	}
-	
-	$ret['cloudsize'] = count($ret['cloud']);
-	return $ret;
-}
-
 
 /** Création d'un lot de parties suivant un mode donnée.
 * @param nbParties : le nombre de parties à créer.
@@ -563,32 +484,8 @@ function createGameCore($cloudSize)
 	$r1 = cgChooseRelations(); $r2 = $r1[1]; $r1 = $r1[0];
 	$sources = cgBuildResultSets($cloudSize, $centerEid, $r1, $r2); $sumWeights = $sources[1]; $sources = $sources[0];
 	$cloud = cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights); $totalDifficulty = $cloud[1]; $cloud = $cloud[0];
-	cgInsert($centerEid, $cloud, $r1, $r2, $totalDifficulty);
+	insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty, 'bot');
 }
-
-/** Récupération d'une partie.
-* @param user : L'identifiant de l'utilisateur.
-* @param nbGames : Le nombre de parties à récupérer.
-* @param mode : Le mode de jeu des parties à récupérer.
-*/
-function getGame($user, $pgidNonce = null)
-{
-	$nonce = "-1";
-	if ($pgidNonce !== null) {
-		if (substr($pgidNonce, 0, 1) == '-') {
-			$temp = getDB()->querySingle("SELECT gid,pgid FROM played_game WHERE nonce =  ".preg_replace('/[^0-9]/', '', $pgidNonce)." and login = '".SQLite3::escapeString($user)."';", true);
-			$gid = $temp['gid'];
-			$nonce = $temp['pgid'];
-			if ($gid == null) { $nonce = preg_replace('/[^0-9]/', '', $pgidNonce); $pgidNonce = null; }
-		} else {
-			$nonce = intval($pgidNonce);
-			$gid = getDB()->querySingle("SELECT gid FROM played_game WHERE pgid = ".$pgidNonce." and login = '".SQLite3::escapeString($user)."';");
-			if ($gid == null) throw new Exception("Cette partie n'est associée à votre nom d'utilisateur.", 4);
-		}
-	}
-	echo game2json($user, $pgidNonce == null ? randomGame() : $gid, $nonce, $pgidNonce == null);
-}
-
 
 function computeScore($probas, $difficulty, $answer, $userReputation) {
 	// Calcul du score. Score = proba[réponse de l'utilisateur]*coeff1 - proba[autres reponses]*coeff2 + bonus
@@ -638,21 +535,21 @@ function normalizeProbas($row) {
 function setGame($user, $pgid, $gid, $answers)
 {
 	$db = getDB();
-	if ('ok' !== $db->querySingle("SELECT 'ok' FROM played_game WHERE pgid = $pgid and gid = $gid and login = '".SQLite3::escapeString($user)."' and timestamp = -1;")) {
+	if ('ok' !== $db->querySingle("SELECT 'ok' FROM played_game WHERE pgid = ".longStrVal($pgid)." and gid = ".intval($gid)." and login = '".SQLite3::escapeString($user)."' and timestamp = -1;")) {
 		return getGameScores($user, $pgid, $gid);
 	}
 	
 	$userReputation = computeUserReputation($db->querySingle("SELECT score FROM user WHERE login = '".SQLite3::escapeString($user)."';"));
 	
 	$db->exec("begin transaction;");
-	$db->exec("update played_game set timestamp = ".time()." where pgid = $pgid;");
+	$db->exec("update played_game set timestamp = ".time()." where pgid = ".longStrVal($pgid)." and login = '".SQLite3::escapeString($user)."';");
 
 	$r0 = 0;
 	$trash = -1;
-	$r1 = $db->querySingle("SELECT relation_1, relation_2 FROM game WHERE gid = $gid;", true);
+	$r1 = $db->querySingle("SELECT relation_1, relation_2 FROM game WHERE gid = ".intval($gid).";", true);
 	$r2 = $r1['relation_2'];
 	$r1 = $r1['relation_1'];
-	$res = $db->query("SELECT num, difficulty, totalWeight, probaR1, probaR2, probaR0, probaTrash FROM game_cloud WHERE gid = $gid;");
+	$res = $db->query("SELECT num, difficulty, totalWeight, probaR1, probaR2, probaR0, probaTrash FROM game_cloud WHERE gid = ".intval($gid).";");
 	$gameScore = 0;
 	$scores = array();
 	
@@ -677,9 +574,10 @@ function setGame($user, $pgid, $gid, $answers)
 		$gameScore += $wordScore;
 		$scores[$num] = $wordScore;
 		
-		$db->exec("insert into played_game_cloud(pgid, gid, type, num, relation, weight, score) values($pgid, $gid, 1, $num, $r1, ".$userReputation.", ".$wordScore.");");
-		$db->exec("update game_cloud set $probaRx = $probaRx + ".max(min($userReputation/2,5),0)." where gid = $gid and num = $num;");
-		$db->exec("update game_cloud set totalWeight = totalWeight + ".max(min($userReputation/2,5),0)." where gid = $gid and num = $num;");
+		$db->exec("insert into played_game_cloud(pgid, login, gid, type, num, relation, weight, score)"
+				  ." values(".longStrVal($pgid).", '".SQLite3::escapeString($user)."', ".intval($gid).", 1, $num, $r1, ".$userReputation.", ".$wordScore.");");
+		$db->exec("update game_cloud set $probaRx = $probaRx + ".max(min($userReputation/2,5),0)." where gid = ".intval($gid)." and num = $num;");
+		$db->exec("update game_cloud set totalWeight = totalWeight + ".max(min($userReputation/2,5),0)." where gid = ".intval($gid)." and num = $num;");
 	}
 	$db->exec("update user set score = score + ".$gameScore." where login = '$user';");
 
@@ -694,16 +592,16 @@ function setGame($user, $pgid, $gid, $answers)
 
 function getGameScores($user, $pgid, $gid) {
 	$db = getDB();
-	$timestamp = $db->querySingle("SELECT timestamp FROM played_game WHERE pgid = $pgid and $gid = $gid and login = '$user';");
+	$timestamp = $db->querySingle("SELECT timestamp FROM played_game WHERE pgid = ".longStrVal($pgid)." and $gid = ".intval($gid)." and login = '".SQLite3::escapeString($user)."';");
 	if ($timestamp == -1) {
 		throw new Exception("Cette partie n'a jamais été jouée.", 4); // TODO : code d'erreur en doublon avec celui ci-dessous.
 	} else if ($timestamp == null) {
-		throw new Exception("Cette partie n'est associée à votre nom d'utilisateur.", 4);
+		throw new Exception("Cette partie n'est pas associée à votre nom d'utilisateur.", 4);
 	}
 	
 	$gameScore = 0;
 	$scores = array();
-	$res = $db->query("SELECT num,score from played_game_cloud where pgid = $pgid and gid = $gid;");
+	$res = $db->query("SELECT num, score from played_game_cloud where pgid = ".longStrVal($pgid)." and gid = ".intval($gid)." and login = '".SQLite3::escapeString($user)."';");
 	while ($row = $res->fetchArray())
 	{
 		$gameScore += $row['score'];
@@ -727,7 +625,7 @@ function get_game_relations()
 		$relations[] = 7;
 		$relations[] = 9;
 		$relations[] = 10;
-		$relations[] = 14;
+		$relations[] = 13;
 		$relations[] = 22;
 
 		return $relations;
@@ -749,9 +647,9 @@ function getGameRelationsJSON() {
 }
 
 function setGameGetScore($user, $pgid, $gid, $answers) {
-	$scores = setGame($user, intval($pgid), intval($gid), $answers);
+	$scores = setGame($user, $pgid, $gid, $answers);
 	// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
-	$scores['newGame'] = game2json($user, randomGame());
+	$scores['newGame'] = game2json($user);
 	$scores['minScore'] = -5;
 	$scores['maxScore'] = 10;
 	echo json_encode($scores);

@@ -29,14 +29,16 @@ create table type_relation(name, num, extended_name, info);
 create table user(login primary key, mail, hash_passwd, score, ugroup);
 create table game(gid integer primary key autoincrement, eid_central_word, relation_1, relation_2, difficulty, author);
 create table game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash);
-create table played_game(pgid integer primary key autoincrement, gid, nonce, login, timestamp);
-create table played_game_cloud(pgid, gid, type, num, relation, weight, score);
+create table played_game(pgid, gid, login, timestamp, primary key(login, pgid));
+create table played_game_sequence(id integer primary key autoincrement);
+create table played_game_cloud(pgid, login, gid, type, num, relation, weight, score);
 create table colon_nodes(eid);
 create table random_cloud_node(eid,nbneighbors);
 create table random_center_node(eid);
 create table user_info(user, key, value, primary key (user, key));
 
 insert into user(login, mail, hash_passwd, score, ugroup) values('$(echo "$user" | sed -e "s/'/''/g")', 'foo@isp.com', '$(echo "$passwd" | dd bs=1 count="${#passwd}" | (if which md5sum >/dev/null 2>&1; then md5sum; else md5; fi) | cut -d ' ' -f 1)', 0, 1);
+insert into user(login, mail, hash_passwd, score, ugroup) values('bot', 'no mail', 'no password', 0, 1);
 EOF
 
 # tr : pour virer le CRLF qui traîne
