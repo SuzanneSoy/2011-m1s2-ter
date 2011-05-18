@@ -5,12 +5,11 @@ import org.pticlic.model.Constant;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
 public class Main extends Activity {
-
+	
 	private WebView webView;
 	private JavaScriptInterface js = null;
 	
@@ -26,9 +25,8 @@ public class Main extends Activity {
 		webView.setVerticalScrollBarEnabled(false);
 		webView.setHorizontalScrollBarEnabled(false);
 
-		js = new JavaScriptInterface(this);
+		js = new JavaScriptInterface(this, webView);
 		webView.addJavascriptInterface(js, "PtiClicAndroid");
-		Log.i("[INFO]", Constant.SERVER + Constant.SERVER_URL);	
 	}
 	
 	@Override
@@ -36,7 +34,7 @@ public class Main extends Activity {
 		super.onStart();
 		webView.loadUrl(Constant.SERVER + Constant.SERVER_URL);
 	}
-		
+	
 	@Override
 	public void onBackPressed() {
 		if (js.getScreen().equals("splash") || js.getScreen().equals("frontpage"))

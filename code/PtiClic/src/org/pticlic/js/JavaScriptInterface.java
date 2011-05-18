@@ -4,17 +4,21 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.webkit.WebView;
+import android.widget.Toast;
 
 public class JavaScriptInterface {
 	private Activity mContext;
 	private ProgressDialog dialog;
 	private String screen;
+	private WebView webView;
 
-    /** Instantie l'interface et initialise le context */
-    public JavaScriptInterface(Activity c) {
+    /** Instantie l'interface et initialise le context */ 
+    public JavaScriptInterface(Activity c, WebView webView) {
         mContext = c;
+        this.webView = webView;
     }
-    
+   
     /**
      * Permet de setter une valeur dans les preferences
      * 
@@ -33,7 +37,8 @@ public class JavaScriptInterface {
      */
     public String getPreference(String aName) {
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-    	return prefs.getString(aName, "");
+    	String res = prefs.getString(aName, "");
+    	return res;
     }
     
     /** Permet d'afficher une progressbar 
@@ -44,12 +49,20 @@ public class JavaScriptInterface {
     	dialog = ProgressDialog.show(mContext, title, message);
     }
     
+    public void info(String title, String message) {
+    	Toast.makeText(mContext, message, Toast.LENGTH_SHORT);
+    }
+    
     /** Permet de retirer l'affichage de la boite de dialog
      * 
      */
     public void dismiss() {
         if (dialog.isShowing())
         	dialog.dismiss();
+    }
+    
+    public void switchCSS(String newTheme) {
+    	webView.reload();
     }
     
     /** Permet de quitter l'application

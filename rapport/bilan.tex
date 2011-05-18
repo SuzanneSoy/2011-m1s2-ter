@@ -1,0 +1,57 @@
+\documentclass[a4paper,11pt,french]{article}
+
+\usepackage[frenchb]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{um2/geometry}
+
+\hypersetup{%
+  colorlinks,%
+  linkcolor=black,%
+  filecolor=black,%
+  urlcolor=black,%
+  citecolor=black%
+}
+
+\title{Bilan de TER - Groupe 42\\---\\Reconception du jeu Pticlic sous Android}
+\author{Yoann \textsc{Bonavero} \and Bertrand \textsc{Brun} \and John \textsc{Charron} \and Georges \textsc{Dupéron} \\\\ Encadrant: M. Mathieu \textsc{Lafourcade}}
+
+\begin{document}
+
+\newgeometry{top=0.5cm, right=2cm, left=2cm, bottom=0.5cm}
+
+\maketitle
+\noindent Le sujet de notre projet a été défini comme suit : 
+
+\begin{quotation}
+\noindent L'étude et le prototypage d'une version [du jeu PtiClic] fonctionnant sur Android semble intéressante. En particulier on s'intéressera a deux aspects : les contraintes imposées par l'environnement smartphone, le biais qu'imposent ces contraintes sur le jeu et les données récoltées. Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel. \\
+\end{quotation}
+
+\noindent Rôles~:
+\begin{itemize}
+\item Chef de projet~: Bertrand \textsc{BRUN}
+\item Responsable de la communication et de la logistique~: John \textsc{CHARRON} (les 3 premiers mois), Bertrand \textsc{BRUN} (par la suite) \\
+\end{itemize}
+
+\noindent Nous avons réalisé deux prototypes, l'un sous Android\texttrademark en Java à l'aide de l'Android Development Tools pour téléphones mobiles sous Android\texttrademark, l'autre pour tout type de smartphone en HTML5 et d'autres langages Web. Outre ces prototypes, nous avons réalisé un site Web (\url{www.pticlic.fr}) pour la gestion des utilisateurs et pour faire connaître notre application. Nous avons aussi fait testé notre application par des alpha-testeurs.
+\\
+
+\noindent En ce qui concerne le premier prototype, nous avons tout d'abord suivi ce qui a été prévu dans notre diagramme de Gantt initial : Georges \textsc{Dupéron} et Yoann \textsc{BONAVERO} ont travaillé principalement côté serveur et base de données alors que Bertrand \textsc{BRUN} et John \textsc{CHARRON} se sont occupés de l'application client. Le site Web n'avait pas été prévu initialement et a été réalisé par Yoann \textsc{BONAVERO} et John \textsc{CHARRON} alors que Bertrand \textsc{BRUN} et Georges \textsc{Dupéron} ont continué leur travail respectif. Le planning du projet a été modifié, nous avons opté pour deux itérations au lieu de quatre.
+\\
+
+\noindent Lors de la deuxième itération du projet, Yoann \textsc{BONAVERO} a continué à travailler sur le site Web, l'améliorant en ajoutant des pages telles que la partie 'Création de parties', Georges \textsc{Dupéron} sur l'application en HTLM5, Bertrand \textsc{BRUN} sur les modifications de l'application Android\texttrademark{} intégrant les modifications suite aux premiers alpha-tests alors que John \textsc{CHARRON} s'est penché sérieusement sur la dimension TALN du projet, un aspect du projet dont nous avions sous-estimé l'importance. 
+\\
+
+\noindent Reste à faire~:
+\begin{itemize}
+  \item améliorations/expérimentations sur des algorithmes de génération de mots centraux, mots nuages et relations
+  \item authentification des utilisateurs dans l'application
+  \item attribution à un joueur donné le droit de créer une partie
+  \item affichage de la personne qui a créé une partie dans la page de score 
+\end{itemize}
+
+\end{document}
