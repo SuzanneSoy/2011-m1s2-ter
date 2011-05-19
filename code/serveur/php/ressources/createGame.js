@@ -200,7 +200,8 @@ $(function() {
 					else if (data != true) {
 						$('input').removeAttr('disabled');
 						var that = $(this);
-						console.log("mot incorrect");
+
+
 						$.each(data,function(i,e) {
 							$('.word')
 								.filter(function() { return that.val() == e; })
