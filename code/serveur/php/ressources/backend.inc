@@ -296,10 +296,10 @@ function decodeAndInsertGame($user,$game) {
 	if(count($badWords) > 0) {
 		echo JSON_encode($badWords);
 	} else if (count($cloud) < 5) {
-		echo "false";
+		echo JSON_encode(false);
 	} else {
 		insertCreatedGame($centerEid,$cloud,$r1,$r2,10,$user);
-		echo "true";
+		echo JSON_encode(true);
 	}
 }
 

@@ -77,22 +77,23 @@ function main()
 		// Requête POST : http://serveur/server.php?action=0&user=foo&passwd=bar
 		echo game2json($user, isset($_GET['pgid']) ? $_GET['pgid'] : null);
 	}
-	else if($action == 1) {           // "Set partie"
+	else if($action == 1) {				// "Set partie"
 		// Requête POST : http://serveur/server.php?action=1&mode=normal&user=foo&passwd=bar&gid=1234&pgid=12357&0=0&1=-1&2=22&3=13&9=-1
 		if (!isset($_GET['pgid']) || !isset($_GET['gid']) || !isset($_GET['answers']))
 			throw new Exception("La requête est incomplète", 2);
 
 		setGameGetScore($user, $_GET['pgid'], $_GET['gid'], $_GET['answers']);
-	} else if($action == 4) {           // CheckWord
+	}
+	else if($action == 4) {           // CheckWord
 		if (!isset($_GET['word']))
 			throw new Exception("La requête est incomplète", 2);
 
 		if(wordExist($_GET['word']))
-			echo "true";
+			echo JSON_encode(true);
 		else
-			echo "false";
+			echo JSON_encode(false);
 	}
-	else if($action == 5) {           // Get relations (JSON)
+	else if($action == 5) {           	// Get relations (JSON)
 		echo getGameRelations();
 	}
 	else if($action == 6) {
@@ -100,15 +101,18 @@ function main()
 			throw new Exception("La requête est incomplète", 2);
 		
 		decodeAndInsertGame($user,$_GET['game']);
-	} elseif ($action == 7) {         // Get user prefs
+	}
+	elseif ($action == 7) {         	// Get user prefs
 		userPrefs($user);
-	} elseif ($action == 8) {         // Set user pref
+	}
+	elseif ($action == 8) {         	// Set user pref
 		if (!isset($_GET['key']) || !isset($_GET['value']))
 			throw new Exception("La requête est incomplète", 2);
 			
 		setUserPref($user, $_GET['key'], $_GET['value']);
 		userPrefs($user);
-	} else {
+	}
+	else {
 		throw new Exception("Commande inconnue", 2);
 	}
 }
@@ -139,6 +143,7 @@ function server() {
 		logError($e->getCode(), $e->getMessage(), date("c"));
 		closeDB();
 	}
+	
 	if(isset($_GET['callback']))
 		echo ')';
 }

@@ -109,7 +109,7 @@ $(function() {
 					url: "server.php?",
    					data: "action=4&word="+word, //+"&user="+user+"&passwd="+passwd,
    					success: function(msg){
-   						input.closest(".wordLine, #center").addClass(msg == "false" ? "invalid" : "valid");
+   						input.closest(".wordLine, #center").addClass(msg == false ? "invalid" : "valid");
    						wordsOK[input.attr("id")] = !(msg == false);
     				}});
     		}
@@ -118,20 +118,20 @@ $(function() {
 		var formOK = function() {
 			displayError("");
 		   	
-   		if ($("#relation1").val() == $("#relation2").val())
-   			displayError("Les deux relation doivent être différents");
-   		else if ($("#centralWord").val() == "")
-   			displayError("Le mot central doit être renseigné.");
+			if ($("#relation1").val() == $("#relation2").val())
+				displayError("Les deux relation doivent être différents");
+			else if ($("#centralWord").val() == "")
+				displayError("Le mot central doit être renseigné.");
 			else if (badWord())
 				displayError("Il existe des mots incorrects");   			
-   		else if (nbWordOK() < nbWordMin)
-   			displayError("Le nuage doit contenir au moins "+nbWordMin+" mots valides.");
-   		else if (!relationsOK())
-   			displayError("Tout les mots ne sont pas liés à une relation");
-   		else
-   			sendGame();
+			else if (nbWordOK() < nbWordMin)
+				displayError("Le nuage doit contenir au moins "+nbWordMin+" mots valides.");
+			else if (!relationsOK())
+				displayError("Tout les mots ne sont pas liés à une relation");
+			else
+				sendGame();
    				
-   		return false;
+			return false;
 		};
 		
 		var nbWordOK = function() {
@@ -150,64 +150,69 @@ $(function() {
    				return true;
    			
    		return false;
-   	}
+		}
    	
-   	var relationsOK = function() {
-   		for(i = 1; i < numWord; i++) {
-   			if(wordsOK["word-"+i]) {
-   				if(!$("#r1-"+i).is(":checked") && !$("#r2-"+i).is(":checked") && !$("#r3-"+i).is(":checked") && !$("#r4-"+i).is(":checked"))
-   					return false;
-   			}
-   		}	
-   					
-   		return true;
-   	}
-   	
-   	var sendGame = function() {
-   		var exit;
-			var cloud = "";
-   		
-   		exit = {center:$("#centralWord").val(),
-   				  relations:[$("#relation1").val(),$("#relation2").val(),0,-1],
-   				  cloud:[]};
-   				  
-   		for(i=1;i<numWord;i++) {
-   			exit.cloud.push({
-   				name:$("#word-"+i).val(),
-   				relations:[
-   					$("#r1-"+i).is(":checked") ? "1":"0",
-   					$("#r2-"+i).is(":checked") ? "1":"0",
-   					$("#r3-"+i).is(":checked") ? "1":"0",
-   					$("#r4-"+i).is(":checked") ? "1":"0"
-  					]
-				});
-   		}
-   		
-   		$.get("server.php",{action:"6",game:exit},function (data) {
-   			//$(".word").closest(".wordLine, #center").removeClass("valid invalid");
-				if(data == "true") {
-					displaySuccess("La partie à bien été enregistrée");
-					$('#newCreationLink').show();
-					$('#center').hide();
-					$('#relations').hide();
-					$('#wordLines').hide();
-					$('#button').hide();
-				} else if (data == "false") {
-					displayError("Le nuage doit contenir au moins "+nbWordMin+" mots valides.");
-				} else if (data != "true") {
-					$('input').removeAttr('disabled');
-					var that = $(this);
-					$.each(data,function(i,e) {
-						$('.word')
-							.filter(function() { return that.val() == e; })
-							.closest(".wordLine, #center")
-							.removeClass("valid invalid")
-							.addClass("invalid");
-					});
+		var relationsOK = function() {
+			for(i = 1; i < numWord; i++) {
+				if(wordsOK["word-"+i]) {
+					if(!$("#r1-"+i).is(":checked") && !$("#r2-"+i).is(":checked") && !$("#r3-"+i).is(":checked") && !$("#r4-"+i).is(":checked"))
+						return false;
 				}
-   		});
-   		$('input').attr('disabled', 'disabled');
-   	}
+			}	
+						
+			return true;
+		}
+   	
+		var sendGame = function() {
+			var exit;
+			var cloud = "";
+			
+			exit = {center:$("#centralWord").val(),
+					  relations:[$("#relation1").val(),$("#relation2").val(),0,-1],
+					  cloud:[]};
+					  
+			for(i=1;i<numWord;i++) {
+				exit.cloud.push({
+					name:$("#word-"+i).val(),
+					relations:[
+						$("#r1-"+i).is(":checked") ? "1":"0",
+						$("#r2-"+i).is(":checked") ? "1":"0",
+						$("#r3-"+i).is(":checked") ? "1":"0",
+						$("#r4-"+i).is(":checked") ? "1":"0"
+						]
+					});
+			}
+			
+			$.get("server.php",{action:"6",game:exit},function (data) {
+				//$(".word").closest(".wordLine, #center").removeClass("valid invalid");
+					if(data == true) {
+						displaySuccess("La partie à bien été enregistrée");
+						$('#newCreationLink').show();
+						$('#center').hide();
+						$('#relations').hide();
+						$('#wordLines').hide();
+						$('#button').hide();
+					}
+					else if (data == false) {
+						$('input').removeAttr('disabled');
+						displayError("Le nuage doit contenir au moins "+nbWordMin+" mots valides.");
+					}
+					else if (data != true) {
+						$('input').removeAttr('disabled');
+						var that = $(this);
+						console.log("mot incorrect");
+						$.each(data,function(i,e) {
+							$('.word')
+								.filter(function() { return that.val() == e; })
+								.closest(".wordLine, #center")
+								.removeClass("valid invalid")
+								.addClass("invalid");
+						});
+					}
+			});
+			
+			$('input').attr('disabled', 'disabled');
+		}
 
 		var displayError = function(message) {
 			if (message != "")
