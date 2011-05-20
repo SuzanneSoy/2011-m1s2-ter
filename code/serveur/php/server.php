@@ -132,10 +132,13 @@ function server() {
 		ob_end_flush();
 	} catch (Exception $e) {
 		ob_end_clean();
+		$code = $e->getCode();
+		$msg = $e->getMessage();
+		if ($code != 10 && $code != 3) $msg = "Erreur ".$code." : " . $msg;
 		echo json_encode(
 			Array(
-				"error" => $e->getCode(),
-				"msg" => "Erreur ".$e->getCode()." : ".$e->getMessage(),
+				"error" => $code,
+				"msg" => $msg,
 				"isError" => true
 			)
 		);

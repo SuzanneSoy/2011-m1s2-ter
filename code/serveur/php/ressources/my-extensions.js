@@ -188,9 +188,9 @@ function encodeHash(data) {
 }
 
 function Cache(resolver) {
-	var cache = [];
+	var cache = {};
 	this.get = function(k) {
-		return cache[k] = cache[k] || $.Deferred(function(dfd) { resolver(k, dfd); }).fail(cache[k] = false).promise();
+		return cache[k] = cache[k] || $.Deferred(function(dfd) { resolver(k, dfd); }).fail(function() { cache[k] = false; }).promise();
 	};
 }
 
