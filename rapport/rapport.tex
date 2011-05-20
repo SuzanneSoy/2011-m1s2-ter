@@ -37,18 +37,17 @@
 
 PtiClic\footnote{http://pticlic.org} est un jeu qui a été conçu et développé par Matthieu Lafourcade et Virginie Zampa. Le jeu a été créé afin de faire des études sur le vocabulaire et la sémantique sur des sujets de divers horizons dans un contexte ludique et motivant. Un mot central apparait, un nuage de mots entoure le mot central et le joueur clique et dépose des mots du nuage dans des catégories proposé sous forme d'énoncés. 
 
-Par exemple, pour le mot central 'bicyclette', les mots 'pédale', 'piéton', 'pied', 'automobile', 'Sébastien Chabal', 'Lance Armstrong', 'pédalier', 'voiture', 'yeux', 'rapide', 'routier', 'maillot', 'pédaler', 'dopage', 'véhicule', 'musclé', 'nez', etc. sont proposé. Le joueur dépose ces mots dans les catégories "... est une partie de 'cycliste', "Un contraire de 'cycliste' est ...", "'cycliste' a un rapport avec ...",  "Une caractéristique de 'cycliste' est ..." ou aucune de ces catégorie. Un score est obtenu en soustrayant les mots manquants et les mots incorrects des mots corrects. 
+Par exemple, pour le mot central 'bicyclette', les mots 'pédale', 'piéton', 'pied', 'automobile', 'Sébastien Chabal', 'Lance Armstrong', 'pédalier', 'voiture', 'yeux', 'rapide', 'routier', 'maillot', 'pédaler', 'dopage', 'véhicule', 'musclé', 'nez', etc. sont proposés. Le joueur dépose ces mots dans les catégories "... est une partie de 'cycliste', "Un contraire de 'cycliste' est ...", "'cycliste' a un rapport avec ...",  "Une caractéristique de 'cycliste' est ..." ou aucune de ces catégorie. Un score est obtenu en soustrayant les mots manquants et les mots incorrects aux mots corrects. 
 
 Des linguistes et des informaticiens récupèrent les données liées aux parties jouées, ce qui leur permet de faire de la recherche dans leurs domaines respectifs.
 
 Notre travail consiste à créer une version du PtiClic sous Android, une version modifiée du jeu adaptée pour téléphone mobile. Le sujet du TER définit clairement l'objectif de ce projet~:
 
 \begin{quotation}
-%% Correction Bertarnd remplacement de fonctionnant sur des Android semble est intéressante => fonctionnant sur Android semble intéressante => NON, CAR CITATION, ON NE PEUT PAS LE 'CORRIGER'
 L'étude et le prototypage d'une version fonctionnant sur Android semble intéressante. En particulier on s'intéressera a deux aspects : * les contraintes imposées par l'environnement smartphone * le biais qu'imposent ces contraintes sur le jeu et les données récoltées. Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel. 
 \end{quotation}
 
-Dans un premier temps, une version de base sera conçue et réalisée. Ensuite, des fonctionnalités supplémentaires seront ajouter. La démarche adoptée par notre groupe est une approche itérative. Les quatres livraisons vont d'une version de base vers des versions plus élaborées~: un joueur pourrait, entre autres, modifier ses préférences ou choisir son niveau. L'idée est aussi de rendre le jeu plus attirant afin d'accroître le nombre de sujets participant aux études liées au résultat des données extraits des parties jouées.
+Dans un premier temps, une version de base sera conçue et réalisée. Ensuite, des fonctionnalités supplémentaires seront ajoutées. La démarche adoptée par notre groupe est une approche itérative. Les quatres livraisons vont d'une version de base vers des versions plus élaborées~: un joueur pourrait, entre autres, modifier ses préférences ou choisir son niveau. L'idée est aussi de rendre le jeu plus attirant afin d'accroître le nombre de sujets participant aux études liées au résultat des données extraits des parties jouées.
 
 
 \subsection{Android}
@@ -60,7 +59,7 @@ Un grand nombre de développeurs ont créés des applications pour étendre la f
  
 \section{Analyse de l'existant}
 
-L'application du jeu du PtiClic d'origine est une application disponible en ligne sur http://www.lirmm.fr/pticlic/pticlic.php. Nous n'avions pas accès au code source de l'application ni à des diagrammes UML. La seule partie de cette application qui nous a été fournie est le dump de la base de données. 
+L'application du jeu du PtiClic d'origine est une application disponible en ligne sur http://www.lirmm.fr/pticlic/pticlic.php. Nous n'avions pas accès au code source de l'application ni à des diagrammes UML. La seule partie de cette application qui nous a été fournie est le dump de la base de données.
 
 L'analyse de l'existant consistait donc d'une analyse du dump de la base de données ainsi que l'application sur Internet que nous avons testé et analysé.
 
@@ -87,7 +86,7 @@ Si le joueur se trompe, il peut double-cliquer sur le carré pour extraire le de
 \includegraphics[width=14cm]{img/PtiClicResultats.png}
 \end{center}
 
-La page des scores contient aussi le corrigé de la partie. Les mots qui ont été mis dans la bonne catégories apparaissent en vert, les mauvaises réponses en rouge et les omissions en gris. On marque un point pour les bonnes réponses, on perd un demi point our une mauvaise réponse, on perd un demi-point pour une omission. Lorsque deux réponses sont possibles, on marque un point quelque soit la relation choisie. Le score final est soit un entier, un entier plus un demi point. Le score final peut être négatif, zéro ou positif. 
+La page des scores contient aussi le corrigé de la partie. Les mots qui ont été mis dans la bonne CATEGORIE apparaissent en vert, les mauvaises réponses en rouge et les omissions en gris.Un point est marqué par bonne réponse tandis qu'une mauvaise réponse ou une omission fait perdred un demi-point. Lorsque deux réponses sont possibles, le point est marqué quelque soit la relation choisie. Le score final est soit un entier, soit un entier plus un demi point~; il peut être négatif, nul ou positif. 
 
 Lorsque l'on clique sur le bouton \"J'ai vu !\", on retourne sur la page d'accueil :
 
@@ -95,29 +94,27 @@ Lorsque l'on clique sur le bouton \"J'ai vu !\", on retourne sur la page d'accue
 \includegraphics[width=14cm]{img/PtiClicAccueil.png}
 \end{center}
 
-Le joueur par défaut est l'utilisateur "joueur". Il est aussi possible de s'inscrire sur le site afin de créer son propre identifiant et mot de passe afin de cumuler des points à chaque fois que l'on joue. Les dix joueurs qui ont cumulé les plus grand nombre de points sont inscrit sur la liste des \"Top 10\". Les points cumulés par le joueur "joueur", qui est l'ensemble de parties jouées par des internautes non inscrits au site, figure parmi les \"Top 10\". A droite de ceci, le score du joueur en question, c'est-à-dire, la somme totale des scores de toutes les parties jouées par l'utilisateur. Si l'utilisateur veut jouer encore une partie, il clique sur le bouton \"Je joue !\" en bas de la page et une nouvelle partie est entamée.
+Le joueur par défaut est l'utilisateur "joueur". Il est aussi possible de s'inscrire sur le site afin de créer son propre identifiant et mot de passe afin de cumuler des points à chaque partie joué. Les dix joueurs qui ont cumulé le plus grand nombre de points sont inscrits sur la liste des \"Top 10\". Les points cumulés par le joueur "joueur", qui est l'ensemble de parties jouées par des internautes non inscrits au site, figure parmi les \"Top 10\". A droite de ceci, le score du joueur en question, c'est-à-dire, la somme totale des scores de toutes les parties jouées par l'utilisateur. Si l'utilisateur veut jouer une partie de plus, il clique sur le bouton \"Je joue !\" en bas de la page et une nouvelle partie est entamée.
 
-Huit styles de couleurs sont disponible et modifiable dans le menu déroulant en haut et à droite de la page d'accueil. Lorsque le joueur s'authifie avec succès, son identifiant apparaît dans le fond de page en très grande taille.
+Huit styles de couleurs sont disponibles et modifiables dans le menu déroulant en haut à droite de la page d'accueil. Lorsque le joueur s'authentifie avec succès, son identifiant apparaît dans le fond de page en très grande taille.
 
 TODO: MES AMIS ---> EXPLICATION DE COMMENT SONT CALCULES LES SCORES, C'EST PAR RAPPORT A UN AUTRE JOUEUR JE PENSE, ET NON PAS PAR RAPPORT A UN DICO... 
 
-Lorsqu'un utilisateur souhaite s'inscrire au site, il est invité à lire un document explicatif de l'objectif du jeu dans le cadre de la recherche. L'utilisateur est aussi averti concernant le contenu du jeu ; le jeu est déconseillé aux personnes en dessous de 16 ans.
+Lorsqu'un utilisateur souhaite s'inscrire au site, il est invité à lire un document explicatif de l'objectif du jeu dans le cadre du projet de recherche de ce dernier. Il est aussi averti du contenu du jeu ; le jeu est déconseillé aux personnes de moins de 16 ans.
 
 
 
 \subsection{Le dump de la base de données}
 
-Le dump de la base de données est un fichier plat de plus de 2 000 000 de lignes. Ce fichier contient un grand nombre de caractères accentués et la version que nous avions à notre disposition lorsque nous avions dû commencer à l'analyser, en extraire des données et puis créer notre propre base de données, n'était pas encodé en UTF-8.
+Le dump de la base de données est un fichier plat de plus de 2 000 000  LIGNES. Ce fichier contient un grand nombre de caractères accentués et la version à notre disposition lorsque nous avons commencé à l'analyser, en extraire des données  puis créer notre propre base de données, n'était pas encodée en UTF-8.
 
-La base de données à laquelle correspond le dump est aussi celle utilisée pour un autre jeu de l'équipe TALN du Lirmm, celui du Jeux de mots. 
+La base de données à laquelle correspond le dump est aussi celle utilisée pour un autre jeu de l'équipe TALN du Lirmm, celui du Jeux de mots. En fait, c'est plutôt l'inverse, c'est PtiClic qui utilise la base de données de JeuxDeMots
 
-Le dump contient en tout début des remerciements et quelques explications des acronymes et des abbréviations utilisés, puis des statistiques, à savoir, le nombre d'occurrences de relations, la fréquence des noeuds, les 50 termes les plus fréquents. Plus un terme ou expression est fréquent, plus son poids est élevé. 
+Le dump contient en tout début des remerciements et quelques explications des acronymes et des abréviations utilisés, puis des statistiques, à savoir, le nombre d'occurrences de relations, la fréquence des noeuds, les 50 termes les plus fréquents. Plus un terme ou expression est fréquent, plus son poids est élevé. 
 
-%Le dump a proprement parler contient deux grandes parties~: une partie 'noeuds' (NODES) et une partie relations (RELATIONS). 
+Le dump a proprement parler contient deux grandes parties~: une partie 'noeuds' (NODES) et une partie relations (RELATIONS). La partie 'noeuds'  contient non seulement des adjectifs, des adverbes, des substantifs et des verbes, mais aussi des locutions et des syntagmes, des mots tels que les prépositions, les conjonctions, les pronoms, les articles et les déterminants. Les substantifs peuvent être des noms propres, y compris des noms de lieux, des noms de personnes. 
 
-La partie 'noeuds' ne contient pas seulement des adjectifs, des adverbs, des substantifs et des verbs, mais aussi des locutions et des syntagmes. Des mots tels que les prépositions, les conjonctions, les pronoms, les articles et les déterminants n'y figurent pas. Les substantifs peuvent être des noms propres, y compris des noms de lieux, des noms de personnes et d'autres nom propres, ainsi que des noms communs. 
-
-Dans la partie mots et expressions, chaque entrée -- chaque ligne -- contient un eid (Entry IDentifier), un nom n (name), un type t et un poids w (weight). En voici un exemple~:
+Dans la partie "mots et expressions", chaque entrée -- chaque ligne -- contient un eid (Entry IDentifier), un nom n (name), un type t et un poids w (weight). En voici un exemple~:
 
 eid=231064:n=\"pour femme\":t=1:w=50
 
@@ -127,64 +124,53 @@ rid=430049:n1=82029:n2=151553:t=12:w=18
 
 
 \subsection{Analyse plus approfondie du jeu}
-Bien que le dump de la base de données contienne 39 relations différentes, la version en ligne du jeu du PtiClic ne contient que treize relations~:
+Bien que le dump de la base de données contienne 55 relations différentes, la version en ligne du jeu du PtiClic n'en contient que treize~:
 
 \begin{itemize}
 
 \item r\_associated|0|idée|Tout terme lié d'une façon ou d'une autre au mot cible... Ce mot vous fait penser à quoi~? \\
 {\bf \verb![mot central]! est en rapport avec...} \\
-ADJECTIFS, ADVERBS, SUBSTANTIFS, VERBS
 
 \item r\_syn|5|synonyme|A partir d'un terme, il est demandé d'énumérer les synonymes ou quasi-synonymes de ce terme. \\
 {\bf \verb![mot central]! a comme synonyme...} \\
-ADJECTIFS, ADVERBS, SUBSTANTIFS, VERBS
 
 \item r\_isa|6|générique|'animal' est un générique de 'chat', 'mammifère', 'être vivant' etc. en sont d'autres... \\
 {\bf \verb![mot central]! est une sorte de...}
-SUBSTANTIFS
 
 \item r\_anto|7|contraire|'chaud' est le contraire de 'froid', vous vous rappelez~? :) \\
 {\bf Un contraire de \verb![mot central]! est...} \\
-ADJECTIFS, ADVERBS, SUBSTANTIFS, VERBS
 
 \item r\_hypo|8|spécifique|'mouche', 'abeille', 'guêpe' sont des spécifiques de 'insecte'... \\
 {\bf un spécifique de \verb![mot central]! est...} \\
-SUBSTANTIFS 
 
 \item r\_has\_part|9|partie|Il faut donner des parties/constituants/éléments du mot cible. Par exemple, 'voiture' pourrait avoir comme parties : 'porte', 'roue', 'moteur', ... \\
 {\bf ... est une partie de \verb![mot central]!} \\
-SUBSTANTIFS
 
 \item r\_holo|10|tout|Le tout est ce qui contient l'objet en question. Pour 'main', on aura 'bras', 'corps', 'personne', etc... On peut aussi voir le tout comme l'ensemble auquel appartient un élément, comme 'classe' pour 'élève'. \\
 {\bf \verb![mot central]! fait partie de...} \\
-SUBSTANTIFS
 
 \item r\_agent|13|action>agent|L'agent (qu'on appelle aussi le sujet) est l'entité qui effectue l'action. Par exemple dans - Le chat mange la souris -, l'agent est le chat. Des agents typiques de 'courir' peuvent être 'sportif', 'enfant',... \\
 {\bf Quoi/Qui pourrait \verb![mot central]!~?} \\
-VERBS
 
 \item r\_lieu|15|chose>lieu|A partir d'un nom d'objet (ou autre), il est demandé d'énumérer les lieux typiques où peut se trouver l'objet en question. \\
 {\bf Un lieu pour \verb![mot central]! est...} \\
-SUBSTANTIFS
 
 \item r\_instr|16|action>instrument|L'instrument est l'objet avec lequel on fait l'action. Dans - Il mange sa salade avec une fourchette -, fourchette est l'instrument. Des instruments typiques de 'tuer' peuvent être 'arme', 'pistolet', 'poison', ... \\
 {\bf Un instrument pour \verb![mot central]! est...} \\
-SUBSTANTIFS
 
 \item r\_carac|17|caractéristique|Pour une terme donné, en général un objet, il est demandé d'énumérer les caractéristiques possibles et/ou typiques de cet objet. Par exemple, pour 'eau' on pourra avoir 'liquide', 'froide', 'chaude', etc. \\
 {\bf Une caractéristique de \verb![mot central]! est...}
-ADJECTIFS
 
 \item r\_lieu\_action|30|lieu>action|A partir d'un lieu, énumérer les action typiques possibles dans ce lieu.
-VERBS
 
 \item r\_action\_lieu|31|action>lieu|A partir d'une action (un verbe), énumérer les lieux typiques possibles où peut être réalisée cette action.
 {\bf Un lieu pour \verb![mot central]! est...} \\
-SUBSTANTIFS
 
 \end{itemize}
 
-Vingt-six relations qui figurent dans la base de données d'origine ne sont pas utilisées dans l'application~:
+D'autres relations qui figurent dans la base de données d'origine ne sont pas utilisées dans l'application~:
+
+TODO: COMPLETER LES RELATIONS MANQUANTES, IL Y EN A 55 EN TOUT !
 
 \begin{itemize}
 \item r\_raff\_sem|1|raffinement sémantique|Raffinement sémantique vers un usage particulier du terme source
@@ -246,14 +232,16 @@ Vingt-six relations qui figurent dans la base de données d'origine ne sont pas 
 
 Pour un mot central donné, seulement un nombre limité de relations sont possibles~:
 
+TODO: INTEGRER L'ANALYSE PLUS APPROFONDIE ICI
+
 SUBSTANTIF~: synonyme, contraire, spécifique, générique, partie, tout, lieu
 VERB~: synonyme, contraire, lieu, instrument, agent
 ADJECTIF~: synonyme, contraire
 ADVERB~: synonyme, contraire
 
-Les adverbs et le locutions advertiales sont relativement peu fréquents. La grande majorité des mots sont des substatifs, des verbs et des adjectifs ainsi que des locutions nominales, verbales et adjectivales. 
+Les adverbes et LES locutions adverbiales sont relativement peu fréquents. La grande majorité des mots sont des substantifs, des verbes et des adjectifs ainsi que des locutions nominales, verbales et adjectivales. 
 
-La relation "patient" est possible pour un mot central qui est un verb, mais est plus complexe car elle ne fonctionne que si le verb en question est transitif. 
+La relation "patient" est possible pour un mot central qui est un verbe, mais elle est plus complexe car elle ne fonctionnera que si le verbe en question est transitif. 
 
 
 \section{Analyse des besoins}
@@ -261,23 +249,22 @@ La relation "patient" est possible pour un mot central qui est un verb, mais est
 
 
 \begin{quotation}
-%% Correction Bertarnd remplacement de fonctionnant sur des Android semble est intéressante => fonctionnant sur Android semble intéressante => NON, CAR CITATION, ON NE PEUT PAS LE 'CORRIGER'
-L'étude et le prototypage d'une version fonctionnant sur Android semble intéressante. En particulier on s'intéressera a deux aspects : * les contraintes imposées par l'environnement smartphone * le biais qu'imposent ces contraintes sur le jeu et les données récoltées. Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel. 
+L'étude et le prototypage d'une version fonctionnant sur Android semble intéressante. En particulier on s'intéressera a deux aspects : * les contraintes imposées par l'environnement smartphone * le biais qu'imposent ces contraintes sur le jeu et les données récoltées. Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel.  
 \end{quotation}
 
-\subsection{Les contraintes de l'environment smartphone}
+\subsection{Les contraintes de l'environnement smartphone}
 
-Comme tout outil, l'environment smartphone présente à la fois des avantages et des inconvéniants. 
+Comme tout outil, l'environnement smartphone présente à la fois des avantages et des inconvéniants. 
 
-Les avantages sont nombreux~: un instrument portatif avec un bref temps de démarrage adapté à effectuer des tâches ponctuelles souvent de courte durée avec un écran tactile qui permet d'agir directement sur des éléments affichés sur son écran. Le smartphone présente encore d'autres avantages, il est à la fois un lecteur mp3, un dictaphone, un appareil, un chronomètre et réveil, pour en citer quelques exemples.
+Les avantages sont nombreux~: un instrument portatif avec un bref temps de démarrage adapté à effectuer des tâches ponctuelles souvent de courte durée avec un écran tactile permettant d'agir directement sur des éléments affichés sur son écran. Le smartphone présente encore d'autres avantages, il est à la fois un lecteur mp3, un dictaphone, un appareil, un chronomètre et réveil, pour ne citer que quelques exemples.
 
-Les inconvénients par rapport à un ordinateur classique sont aussi nombreux. L'écran est nettement plus petit limitant l'espace de travail et obligeant davantage de navigation de page en page. L'entrée des données est plus difficile, il n'existe pas de clavier, ou bien seulement un clavier virtuel ou un micro-clavier intégré à certains smartphones. Malgré les avantages de l'écran tactile, son utilisation permet une précision bien moindre que l'utilisation d'une souris à cause de la petite taille de l'écran et les doigts et les mains qui bloque la vue de l'écran lors du glissement-et-déposé par exemple. Le faible espace de stockage et les limites d'autonomies et d'énergies se traduisent par une nécessité d'économie de la part des concepteurs d'applications par rapport aux ordinateurs classiques d'aujourd'hui qui sont très de plus en plus performants. C'est pour cette raison que le smartphone n'est pas du plus adapté à effectuer des tâches de longue haleine telles que la rédaction d'un document.
+Les inconvénients par rapport à un ordinateur classique sont aussi nombreux. L'écran est nettement plus petit limitant l'espace de travail et obligeant davantage de navigation de page en page. L'entrée des données est plus difficile, il n'existe pas de clavier, ou bien seulement un clavier virtuel ou un micro-clavier intégré. Malgré les avantages de l'écran tactile, son utilisation permet une précision bien moindre que l'utilisation d'une souris à cause de la petite taille de l'écran et des doigts et mains qui bloquent la vue de l'écran lors du glissement-et-déposé par exemple. Le faible espace de stockage et les limites d'autonomie et d'énergie se traduisent par une nécessité d'économie de la part des concepteurs d'applications par rapport aux ordinateurs classiques de plus en plus performants actuellement. C'est pour cette raison que le smartphone n'est pas le plus adapté pour effectuer des tâches de longue haleine telles que la rédaction d'un document.
 
 TODO: Beaucoup d'accès réseau (gd) !! (inconvénient)
 
-Les applications qui sont bien adaptées au smartphone sont celles telles que les calculatrices, les chronomètres et les jeux, et le jeu du PtiClic n'est pas une exception à cette dernière. L'avantage de telles applications sur un smartphone est qu'il est possible d'y jouer lorsque l'on est en file d'attente à la Poste ou bien dans les transports en commun. Un tel prototypage du jeu demande toutefois une réflexion non seulement aux limites mais aussi aux avantages des smartphones.
+Les applications bien adaptées au smartphone sont des aplications telles que les calculatrices, les chronomètres et les jeux, et le jeu du PtiClic n'est pas une exception à cette dernière. L'avantage de ces applications sur un smartphone est qu'il est possible d'y jouer lorsque l'on est en file d'attente à la Poste ou à la Préfecture ou bien dans les transports en commun. Un tel prototypage du jeu demande toutefois une réflexion non seulement quant aux limites d'un smartphone mais aussi quant quant à ses avantages.
 
-Le jeu de base du PtiClic sous Android effectue exactement les mêmes cas d'utilisations que l'application d'origine. 
+Le jeu de base du PtiClic sous Android présente exactement les mêmes cas d'utilisations que l'application d'origine. 
 
 
 
@@ -287,6 +274,8 @@ Le jeu de base du PtiClic sous Android effectue exactement les mêmes cas d'util
 \subsection{Base de données}
 
 Le schéma relationnel suivant a été modélisé à partir des informations du dump de la base de données d'origine et nos besoin en matière d'authentification et de sécurité côté serveur~:
+
+TODO : A METTRE A JOUR, PLUS D'ACTUALITE
 
 {\footnotesize
 NODE(\underline{EID}, name, \#type, weight) \\ 
@@ -362,7 +351,7 @@ Afin de pouvoir utiliser le jeu il faut posséder un compte utilisateur. Un util
 
 Le site Internet permet de réaliser cette inscription grâce à un formulaire qui permet la saisie des informations nécessaires. Il est également un moyen de présenter le projet, l'application et de prendre contact avec les développeurs.
 
-Le site et constitué d'un petit nombre de pages à savoir : une présentation de l'application et du projet, l'inscription et l'authentification, une page de téléchargement de l'application et de procédure d'installation, ainsi que quelques pages permettant de créer et afficher des parties.
+Le site est constitué d'un petit nombre de pages à savoir : une présentation de l'application et du projet, l'inscription et l'authentification, une page de téléchargement de l'application et de procédure d'installation, ainsi que quelques pages permettant de créer et afficher des parties.
 
 Les deux dernières pages citées concernant la création et l'affichage de parties ne sont pas accessibles à tout le monde. Il faudra que l'utilisateur débloque ce mode en obtenant un certain nombre de points dans le jeu.
 
@@ -398,7 +387,7 @@ Le site Internet est en grande partie "statique" (langage HTML). Les pages "stat
 
 Certain éléments comme l'inscription, la connexion... ont une partie PHP qui permet d'intérroger la base de données afin de valider ou non l'action.
 
-La création de parties et elle réalisée en PHP et JavaScript afin de rendre plus intuitif l'interraction avec l'utilisateur. Les parties générées par les utilisateurs ont éjoutées dans la base de données pour qu'elle puissent par la suite être jouées par les autres joueurs.
+La création de parties est, elle, réalisée en PHP et JavaScript afin de rendre plus intuitif l'interraction avec l'utilisateur. Les parties générées par les utilisateurs ont éjoutées dans la base de données pour qu'elle puissent par la suite être jouées par les autres joueurs.
 
 
 \section{Discussion}
@@ -565,4 +554,3 @@ php\/ressources/simple.css  -- CSS de base du site
 php\/ressources/strings.inc -- fichier de configuration des strings (phrases utilisés de manière répétitive dans le site, par exemple, les messages d'erreurs)
 
 \end{document}
-
