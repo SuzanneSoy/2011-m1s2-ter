@@ -1,7 +1,8 @@
 <?php
-
 require_once("ressources/relations.inc");
 require_once("ressources/db.inc");
+
+
 
 /* Les prototypes des fonctions :
 * ===============================>
@@ -25,9 +26,18 @@ require_once("ressources/db.inc");
 *   get_game_relations();
 *   getGameRelationsJSON();
 *   setGameGetScore($user, $pgid, $gid, $answers);
-*   insertNode($node);
 *   getNodeEid($node);
+* 	wordExist($node);
+* 	setUserInfo($user, $key, $value);
+*	userPrefsDefaults();
+*	userPrefs($user);
+* 	setUserPref($user, $key, $value);
 */
+
+
+
+/* Les définitions
+====================*/
 
 function longStrVal($str) {
 	return preg_match('/^-?[0-9]+$/', ''.$str) ? ''.$str : '0';
@@ -285,10 +295,10 @@ function decodeAndInsertGame($user,$game) {
 	if(count($badWords) > 0) {
 		echo JSON_encode($badWords);
 	} else if (count($cloud) < 5) {
-		echo "false";
+		echo JSON_encode(false);
 	} else {
 		insertCreatedGame($centerEid,$cloud,$r1,$r2,10,$user);
-		echo "true";
+		echo JSON_encode(true);
 	}
 }
 
@@ -535,6 +545,7 @@ function normalizeProbas($row) {
 function setGame($user, $pgid, $gid, $answers)
 {
 	$db = getDB();
+	
 	if ('ok' !== $db->querySingle("SELECT 'ok' FROM played_game WHERE pgid = ".longStrVal($pgid)." and gid = ".intval($gid)." and login = '".SQLite3::escapeString($user)."' and timestamp = -1;")) {
 		return getGameScores($user, $pgid, $gid);
 	}
@@ -615,23 +626,9 @@ function getGameScores($user, $pgid, $gid) {
 }
 
 /** Fourni l'ensembles des relations pouvant apparaître dans le jeu.
-* @return array : un tableau de realtions.
+* @return JSON type et nom des relations.
 */
-function get_game_relations()
-{
-		$reqlations = array();
-
-		$relations[] = 5;
-		$relations[] = 7;
-		$relations[] = 9;
-		$relations[] = 10;
-		$relations[] = 13;
-		$relations[] = 22;
-
-		return $relations;
-}
-
-function getGameRelationsJSON() {
+function getGameRelations() {
 	$json = "{";
 	global $stringRelations;
 	
@@ -655,20 +652,6 @@ function setGameGetScore($user, $pgid, $gid, $answers) {
 	echo json_encode($scores);
 }
 
-/** Insère dans la base de données le noeud si il n'existe pas encore.
-* @param node : le noeud à ajouter.
-*/
-function insertNode($node) {
-	$db = getDB();
-	
-	if($db->querySingle("SELECT eid FROM node WHERE name='".SQLite3::escapeString($node)."'") == null) {
-		$db->exec("INSERT INTO node(name,type,weight) VALUES('".SQLite3::escapeString($node)."',1,50);");
-		return true;
-	}
-
-	return false;
-}
-
 
 /** retourne l'eid d'un mot.
 * @param node : le mot dont on veut obtenir l'eid.
@@ -679,6 +662,10 @@ function getNodeEid($node) {
 	return $db->querySingle("SELECT eid FROM node WHERE name='".SQLite3::escapeString($node)."';");
 }
 
+/* Permet de déterminer si le mot existe dans la base de données ou non.
+ * @param node : Le mot dont on veut connaître l'existance.
+ * @return char : "0" ou "1".
+*/
 function wordExist($node) {
 	$db = getDB();
 
