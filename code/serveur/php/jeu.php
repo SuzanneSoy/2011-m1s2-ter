@@ -17,7 +17,7 @@
 			.screen { width:100%; height:100%; position:absolute; }
 			.highlight { display:none; width:100%; height:100%; border-width:medium; border-style:solid; border-radius:2em; position:absolute; }
 			a:hover .highlight { display:block; }
-			#frontpage .icon-container { width:100%; bottom: 40%; height:50%; position:absolute; }
+			#frontpage .icon-container { width:100%; bottom: 40%; height:50%; position:absolute; vertical-align:bottom; }
 			#frontpage .icon-container img { display:block; margin: 0 auto; }
 			#frontpage .icon-label { width:100%; height:30%; bottom:5%; position:absolute; }
 			#frontpage a { color: black; text-decoration: none; display:inline-block; width: 30%; height: 32%; top: 32%; position:absolute; }
@@ -31,7 +31,7 @@
 			.fitFont, .subFitFont { overflow:auto; }
 			#score { text-align:center; }
 			.marginBox { width: 90%; height: 90%; top: 5%; left:5%; position:absolute; }
-			#message { left:25%; top:5%; width:50%; height:15%; position:absolute; border-radius:0.5em; text-align:center; opacity:0.9; }
+			#message { left:25%; top:5%; width:50%; height:10%; position:absolute; border-radius:0.5em; text-align:center; opacity:0.9; }
 
 			.transition { transition: all 0.7s linear; -moz-transition: all 0.7s linear; -webkit-transition: all 0.7s linear; }
 			.transition-bg { transition: background-color 0.7s linear; -moz-transition: background-color 0.7s linear; -webkit-transition: background-color 0.7s linear; }
@@ -80,6 +80,9 @@
 			</div>
 		</div>
 		<div id="frontpage" class="screen fitFontGroup">
+			<a href="index.php" style="width:7%; height:5%; top:2%; right:2%; position:absolute;" class="fitFont button">
+				<span style="width:90%; height:90%; top:5%; left:5%; position:absolute;"><span class="center">Retour au site</span></span>
+			</a>
 			<div style="width:50%; height:24%; top:4%; left:25%; position:absolute;" class="fitFont">
 				<span class="center">PtiClic</span>
 			</div>
@@ -148,7 +151,7 @@
 			</div>
 		</div>
 		<div id="connection" class="screen">
-			<form id="connect-form" action="#" method="GET" style="width:100%; height:100%;" class="fitFontGroup">
+			<form action="#" method="GET" style="width:100%; height:100%;" class="fitFontGroup">
 				<div class="formElement subFitFont" style="right: 55%; top: 25%;"><label id="user-label" for="user">Login : </label></div>
 				<div class="formElement subFitFont" style="left: 55%; top: 25%;"><input type="text" name="user" id="user" class="setFont" /></div>
 				<div class="formElement subFitFont" style="right: 55%; top: 50%;"><label id="passwd-label" for="passwd">Mot de passe : </label></div>

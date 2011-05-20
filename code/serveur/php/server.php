@@ -128,7 +128,7 @@ function server() {
 		echo json_encode(
 			Array(
 				"error" => $e->getCode(),
-				"msg" => "".$e->getMessage(),
+				"msg" => "Erreur ".$e->getCode()." : ".$e->getMessage(),
 				"isError" => true
 			)
 		);

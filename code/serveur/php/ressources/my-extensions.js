@@ -189,13 +189,8 @@ function encodeHash(data) {
 
 function Cache(resolver) {
 	var cache = [];
-	var self = this;
 	this.get = function(k) {
-		return cache[k] = cache[k] || $.Deferred(function(dfd) { resolver(k, dfd, self); });
-	};
-	this.alias = function(alias, k) {
-		cache[alias] = cache[alias] || $.Deferred();
-		cache[k].done(function(data) { cache[alias].resolve(data); });
+		return cache[k] = cache[k] || $.Deferred(function(dfd) { resolver(k, dfd); }).fail(cache[k] = false).promise();
 	};
 }
 

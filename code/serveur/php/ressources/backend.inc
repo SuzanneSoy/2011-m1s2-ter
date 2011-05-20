@@ -18,7 +18,6 @@ require_once("ressources/db.inc");
 *   game2json($user, $pgid);
 *   createGame($nbParties, $mode);
 *   createGameCore($cloudSize);
-*   getGame($user, $nbGames, $mode);
 *   computeScore($probas, $difficulty, $answer, $userReputation);
 *   computeUserReputation($score);
 *   normalizeProbas($row);
@@ -299,8 +298,8 @@ function insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty, $user
 	$sqlUserName = SQLite3::escapeString($userName);
 	// Insère dans la base une partie avec le mot central $centerEid, le nuage $cloud et les relations $r1 et $r2
 	$db->exec("begin transaction;");
-	$db->exec("INSERT INTO game(gid, eid_central_word, relation_1, relation_2, difficulty, author)
-		   VALUES (null, $centerEid, $r1, $r2, $totalDifficulty, '".$sqlUserName."');");
+	$db->exec("INSERT INTO game(gid, eid_central_word, relation_1, relation_2, difficulty, author, nb_like, nb_dislike)
+		   VALUES (null, $centerEid, $r1, $r2, $totalDifficulty, '".$sqlUserName."', 0, 0);");
 	$gid = $db->lastInsertRowID();
 	
 	$t = time();
@@ -437,10 +436,11 @@ function game2json($user, $pgid = null)
 	list($gid, $pgid) = makePgid($user, null, $pgid);
 	
 	// TODO Yoann : faire des tests d'erreur pour ces select ?
-	$game = $db->query("select gid, (select name from node where eid = eid_central_word) as name_central_word, eid_central_word, relation_1, relation_2 from game where gid = ".$gid.";");
+	$game = $db->query("select author, gid, (select name from node where eid = eid_central_word) as name_central_word, eid_central_word, relation_1, relation_2 from game where gid = ".$gid.";");
 	$game = $game->fetchArray();
 
 	$ret = array(
+		"author" => $game['author'],
 		"gid" => $gid,
 		"pgid" => $pgid,
 		"relations" => array(

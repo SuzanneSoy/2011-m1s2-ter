@@ -119,20 +119,72 @@ init(function() {
 	
 });
 
-// ==== Écran game
-runstate.gameCache = new Cache(function(k, dfd, cache) {
-	$.getJSON("getGame.php?callback=?", {pgid:k}, function(data) {
-		if (data.error == 10) {
-			$('#connection.screen').trigger('goto');
-		} else if (data.isError) {
-			location.hash = "#frontpage";
-			message("Erreur", "Une erreur est survenue, veuillez nous en excuser.");
+// ==== Écran connexion
+runstate.pendingGetPrefs = function() {
+	console.log('Should execute pendingGetPrefs');
+};
+
+init(function() {
+	$('#connection.screen form').submit(function() {
+		runstate.user = $('#user').val();
+		runstate.passwd = $('#passwd').val();
+		if (runstate.pendingSetPrefs) {
+			runstate.pendingSetPrefs();
 		} else {
-			cache.alias(data.pgid, k);
-			dfd.resolve(data);
+			runstate.pendingGetPrefs();
 		}
+		if (state.screen == game) {
+			$('#game').trigger('pre-enter');
+		} else {
+			location.hash = "#frontpage";
+		}
+		return false;
+	});
+
+	$('#connection.screen').bind('leave', function() {
+		runstate.pendingSetPrefs = false;
+		runstate.pendingGetGame = false;
 	});
 });
+
+// ==== Écran game
+$.ajaj = function(url, data, callback) {
+	var user = '' + UI().getPreference("user");
+	var passwd = '' + UI().getPreference("passwd");
+	if (user != '' && passwd != '') {
+		if (!data.user) data.user = user;
+		if (!data.passwd) data.passwd = passwd;
+	}
+	$.getJSON(url, data, callback);
+};
+	
+function getGame(k, dfd, retry) {
+	$.ajaj("getGame.php?callback=?", {pgid:k}, function(data) {
+		if (data.error == 10) {
+			dfd.reject(data);
+			if (state.screen == 'game' && state.pgid == k) {
+				if (retry) {
+					$('#connection.screen').trigger('goto');
+				} else {
+					location.hash = "#frontpage";
+					message("Erreur", "Vous n'êtes pas connecté.");
+				}
+			}
+		} else if (data.isError) {
+			dfd.reject(data);
+			location.hash = "#frontpage";
+			message("Erreur", data.msg);
+		} else {
+            dfd.resolve(data);
+		}
+	}).fail(function() {
+		dfd.reject(data);
+		location.hash = "#frontpage";
+		message("Erreur", "Une erreur est survenue, veuillez nous en excuser.");
+	});
+}
+
+runstate.gameCache = new Cache(function(k, dfd) { getGame(k, dfd, true); });
 
 init(function() {
 	var game = $('#game.screen');
@@ -143,8 +195,8 @@ init(function() {
 
 	game.bind('pre-enter', function() {
 		runstate.gameCache.get(state.pgid).done(function(data) {
-			runstate.game = data
-			if (runstate.screen == 'game') { game.trigger('enter'); }
+			runstate.game = data;
+			game.trigger('enter');
 		});
 		return false;
 	});
@@ -367,8 +419,8 @@ ajaj.request = function(url, data, okFunction, smallErrorFunction, bigErrorFunct
 	try {
 		smallErrorFunction = smallErrorFunction || ajaj.smallError;
 		bigErrorFunction = bigErrorFunction || ajaj.bigError;
-		var user = "" + UI().getPreference("user");
-		var passwd = "" + UI().getPreference("passwd");
+		var user = '' + UI().getPreference("user");
+		var passwd = '' + UI().getPreference("passwd");
 		if (user != '' && passwd != '') {
 			if (!data.user) data.user = user;
 			if (!data.passwd) data.passwd = passwd;

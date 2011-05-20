@@ -27,7 +27,7 @@ create table relation(rid integer primary key autoincrement, start, end, type, w
 create table type_node(name, num);
 create table type_relation(name, num, extended_name, info);
 create table user(login primary key, mail, hash_passwd, score, ugroup);
-create table game(gid integer primary key autoincrement, eid_central_word, relation_1, relation_2, difficulty, author);
+create table game(gid integer primary key autoincrement, eid_central_word, relation_1, relation_2, difficulty, author, nb_like, nb_dislike);
 create table game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash);
 create table played_game(pgid, gid, login, timestamp, primary key(login, pgid));
 create table played_game_sequence(id integer primary key autoincrement);
