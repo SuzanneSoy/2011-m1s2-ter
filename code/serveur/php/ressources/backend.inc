@@ -16,7 +16,7 @@ require_once("ressources/db.inc");
 *   randomGameCore();
 *   randomGame();
 *   formatWord($word);
-*   game2json($user, $pgid);
+*   game2array($user, $pgid);
 *   createGame($nbParties, $mode);
 *   createGameCore($cloudSize);
 *   computeScore($probas, $difficulty, $answer, $userReputation);
@@ -314,17 +314,17 @@ function insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty, $user
 	
 	$t = time();
 	$pgid1 = getSequencePlayedGame();
-	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)"
-			  ." VALUES ($pgid1, $gid, '".$sqlUserName."', $t);");
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp, like)"
+			  ." VALUES ($pgid1, $gid, '".$sqlUserName."', $t, 0);");
 	$pgid2 = getSequencePlayedGame();
-	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)"
-			  ." VALUES ($pgid2, $gid, '".$sqlUserName."', $t);");
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp, like)"
+			  ." VALUES ($pgid2, $gid, '".$sqlUserName."', $t, 0);");
 	$pgid0 = getSequencePlayedGame();
-	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)"
-			  ." VALUES ($pgid0, $gid, '".$sqlUserName."', $t);");
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp, like)"
+			  ." VALUES ($pgid0, $gid, '".$sqlUserName."', $t, 0);");
 	$pgidT = getSequencePlayedGame();
-	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp)"
-			  ." VALUES ($pgidT, $gid, '".$sqlUserName."', $t);");
+	$db->exec("INSERT INTO played_game(pgid, gid, login, timestamp, like)"
+			  ." VALUES ($pgidT, $gid, '".$sqlUserName."', $t, 0);");
 
 	// TODO : R0 et Trash + corrections
 	foreach ($cloud as $c)
@@ -406,7 +406,7 @@ function formatWord($word) {
 
 function makePlayedGameRow($user, $gid, $pgid) {
 	// TODO : planter si la requête suivante échoue pour quelque raison que ce soit.
-	getDB()->exec("INSERT INTO played_game(pgid, gid, login, timestamp) VALUES (".longStrVal($pgid).", ".intval($gid).", '".SQLite3::escapeString($user)."', -1);");
+	getDB()->exec("INSERT INTO played_game(pgid, gid, login, timestamp, like) VALUES (".longStrVal($pgid).", ".intval($gid).", '".SQLite3::escapeString($user)."', -1, 0);");
 }
 
 function getGidFromPgid($user, $pgid) {
@@ -438,7 +438,7 @@ function makePgid($user, $gid = null, $pgid = null) {
 * @param user : l'utilisateur.
 * @param gameId : L'identifiant d'une partie.
 */
-function game2json($user, $pgid = null)
+function game2array($user, $pgid = null)
 {
 	global $stringRelations;
 	$db = getDB();
@@ -468,7 +468,7 @@ function game2json($user, $pgid = null)
 	{
 		$ret['cloud'][] = array("id" => $x['eid_word'], "name" => ''.formatWord($x['name_word']));
 	}
-	return json_encode($ret);
+	return $ret;
 }
 
 /** Création d'un lot de parties suivant un mode donnée.
@@ -606,7 +606,7 @@ function getGameScores($user, $pgid, $gid) {
 	$timestamp = $db->querySingle("SELECT timestamp FROM played_game WHERE pgid = ".longStrVal($pgid)." and $gid = ".intval($gid)." and login = '".SQLite3::escapeString($user)."';");
 	if ($timestamp == -1) {
 		throw new Exception("Cette partie n'a jamais été jouée.", 4); // TODO : code d'erreur en doublon avec celui ci-dessous.
-	} else if ($timestamp == null) {
+	} elseif ($timestamp == null) {
 		throw new Exception("Cette partie n'est pas associée à votre nom d'utilisateur.", 4);
 	}
 	
@@ -643,13 +643,18 @@ function getGameRelations() {
 	return $json;
 }
 
-function setGameGetScore($user, $pgid, $gid, $answers) {
-	$scores = setGame($user, $pgid, $gid, $answers);
+function setGameGetScore($user, $pgid, $answers) {
+	$scores = setGame($user, $pgid, getGidFromPgid($user, $pgid), $answers);
+	$scores['words'] = array();
+	$g = game2array($user, $pgid);
+	foreach ($g['cloud'] as $v) {
+		$scores['words'][] = $v['name'];
+	}
 	// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
-	$scores['newGame'] = game2json($user);
+	$scores['newGame'] = game2array($user);
 	$scores['minScore'] = -5;
 	$scores['maxScore'] = 10;
-	echo json_encode($scores);
+	echo JSON_encode($scores);
 }
 
 
@@ -694,7 +699,7 @@ function userPrefs($user) {
 		$x = getUserInfo($user, $k);
 		if ($x !== null) $v = $x;
 	}
-	echo json_encode($res);
+	echo JSON_encode($res);
 }
 
 function setUserPref($user, $key, $value) {

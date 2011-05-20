@@ -56,7 +56,7 @@ function main()
 		throw new Exception("Vous n'êtes pas connecté.", 10);
 
 	if ($action == 3) {
-		echo json_encode(
+		echo JSON_encode(
 			Array(
 				"loginOk" => !!$loginIsOk,
 				"whoami" => "".$user
@@ -75,14 +75,14 @@ function main()
 	}
 	else if($action == 0) {           // "Get partie"
 		// Requête POST : http://serveur/server.php?action=0&user=foo&passwd=bar
-		echo game2json($user, isset($_GET['pgid']) ? $_GET['pgid'] : null);
+		echo JSON_encode(game2array($user, isset($_GET['pgid']) ? $_GET['pgid'] : null));
 	}
 	else if($action == 1) {				// "Set partie"
 		// Requête POST : http://serveur/server.php?action=1&mode=normal&user=foo&passwd=bar&gid=1234&pgid=12357&0=0&1=-1&2=22&3=13&9=-1
-		if (!isset($_GET['pgid']) || !isset($_GET['gid']) || !isset($_GET['answers']))
+		if (!isset($_GET['pgid']) || !isset($_GET['answers']))
 			throw new Exception("La requête est incomplète", 2);
 
-		setGameGetScore($user, $_GET['pgid'], $_GET['gid'], $_GET['answers']);
+		setGameGetScore($user, $_GET['pgid'], $_GET['answers']);
 	}
 	else if($action == 4) {           // CheckWord
 		if (!isset($_GET['word']))
@@ -135,7 +135,7 @@ function server() {
 		$code = $e->getCode();
 		$msg = $e->getMessage();
 		if ($code != 10 && $code != 3) $msg = "Erreur ".$code." : " . $msg;
-		echo json_encode(
+		echo JSON_encode(
 			Array(
 				"error" => $code,
 				"msg" => $msg,

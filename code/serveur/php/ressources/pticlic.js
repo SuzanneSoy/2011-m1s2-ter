@@ -143,6 +143,8 @@ init(function() {
 		}
 		if (state.screen == 'game') {
 			$('#game').trigger('goto');
+		} else if (state.screen == 'score') {
+			$('#score').trigger('goto');
 		} else {
 			location.hash = "#frontpage";
 		}
@@ -166,7 +168,7 @@ $.ajaj = function(url, data, callback) {
 	return $.getJSON(url, data, callback);
 };
 	
-function getGame(k, dfd) {
+runstate.gameCache = new Cache(function getGame(k, dfd) {
 	$.ajaj("getGame.php?callback=?", {pgid:k}, function(data) {
 		if (data.isError) {
 			dfd.reject(data);
@@ -184,9 +186,7 @@ function getGame(k, dfd) {
 		$("#frontpage").trigger('goto');
 		message("Erreur", "Une erreur est survenue, veuillez nous en excuser.");
 	});
-}
-
-runstate.gameCache = new Cache(function(k, dfd) { getGame(k, dfd); });
+});
 
 init(function() {
 	var game = $('#game.screen');
@@ -213,8 +213,13 @@ init(function() {
 				.find(".text").html(relation.name.replace(/%(m[cn])/g, '<span class="$1"/>')).end()
 				.find(".icon").data("image",relation.id).end()
 				.click(function(e) {
-					location.hash = encodeHash(appendAnswer(state, relation.id));
-					$(this).addClass("hot");
+					var h = appendAnswer(state, relation.id);
+					if (state.answers.length + 1 >= runstate.game.cloud.length) {
+						location.hash = encodeHash($.extend(h, {screen:'score'}));
+					} else {
+						location.hash = encodeHash(h);
+						$(this).addClass("hot");
+					}
 				})
 				.appendTo("#game .relations");
 		});
@@ -222,10 +227,11 @@ init(function() {
 	});
 
 	game.bind('update', function() {
-		if (state.pgid != runstate.game.pgid) {
+		if (!runstate.game || state.pgid != runstate.game.pgid) {
 			$('#game').trigger('goto');
 			return;
 		}
+		
 		window.document.title = "PtiClic "+(state.answers.length + 1)+' / '+runstate.game.cloud.length;
 		$('.mn').text(runstate.game.cloud[state.answers.length].name);
 		jss();
@@ -235,9 +241,10 @@ init(function() {
 		
 		if (!runstate.currentMNCaption || oldstate.screen != 'game')
 			runstate.currentMNCaption = $('<span class="mn-caption"/>');
-		var a = runstate.currentMNCaption.text(runstate.game.cloud[oldstate.answers.length].name);
+		var tmp = runstate.game.cloud[oldstate.answers.length];
+		var a = runstate.currentMNCaption.text(tmp ? tmp.name : '…');
 		var b = $('<span class="mn-caption"/>').text(runstate.game.cloud[state.answers.length].name);
-		if (oldstate.screen != 'game' || state.answers.length == oldstate.answers.length) {
+		if (isForward && (oldstate.screen != 'game' || state.answers.length == oldstate.answers.length)) {
 			isForward = true;
 			a.remove();
 			a = $();
@@ -254,10 +261,46 @@ init(function() {
 	});
 	
 	game.bind('leave', function() {
-		runstate.currentMNCaption.remove();
+		if (runstate.currentMNCaption) runstate.currentMNCaption.remove();
 	});
 });
 
+// ==== Écran score
+runstate.scoreCache = new Cache(function getScore(k, dfd, arg) {
+	$.ajaj("server.php?callback=?", {
+		action: 1,
+		pgid: k,
+		answers: arg,
+	}, function(data) {
+		if (data.isError) {
+			dfd.reject(data);
+			message("Erreur", data.msg);
+			if ((data.error == 10 || data.error == 3) && state.screen == 'game' && state.pgid == k) {
+				$.screen('connection').trigger('goto');
+			} else {
+				$.screen('frontpage').trigger('goto');
+			}
+		} else {
+            dfd.resolve(data);
+		}
+	}).fail(function(data) {
+		dfd.reject(data);
+		$("#frontpage").trigger('goto');
+		message("Erreur", "Une erreur est survenue, veuillez nous en excuser.");
+	});
+});
+
+init(function() {
+	var score = $.screen('score');
+	score.bind('pre-enter', function() {
+		runstate.scoreCache.get(state.pgid, state.answers).done(function(data) {
+			console.log(data);
+			runstate.score = data;
+			score.trigger('enter');
+		});
+		return false;
+	});
+});
 
 game = {};
 game.leave = function () {

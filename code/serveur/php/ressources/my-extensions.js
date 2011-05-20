@@ -218,8 +218,8 @@ function encodeHash(data) {
 
 function Cache(resolver) {
 	var cache = {};
-	this.get = function(k) {
-		return cache[k] = cache[k] || $.Deferred(function(dfd) { resolver(k, dfd); }).fail(function() { cache[k] = false; }).promise();
+	this.get = function(k, arg) {
+		return cache[k] = cache[k] || $.Deferred(function(dfd) { resolver(k, dfd, arg); }).fail(function() { cache[k] = false; }).promise();
 	};
 }
 
