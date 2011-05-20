@@ -41,7 +41,7 @@
 			body, .screen { background-color:#ffffe0; color: black; }
 			#message { background-color:#f0f8d0; color:black; border:medium solid #4a4; }
 			#mc-caption { color:#8b4; }
-			#mn-caption-box { background-color:#f0f8d0; }
+			#mn-caption-bg { background-color:#f0f8d0; }
 			.mn-caption { color: #4a4; }
 			.borderbar { background-color: #4a4; }
 			.relationBox { background-color:#f0f8d0; border-color: #4a4; }
@@ -52,7 +52,7 @@
 			body.black, .black .screen { background-color:black; color: white; }
 			.black #message { background-color:#222; color:white; border:medium solid #ccc; }
 			.black #mc-caption { color:white; }
-			.black #mn-caption-box { background-color:#222; }
+			.black #mn-caption-bg { background-color:#222; }
 			.black .mn-caption { color: #ccc; }
 			.black .borderbar { background-color: #ccc; }
 			.black .relationBox { background-color:#222; border-color: #ccc; }
@@ -70,9 +70,8 @@
 					<div id="mc-caption" class="mc center">Mot central</div>
 				</div>
 				<div class="borderbar" style="height:5%; width:100%; top:52.5%; position:absolute;"></div>
-				<div id="mn-caption-box" style="top:57.5%; height:37.5%; width:100%; position:absolute;"></div>
-				<div style="width: 90%; height:25%; top:63.75%; left: 5%; position:absolute;" class="fitFont">
-					<div class="mn mn-caption center setFont">Mot du nuage</div>
+				<div id="mn-caption-bg" style="top:57.5%; height:37.5%; width:100%; position:absolute;"></div>
+				<div id="mn-caption-box" style="width: 90%; height:25%; top:63.75%; left: 5%; position:absolute;" class="fitFont">
 				</div>
 				<div class="borderbar" style="height:5%; width:100%; top:95%; position:absolute;"></div>
 			</div>

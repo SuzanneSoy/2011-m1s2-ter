@@ -87,6 +87,7 @@ init(function() {
 	$('.screen').live('enter', function() {
 		$(this).show();
 		jss();
+		$(this).trigger('update');
 	});
 	
 	$('.screen').live('leave', function() {
@@ -123,6 +124,7 @@ init(function() {
 // ==== Écran d'accueil
 init(function() {
 	$('.goFrontpage').click(function() { location.hash = "#frontpage"; });
+	$.screen('frontpage').bind('enter', function() { window.document.title = "PtiClic pre-alpha 0.2"; });
 });
 
 // ==== Écran connexion
@@ -212,54 +214,47 @@ init(function() {
 				.find(".icon").data("image",relation.id).end()
 				.click(function(e) {
 					location.hash = encodeHash(appendAnswer(state, relation.id));
-					window.document.title = "PtiClic "+state.answers.length+' / '+game.cloud.length;
 					$(this).addClass("hot");
 				})
 				.appendTo("#game .relations");
 		});
-		$("#game .mn").text(game.cloud[state.answers.length].name);
 		$("#game .mc").text(game.center.name);
 	});
 
-	game.bind('update', function(e) {
+	game.bind('update', function() {
 		if (state.pgid != runstate.game.pgid) {
 			$('#game').trigger('goto');
 			return;
 		}
-		var direction = state.answers.length - oldstate.answers.length;
-		var mn = $("#game .mn-caption");
-		var clone = $();
-		if (direction != 0) {
-			clone = (mn)
-				.stop().clearQueue()
-				.clone().removeClass('center')
-				.appendTo("body") // Append to body so we can animate the offset (instead of top/left)
-				.offset(mn.offset());
-		}
-		mn.text(runstate.game.cloud[state.answers.length].name);
+		window.document.title = "PtiClic "+(state.answers.length + 1)+' / '+runstate.game.cloud.length;
+		$('.mn').text(runstate.game.cloud[state.answers.length].name);
 		jss();
-		if (direction != 0) {
-			// window.setTimeout pour éviter que le offset (ci-dessus) ne soit animé, et pour que le temps de rendu de la page ne soit pas inclus dans le temps d'animation.
-			window.setTimeout(function() {
-				(clone)
-					.addClass("transition")
-					.css(runstate.relationBox[state.answers[state.answers.length - 1]].center())
-					.css({fontSize: 0})
-					.delay(700)
-					.qRemove();
-				$('.relationBox.hot').addClass('transition-bg').removeClass('hot').delay(700).qRemoveClass('transition-bg');
-			}, 0);
+		
+		var isForward = (state.answers.length - oldstate.answers.length) >= 0;
+		var rb = runstate.relationBox[(isForward ? state : oldstate).answers[(isForward ? state : oldstate).answers.length - 1]];
+		
+		if (!runstate.currentMNCaption || oldstate.screen != 'game')
+			runstate.currentMNCaption = $('<span class="mn-caption"/>');
+		var a = runstate.currentMNCaption.text(runstate.game.cloud[oldstate.answers.length].name);
+		var b = $('<span class="mn-caption"/>').text(runstate.game.cloud[state.answers.length].name);
+		if (oldstate.screen != 'game' || state.answers.length == oldstate.answers.length) {
+			isForward = true;
+			a.remove();
+			a = $();
 		}
-/*			var fs = mn.css("fontSize");
-			var mncbCenter = $("#game #mn-caption-box").center();
-			
-			(mn)
-				.css("fontSize", 0)
-				.animate({fontSize: fs}, {duration:700, step:function(){
-					try {
-						mn.center(mncbCenter);
-					} catch(e) {alert("Error anonymous 2 in game.animateNext");alert(e);}
-				}}); */
+		if (!isForward) { var c = b; b = a; a = c; }
+		runstate.currentMNCaption = isForward ? b : a;
+		
+		a.zoom(rb, '#mn-caption-box', isForward); // De ou vers la relationBox
+		b.zoom('#mn-caption-box', '#mn-caption-box', !isForward); // De ou vers le #mn-caption
+		
+		window.setTimeout(function() {
+			$('.relationBox.hot').addClass('transition-bg').removeClass('hot').delay(700).qRemoveClass('transition-bg');
+		}, 0);
+	});
+	
+	game.bind('leave', function() {
+		runstate.currentMNCaption.remove();
 	});
 });
 

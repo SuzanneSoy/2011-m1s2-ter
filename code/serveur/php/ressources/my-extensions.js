@@ -92,6 +92,8 @@ $.fn.qText = queueize("text");
 
 $.fn.wh = function(w, h) {
 	try {
+		if (isNaN(+w) && w && typeof w.width != 'undefined') { h = w.height; w = w.width; }
+		if (typeof w == 'undefined') return {width: this.width(), height:this.height()};
 		return this.width(w).height(isNaN(+h) ? w : h);
 	} catch(e) {alert("Error $.fn.wh");alert(e);}
 };
@@ -158,10 +160,37 @@ $.fn.goodBad = function(min, max, startcolor, endcolor) {
 	return this;
 };
 
-var PtiClic = $({});
-PtiClic.queueJSON = function(url, data, ok, error) {
+/** Zoom from small center of startElem to big center of endElem, or do the reverse animation (from big end to small start). */
+$.fn.zoom = function(startElem, endElem, reverse) {
+	var that = this;
+	startElem = $(startElem);
+	endElem = $(endElem);
+	return this.queue(function(next) {
+		if (that.size() == 0) return next();
+		that.removeClass('transition'); // disable animations
+		window.setTimeout(function() {
+			// Calcul de la taille de police pour end().
+			var endbox = $('<div style="text-align:center;"/>').appendTo('body').wh(endElem.wh());
+			that.appendTo(endbox);
+			that.css({position:'', top:'', left:''});
+			that = endbox;
+			that.fitFont();
+			var BFontSize = that.css('fontSize');
+			var APos = that.css('fontSize', 0).center(startElem.center()).offset();
+			var BPos = that.css('fontSize', BFontSize).center(endElem.center()).offset();
+			var A = function() { that.css('fontSize', 0).offset(APos); };
+			var B = function() { that.css('fontSize', BFontSize).offset(BPos); };
+			(reverse ? B : A)();
+			window.setTimeout(function() {
+				that.addClass('transition'); // enable animations
+				(reverse ? A : B)();
+				if (reverse) that.delay(700).qRemove()
+				next();
+			}, 0);
+		}, 0);
+	});
 };
-
+	
 function decodeHash(hash) {
 	/* hash.match(/^#([a-z]+(\/[0-9]+(\/-?[0-9]+(,-?[0-9]+)*)?)?)?$/) */
 	hash = hash.substring(1).split('/');
