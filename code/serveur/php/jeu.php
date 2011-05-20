@@ -17,10 +17,9 @@
 			.screen { width:100%; height:100%; position:absolute; }
 			.highlight { display:none; width:100%; height:100%; border-width:medium; border-style:solid; border-radius:2em; position:absolute; }
 			a:hover .highlight { display:block; }
-			#frontpage .icon-container { width:100%; bottom: 40%; height:50%; position:absolute; vertical-align:bottom; }
-			#frontpage .icon-container img { display:block; margin: 0 auto; }
-			#frontpage .icon-label { width:100%; height:30%; bottom:5%; position:absolute; }
-			#frontpage a { color: black; text-decoration: none; display:inline-block; width: 30%; height: 32%; top: 32%; position:absolute; }
+			#frontpage a { color: black; text-decoration: none; display:inline-block; width: 30%; top: 32%; position:absolute; }
+			#frontpage .icon-container img { display:block; position:relative; margin: 0 auto; }
+			#frontpage .icon-label { width:100%; height:30%; position:relative; }
 			a.button {
 				color: black; text-decoration: none;
 				padding: 0.4em; margin: 0.4em; display: inline-block;
@@ -88,7 +87,7 @@
 			</div>
 			<a href="#game" style="right:55%; top:33%;">
 				<div class="highlight"></div>
-				<div class="icon-container"><img class="iconFitParent" alt="" src="ressources/img/72/default.png" /></div>
+				<div class="icon-container"><img alt="" src="ressources/img/72/default.png" /></div>
 				<div class="icon-label subFitFont"><span class="text center">Jouer</span></div>
 			</a>
 			<a href="#prefs" style="left:55%; top:33%;">

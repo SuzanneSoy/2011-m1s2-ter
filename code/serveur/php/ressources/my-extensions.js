@@ -7,7 +7,7 @@ Number.prototype.clip = function(min, max, floor) {
 Number.prototype.mapInterval = function(a,b,x,y) {
 	return x + ((this-a) / (b-a) * (y-x));
 }
-	
+
 dichotomyStop = false;
 function dichotomy(start, isBigger, debug) {
 	try {

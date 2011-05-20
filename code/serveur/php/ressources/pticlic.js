@@ -51,14 +51,15 @@ function jss() {
 			rb.css({ marginTop: (rel.height() - rb.sumOuterHeight()) / (rb.size() + 1) });
 			rb.find('.icon').css({paddingRight: 10/72*iconSize});
 		}
-		$('.iconFitParent').wh(0,0).each(function(i,e) {
-			e=$(e);
-			var p = e.parent();
-			var size = Math.min(p.width(), p.height());
-			if (size >= 72) { e.wh(72); }
-			else if (size >= 48) e.wh(48);
-			else if (size >= 36) e.wh(36);
-			else e.wh(0);
+		$('#frontpage a').$each(function(i,e) {
+			var img = e.find('img');
+			var size = Math.min($('#frontpage').width() * 0.3, $('#frontpage').height() * 0.32 * 0.5);
+			if (size >= 72) { img.wh(72); }
+			else if (size >= 48) img.wh(48);
+			else if (size >= 36) img.wh(36);
+			else img.wh(0);
+			e.find('.icon-label').height($('#frontpage').height() * 0.32 * 0.3);
+			img.css('padding-top', $('#frontpage').height() * 0.32 * 0.06);
 		});
 		$('.fitFont:visible').$each(function(i,e) { e.fitFont(); });
 		$('.fitFontGroup:visible').each(function(i,e) { $(e).find('.subFitFont').fitFont(); });
