@@ -127,7 +127,7 @@ init(function() {
 
 // ==== Écran connexion
 runstate.pendingGetPrefs = function() {
-	console.log('Should execute pendingGetPrefs');
+	UI().log('Should execute pendingGetPrefs');
 };
 
 init(function() {
@@ -161,7 +161,6 @@ $.ajaj = function(url, data, callback) {
 		if (!data.user) data.user = user;
 		if (!data.passwd) data.passwd = passwd;
 	}
-	console.log('ajaj', data, user, passwd);
 	return $.getJSON(url, data, callback);
 };
 	
@@ -223,6 +222,10 @@ init(function() {
 	});
 
 	game.bind('update', function(e) {
+		if (state.pgid != runstate.game.pgid) {
+			$('#game').trigger('goto');
+			return;
+		}
 		var direction = state.answers.length - oldstate.answers.length;
 		var mn = $("#game .mn-caption");
 		var clone = $();
