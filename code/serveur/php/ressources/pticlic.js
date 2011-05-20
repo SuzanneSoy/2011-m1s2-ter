@@ -120,6 +120,11 @@ init(function() {
 	
 });
 
+// ==== Écran d'accueil
+init(function() {
+	$('.goFrontpage').click(function() { location.hash = "#frontpage"; });
+});
+
 // ==== Écran connexion
 runstate.pendingGetPrefs = function() {
 	console.log('Should execute pendingGetPrefs');
@@ -134,8 +139,8 @@ init(function() {
 		} else {
 			runstate.pendingGetPrefs();
 		}
-		if (state.screen == game) {
-			$('#game').trigger('pre-enter');
+		if (state.screen == 'game') {
+			$('#game').trigger('goto');
 		} else {
 			location.hash = "#frontpage";
 		}
@@ -150,42 +155,37 @@ init(function() {
 
 // ==== Écran game
 $.ajaj = function(url, data, callback) {
-	var user = '' + UI().getPreference("user");
-	var passwd = '' + UI().getPreference("passwd");
-	if (user != '' && passwd != '') {
+	var user = runstate.user; /* '' + UI().getPreference("user"); */
+	var passwd = runstate.passwd; /* '' + UI().getPreference("passwd"); */
+	if (user && passwd) {
 		if (!data.user) data.user = user;
 		if (!data.passwd) data.passwd = passwd;
 	}
-	$.getJSON(url, data, callback);
+	console.log('ajaj', data, user, passwd);
+	return $.getJSON(url, data, callback);
 };
 	
-function getGame(k, dfd, retry) {
+function getGame(k, dfd) {
 	$.ajaj("getGame.php?callback=?", {pgid:k}, function(data) {
-		if (data.error == 10) {
+		if (data.isError) {
 			dfd.reject(data);
-			if (state.screen == 'game' && state.pgid == k) {
-				if (retry) {
-					$('#connection.screen').trigger('goto');
-				} else {
-					location.hash = "#frontpage";
-					message("Erreur", "Vous n'êtes pas connecté.");
-				}
-			}
-		} else if (data.isError) {
-			dfd.reject(data);
-			location.hash = "#frontpage";
 			message("Erreur", data.msg);
+			if ((data.error == 10 || data.error == 3) && state.screen == 'game' && state.pgid == k) {
+				$.screen('connection').trigger('goto');
+			} else {
+				$.screen('frontpage').trigger('goto');
+			}
 		} else {
             dfd.resolve(data);
 		}
-	}).fail(function() {
+	}).fail(function(data) {
 		dfd.reject(data);
-		location.hash = "#frontpage";
+		$("#frontpage").trigger('goto');
 		message("Erreur", "Une erreur est survenue, veuillez nous en excuser.");
 	});
 }
 
-runstate.gameCache = new Cache(function(k, dfd) { getGame(k, dfd, true); });
+runstate.gameCache = new Cache(function(k, dfd) { getGame(k, dfd); });
 
 init(function() {
 	var game = $('#game.screen');

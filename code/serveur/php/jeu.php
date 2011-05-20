@@ -13,6 +13,7 @@
 		<script src="ressources/pticlic.js"></script>
 		<script src="server.php?callback=prefs.loadPrefs&action=7"></script>
 		<style>
+			img { border: none; }
 			body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
 			.screen { width:100%; height:100%; position:absolute; }
 			.highlight { display:none; width:100%; height:100%; border-width:medium; border-style:solid; border-radius:2em; position:absolute; }
@@ -151,12 +152,15 @@
 		</div>
 		<div id="connection" class="screen">
 			<form action="#" method="GET" style="width:100%; height:100%;" class="fitFontGroup">
-				<div class="formElement subFitFont" style="right: 55%; top: 25%;"><label id="user-label" for="user">Login : </label></div>
-				<div class="formElement subFitFont" style="left: 55%; top: 25%;"><input type="text" name="user" id="user" class="setFont" /></div>
-				<div class="formElement subFitFont" style="right: 55%; top: 50%;"><label id="passwd-label" for="passwd">Mot de passe : </label></div>
-				<div class="formElement subFitFont" style="left: 55%; top: 50%;"><input type="password" name="passwd" id="passwd" class="setFont" /></div>
-				<div class="formElement subFitFont" style="left: 25%; width:50%; top: 75%;">
-					<input type="submit" name="connect" id="connect" value="Se connecter" class="center setFont" />
+				<div class="formElement subFitFont" style="right: 55%; top: 25%; text-align:right;"><label id="user-label" for="user">Login : </label></div>
+				<div class="formElement subFitFont" style="left: 55%; top: 25%; text-align:left;"><input type="text" name="user" id="user" class="setFont" /></div>
+				<div class="formElement subFitFont" style="right: 55%; top: 50%; text-align:right;"><label id="passwd-label" for="passwd">Mot de passe : </label></div>
+				<div class="formElement subFitFont" style="left: 55%; top: 50%; text-align:left;"><input type="password" name="passwd" id="passwd" class="setFont" /></div>
+				<div class="formElement subFitFont" style="right: 55%; top: 75%; text-align:right;">
+					<input type="button" value="Retour" class="setFont goFrontpage" />
+				</div>
+				<div class="formElement subFitFont" style="left: 55%; top: 75%; text-align:left;">
+					<input type="submit" name="connect" id="connect" value="Se connecter" class="setFont" />
 				</div>
 			</form>
 		</div>
