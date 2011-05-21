@@ -348,7 +348,7 @@ init(function() {
 // ==== Écran Préférences
 function loadPrefs(prefs) {
 	runstate.prefs = (prefs && prefs.theme) ? prefs : {
-		theme: "black"
+		theme: "green"
 	};
 	if (runstate.loaded) jss();
 }

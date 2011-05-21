@@ -78,8 +78,8 @@
 			</div>
 		</div>
 		<div id="frontpage" class="screen fitFontGroup">
-			<a href="index.php" style="width:7%; height:5%; top:2%; right:2%; position:absolute;" class="fitFont button">
-				<span style="width:90%; height:90%; top:5%; left:5%; position:absolute;"><span class="center">Retour au site</span></span>
+			<a href="index.php" style="width:15%; height:5%; top:2%; right:2%; position:absolute;" class="fitFont button">
+				<span class="marginBox"><span class="center">Retour au site</span></span>
 			</a>
 			<div style="width:50%; height:24%; top:4%; left:25%; position:absolute;" class="fitFont">
 				<span class="center">PtiClic</span>
