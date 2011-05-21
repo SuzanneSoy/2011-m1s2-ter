@@ -23,6 +23,7 @@ function init(fn) {
 
 // ==== Code métier général
 $(function() {
+	loadPrefs();
 	var lastWinSize = $(window).wh();
 	$(window).dequeue('init');
 	$(window).resize($.debounce(function resizeJSS() {
@@ -41,6 +42,7 @@ function jss() {
 	try {
 		if (jss.running) return;
 		jss.running = true;
+		$('body').removeClass().addClass(runstate.prefs.theme);
 		if ($("#splash img").is(':visible')) {
 			var ratio = Math.min($('#splash').width() / 320, $('#splash').height() / 480);
 			$('#splash.screen img')
@@ -248,7 +250,7 @@ init(function() {
 			$('#game').trigger('goto');
 			return;
 		}
-		
+
 		window.document.title = "PtiClic "+(state.answers.length + 1)+' / '+runstate.game.cloud.length;
 		$('.mn').text(runstate.game.cloud[state.answers.length].name);
 		jss();
@@ -261,7 +263,7 @@ init(function() {
 		var tmp = runstate.game.cloud[oldstate.answers.length];
 		var a = runstate.currentMNCaption.text(tmp ? tmp.name : '…');
 		var b = $('<span class="mn-caption"/>').text(runstate.game.cloud[state.answers.length].name);
-		if (isForward && (oldstate.screen != 'game' || state.answers.length == oldstate.answers.length)) {
+		if (!rb || (isForward && (oldstate.screen != 'game' || state.answers.length == oldstate.answers.length))) {
 			isForward = true;
 			a.remove();
 			a = $();
@@ -342,6 +344,77 @@ init(function() {
 		});
 	});
 });
+
+// ==== Écran Préférences
+function loadPrefs(prefs) {
+	runstate.prefs = (prefs && prefs.theme) ? prefs : {
+		theme: "black"
+	};
+	if (runstate.loaded) jss();
+}
+
+init(function() {
+});
+/*prefs.enter = function() {
+	try {
+		$("#prefs-form").unbind('submit', prefs.apply).submit(prefs.apply);
+		$("#prefs-cancel").clickOnce(prefs.cancel);
+		$("#prefs-form input:radio[name=theme]").attr('checked', function(i,val) {
+			return $(this).val() == runstate.prefs.theme;
+		});
+		jss();
+		UI().dismiss();
+	} catch(e) {alert("Error prefs.enter");alert(e);}
+};
+
+prefs.apply = function(){
+	try {
+		var newtheme = $("#prefs-form input:radio[name=theme]:checked").val();
+		ajaj.request("server.php?callback=?", {
+			action: 8,
+			key: 'theme',
+			value: newtheme
+		}, function(data) {
+			try {
+			if (data.theme) {
+				message("Préférences", "Les préférences ont été enregistrées.");
+				prefs.loadPrefs(data);
+			} else {
+				message("Préférences", "Les préférences n'ont pas pu être enregistrées.");
+			}
+			} catch(e) {alert("Error anonymous in prefs.apply");alert(e);}
+		});
+		state.set('screen', 'frontpage').validate();
+		return false;
+	} catch(e) {alert("Error anonymous in prefs.apply");alert(e);}
+};
+
+prefs.cancel = function(){
+	try {
+		state.set('screen', 'frontpage').validate();
+	} catch(e) {alert("Error anonymous in prefs.cancel");alert(e);}
+};
+
+prefs.loadPrefs = function(data) {
+	try {
+		if (data && data.theme) {
+			runstate.prefs = data;
+		} else {
+			runstate.prefs = {
+				theme: "green"
+			};
+		}
+		if (runstate.loaded) jss();
+	} catch(e) {alert("Error anonymous in prefs.loadPrefs");alert(e);}
+};
+*/
+
+
+
+
+
+
+
 
 game = {};
 game.leave = function () {

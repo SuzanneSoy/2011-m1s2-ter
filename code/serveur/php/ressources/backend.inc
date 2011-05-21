@@ -568,7 +568,7 @@ function setGame($user, $pgid, $gid, $answers)
 	{
 		$num = intval($row['num']);
 		if (!isset($answers[$num])) {
-			throw new Exception("Cette requête \"Set partie\" ne donne pas de réponse (une relation) pour le mot numéro $num de la partie.", 5);
+			throw new Exception("Cette requête \"Set partie\" ne donne pas de réponse (une relation) pour le mot numéro ".($num+1)." de la partie.", 5);
 		}
 		$relanswer = intval($answers[$num]);
 

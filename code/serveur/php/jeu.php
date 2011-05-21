@@ -4,57 +4,57 @@
 		<title>PtiClic pre-alpha 0.2</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="target-densitydpi=device-dpi" />
-		<style>.screen { display: none; }</style>
 		<script src="ressources/jquery-1.5.1.min.js"></script>
 		<script src="ressources/jquery-ui-1.8.11.custom.min.js"></script>
 		<script src="ressources/jquery.ba-hashchange.min.js"></script>
 		<script src="ressources/jquery.JSON.js"></script>
 		<script src="ressources/my-extensions.js"></script>
 		<script src="ressources/pticlic.js"></script>
-		<script src="server.php?callback=prefs.loadPrefs&action=7"></script>
+		<script src="server.php?callback=loadPrefs&action=7"></script>
 		<style>
-			img { border: none; }
-			body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+			.screen { display:none; }
+			img { border:none; }
+			body, html { margin:0; padding:0; height:100%; overflow:hidden; }
 			.screen { width:100%; height:100%; position:absolute; }
 			.highlight { display:none; width:100%; height:100%; border-width:medium; border-style:solid; border-radius:2em; position:absolute; }
 			a:hover .highlight { display:block; }
-			#frontpage a { color: black; text-decoration: none; display:inline-block; width: 30%; top: 32%; position:absolute; }
-			#frontpage .icon-container img { display:block; position:relative; margin: 0 auto; }
+			#frontpage a { text-decoration:none; display:inline-block; width:30%; top:32%; position:absolute; }
+			#frontpage .icon-container img { display:block; position:relative; margin:0 auto; }
 			#frontpage .icon-label { width:100%; height:30%; position:relative; }
-			a.button {
-				color: black; text-decoration: none;
-				padding: 0.4em; margin: 0.4em; display: inline-block;
-				border: medium solid #4a4; background-color:#f0f8d0; border-radius:0.4em;
-			}
-			.relationBox { border-width: 3px; border-style: solid; border-radius:1em; padding: 0.5em; width: 95%; margin: 0 auto; }
-			.formElement { width:46%; height: 10%; position:absolute; }
+			a.button { text-decoration:none; padding:0.4em; margin:0.4em; display:inline-block; border-width:medium; border-style:solid; border-radius:0.4em; }
+			.relationBox { border-width:3px; border-style:solid; border-radius:1em; padding:0.5em; width:95%; margin:0 auto; }
+			.formElement { width:46%; height:10%; position:absolute; }
 			#score { text-align:center; }
-			.marginBox { width: 90%; height: 90%; top: 5%; left:5%; position:absolute; }
-			#message { left:25%; top:5%; width:50%; height:10%; position:absolute; border-radius:0.5em; text-align:center; opacity:0.9; }
+			.marginBox { width:90%; height:90%; top:5%; left:5%; position:absolute; }
+			#message { left:25%; top:5%; width:50%; height:10%; position:absolute; border-width:medium; border-style:solid; border-radius:0.5em; text-align:center; opacity:0.9; }
 
-			.transition { transition: all 0.7s linear; -moz-transition: all 0.7s linear; -webkit-transition: all 0.7s linear; }
-			.transition-bg { transition: background-color 0.7s linear; -moz-transition: background-color 0.7s linear; -webkit-transition: background-color 0.7s linear; }
+			.transition { transition:all 0.7s linear; -moz-transition:all 0.7s linear; -webkit-transition:all 0.7s linear; }
+			.transition-bg { transition:background-color 0.7s linear; -moz-transition:background-color 0.7s linear; -webkit-transition:background-color 0.7s linear; }
 			
-			#splash, #nojs { background-color:black; color: white; }
+			#splash, #nojs { background-color:black; color:white; }
 			/* couleurs green */
-			body, .screen { background-color:#ffffe0; color: black; }
-			#message { background-color:#f0f8d0; color:black; border:medium solid #4a4; }
+			body, .screen { background-color:#ffffe0; color:black; }
+			a.button { color:black; border-color:#4a4; background-color:#f0f8d0; }
+			#message { background-color:#f0f8d0; color:black; border-color:#4a4; }
+			#frontpage a { color:black; }
 			#mc-caption { color:#8b4; }
 			#mn-caption-bg { background-color:#f0f8d0; }
-			.mn-caption { color: #4a4; }
-			.borderbar { background-color: #4a4; }
-			.relationBox { background-color:#f0f8d0; border-color: #4a4; }
+			.mn-caption { color:#4a4; }
+			.borderbar { background-color:#4a4; }
+			.relationBox { background-color:#f0f8d0; border-color:#4a4; }
 			.highlight { background-color:#f0f8d0; border-color:#4a4; }
 			.hot { background-color:yellow; }
 
 			/* couleurs black */
-			body.black, .black .screen { background-color:black; color: white; }
-			.black #message { background-color:#222; color:white; border:medium solid #ccc; }
+			body.black, .black .screen { background-color:black; color:white; }
+			.black a.button { color:white; border-color:#ccc; background-color:#222; }
+			.black #message { background-color:#222; color:white; border-color:#ccc; }
+			.black #frontpage a { color:white; }
 			.black #mc-caption { color:white; }
 			.black #mn-caption-bg { background-color:#222; }
-			.black .mn-caption { color: #ccc; }
-			.black .borderbar { background-color: #ccc; }
-			.black .relationBox { background-color:#222; border-color: #ccc; }
+			.black .mn-caption { color:#ccc; }
+			.black .borderbar { background-color:#ccc; }
+			.black .relationBox { background-color:#222; border-color:#ccc; }
 			.black .highlight { background-color:#222; border-color:#ccc; }
 			.black .hot { background-color:#aaa; }
 		</style>
@@ -92,7 +92,7 @@
 			<a href="#prefs" style="left:55%; top:33%;">
 				<div class="highlight"></div>
 				<div class="icon-container"><img class="iconFitParent" alt="" src="ressources/img/72/default.png" /></div>
-				<div class="icon-label subFitFont"><span class="text center">Configuration</span></div>
+				<div class="icon-label subFitFont"><span class="text center">Préférences</span></div>
 			</a>
 			<a href="#connection" style="right:55%; top:66%;">
 				<div class="highlight"></div>
