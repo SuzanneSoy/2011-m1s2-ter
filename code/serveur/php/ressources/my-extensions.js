@@ -49,12 +49,14 @@ $.fn.hasScroll = function() {
 $.fn.fitFont = function() {
 	try {
 	var that = this;
+	this.css({overflow: 'auto'});
 	var setFont = this.find('.setFont').andSelf();
 	this.find('.center').css({top:0, left:0}); // Petit hack pour que ça ne déborde pas à cause de l'offset mis par .center().
 	var size = dichotomy(parseInt(this.css("font-size"), 10), function(x) {
 		setFont.css("fontSize", x);
 		return that.$ormap(function(i,e) { return e.hasScroll(); });
 	});
+	this.css({overflow: 'hidden'});
 	this.css("font-size", Math.max(0, size));
 	return this;
 	} catch(e) {alert("Error $.fn.fitFont");alert(e);throw(e);}
@@ -80,7 +82,7 @@ function queueize(method) {
 	try {
 	return function() {
 		var $this = this;
-		var args = arguments;
+		var args = Array.prototype.slice.call(arguments); // cast Arguments → Array
 		return this.queue(function(next) {
 			$this[method].apply($this,args);
 			next();
@@ -167,6 +169,30 @@ $.fn.goodBad = function(min, max, startcolor, endcolor) {
 	return this;
 };
 
+$.debounce = function debounce(fn, interval) {
+	var wait = false;
+	var delayedFn = false;
+	interval = interval || 200;
+	return function() {
+		var that = this;
+		var args = Array.prototype.slice.call(arguments); // cast Arguments → Array
+		delayedFn = function() { delayedFn = false; fn.apply(that, args); }
+		if (!wait) {
+			wait = true;
+			delayedFn();
+			var loop = function() {
+				if (delayedFn) {
+					delayedFn();
+					window.setTimeout(loop, interval);
+				} else {
+					wait = false;
+				}
+			}
+			window.setTimeout(loop, interval);
+		}
+	};
+};
+
 /** Zoom from small center of startElem to big center of endElem, or do the reverse animation (from big end to small start). */
 $.fn.zoom = function(startElem, endElem, reverse) {
 	var that = this;
@@ -180,18 +206,18 @@ $.fn.zoom = function(startElem, endElem, reverse) {
 			var endbox = $('<div style="text-align:center;"/>').appendTo('body').wh(endElem.wh());
 			that.appendTo(endbox);
 			that.css({position:'', top:'', left:''});
-			that = endbox;
-			that.fitFont();
-			var BFontSize = that.css('fontSize');
-			var APos = that.css('fontSize', 0).center(startElem.center()).offset();
-			var BPos = that.css('fontSize', BFontSize).center(endElem.center()).offset();
-			var A = function() { that.css('fontSize', 0).offset(APos); };
-			var B = function() { that.css('fontSize', BFontSize).offset(BPos); };
+			endbox.fitFont();
+			var BFontSize = endbox.css('fontSize');
+			var APos = endbox.css('fontSize', 0).center(startElem.center()).offset();
+			var BPos = endbox.css('fontSize', BFontSize).center(endElem.center()).offset();
+			var A = function() { endbox.css('fontSize', 0).offset(APos); };
+			var B = function() { endbox.css('fontSize', BFontSize).offset(BPos); };
 			(reverse ? B : A)();
 			window.setTimeout(function() {
-				that.addClass('transition'); // enable animations
+				endbox.addClass('transition'); // enable animations
 				(reverse ? A : B)();
-				if (reverse) that.delay(700).qRemove()
+				endbox.delay(700).qRemoveClass('transition');
+				if (reverse) endbox.qRemove();
 				next();
 			}, 0);
 		}, 0);

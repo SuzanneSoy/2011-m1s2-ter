@@ -645,11 +645,13 @@ function getGameRelations() {
 
 function setGameGetScore($user, $pgid, $answers) {
 	$scores = setGame($user, $pgid, getGidFromPgid($user, $pgid), $answers);
-	$scores['words'] = array();
 	$g = game2array($user, $pgid);
-	foreach ($g['cloud'] as $v) {
-		$scores['words'][] = $v['name'];
+	$s = array();
+	foreach ($g['cloud'] as $k => $v) {
+		$s[] = array('name' => $v['name'], 'score' => $scores['scores'][$k]);
 	}
+	$scores['scores'] = $s;
+	$scores['author'] = $g['author'];
 	// On renvoie une nouvelle partie pour garder le client toujours bien alimenté.
 	$scores['newGame'] = game2array($user);
 	$scores['minScore'] = -5;

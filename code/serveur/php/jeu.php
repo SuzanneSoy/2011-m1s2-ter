@@ -27,8 +27,7 @@
 				border: medium solid #4a4; background-color:#f0f8d0; border-radius:0.4em;
 			}
 			.relationBox { border-width: 3px; border-style: solid; border-radius:1em; padding: 0.5em; width: 95%; margin: 0 auto; }
-			.formElement { width:30%; height: 10%; position:absolute; }
-			.fitFont, .subFitFont { overflow:auto; }
+			.formElement { width:46%; height: 10%; position:absolute; }
 			#score { text-align:center; }
 			.marginBox { width: 90%; height: 90%; top: 5%; left:5%; position:absolute; }
 			#message { left:25%; top:5%; width:50%; height:10%; position:absolute; border-radius:0.5em; text-align:center; opacity:0.9; }
@@ -107,11 +106,11 @@
 			</a>
 		</div>
 		<div id="score" class="screen">
-			<div class="marginBox fitFont">
-				<h1>Score total : <span class="scoreTotal"></span></h1>
-				<div class="scores"></div>
-				<p style="text-align: center;">
-					<a class="button" href="#">J'ai vu !</a>
+			<div class="marginBox">
+				<h1 class="fitFont" style="width:100%; height:8%; top: 8%; position:absolute; margin:0; text-align:center;">Score total : <span class="scoreTotal"></span></h1>
+				<div class="scores fitFont" style="width:100%; height:60%; top:24%; position:absolute;"></div>
+				<p class="fitFont" style="text-align: center; width:100%; height:12%; top:86%; margin:0; position:absolute;">
+					<a class="button" href="#" style="margin:0;">J'ai vu !</a>
 				</p>
 			</div>
 		</div>
@@ -151,14 +150,14 @@
 		</div>
 		<div id="connection" class="screen">
 			<form action="#" method="GET" style="width:100%; height:100%;" class="fitFontGroup">
-				<div class="formElement subFitFont" style="right: 55%; top: 25%; text-align:right;"><label id="user-label" for="user">Login : </label></div>
-				<div class="formElement subFitFont" style="left: 55%; top: 25%; text-align:left;"><input type="text" name="user" id="user" class="setFont" /></div>
-				<div class="formElement subFitFont" style="right: 55%; top: 50%; text-align:right;"><label id="passwd-label" for="passwd">Mot de passe : </label></div>
-				<div class="formElement subFitFont" style="left: 55%; top: 50%; text-align:left;"><input type="password" name="passwd" id="passwd" class="setFont" /></div>
-				<div class="formElement subFitFont" style="right: 55%; top: 75%; text-align:right;">
+				<div class="formElement subFitFont" style="right: 52%; top: 25%; text-align:right;"><label id="user-label" for="user">Login : </label></div>
+				<div class="formElement subFitFont" style="left: 52%; top: 25%; text-align:left;"><input type="text" name="user" id="user" class="setFont" /></div>
+				<div class="formElement subFitFont" style="right: 52%; top: 50%; text-align:right;"><label id="passwd-label" for="passwd">Mot de passe : </label></div>
+				<div class="formElement subFitFont" style="left: 52%; top: 50%; text-align:left;"><input type="password" name="passwd" id="passwd" class="setFont" /></div>
+				<div class="formElement subFitFont" style="right: 52%; top: 75%; text-align:right;">
 					<input type="button" value="Retour" class="setFont goFrontpage" />
 				</div>
-				<div class="formElement subFitFont" style="left: 55%; top: 75%; text-align:left;">
+				<div class="formElement subFitFont" style="left: 52%; top: 75%; text-align:left;">
 					<input type="submit" name="connect" id="connect" value="Se connecter" class="setFont" />
 				</div>
 			</form>
@@ -170,8 +169,8 @@
 					<input type="radio" id="theme-green" name="theme" value="green" /><label for="theme-green">Colline verdoyante</label><br/>
 					<input type="radio" id="theme-black" name="theme" value="black" /><label for="theme-black">Bas-fond de cachot</label>
 				</fieldset>
-				<div class="formElement subFitFont" style="top:75%; right:55%"><input class="center setFont" type="reset" name="prefs-cancel" id="prefs-cancel" value="Annuler" /></div>
-				<div class="formElement subFitFont" style="top:75%; left:55%"><input class="center setFont" type="submit" name="prefs-apply" id="prefs-apply" value="Appliquer" /></div>
+				<div class="formElement subFitFont" style="top:75%; right:52%"><input class="center setFont" type="reset" name="prefs-cancel" id="prefs-cancel" value="Annuler" /></div>
+				<div class="formElement subFitFont" style="top:75%; left:52%"><input class="center setFont" type="submit" name="prefs-apply" id="prefs-apply" value="Appliquer" /></div>
 			</form>
 		</div>
 		<div id="templates" style="display: none;">

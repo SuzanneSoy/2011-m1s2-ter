@@ -23,17 +23,24 @@ function init(fn) {
 
 // ==== Code métier général
 $(function() {
+	var lastWinSize = $(window).wh();
 	$(window).dequeue('init');
-	$(window).resize(jss);
+	$(window).resize($.debounce(function resizeJSS() {
+		if (lastWinSize.width != $(window).width() || lastWinSize.height != $(window).height()) {
+			lastWinSize = $(window).wh();
+			hashchange();
+		}
+	}));
 	$(window).hashchange(hashchange);
 	hashchange();
-	jss();
 	runstate.loaded = true;
 });
 
 // ==== Nouveau jss
 function jss() {
 	try {
+		if (jss.running) return;
+		jss.running = true;
 		if ($("#splash img").is(':visible')) {
 			var ratio = Math.min($('#splash').width() / 320, $('#splash').height() / 480);
 			$('#splash.screen img')
@@ -64,6 +71,10 @@ function jss() {
 		$('.fitFont:visible').$each(function(i,e) { e.fitFont(); });
 		$('.fitFontGroup:visible').each(function(i,e) { $(e).find('.subFitFont').fitFont(); });
 		$('.center:visible').$each(function(i,e) { e.center(e.parent().center()); });
+		if ($('#game.screen').is(':visible')) {
+			$('#game.screen').trigger('update');
+		}
+		jss.running = false;
 	} catch(e) {alert("Error jss");alert(e);}
 }
 
@@ -86,8 +97,11 @@ init(function() {
 	
 	$('.screen').live('enter', function() {
 		$(this).show();
-		jss();
 		$(this).trigger('update');
+	});
+
+	$('.screen').live('update', function() {
+		jss();
 	});
 	
 	$('.screen').live('leave', function() {
@@ -226,7 +240,10 @@ init(function() {
 		$("#game .mc").text(game.center.name);
 	});
 
+	var updating = false;
 	game.bind('update', function() {
+		if (updating) return false;
+		updating = true;
 		if (!runstate.game || state.pgid != runstate.game.pgid) {
 			$('#game').trigger('goto');
 			return;
@@ -258,6 +275,9 @@ init(function() {
 		window.setTimeout(function() {
 			$('.relationBox.hot').addClass('transition-bg').removeClass('hot').delay(700).qRemoveClass('transition-bg');
 		}, 0);
+		
+		updating = false;
+		return false;
 	});
 	
 	game.bind('leave', function() {
@@ -299,6 +319,27 @@ init(function() {
 			score.trigger('enter');
 		});
 		return false;
+	});
+	score.bind('enter', function() {
+		var s = runstate.score;
+		$("#score .scores").empty();
+		$("#score .scoreTotal")
+			.text(s.scoreTotal)
+			.goodBad(s.minScore*s.scores.length, s.maxScore*s.scores.length, {r:255,g:0,b:0}, {r:0,g:192,b:0});
+		$.each(s.scores, function(i,e) {
+			try {
+				$("#templates .scoreLine")
+					.clone()
+					.find(".word")
+					.text(e.name)
+					.end()
+					.find(".score")
+					.text(e.score)
+					.goodBad(s.minScore, s.maxScore, {r:255,g:0,b:0}, {r:0,g:192,b:0})
+					.end()
+					.appendTo("#score .scores");
+			} catch(e) {alert("Error anonymous 1 in score.ui");alert(e);}
+		});
 	});
 });
 
