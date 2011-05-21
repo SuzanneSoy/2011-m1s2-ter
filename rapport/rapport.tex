@@ -491,21 +491,32 @@ La seconde partie, la \og{}partie Cliente\fg{}, permet a l'utilisateur de pouvoi
 Comme cite plus haut, nous avons utiliser PHP pour la creation du serveur. PHP est un langage imperatif, il dispose aussi depuis la version 5 de fonctionnalites objet, mais nous ne les utilisont pas dans projet. Ce langage est
 principalement utilise pour produire des pages Web dynamiques, c'est la raison de sont utilisation dans notre projet. C'est un langage peu type, souple, multiplate-forme, libre et gratuit.
 Nous utilisons donc PHP pour la creation de notre site web \url{http://www.pticlic.fr} ainsi que pour toute la partie generation de partie a savoir la creation, generation, envoie et recuperation de partie PtiClic.
+
 \subsubsection{SHELL}
 Nous utilisons aussi le langage SHELL. Ce langage est surtout utiliser pour l'initialisation du serveur lors de sont installation sur un serveur different. Sont but, pour notre projet, et de recupere le dernier dump de la base de donnee,
 de convertir ce dump en SQL et de l'insere dans la base de donnee SQLite
+
 \subsubsection{SQLite3}
 SQLite est un bibliotheque, ecrite en C qui propose un moteur de base de donnees relationnelles accessible par le langage SQL. Contrairement aux serveurs de bases de donnee traditionnels, comme MySQL ou PostgreSQLL, sa paritcularite est
 de ne pas reproduire le schema habituel client-serveur mais d'être directement intégrée aux programmes. L'intégralité de la base de données est stockée dans un fichier indépendant de la plateforme. Le code source de SQLite est dans le domaine public, ce qui permet son utilisation sans restriction aussi bien dans les projets open source que dans les projet propriétaire.
+
 \subsubsection{Java}
+La partie cliente du projet et realiser en Java. Ce langage est le plus utilise dans le monde par les developpeur. Java reprend en grande partie la syntaxe du langage C++. Neanmoins il a ete epure des concepts les plus deroutants du C++ tels que les pointeurs, les references, l'heritage multiple\dots{}
+La grande specificite de ce langage est ca protabilite. En effet lors de la compilation, un bit code est genere, et celui-ci est ensuite lu par un machine virtuelle dependante de la platforme.
 
 \subsection{Outils utilisés}
 \subsubsection{Gestionnaire de version~: GitHub}
 % TODO : Georges
-\subsubsection{\android{}}
-\paragraph{Developper Toolkit (ADT) Plugin}
-\paragraph{Software Development Kit (SDK)}
 \subsubsection{Environnement intégré de développement~: Eclipse}
+Eclipse est un IDE extensible (par plugin) et polyvalent permettant de creer des projets mettant en oeuvre n'importe quel langage de programmation. Eclipse est ecrit en Java, et c'est avec ce langage que l'on peut creer de nouvelle extensions. La grande force de cet IDE est qu'il est developper autour des plugins pour pouvoir etendre l'application.
+
+\subsubsection{\android{}}
+Android est un systeme d'exploitation open source pour smartphones. Pour ce TER nous avons donc utilise le framework propose par Google, pour le developpement d'application sur cet OS. Il est donc base sur le langage Java, ce qui permet un apprentissage plus facile (du fait que ce langage est le plus utiliser dans le monde).
+
+\paragraph{Software Development Kit (SDK)}
+Le SDK d'\android{} possede un grand nombre de classes et de paquetage sur l'ensemble des fonctionnalitees proposer par les peripherique embarquant cet OS. On peut par exemple trouver un paquetage specialiser dans les acces reseaux, bluetooth, d'autre pour la geolocalisation\dots{}
+\paragraph{Developper Toolkit (ADT) Plugin}
+L'ADT est un plugin developper par Google pour facilite le developpement d'application \android{} avec Eclipse. Il propose un menu permettant de creer des projets de type \android{} parfaitement parametre selon ces besoin. Mais aussi un gestionnaire d'emulateur, une disposition DDMS permettant de controler l'emulateur\dots{}
 
 
 \section{Discussion}
