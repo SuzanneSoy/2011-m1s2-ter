@@ -141,6 +141,7 @@ init(function() {
 init(function() {
 	$('.goFrontpage').click(function() { location.hash = "#frontpage"; });
 	$.screen('frontpage').bind('enter', function() { window.document.title = "PtiClic pre-alpha 0.2"; });
+	if (UI().isAndroid()) $('#back2site').hide();
 });
 
 // ==== Écran connexion
