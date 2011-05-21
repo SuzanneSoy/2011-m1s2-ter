@@ -255,31 +255,3 @@ function Cache(resolver) {
 		return cache[k] = cache[k] || $.Deferred(function(dfd) { resolver(k, dfd, arg); }).fail(function() { cache[k] = false; }).promise();
 	};
 }
-
-/* Enchaînement des écrans
-
-*** Utiliser un objet Deferred pour les fonctions qu'on ne veut apeller qu'une fois.
-
-***
-
-- Cache des parties récupérées & scores (key = pgid pour les deux, mais params supplémentaires pour scores)
-new Cache(queryFn(k, dfd, cache) { cache.set(k,v); dfd.resolve(data); });
-Cache.get(k) returns Promise; // Peut déclencher $.extend(Cache, queryFn(k)).
-
-- Récupérer une partie aléatoire, et la stocker dans le cache à son arrivée
-- Afficher $(#game) (et $(#score)) une fois la partie (score) récupéré(e) et le(la) consommer
-- Sauf si l'action a été annulée.
-$.when(getGame, goGame)
-if (runstate.nextScreen == 'game') …
-- Lorsqu'une requête échoue, on demande le login, on retente la requête avec ce login/mdp. Si ça marche avec ce login/mdp, on .resolve(), sinon on .fail().
-
-***
-
-Aller sur un écran donné (parfois sans changer l'URL, par ex. pour splash→frontpage, et lorsqu'on force le login).
-Recevoir des données avant d'entrer dans un écran.
-Envoyer des données avant de quiter un écran.
-Vérouiller l'écran courant pendant qu'on attend un transfert ou bien des écrans d'«attente».
-Lorsqu'un transfert a échoué car non logué, on va sur l'écran de connexion et on retente le transfert ensuite.
-Stocker uniquement les données importantes dans l'url (état, numéro de partie, réponses).
-Pouvoir basculer sur un écran et exécuter quelque chose une fois qu'il est chargé (exécuter le commit pour l'url).
-*/

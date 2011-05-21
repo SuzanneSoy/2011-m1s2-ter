@@ -1,29 +1,21 @@
-// ==== URL persistante
-var nullFunction = function(){};
-var futureHashChange = null;
-var runstate = {
-	screen: 'none',
-};
-var state = decodeHash("");
-var oldstate = decodeHash("");
-
-$.screen = function (name) {
-	return $(document.getElementById(name)).filter('.screen');
-}
-
-function hashchange() {
-	oldstate = state;
-	state = decodeHash(location.hash);
-	$.screen(state.screen).trigger(state.screen != runstate.screen ? "goto" : "update");
-}
-
+// ==== Code métier général
 function init(fn) {
 	$(window).queue('init', function(next) {fn(); next();});
 }
 
-// ==== Code métier général
+$.ajaj = function(url, data, callback) {
+	var user = '' + UI().getPreference("user");
+	var passwd = '' + UI().getPreference("passwd");
+	user = runstate.user || user;
+	passwd = runstate.passwd || passwd;
+	if (user && passwd) {
+		if (!data.user) data.user = user;
+		if (!data.passwd) data.passwd = passwd;
+	}
+	return $.getJSON(url, data, callback);
+};
+
 $(function() {
-	loadPrefs();
 	var lastWinSize = $(window).wh();
 	$(window).dequeue('init');
 	$(window).resize($.debounce(function resizeJSS() {
@@ -37,9 +29,67 @@ $(function() {
 	runstate.loaded = true;
 });
 
+// ==== URL persistantes et passage d'un écran à l'autre
+var runstate = { screen: 'none' };
+var state = decodeHash("");
+var oldstate = decodeHash("");
+
+init(function() {
+	$('.screen').live('goto', function() {
+		var screen = this.id;
+		if (screen == '') return;
+		// Afficher "Chargement…"
+		/* location.hash = "#" + screen; */
+		$.screen(runstate.screen).trigger('leave').hide();
+		runstate.screen = screen;
+		UI().setScreen(screen);
+		$(this).trigger('pre-enter');
+	});
+	
+	$('.screen').live('pre-enter', function() {
+		$(this).trigger('enter');
+	});
+	
+	$('.screen').live('enter', function() {
+		$(this).show();
+		$(this).trigger('update');
+	});
+
+	$('.screen').live('update', function() {
+		jss();
+	});
+	
+	$('.screen').live('leave', function() {
+		$(this).hide();
+	});
+});
+
+$.screen = function (name) {
+	return $(document.getElementById(name)).filter('.screen');
+}
+
+function hashchange() {
+	oldstate = state;
+	state = decodeHash(location.hash);
+	$.screen(state.screen).trigger(state.screen != runstate.screen ? "goto" : "update");
+}
+
+// ==== Interface Android
+function UI () {
+	if (typeof(PtiClicAndroid) != "undefined") {
+		return PtiClicAndroid;
+	} else {
+		return {
+			isAndroid: function() { return false; },
+			setPreference: function() {},
+			getPreference: function() {return "";},
+			setScreen: function() {}
+		};
+	}
+}
+
 // ==== Nouveau jss
 function jss() {
-	try {
 		if (jss.running) return;
 		jss.running = true;
 		$('body').removeClass().addClass(runstate.prefs.theme);
@@ -77,39 +127,7 @@ function jss() {
 			$('#game.screen').trigger('update');
 		}
 		jss.running = false;
-	} catch(e) {alert("Error jss");alert(e);}
 }
-
-// ==== Passage d'un écran à l'autre
-
-init(function() {
-	$('.screen').live('goto', function() {
-		var screen = this.id;
-		if (screen == '') return;
-		// Afficher "Chargement…"
-		/* location.hash = "#" + screen; */
-		$.screen(runstate.screen).trigger('leave').hide();
-		runstate.screen = screen;
-		$(this).trigger('pre-enter');
-	});
-	
-	$('.screen').live('pre-enter', function() {
-		$(this).trigger('enter');
-	});
-	
-	$('.screen').live('enter', function() {
-		$(this).show();
-		$(this).trigger('update');
-	});
-
-	$('.screen').live('update', function() {
-		jss();
-	});
-	
-	$('.screen').live('leave', function() {
-		$(this).hide();
-	});
-});
 
 // ==== Bulle pour les messages
 init(function() {
@@ -117,17 +135,18 @@ init(function() {
 });
 
 function message(title, msg) {
-	try {
-		$('#message')
-			.qCss('opacity',0).qShow()
-			.queue(function(next){ $('#message .text').text(msg); jss(); next(); })
-			.fadeTo(700, 0.9).delay(5000).fadeOut(700);
-	} catch(e) {alert("Error UI().info");alert(e);}
+	$('#message')
+		.qCss('opacity',0).qShow()
+		.queue(function(next){ $('#message .text').text(msg || 'Une erreur est survenue, veuillez nous en excuser.'); jss(); next(); })
+		.fadeTo(700, 0.9).delay(5000).fadeOut(700);
 }
 
 // ==== Écran splash
 init(function() {
-	$('#splash.screen').click(function(){ $('#frontpage').trigger('goto'); });
+	$('#splash.screen').click(function(){ $('#frontpage').trigger('goto'); return false; });
+	window.setTimeout(function() {
+		if (runstate.screen == 'splash') $('#frontpage').trigger('goto');
+	}, 5000);
 	$('#splash.screen').bind('goto', function(e){
 		if (runstate.loaded) {
 			$('#frontpage').trigger('goto');
@@ -139,20 +158,17 @@ init(function() {
 
 // ==== Écran d'accueil
 init(function() {
-	$('.goFrontpage').click(function() { location.hash = "#frontpage"; });
 	$.screen('frontpage').bind('enter', function() { window.document.title = "PtiClic pre-alpha 0.2"; });
 	if (UI().isAndroid()) $('#back2site').hide();
 });
 
 // ==== Écran connexion
-runstate.pendingGetPrefs = function() {
-	UI().log('Should execute pendingGetPrefs');
-};
-
 init(function() {
 	$('#connection.screen form').submit(function() {
 		runstate.user = $('#user').val();
 		runstate.passwd = $('#passwd').val();
+		UI().setPreference('user', runstate.user);
+		UI().setPreference('passwd', runstate.passwd);
 		if (runstate.pendingSetPrefs) {
 			runstate.pendingSetPrefs();
 		} else {
@@ -162,6 +178,8 @@ init(function() {
 			$('#game').trigger('goto');
 		} else if (state.screen == 'score') {
 			$('#score').trigger('goto');
+		} else if (location.hash == "#frontpage") {
+			$.screen('frontpage').trigger('goto');
 		} else {
 			location.hash = "#frontpage";
 		}
@@ -175,16 +193,6 @@ init(function() {
 });
 
 // ==== Écran game
-$.ajaj = function(url, data, callback) {
-	var user = runstate.user; /* '' + UI().getPreference("user"); */
-	var passwd = runstate.passwd; /* '' + UI().getPreference("passwd"); */
-	if (user && passwd) {
-		if (!data.user) data.user = user;
-		if (!data.passwd) data.passwd = passwd;
-	}
-	return $.getJSON(url, data, callback);
-};
-	
 runstate.gameCache = new Cache(function getGame(k, dfd) {
 	$.ajaj("getGame.php?callback=?", {pgid:k}, function(data) {
 		if (data.isError) {
@@ -317,7 +325,6 @@ init(function() {
 	var score = $.screen('score');
 	score.bind('pre-enter', function() {
 		runstate.scoreCache.get(state.pgid, state.answers).done(function(data) {
-			console.log(data);
 			runstate.score = data;
 			score.trigger('enter');
 		});
@@ -330,32 +337,94 @@ init(function() {
 			.text(s.scoreTotal)
 			.goodBad(s.minScore*s.scores.length, s.maxScore*s.scores.length, {r:255,g:0,b:0}, {r:0,g:192,b:0});
 		$.each(s.scores, function(i,e) {
-			try {
-				$("#templates .scoreLine")
-					.clone()
-					.find(".word")
-					.text(e.name)
-					.end()
-					.find(".score")
-					.text(e.score)
-					.goodBad(s.minScore, s.maxScore, {r:255,g:0,b:0}, {r:0,g:192,b:0})
-					.end()
-					.appendTo("#score .scores");
-			} catch(e) {alert("Error anonymous 1 in score.ui");alert(e);}
+			$("#templates .scoreLine")
+				.clone()
+				.find(".word").text(e.name).end()
+				.find(".score").text(e.score).goodBad(s.minScore, s.maxScore, {r:255,g:0,b:0}, {r:0,g:192,b:0}).end()
+				.appendTo("#score .scores");
 		});
 	});
 });
 
 // ==== Écran Préférences
 function loadPrefs(prefs) {
-	runstate.prefs = (prefs && prefs.theme) ? prefs : {
-		theme: "green"
-	};
-	if (runstate.loaded) jss();
+	var previousTheme = runstate.prefs ? runstate.prefs.theme : 'green';
+	runstate.prefs = (prefs && prefs.theme) ? prefs : { theme: "green" };
+	runstate.serverPrefs = $.extend({}, runstate.prefs);
+	if (runstate.loaded && previousTheme != runstate.prefs.theme) jss();
+}
+loadPrefs(); // initialize runstate.prefs.
+
+function setPrefs(prefs, callback) {
+	$.ajaj("server.php?callback=?", {
+		action: 8,
+		key: 'theme',
+		value: prefs.theme
+	}, function(data) {
+		if ((data.error == 10 || data.error == 3) && (state.screen == 'frontpage' || state.screen == 'prefs')) {
+			$.screen('connection').trigger('goto');
+		} else {
+			if (data.theme) {
+				runstate.pendingSetPrefs = false;
+				loadPrefs(data);
+				message("Préférences", "Les préférences ont été enregistrées.");
+			} else {
+				message("Erreur", data.msg);
+				message("Préférences", "Les préférences n'ont pas pu être enregistrées.");
+			}
+		}
+	});
 }
 
+runstate.pendingGetPrefs = function() {
+	$.ajaj("server.php?callback=?", { action: 7 }, function(data) {
+		if (data.theme) { message("Succès", "Vous êtes connecté.", data.msg); loadPrefs(data); }
+		if (data.isError) message("Erreur", data.msg);
+	});
+};
+
 init(function() {
+	$("#prefs").bind('enter', function() {
+		$("#prefs-form input:radio[name=theme]").attr('checked', function(i,val) {
+			return $(this).val() == runstate.prefs.theme;
+		});
+	});
+
+	var readPrefs = function() {
+		var newtheme = $("#prefs form input:radio[name=theme]:checked").eq(0).val();
+		if (runstate.prefs.theme != newtheme) {
+			runstate.prefs.theme = newtheme;
+			jss();
+		}
+	};
+	
+	$("#prefs form").submit(function() {
+		readPrefs();
+		location.href = "#frontpage"
+		var p = $.extend({}, runstate.prefs);
+		runstate.pendingSetPrefs = function() { setPrefs(p); }
+		runstate.pendingSetPrefs();
+		return false;
+	});
+	$("#prefs form").bind('reset', function() {
+		runstate.prefs = runstate.serverPrefs;
+		location.hash = "#frontpage";
+	});
+	$("#prefs form input:radio[name=theme]").bind('change click', readPrefs);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*prefs.enter = function() {
 	try {
 		$("#prefs-form").unbind('submit', prefs.apply).submit(prefs.apply);
@@ -408,14 +477,6 @@ prefs.loadPrefs = function(data) {
 		if (runstate.loaded) jss();
 	} catch(e) {alert("Error anonymous in prefs.loadPrefs");alert(e);}
 };
-*/
-
-
-
-
-
-
-
 
 game = {};
 game.leave = function () {
@@ -532,6 +593,7 @@ State.prototype.validate = function () {
 	} catch(e) {alert("Error State.prototype.validate");alert(e);}
 };*/
 
+/*
 function _hashchange() {
 	try {
 		if (futureHashChange !== location.hash) {
@@ -539,35 +601,6 @@ function _hashchange() {
 			// Appliquer le changement de screen etc.
 		}
 	} catch(e) {alert("Error hashchange");alert(e);}
-}
-
-// ==== Interface Android
-function UI () {
-	try {
-	if (typeof(PtiClicAndroid) != "undefined") {
-		return PtiClicAndroid;
-	} else {
-		return {
-			isAndroid: function() { return false; },
-			setPreference: function() {},
-			getPreference: function() {return "";},
-			show: function(title, text) {},
-			dismiss: function() {},
-			exit: function() {},
-			log: function(msg) {
-				try {
-					window.console && console.log(msg);
-				} catch(e) {alert("Error UI().log");alert(e);}
-			},
-			info: function(title, msg) {
-				try {
-					alert(msg);
- 				} catch(e) {alert("Error UI().info");alert(e);}
-			},
-			setScreen: function() {}
-		};
-	}
-	} catch(e) {alert("Error UI");alert(e);}
 }
 
 // ==== Asynchronous Javascript And Json.
@@ -924,3 +957,5 @@ prefs.loadPrefs = function(data) {
 		if (runstate.loaded) jss();
 	} catch(e) {alert("Error anonymous in prefs.loadPrefs");alert(e);}
 };
+
+*/
