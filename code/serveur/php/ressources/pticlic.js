@@ -347,13 +347,16 @@ init(function() {
 });
 
 // ==== Écran Préférences
+runstate.prefs = { theme: "green" };
+
 function loadPrefs(prefs) {
 	var previousTheme = runstate.prefs ? runstate.prefs.theme : 'green';
-	runstate.prefs = (prefs && prefs.theme) ? prefs : { theme: "green" };
-	runstate.serverPrefs = $.extend({}, runstate.prefs);
-	if (runstate.loaded && previousTheme != runstate.prefs.theme) jss();
+	if (prefs && prefs.theme) {
+		runstate.prefs = prefs;
+		runstate.serverPrefs = $.extend({}, runstate.prefs);
+		if (runstate.loaded && previousTheme != runstate.prefs.theme) jss();
+	}
 }
-loadPrefs(); // initialize runstate.prefs.
 
 function setPrefs(prefs, callback) {
 	$.ajaj("server.php?callback=?", {
