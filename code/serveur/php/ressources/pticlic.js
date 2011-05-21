@@ -275,7 +275,7 @@ runstate.scoreCache = new Cache(function getScore(k, dfd, arg) {
 		if (data.isError) {
 			dfd.reject(data);
 			message("Erreur", data.msg);
-			if ((data.error == 10 || data.error == 3) && state.screen == 'game' && state.pgid == k) {
+			if ((data.error == 10 || data.error == 3) && state.screen == 'score' && state.pgid == k && state.answers.equalp(arg)) {
 				$.screen('connection').trigger('goto');
 			} else {
 				$.screen('frontpage').trigger('goto');

@@ -8,8 +8,15 @@ Number.prototype.mapInterval = function(a,b,x,y) {
 	return x + ((this-a) / (b-a) * (y-x));
 }
 
-dichotomyStop = false;
-function dichotomy(start, isBigger, debug) {
+Array.prototype.equalp = function(a) {
+	if (this.length != a.length) return false;
+	for (var i = 0; i < this.length; i++) {
+		if (this[i] !== a[i]) return false;
+	}
+	return true;
+};
+
+function dichotomy(start, isBigger) {
 	try {
 	var i = 0, min = 0, max, half;
 	for (max = start || 1; ++i < 10 && !isBigger(max); max *= 2);
@@ -47,7 +54,7 @@ $.fn.fitFont = function() {
 	var size = dichotomy(parseInt(this.css("font-size"), 10), function(x) {
 		setFont.css("fontSize", x);
 		return that.$ormap(function(i,e) { return e.hasScroll(); });
-	}, this);
+	});
 	this.css("font-size", Math.max(0, size));
 	return this;
 	} catch(e) {alert("Error $.fn.fitFont");alert(e);throw(e);}
