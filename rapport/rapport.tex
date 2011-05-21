@@ -430,26 +430,82 @@ La création de parties est, elle, réalisée en PHP et JavaScript afin de rendr
 \section{Réalisation}
 \subsection{Cahier des charges}
 
+\begin{itemize}
+\item Itération 1
+  \begin{itemize}
+  \item Serveur capable de générer les parties (nuage de mots + mot central).
+  \item Application \android{} qui récupère une partie, et permet d'y jouer.
+  \item Gestion des logins/mot de passe.
+  \end{itemize}
+\item Itération 2
+  \begin{itemize}
+  \item Ajout de niveaux de difficulté sur les parties
+  \item Mode «Marathon» (…)
+  \item Mode «Shoot'em up» (…)
+  \end{itemize}
+\item Itération 3
+  \begin{itemize}
+  \item Thèmes pour l'apparence et pour des questions d'accessibilité~: modification des couleurs et des tailles des éléments
+  \item Intégration avec des réseaux sociaux, pour promouvoir l'application.
+  \item Mode de jeu «Multijoueur» (…)
+  \end{itemize}
+\item Itération 4
+  \begin{itemize}
+  \item Mode de jeu «Thématique» (…)
+  \item Mode de jeu «Chrono» (…) + mise en pause
+  \item Interface vocale
+  \end{itemize}
+\end{itemize}
 
+Chaque itération comprenait 2 semaines pour implémenter les fonctionnalités, une semaine pour d'éventuelles améliorations ou pour
+implémenter des détails que nous n'avions pas eu le temps d'implémenter, et une semaine pour corriger les bugs signalés lors des
+alpha-test. Après chaque itération, nous devions livrer une version alpha aux alpha-testeurs, pour un alpha-test de 2 semaines.
 
+TODO : Cf. Diagramme de Gantt.
 
-\subsubsection{Langages de programmation}
+À la fin de l'itération 1, après envoi de la version aux alpha-testeurs, et après discussion avec notre tuteur, nous avons radicalement
+changé le cahier des charges pour qu'il devienne le suivant~:
+\begin{itemize}
+\item Itération 1
+  \begin{itemize}
+  \item Serveur capable de générer les parties (nuage de mots + mot central).
+  \item Application \android{} qui récupère une partie, et permet d'y jouer.
+  \item Gestion des logins/mot de passe.
+  \end{itemize}
+\item Itération 2
+  \begin{itemize}
+  \item Passage d'une version native à une version web.
+  \item Au lieu d'intégrer l'application à des réseaux sociaux, ajout d'un bouton «j'aime» ou «j'aime pas».
+  \item Outil de création manuelle de parties.
+  \end{itemize}
+\end{itemize}
 
+TODO : Cf description du travail effectué.
 
+\subsection{Langages}
+Notre projet c'est decouper en 2 gros parties. La premiere partie, la \og{}partie Serveur\fg{}, permet de realiser des actions sur l'ensemble de la base de donnee (creation de parti, validation de partie\ldots),
+la realisation de celle-ci c'est fait principalement en PHP, l'autre partie etant du SHELL.
+La seconde partie, la \og{}partie Cliente\fg{}, permet a l'utilisateur de pouvoir interagir avec le serveur, et surtout de pouvoir jouee a PtiClic. Elle a ete realiser en Java en utilisant le framework \android{}.
 
-\subsubsection{Base de données}
-
-
-
-\subsubsection{d'autres subsubsections?}
+\subsubsection{PHP}
+Comme cite plus haut, nous avons utiliser PHP pour la creation du serveur. PHP est un langage imperatif, il dispose aussi depuis la version 5 de fonctionnalites objet, mais nous ne les utilisont pas dans projet. Ce langage est
+principalement utilise pour produire des pages Web dynamiques, c'est la raison de sont utilisation dans notre projet. C'est un langage peu type, souple, multiplate-forme, libre et gratuit.
+Nous utilisons donc PHP pour la creation de notre site web \url{http://www.pticlic.fr} ainsi que pour toute la partie generation de partie a savoir la creation, generation, envoie et recuperation de partie PtiClic.
+\subsubsection{SHELL}
+Nous utilisons aussi le langage SHELL. Ce langage est surtout utiliser pour l'initialisation du serveur lors de sont installation sur un serveur different. Sont but, pour notre projet, et de recupere le dernier dump de la base de donnee,
+de convertir ce dump en SQL et de l'insere dans la base de donnee SQLite
+\subsubsection{SQLite3}
+SQLite est un bibliotheque, ecrite en C qui propose un moteur de base de donnees relationnelles accessible par le langage SQL. Contrairement aux serveurs de bases de donnee traditionnels, comme MySQL ou PostgreSQLL, sa paritcularite est
+de ne pas reproduire le schema habituel client-serveur mais d'être directement intégrée aux programmes. L'intégralité de la base de données est stockée dans un fichier indépendant de la plateforme. Le code source de SQLite est dans le domaine public, ce qui permet son utilisation sans restriction aussi bien dans les projets open source que dans les projet propriétaire.
+\subsubsection{Java}
 
 \subsection{Outils utilisés}
-\subsubsection{Environnement intégré de développement~: Eclipse}
-\subsubsection{\android{} Developper Toolkit (ADT) Plugin}
-\subsubsection{\android{} Software Development Kit (SDK)}
 \subsubsection{Gestionnaire de version~: GitHub}
-\subsubsection{JUnit}
-\subsubsection{d'autres subsubsections~?}
+% TODO : Georges
+\subsubsection{\android{}}
+\paragraph{Developper Toolkit (ADT) Plugin}
+\paragraph{Software Development Kit (SDK)}
+\subsubsection{Environnement intégré de développement~: Eclipse}
 
 
 \section{Discussion}
@@ -525,31 +581,6 @@ $*$ & r\_holo      & 10 & Fait partie de (patte -> chat) \\
 \end{tabular}
 \newpage
 
-\section{Notes Bertrand}
-
-\subsection{Langages}
-Notre projet c'est decouper en 2 gros parties. La premiere partie, la \og{}partie Serveur\fg{}, permet de realiser des actions sur l'ensemble de la base de donnee (creation de parti, validation de partie\ldots),
-la realisation de celle-ci c'est fait principalement en PHP, l'autre partie etant du SHELL.
-La seconde partie, la \og{}partie Cliente\fg{}, permet a l'utilisateur de pouvoir interagir avec le serveur, et surtout de pouvoir jouee a PtiClic. Elle a ete realiser en Java en utilisant le framework \android{}.
-
-\subsubsection{PHP}
-Comme cite plus haut, nous avons utiliser PHP pour la creation du serveur. PHP est un langage imperatif, il dispose aussi depuis la version 5 de fonctionnalites objet, mais nous ne les utilisont pas dans projet. Ce langage est
-principalement utilise pour produire des pages Web dynamiques, c'est la raison de sont utilisation dans notre projet. C'est un langage peu type, souple, multiplate-forme, libre et gratuit.
-Nous utilisons donc PHP pour la creation de notre site web \url{http://www.pticlic.fr} ainsi que pour toute la partie generation de partie a savoir la creation, generation, envoie et recuperation de partie PtiClic.
-\subsubsection{SHELL}
-Nous utilisons aussi le langage SHELL. Ce langage est surtout utiliser pour l'initialisation du serveur lors de sont installation sur un serveur different. Sont but, pour notre projet, et de recupere le dernier dump de la base de donnee,
-de convertir ce dump en SQL et de l'insere dans la base de donnee SQLite
-\subsubsection{SQLite3}
-SQLite est un bibliotheque, ecrite en C qui propose un moteur de base de donnees relationnelles accessible par le langage SQL. Contrairement aux serveurs de bases de donnee traditionnels, comme MySQL ou PostgreSQLL, sa paritcularite est
-de ne pas reproduire le schema habituel client-serveur mais d'être directement intégrée aux programmes. L'intégralité de la base de données est stockée dans un fichier indépendant de la plateforme. Le code source de SQLite est dans le domaine public, ce qui permet son utilisation sans restriction aussi bien dans les projets open source que dans les projet propriétaire.
-\subsubsection{Java}
-\subsection{Outils}
-\subsubsection{Eclipse}
-\subsubsection{Git}
-\subsubsection{Visual Paradigm}
-
-\newpage
-
 \appendix
 
 \section{Annexe A}
@@ -614,5 +645,8 @@ php\/ressources/pticlic-alpha-v0.1.apk  -- exécutable PtiClic (fichier d'instal
 php\/ressources/showmsg.inc  -- ?? (pour l'affichage des messages... mais dans quel contexte~? Pourquoi~?)
 php\/ressources/simple.css  -- CSS de base du site
 php\/ressources/strings.inc -- fichier de configuration des strings (phrases utilisés de manière répétitive dans le site, par exemple, les messages d'erreurs)
+
+\section{Mentions légales}
+Android is a trademark of Google Inc. Use of this subject to Google Permissions.
 
 \end{document}
