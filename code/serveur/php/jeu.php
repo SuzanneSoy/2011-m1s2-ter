@@ -78,7 +78,7 @@
 			</div>
 		</div>
 		<div id="frontpage" class="screen fitFontGroup">
-			<a href="index.php" style="width:15%; height:5%; top:2%; right:2%; position:absolute;" class="fitFont button">
+			<a href="index.php" style="width:20%; height:4%; top:2%; right:2%; position:absolute;" class="fitFont button">
 				<span class="marginBox"><span class="center">Retour au site</span></span>
 			</a>
 			<div style="width:50%; height:24%; top:4%; left:25%; position:absolute;" class="fitFont">
