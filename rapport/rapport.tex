@@ -1,5 +1,10 @@
 \documentclass[a4paper,11pt,french]{article}
 
+\widowpenalty=9999
+\clubpenalty=9999
+
+\def\android{Android\texttrademark{}}
+
 \usepackage[frenchb]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -12,7 +17,7 @@
 \setlength{\parskip}{2ex}
 
 
-\title{Rapport de TER\\---\\Reconception du jeu Pticlic sous Android}
+\title{Rapport de TER\\---\\Reconception du jeu Pticlic sous \android{}}
 \author{Yoann \textsc{Bonavero} \and Bertrand \textsc{Brun} \and John \textsc{Charron} \and Georges \textsc{Dupéron}}
 
 \begin{document}
@@ -41,10 +46,10 @@ Par exemple, pour le mot central «bicyclette», les mots «pédale», «piéton
 
 Des linguistes et des informaticiens récupèrent les données liées aux parties jouées, ce qui leur permet de faire de la recherche dans leurs domaines respectifs.
 
-Notre travail consiste à créer une version du PtiClic sous Android, une version modifiée du jeu adaptée pour téléphone mobile. Le sujet du TER définit clairement l'objectif de ce projet~:
+Notre travail consiste à créer une version du PtiClic sous \android{}, une version modifiée du jeu adaptée pour téléphone mobile. Le sujet du TER définit clairement l'objectif de ce projet~:
 
 \begin{quotation}
-  L'étude et le prototypage d'une version fonctionnant sur Android semble intéressante. En particulier on s'intéressera à deux aspects :
+  L'étude et le prototypage d'une version fonctionnant sur \android{} semble intéressante. En particulier on s'intéressera à deux aspects :
   \begin{itemize}
   \item les contraintes imposées par l'environnement smartphone
   \item le biais qu'imposent ces contraintes sur le jeu et les données récoltées.
@@ -56,14 +61,14 @@ Notre travail consiste à créer une version du PtiClic sous Android, une versio
 Dans un premier temps, une version de base sera conçue et réalisée. Ensuite, des fonctionnalités supplémentaires seront ajoutées. La démarche adoptée par notre groupe est une approche itérative. Les quatres livraisons vont d'une version de base vers des versions plus élaborées~: un joueur pourrait, entre autres, modifier ses préférences ou choisir son niveau. L'idée est aussi de rendre le jeu plus attirant afin d'accroître le nombre de sujets participant aux études liées au résultat des données extraits des parties jouées.
 
 
-\subsection{Android}
+\subsection{\android{}}
 
-Android est un système d'exploitation pour téléphone mobile basé sur le noyau Linux développé par Android Inc., racheté par Google en 2005. Google et d'autres membres du Open Handset Alliance ont par la suite contribué à son développement et le Android Open Source Project (AOSP) est chargé de la maintenance et l'évolution d'Android. Ce système d'exploitation est utilisé notamment dans des smartphones, appelé aussi ordiphones, «terminaux de poche» ou «téléphones intelligents», produits et distribués par un grand nombre de fabriquants de téléphones mobiles. Le nombre de téléphones mobiles intégrant le système d'exploitation d'Android a cru sensiblement récemment.
+\android{} est un système d'exploitation pour téléphone mobile basé sur le noyau Linux développé par \android{} Inc., racheté par Google en 2005. Google et d'autres membres du Open Handset Alliance ont par la suite contribué à son développement et le \android{} Open Source Project (AOSP) est chargé de la maintenance et l'évolution d'\android{}. Ce système d'exploitation est utilisé notamment dans des smartphones, appelé aussi ordiphones, «terminaux de poche» ou «téléphones intelligents», produits et distribués par un grand nombre de fabriquants de téléphones mobiles. Le nombre de téléphones mobiles intégrant le système d'exploitation d'\android{} a cru sensiblement récemment.
 
-Un grand nombre de développeurs ont créé des applications pour étendre la fonctionnalité des téléphones sous Android et il y a aujourd'hui
-plus de 200 000 applications disponibles. Bien qu'Android Market soit le magasin en ligne opéré par Google, il existe d'autres distributeurs
-d'applications Android. La majorité des applications sont écrites en Java, bien qu'il soit possible de développer des applications en
-Python, en Ruby et d'autres par le biais du Android Scripting Environment.
+Un grand nombre de développeurs ont créé des applications pour étendre la fonctionnalité des téléphones sous \android{} et il y a aujourd'hui
+plus de 200 000 applications disponibles. Bien qu'\android{} Market soit le magasin en ligne opéré par Google, il existe d'autres distributeurs
+d'applications \android{}. La majorité des applications sont écrites en Java, bien qu'il soit possible de développer des applications en
+Python, en Ruby et d'autres par le biais du \android{} Scripting Environment.
 
  
 \section{Analyse de l'existant}
@@ -276,13 +281,16 @@ Les adverbes et LES locutions adverbiales sont relativement peu fréquents. La g
 
 La relation "patient" est possible pour un mot central qui est un verbe, mais elle est plus complexe car elle ne fonctionnera que si le verbe en question est transitif. 
 
-
 \section{Analyse des besoins}
 
-
-
 \begin{quotation}
-L'étude et le prototypage d'une version fonctionnant sur Android semble intéressante. En particulier on s'intéressera a deux aspects : * les contraintes imposées par l'environnement smartphone * le biais qu'imposent ces contraintes sur le jeu et les données récoltées. Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel.  
+  L'étude et le prototypage d'une version fonctionnant sur \android{} semble intéressante. En particulier on s'intéressera à deux aspects :
+  \begin{itemize}
+  \item les contraintes imposées par l'environnement smartphone
+  \item le biais qu'imposent ces contraintes sur le jeu et les données récoltées.
+  \end{itemize}
+  
+  Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel.
 \end{quotation}
 
 \subsection{Les contraintes de l'environnement smartphone}
@@ -291,13 +299,24 @@ Comme tout outil, l'environnement smartphone présente à la fois des avantages 
 
 Les avantages sont nombreux~: un instrument portatif avec un bref temps de démarrage adapté à effectuer des tâches ponctuelles souvent de courte durée avec un écran tactile permettant d'agir directement sur des éléments affichés sur son écran. Le smartphone présente encore d'autres avantages, il est à la fois un lecteur mp3, un dictaphone, un appareil, un chronomètre et réveil, pour ne citer que quelques exemples.
 
-Les inconvénients par rapport à un ordinateur classique sont aussi nombreux. L'écran est nettement plus petit limitant l'espace de travail et obligeant davantage de navigation de page en page. L'entrée des données est plus difficile, il n'existe pas de clavier, ou bien seulement un clavier virtuel ou un micro-clavier intégré. Malgré les avantages de l'écran tactile, son utilisation permet une précision bien moindre que l'utilisation d'une souris à cause de la petite taille de l'écran et des doigts et mains qui bloquent la vue de l'écran lors du glissement-et-déposé par exemple. Le faible espace de stockage et les limites d'autonomie et d'énergie se traduisent par une nécessité d'économie de la part des concepteurs d'applications par rapport aux ordinateurs classiques de plus en plus performants actuellement. C'est pour cette raison que le smartphone n'est pas le plus adapté pour effectuer des tâches de longue haleine telles que la rédaction d'un document.
+Les inconvénients par rapport à un ordinateur classique sont aussi nombreux. L'écran est nettement plus petit limitant l'espace de travail
+et obligeant davantage de navigation de page en page. L'entrée des données est plus difficile, il n'existe pas de clavier, ou bien seulement
+un clavier virtuel ou un micro-clavier intégré. Malgré les avantages de l'écran tactile, son utilisation permet une précision bien moindre
+que l'utilisation d'une souris à cause de la petite taille de l'écran et des doigts et mains qui bloquent la vue de l'écran lors du
+glissement-et-déposé par exemple.
 
-TODO: Beaucoup d'accès réseau (gd) !! (inconvénient)
+Le faible espace de stockage et les limites d'autonomie et d'énergie se traduisent par une nécessité d'économie de la part des concepteurs
+d'applications par rapport aux ordinateurs classiques de plus en plus performants actuellement. C'est pour cette raison que le smartphone
+n'est pas le plus adapté pour effectuer des tâches de longue haleine telles que l'édition de vidéos. Notamment, dans notre cas,
+l'utilisation du réseau est lente, potentiellement coûteuse pour l'utilisateur (forfaits facturant à la quantité de données), et
+consommatrice d'énergie.
 
-Les applications bien adaptées au smartphone sont des aplications telles que les calculatrices, les chronomètres et les jeux, et le jeu du PtiClic n'est pas une exception à cette dernière. L'avantage de ces applications sur un smartphone est qu'il est possible d'y jouer lorsque l'on est en file d'attente à la Poste ou à la Préfecture ou bien dans les transports en commun. Un tel prototypage du jeu demande toutefois une réflexion non seulement quant aux limites d'un smartphone mais aussi quant quant à ses avantages.
+Les applications bien adaptées au smartphone sont des applications telles que les calculatrices, les logiciels de prise de notes, les jeux
+simples (casual games), et le jeu du PtiClic n'est pas une exception à cette dernière catégorie. L'avantage de ces applications sur un smartphone est
+qu'il est possible d'y jouer lorsque l'on est en file d'attente à la Poste ou à la Préfecture ou bien dans les transports en commun. Un tel
+prototypage du jeu demande toutefois une réflexion non seulement quant aux limites d'un smartphone mais aussi ses avantages.
 
-Le jeu de base du PtiClic sous Android présente exactement les mêmes cas d'utilisations que l'application d'origine. 
+Le jeu de base du PtiClic sous \android{} présente exactement les mêmes cas d'utilisations que l'application d'origine. 
 
 
 \section{PtiClic et TALN}
@@ -388,6 +407,7 @@ TYPE\_RELATION(\underline{num}, name, extended\_name, info) \\
 TODO: UML, diagrammes de classes, Use cases, etc.
 
 \subsection{Site Internet}
+% TODO : Yoann
 Afin de pouvoir utiliser le jeu il faut posséder un compte utilisateur. Un utilisateur qui installe pour la première fois l'application sur son smartphone devra obtenir un compte avant de profiter du jeu.
 
 Le site Internet permet de réaliser cette inscription grâce à un formulaire qui permet la saisie des informations nécessaires. Il est également un moyen de présenter le projet, l'application et de prendre contact avec les développeurs.
@@ -395,6 +415,15 @@ Le site Internet permet de réaliser cette inscription grâce à un formulaire q
 Le site est constitué d'un petit nombre de pages à savoir : une présentation de l'application et du projet, l'inscription et l'authentification, une page de téléchargement de l'application et de procédure d'installation, ainsi que quelques pages permettant de créer et afficher des parties.
 
 Les deux dernières pages citées concernant la création et l'affichage de parties ne sont pas accessibles à tout le monde. Il faudra que l'utilisateur débloque ce mode en obtenant un certain nombre de points dans le jeu.
+
+\subsection{Site Internet 2}
+Le site Internet est en grande partie "statique" (langage HTML). Les pages "statiques" sont les pages de présentation, de contact et de téléchargement.
+
+Certain éléments comme l'inscription, la connexion\dots{} ont une partie PHP qui permet d'intérroger la base de données afin de valider ou non l'action.
+
+La création de parties est, elle, réalisée en PHP et JavaScript afin de rendre plus intuitif l'interraction avec l'utilisateur. Les parties générées par les utilisateurs ont éjoutées dans la base de données pour qu'elle puissent par la suite être jouées par les autres joueurs.
+
+
 
 
 
@@ -416,19 +445,11 @@ Les deux dernières pages citées concernant la création et l'affichage de part
 
 \subsection{Outils utilisés}
 \subsubsection{Environnement intégré de développement~: Eclipse}
-\subsubsection{Android Developper Toolkit (ADT) Plugin}
-\subsubsection{Android Software Development Kit (SDK)}
+\subsubsection{\android{} Developper Toolkit (ADT) Plugin}
+\subsubsection{\android{} Software Development Kit (SDK)}
 \subsubsection{Gestionnaire de version~: GitHub}
 \subsubsection{JUnit}
 \subsubsection{d'autres subsubsections~?}
-
-
-\subsection{Site Internet}
-Le site Internet est en grande partie "statique" (langage HTML). Les pages "statiques" sont les pages de présentation, de contact et de téléchargement.
-
-Certain éléments comme l'inscription, la connexion\dots{} ont une partie PHP qui permet d'intérroger la base de données afin de valider ou non l'action.
-
-La création de parties est, elle, réalisée en PHP et JavaScript afin de rendre plus intuitif l'interraction avec l'utilisateur. Les parties générées par les utilisateurs ont éjoutées dans la base de données pour qu'elle puissent par la suite être jouées par les autres joueurs.
 
 
 \section{Discussion}
@@ -436,7 +457,7 @@ La création de parties est, elle, réalisée en PHP et JavaScript afin de rendr
 \subsubsection{Itération 1, semaine 1}
 \begin{itemize}
 \item Outil de création de diagrammes de GANTT (planner) est assez mauvais.
-\item Lenteur de l'émulateur Android : impossible de travailler sur mon PC.% gd
+\item Lenteur de l'émulateur \android{} : impossible de travailler sur mon PC.% gd
 \item Caractères non échappés dans le dump de la base.% gd
 \end{itemize}
 
@@ -479,7 +500,7 @@ Making people play for Lexical Acquisition. In Proc. SNLP 2007, 7th Symposium on
 
 Code Conventions for the Java Programming Language, Oracle, 1999. (\url{http://www.oracle.com/technetwork/java/codeconvtoc-136057.html, www.oracle.com/technetwork/java/codeconventions-150003.pdf})
 
-\subsection{Android}
+\subsection{\android{}}
 
 Android Developer, 2011. (\url{http://developer.android.com/})
 
@@ -509,7 +530,7 @@ $*$ & r\_holo      & 10 & Fait partie de (patte -> chat) \\
 \subsection{Langages}
 Notre projet c'est decouper en 2 gros parties. La premiere partie, la \og{}partie Serveur\fg{}, permet de realiser des actions sur l'ensemble de la base de donnee (creation de parti, validation de partie\ldots),
 la realisation de celle-ci c'est fait principalement en PHP, l'autre partie etant du SHELL.
-La seconde partie, la \og{}partie Cliente\fg{}, permet a l'utilisateur de pouvoir interagir avec le serveur, et surtout de pouvoir jouee a PtiClic. Elle a ete realiser en Java en utilisant le framework Android.
+La seconde partie, la \og{}partie Cliente\fg{}, permet a l'utilisateur de pouvoir interagir avec le serveur, et surtout de pouvoir jouee a PtiClic. Elle a ete realiser en Java en utilisant le framework \android{}.
 
 \subsubsection{PHP}
 Comme cite plus haut, nous avons utiliser PHP pour la creation du serveur. PHP est un langage imperatif, il dispose aussi depuis la version 5 de fonctionnalites objet, mais nous ne les utilisont pas dans projet. Ce langage est
