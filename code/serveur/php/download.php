@@ -22,7 +22,7 @@ if(!isset($_SESSION['userId']))
 		<ul>
 		<li><a href="ressources/pticlic-alpha-v0.1.apk">Téléchargez le fichier d'installation</a></li>
 				<li>Vous avez besoin d'autorisé votre téléphone à accepter les sources inconnue. Pour cela, aller dans Préférence→Application. Coché Sources inconnues.</li>
-				<li>Une fois téléchargé, cliquez sur le fichier dans la barre de notification d'Android et suivez
+				<li>Une fois téléchargé, cliquez sur le fichier dans la barre de notification d'Android™ et suivez
 	les instructions d'installation. Vous devrez patientez quelques instant pendant l'installation.</li>
 	<li>Une fois l'installation terminée, démarrez l'application</li>
 	<li> Suivez attentivement les instructions lors du premier démarrage de l'application</li>

@@ -74,7 +74,7 @@ function hashchange() {
 	$.screen(state.screen).trigger(state.screen != runstate.screen ? "goto" : "update");
 }
 
-// ==== Interface Android
+// ==== Interface Android™
 function UI () {
 	if (typeof(PtiClicAndroid) != "undefined") {
 		return PtiClicAndroid;
