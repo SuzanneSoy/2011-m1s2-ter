@@ -152,12 +152,12 @@ Le dump contient en tout début des remerciements et quelques explications des a
 
 Le dump a proprement parler contient deux grandes parties~: une partie «noeuds» (\verb!NODES!) et une partie relations (\verb!RELATIONS!). La partie «noeuds»  contient non seulement des adjectifs, des adverbes, des substantifs et des verbes, mais aussi des locutions et des syntagmes, des mots tels que les prépositions, les conjonctions, les pronoms, les articles et les déterminants. Les substantifs peuvent être des noms propres, y compris des noms de lieux, des noms de personnes. 
 
-Dans la partie "mots et expressions", chaque entrée -- chaque ligne -- contient un \verb!eid! (Entry IDentifier), un nom \verb!n! (name), un type \verb!t! et un poids \verb!w! (weight). En voici un exemple~:
+Dans la partie "mots et expressions", chaque entrée -- chaque ligne -- contient un $eid$ (Entry IDentifier), un nom $n$ (name), un type $t$ et un poids $w$ (weight). En voici un exemple~:
 \begin{verbatim}
 eid=231064:n="pour femme":t=1:w=50
 \end{verbatim}
 
-Pour la partie relation, l'identifiant est le \verb!rid! (Relation IDentifier), le noeud de début \verb!n1! (starting node), le noeud de fin \verb!n2! (ending node), le \verb!type! (relation type) et le poids \verb!w! (weight). En voici un exemple~:
+Pour la partie relation, l'identifiant est le $rid$ (Relation IDentifier), le noeud de début $n1$ (starting node), le noeud de fin $n2$ (ending node), le $type$ (relation type) et le poids $w$ (weight). En voici un exemple~:
 \begin{verbatim}
 rid=430049:n1=82029:n2=151553:t=12:w=18
 \end{verbatim}
@@ -350,7 +350,10 @@ PLAYED\_GAME(\underline{PGID}, \#gid, \#login) \\
 PLAYED\_GAME\_CLOUD(\underline{\#PGID, \#GID, num}, type, \#relation, weight, score) 
 }
 
-Si nous reprenons nos deux petits exemples d'entrées NODE et RELATION du dump de la base de données, il devient clair que les tables NODE et RELATION y correspondent strictement à la structure d'origine~: eid=231064:n=\"pour femme\":t=1:w=50, où «eid' correspond à 'EID', \verb!n! à 'name', 't' à 'type' et 'w' à 'weight' de la table NODE de notre base~; rid=430049:n1=82029:n2=151553:t=12:w=18 où 'rid' correspond à 'RID', 'n1' à 'start', 'n2' à 'end', 't' à 'type' et 'w' à 'weight' de la table RELATION de notre base. 
+Si nous reprenons nos deux petits exemples d'entrées NODE et RELATION du dump de la base de données, il devient clair que les tables NODE et
+RELATION y correspondent strictement à la structure d'origine~: \verb!eid=231064:n="pour femme":t=1:w=50!, où «eid» correspond à «EID», $n$ à
+«name», $t$ à «type» et $w$ à «weight» de la table NODE de notre base~; \verb!rid=430049:n1=82029:n2=151553:t=12:w=18! où $rid$ correspond à «rid»,
+$n_1$ à «start», $n_2$ à «end», $t$ à «type» et $w$ à «weight» de la table RELATION de notre base.
 
 
 
@@ -428,57 +431,90 @@ La création de parties est, elle, réalisée en PHP et JavaScript afin de rendr
 \section{Réalisation}
 \subsection{Cahier des charges}
 
+\subsection{Cahier des charges initial}
+Avant le début du projet, nous avions planifié l'implémentation des fonctionnalités souhaitées de notre application. Le déroulement du
+travail devait s'effectuer sur 4 itérations, décrites ci-dessous.
+
+Chaque itération comprenait 2 semaines pour implémenter les fonctionnalités, une semaine pour d'éventuelles améliorations ou pour
+implémenter des détails que nous n'aurions pas eu le temps d'implémenter, et une semaine pour corriger les bugs signalés lors des
+alpha-test. Après chaque itération, nous devions livrer une version stable aux alpha-testeurs, pour un alpha-test de 2 semaines.
+
 \begin{itemize}
 \item Itération 1
   \begin{itemize}
-  \item Serveur capable de générer les parties (nuage de mots + mot central).
+  \item Serveur capable de générer les parties (choix du mot central et des mots du nuage).
   \item Application \android{} qui récupère une partie, et permet d'y jouer.
   \item Gestion des logins/mot de passe.
   \end{itemize}
 \item Itération 2
   \begin{itemize}
-  \item Ajout de niveaux de difficulté sur les parties
-  \item Mode «Marathon» (…)
-  \item Mode «Shoot'em up» (…)
+  \item Ajout de niveaux de difficulté sur les parties.
+  \item Mode «Marathon»~:faire la plus longue parties possible avec un maximum de $n$ fautes.
+  \item Mode «Shoot'em up»~:Une seule relation, et tous les mots du nuage affichés en même temps. L'utilisateur doit cliquer sur les mots
+    qui appartiennt à cette relation puis indiquer qu'il a terminé. Ce mode est assez proche conceptuellement du fonctionnement original de
+    PtiClic.
   \end{itemize}
 \item Itération 3
   \begin{itemize}
-  \item Thèmes pour l'apparence et pour des questions d'accessibilité~: modification des couleurs et des tailles des éléments
+  \item Thèmes pour l'apparence et pour des questions d'accessibilité~: modification des couleurs et des tailles des éléments.
   \item Intégration avec des réseaux sociaux, pour promouvoir l'application.
-  \item Mode de jeu «Multijoueur» (…)
+  \item Mode de jeu «Multijoueur»~: Deux joueurs jouent à la même partie, et leurs scores sont comparés.
   \end{itemize}
 \item Itération 4
   \begin{itemize}
-  \item Mode de jeu «Thématique» (…)
-  \item Mode de jeu «Chrono» (…) + mise en pause
-  \item Interface vocale
+  \item Mode de jeu «Thématique»~: Après avoir choisi un thème (noël, informatique, \dots), on propose à l'utilisateur des parties avec des
+    mots centraux reliés à ce thème.
+  \item Mode de jeu «Chrono»~:une seule relation, les mots du nuage apparaissent et disparaissent assez rapidement, et il faut cliquer sur
+    la relation uniquement pour les mots qui y appartiennent (le reste va implicitement à la poubelle). Ce mode nécessitait d'implémenter la
+    possibilité de mettre en pause le jeu étant donné que le temps y a une importance.
+  \item Interface vocale, pour améliorer l'accessibilité de l'application.
   \end{itemize}
 \end{itemize}
 
-Chaque itération comprenait 2 semaines pour implémenter les fonctionnalités, une semaine pour d'éventuelles améliorations ou pour
-implémenter des détails que nous n'avions pas eu le temps d'implémenter, et une semaine pour corriger les bugs signalés lors des
-alpha-test. Après chaque itération, nous devions livrer une version alpha aux alpha-testeurs, pour un alpha-test de 2 semaines.
+Le diagramme de gantt en annexe \ref{sec:gantt-original} présente l'ordonancement et l'affectation des tâches de chacunes des itérations.
 
-TODO : Cf. Diagramme de Gantt.
+\subsection{Travail effectué}
 
-À la fin de l'itération 1, après envoi de la version aux alpha-testeurs, et après discussion avec notre tuteur, nous avons radicalement
-changé le cahier des charges pour qu'il devienne le suivant~:
+L'itération 1 a pris plus de temps que prévu, en partie à cause des difficultés rencontrées \ref{sec:difficultes}, et aussi parce que nous
+nous sommes rendus comptes que certaines fonctionnalités devaient être plus avancées avant que l'application soit livrée.
+
+Entre autres, nous avons passé du temps à améliorer et régler les paramètres de l'algorithme de génération de parties, étant donné que
+l'algorithme naïf prévu au départ donnait des résultats assez mauvais.
+
+Nous avons aussi amélioré le serveur sur les points suivants~:
 \begin{itemize}
-\item Itération 1
+\item Refus d'enregistrer les réponses pour une partie si elle a déjà été jouée (pour prévenir les tentatives de tricherie de la part des joueurs).
+\item Protocole de transmission des erreurs entre le serveur et le client, par exemple lorsqu'un paramètre manque à la requête, ou lors d'un
+  accès à une partie inexistante.
+\end{itemize}
+
+De plus, au départ, nous pensions fournir directement l'application aux alpha-testeurs, mais étant donné la nécessité d'avoir les noms d'utilisateurs
+et mots de passe dans la base, il semblait peu avantageux gérer ces points manuellement. Nous avons aussi dû créer un site web à destination
+des utilisateurs, pour qu'ils puissent s'inscrire, télécharger l'application (avec des explications sur la procédure d'installation), et
+s'informer sur le projet.
+
+Ainsi, à la fin de l'itération 1, après envoi de la version aux alpha-testeurs, et après discussion avec notre tuteur, nous avons
+radicalement changé le cahier des charges pour qu'il devienne le suivant~:
+\begin{itemize}
+\item Itération 1 (effectuée)
   \begin{itemize}
-  \item Serveur capable de générer les parties (nuage de mots + mot central).
-  \item Application \android{} qui récupère une partie, et permet d'y jouer.
-  \item Gestion des logins/mot de passe.
+  \item Serveur robuste capable de générer les parties d'une qualité acceptable.
+  \item Application \android{} qui récupère une partie, et permet d'y jouer, avec un écran permettant aux utilisateurs de configurer
+    l'application (adresse du serveur, login et mot de passe).
+  \item Gestion des logins/mot de passe sur le serveur et le client.
+  \item Site web de présentation du projet.
   \end{itemize}
 \item Itération 2
   \begin{itemize}
-  \item Passage d'une version native à une version web.
-  \item Au lieu d'intégrer l'application à des réseaux sociaux, ajout d'un bouton «j'aime» ou «j'aime pas».
-  \item Outil de création manuelle de parties.
+  \item Passage d'une version native à une version web, pour pouvoir toucher plus d'utilisateurs, et à cause des difficultés de l'environnement Android.
+  \item Au lieu d'intégrer l'application à des réseaux sociaux, ajout d'un bouton «j'aime» ou «j'aime pas», et permettre aux joueurs d'avoir des «amis» etc.
+  \item Outil de création manuelle de parties accessible aux joueurs sur le site, avec les extensions du serveur nécessaires.
+  \item Pousser plus loin la recherche sur les méthodes de création de parties, et étude de la base du point de vue linguistique et TALN.
   \end{itemize}
 \end{itemize}
 
-TODO : Cf description du travail effectué.
+Globalement, nous avons donc réduit le nombre de fonctionnalités à implémenter, tout en étoffant celles que nous avons conservé, afin
+d'éviter d'avoir une application offrant une multitude de fonctionnalités qui seraient implémentées de manière superficielle.
 
 \subsection{Langages}
 Notre projet c'est decouper en 2 gros parties. La premiere partie, la \og{}partie Serveur\fg{}, permet de realiser des actions sur l'ensemble de la base de donnee (creation de parti, validation de partie\ldots),
@@ -518,12 +554,13 @@ La connexion entre les controlleurs et le vues est realiser grace a la methode \
 \paragraph{Developper Toolkit (ADT) Plugin}
 L'ADT est un plugin developper par Google pour facilite le developpement d'application \android{} avec Eclipse. Il propose un menu permettant de creer des projets de type \android{} parfaitement parametre selon ces besoin. Mais aussi un gestionnaire d'emulateur, une disposition DDMS permettant de controler l'emulateur\dots{}
 
-\section{Revirement de choix de developpement} % TODO : Devrait peut etre etre deplacer
-A la fin de la premiere iteration, nous avons decider de ne plus utiliser le systeme de creation de vue proposer par le SDK d'\android{}, car, pour nous, la creation de vue en passant par le format proposer nous prennait enormement de temps. \android{} supportant le framework WebKit et notre groupe ayant un peut plus d'experience dans le developpement d'application web (de part notre formation), nous avons decider de developper les vues de l'application PtiClic en HTML5/javascript. De ce faite, l'application a ete simplifier (une seul Activite) et une classe \verb!JavascriptInterface! realisant l'interface entre le code javascript et le telephone.
+\section{Revirement des choix de developpement} % TODO : Devrait peut etre etre deplacé
+A la fin de la premiere iteration, nous avons décidé de ne plus utiliser le systeme de creation de vue proposer par le SDK d'\android{}, car, pour nous, la creation de vue en passant par le format proposer nous prennait enormement de temps. \android{} supportant le framework WebKit et notre groupe ayant un peut plus d'experience dans le developpement d'application web (de part notre formation), nous avons décidé de developper les vues de l'application PtiClic en HTML5/javascript. De ce faite, l'application a ete simplifier (une seul Activite) et une classe \verb!JavascriptInterface! realisant l'interface entre le code javascript et le telephone.
 Un autre avantage d'utiliser une application web pour developper PtiClic est le publique viser. En effet avec la version 2 nous avons aussi une application jouable a partir d'un navigateur internet <<normal>>, ce qui permet a un plus grand nombre de personne de pouvoir jouer a PtiClic.
 
 \section{Discussion}
 \subsection{Difficultés rencontrées}
+\label{sec:difficultes}
 \subsubsection{Itération 1, semaine 1}
 \begin{itemize}
 \item Outil de création de diagrammes de GANTT (planner) est assez mauvais.
@@ -534,19 +571,26 @@ Un autre avantage d'utiliser une application web pour developper PtiClic est le 
 \subsubsection{Itération 1, semaine 3}
 \begin{itemize}
 \item SQLite3 n'est pas capable d'utiliser un index pour la requête extérieure sur une requête du type
+
 \begin{verbatim}
 select * from (select * from table where condition) where condition
 \end{verbatim}
+
 Donc nécessité de ré-écrire certaines requêtes avec des jointures à priori beaucoup moins efficaces, mais qui le sont plus grâce aux index.
 \item SQLite3 tranforme les requêtes de la forme~:
+
 \begin{verbatim}
 select * from table limit 100 order by random();
 \end{verbatim}
+
   en une requête qui récupère tout le set de résultats, ajoute une colonne random(), prend les 100 premiers résultats et les trie. Mais cela
   l'oblige à récupérer tout le set de résultats, et calculer le random() pour chaque ligne, pour ensuite jeter tout ce qui dépasse la ligne
   100. Cela est évidemment très coûteux dans le cadre de requêtes avec beaucoup de résultats, et nous avons donc dû isoler la requête avec
   \verb!limit! de son \verb!order by! avec des «hacks» assez tordus.
 \end{itemize}
+
+\subsection{Perspectives}
+% TODO
 
 \section{Conclusions}
 
@@ -589,13 +633,22 @@ $*$ & r\_anto      & 7  & antonyme (bon -> mauvais) \\
 $*$ & r\_has\_part & 9  & A comme partie (chat -> patte) \\
 $*$ & r\_holo      & 10 & Fait partie de (patte -> chat) \\
     & r\_agent     & 13 & Peut exécuter comme action (chat -> manger) \\
-    & r\_patient   & 14 & Peut subir comme action (chat -> être lavé) \\
+    & r\_patient   & 14 & Peut subir comme action (chat -> laver) \\
     & r\_carac     & 17 & Caractéristique (chat -> affectueux (ou pas…)) \\
 \hline
 \end{tabular}
+
+% TODO : graphique sélection des mots.
 \newpage
 
 \appendix
+
+\section{Diagramme de Gantt prévisionnel}
+\label{sec:gantt-original}
+\noindent
+\hskip -2.6cm%
+\includegraphics[trim=1.7cm 19cm 1.7cm 4cm,clip,width=20cm]{../feuille-route/gp-pticlic.pdf}
+\newpage
 
 \section{Annexe A}
 
