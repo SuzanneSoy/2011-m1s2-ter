@@ -536,11 +536,36 @@ de ne pas reproduire le schema habituel client-serveur mais d'être directement 
 
 \subsubsection{Java}
 La partie cliente du projet et realiser en Java. Ce langage est le plus utilise dans le monde par les developpeur. Java reprend en grande partie la syntaxe du langage C++. Neanmoins il a ete epure des concepts les plus deroutants du C++ tels que les pointeurs, les references, l'heritage multiple\dots{}
-La grande specificite de ce langage est ca protabilite. En effet lors de la compilation, un bit code est genere, et celui-ci est ensuite lu par un machine virtuelle dependante de la platforme.
+La grande specificite de ce langage est sa portabilité. En effet lors de la compilation, un bit code est genere, et celui-ci est ensuite lu par un machine virtuelle dependante de la platforme.
 
 \subsection{Outils utilisés}
-\subsubsection{Gestionnaire de version~: GitHub}
+\subsubsection{Gestionnaire de versions~: Git et Github}
+
 % TODO : Georges
+
+Pour synchroniser nos efforts sur le projet, nous avons utilisé le gestionnaire de versions distribué git, et hébergé notre projet sur la
+plate-forme github. Un des avantages d'un gestionnaire de version distribué par rapport à un gestionnaire de versions centralisé tel que
+SVN, est qu'il n'y a pas besoin d'un serveur central pour synchroniser deux copies du projet. Ainsi, nous avons pu partager nos
+modifications via une clé usb, même dans des lieux avec une connectivité réduite, comme la fac, où nous avons régulièrement travaillé.
+
+De plus, git possède un algorithme de résolution des conflits d'édition beaucoup plus efficace que celui de SVN, ce qui nous a permis de
+développer certaines fonctionnalités dans des branches séparées, et de les fusionner par la suite avec la branche principale, sans avoir à
+craindre une fusion manuelle des deux branches.
+
+Une autre fonctionnalité appréciable de git est que chaque «clone» d'un dépôt conserve tout l'historique du projet, si bien qu'un crash du
+serveur n'impacte pas du tout le projet~: On met en place un autre serveur sur lequel on envoie une copie du projet, et tout fonctionne
+comme avant.
+
+Nous avons choisi la plate-forme d'hébergement github pour la facilité de la mise en place d'un dépôt git (quelques clics suffisent), sa
+disponibilité élevée comparée à un serveur personnel, et parce que nous avions déjà utilisé cette plate-forme avec succès dans d'autres
+projets.
+
+Github offre des fonctionalités supplémentaires telles que des graphes permettant de visualiser l'avancement du projet, un outil de rapport
+de bug et un wiki pour la documentation. Nous n'avons cependant pas utilisé ces deux dernières fonctionnalités, préférant un simple fichier
+texte pour garder une trace des bugs à corriger et des tâches à effectuer. Une des raisons motivant ce choix est qu'un des membres du groupe
+possède un ordinateur relativement peu performant et une connexion à Internet très peu fiable, qui rendent l'utilisation de ces services
+pénible (voire impossibles lors des fréquentes coupures du réseau).
+
 \subsubsection{Environnement intégré de développement~: Eclipse}
 Eclipse est un IDE extensible (par plugin) et polyvalent permettant de creer des projets mettant en oeuvre n'importe quel langage de programmation. Eclipse est ecrit en Java, et c'est avec ce langage que l'on peut creer de nouvelle extensions. La grande force de cet IDE est qu'il est developper autour des plugins pour pouvoir etendre l'application.
 
