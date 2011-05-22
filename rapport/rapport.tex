@@ -425,7 +425,7 @@ Le site Internet est en grande partie "statique" (langage HTML). Les pages "stat
 
 Certain éléments comme l'inscription, la connexion\dots{} ont une partie PHP qui permet d'intérroger la base de données afin de valider ou non l'action.
 
-La création de parties est, elle, réalisée en PHP et JavaScript afin de rendre plus intuitif l'interraction avec l'utilisateur. Les parties générées par les utilisateurs ont éjoutées dans la base de données pour qu'elle puissent par la suite être jouées par les autres joueurs.
+La création de parties est, elle, réalisée en PHP et JavaScript afin de rendre plus intuitif l'interraction avec l'utilisateur. Les parties générées par les utilisateurs sont ajoutées dans la base de données pour qu'elle puissent par la suite être jouées par les autres joueurs. Le nom de la personne ayant créer la partie est associé à celle-ci ce qui permettra d'indiquer aux joueurs la personne qui à créer la partie à laquelle il sont entrain ou ils viennent de jouer. Par soucis de maintien d'une base de donnée propre, l'utilisateur ne peux pas rentrer de nouveaux mots dans la base de données. Lorsqu'il souhaite créer une nouvelle partie il doit utiliser des mots "connus". Le JavaScript permet de vérifier dynamique la validité des mots et ainsi indiquer immédiatement à l'utilisateur si le mot qu'il vient saisir est correct ou non.
 
 \subsection{Version html5 du jeu}
 \label{sec:html5}
