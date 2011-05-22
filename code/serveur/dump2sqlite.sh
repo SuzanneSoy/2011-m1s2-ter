@@ -83,6 +83,6 @@ insert into random_cloud_node(eid,nbneighbors) select eid,sum(nb) from (
 		group by end
 ) where type = 1 group by eid;
 create index i_random_cloud_node_nbneighbors on random_cloud_node(nbneighbors);
-insert into random_center_node(eid) select eid from random_cloud_node where nbneighbors > 3;
+insert into random_center_node(eid) select eid from random_cloud_node where nbneighbors > 6;
 commit;
 EOF
