@@ -427,6 +427,74 @@ Certain éléments comme l'inscription, la connexion\dots{} ont une partie PHP q
 
 La création de parties est, elle, réalisée en PHP et JavaScript afin de rendre plus intuitif l'interraction avec l'utilisateur. Les parties générées par les utilisateurs ont éjoutées dans la base de données pour qu'elle puissent par la suite être jouées par les autres joueurs.
 
+\subsection{Version html5 du jeu}
+\label{sec:html5}
+\subsubsection{Architecture}
+
+La version HTML5 du jeu est architecturée de la manière suivante~:
+
+L'application comporte 6 écrans~:
+\begin{itemize}
+\item Le «splash» au démarrage;
+\item L'éran d'accueil, avec des liens vers les 4 autres (sauf score);
+\item L'écran du jeu, avec le mot central, le mot du nuage et les quatre relations;
+\item Le score, affiché à la fin de la partie;
+\item Les préférences, qui permettent de choisir le thème de couleurs de l'application;
+\item L'écran de connexion, sur lequel on peut se rendre depuis l'écran d'accueil, et qui s'affiche automatiquement lorsqu'on tente de faire
+  une action (jouer ou modifier les préférences) sans être connecté;
+\item L'écran «À propos», qui explique l'origine du jeu.
+\end{itemize}
+Chaque écran est contenu dans un élément HTML (\verb!<div/>!) qui est affiché uniquement lorsque l'utilisateur est sur cet écran.
+
+La navigation entre les écrans, et entre chaque mot du nuage lorsqu'on joue à la partie, s'effectue en modifiant l'identifiant de fragment
+de l'URL (la partie après le \verb!#!). De cette manière, chaque état est stocké dans l'historique du navigateur, et on peut revenir à
+l'écran précédent en utilisant les botons «Précédent» et «Suivant» classiques. De plus, cela permet d'annuler le choix d'une relation pour
+un mot donné simplement en cliquant sur «Précédent».
+
+L'état du programme (écran en cours, thème de couleurs, structure de données représentant la partie en cours lorsqu'elle a été récupérée,
+même chose pour les scores) est stocké dans une variable nommée \verb!runstate!. Cependant, si l'on considère l'enchaînement d'actions
+suivantes, on se rend compte qu'il doit y avoir une décorrélation entre l'état du programme tel que dicté par l'URL, et l'état réel du
+programme~:
+\begin{itemize}
+\item L'utilisateur clique sur «Jouer», ce qui l'amène à l'URL \verb!#game!;
+\item L'écran de connexion est affiché pour que l'utilisateur s'identifie, sans modifier l'URL (pour ne pas enregistrer cette étape
+  transitoire dans l'historique).
+\item Une fois que l'utilisateur est connecté, la partie commence.
+\end{itemize}
+Cette décorrélation apporte une certaine complexité au code de transition entre les états du programme, d'autant plus que l'application
+effectue des requêtes réseau asynchrones, par exemple pour récupérer la partie, durant lesquelles n'importe quelle séquence de «Précédent» /
+«Suivant» ou de modifications arbitraire peut avoir lieu. Ainsi, entre le moment où on effectue une requête pour récupérer une nouvelle
+partie, et le moment où cette requête aboutit, l'utilisateur peut avoir cliqué sur «Précédent», ce qui le ramène à l'écran d'accueil (auquel
+cas il ne faut pas afficher la partie lors de la réception), mais il peut aussi après ce «Précédent» faire «Suivant», auquel cas on se
+retrouve de nouveau sur l'écran du jeu, et il faut donc afficher la partie lors de sa réception (et ne pas faire une deuxième requête
+puisqu'il y en a déjà une en cours).
+
+Pour gérer cela, nous avons implémenté une routine de transition entre les états, qui envoie la séquence de messages suivante au nouvel
+écran~:
+\begin{itemize}
+\item «goto», qui envoie le message «leave» à l'écran en cours, met à jour la variable runstate.screen, et communique quelques informations
+  à l'application hôte en Java sous Android;
+\item «pre-enter», qui permet à l'écran d'effectuer des requêtes réseau avant son affichage;
+\item «enter», qui affiche l'écran, et modifie dynamiquement son contenu si nécessaire (par exemple affichage du texte décrivant les
+  relations dans l'écran du jeu);
+\item «update», appellée une première fois juste après l'affichage de l'écran, et à chaque changement d'URL qui ne modifie pas l'écran. Cela
+  permet par exemple à l'écran du jeu de détecter qu'une réponse a été donnée pour un des mots du nuage, et d'afficher le mot suivant.
+\end{itemize}
+
+Un changement d'URL déclenche donc soit un «goto», soit un «update», ce qui permet d'afficher l'écran voulu, tandis que les écrans peuvent
+s'envoyer les uns les autres ces messages (principalement le message «goto») pour basculer de l'un à l'autre sans modifier l'URL.
+
+\subsubsection{Concepts et techniques de programmation}
+
+Les actions à déclencher lors de la réception du résultat d'une requête réseau, ainsi que le cache partiel des parties et des scores (qui
+permet de ne pas renvoyer une requête qui est déjà en cours ou a déjà abouti), sont implémentés en utilisant le paradigme de programmation
+fonctionelle avec évaluation paresseuse, le côté «évaluation paresseuse» étant émulé en encapsulant le code dans des fonctions anonymes
+(lambda fonctions).
+
+Nous avons aussi employé une forme limitée de programmation réactive pour le cache, implémentée via l'objet \verb!Deferred! de jQuery.
+
+Enfin, nous avons utilisé les capactités de javaScript lui-même, qui est un langage objet basé sur les prototypes (et non les classes), pour
+étendre le langage là où cela s'est avéré nécessaire.
 
 \section{Réalisation}
 \subsection{Cahier des charges}
@@ -538,10 +606,19 @@ de ne pas reproduire le schema habituel client-serveur mais d'être directement 
 La partie cliente du projet et realiser en Java. Ce langage est le plus utilise dans le monde par les developpeur. Java reprend en grande partie la syntaxe du langage C++. Neanmoins il a ete epure des concepts les plus deroutants du C++ tels que les pointeurs, les references, l'heritage multiple\dots{}
 La grande specificite de ce langage est sa portabilité. En effet lors de la compilation, un bit code est genere, et celui-ci est ensuite lu par un machine virtuelle dependante de la platforme.
 
+\subsubsection{HTML5, JavaScript et jQuery}
+
+La deuxième version de l'application, écrite en HTML5, utilise langage JavaScript pour l'interaction avec l'utilisateur. La bibliothèque
+jQuery a été lourdement utilisée pour abstraire l'interface DOM (Document Object Model) fournie par le navigateur pour interagir avec le
+document HTML. Cette bibliothèque très extensible permet entre autres de manipuler facilement des collections entières d'éléments pour les
+modifier tous en même temps, de faire des requêtes complexes sur le document pour en récupérer une portion destinée à être manipulée, et
+fournit aussi une couche d'abstraction pour les requêtes réseau asynchrones et la manipulation de données au format JSON (JavaScript Object
+Notation), qui est le format utilisé dans les échanges entre le client et le serveur. Dans le cadre de ce projet, nous avons été amenés à
+écrire plusieurs petites extensions à la bibliothèque jQuery, ce qui a été à chaque fois une tâche relativement aisée, vérifiant ainsi
+l'extensibilité de cette bibliothèque.
+
 \subsection{Outils utilisés}
 \subsubsection{Gestionnaire de versions~: Git et Github}
-
-% TODO : Georges
 
 Pour synchroniser nos efforts sur le projet, nous avons utilisé le gestionnaire de versions distribué git, et hébergé notre projet sur la
 plate-forme github. Un des avantages d'un gestionnaire de version distribué par rapport à un gestionnaire de versions centralisé tel que
