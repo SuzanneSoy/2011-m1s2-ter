@@ -692,9 +692,34 @@ select * from table limit 100 order by random();
 \end{itemize}
 
 \subsection{Perspectives}
-% TODO
+
+Bien que fonctionnelle, notre application peut encore être améliorée. L'implémentation d'un des modes de jeu prévus au départ, par exemple
+le mode «thématique», peut-être couplé avec un mode «l'image cachée» (on choisit un thème, et au bout de plusieurs parties, on découvre une
+image associée à ce thème) serait certainement un plus pour l'addictivité du jeu.
+
+Un autre point améliorable est la qualité des nuages de mots générés. Actuellement, l'algorithme de génération des nuages ne tient pas
+compte de la partie du discours à laquelle le mot central et les mots du nuage appartiennent. Par exemple, la relation «fait partie de» n'a
+de sens que pour des noms, alors que notre algorithme peut aussi bien la choisir avec un adjectif comme mot central.
+
+Nous avons pensé à utiliser une forme de réseau de neuronnes pour déterminer si un mot central et des mots du nuage sont pertinants pour une
+relation donnée. Nous avons commencé à implémenter un tel algorithme, mais n'avons pas eu le temps terminer cette amélioration.
+
+Il est aussi à noter que l'application bénéficierait d'une restructuration du code. Nous avons effectué cette restructuration et un gros
+nettoyage du code du client, mais le serveur n'est pas aussi propre et extensible que souhaitable.
 
 \section{Conclusions}
+
+Le client et le serveur constituent tous les deux des briques logicielles réutilisables. Le serveur peut être réutilisé assez facilement
+pour d'autres applications qui souhaiteraient afficher par exemple le nuage pour un mot donné. Le client communique avec le serveur en
+utilisant seulement quelques types de requêtes différents, et pourrait donc être couplé avec un autre serveur avec peu de modifications
+(nous pensons ici au serveur existant de la version de PtiClic réalisée par le LIRMM).
+
+Le client est aussi extensible~: son architecture permet l'ajout de nouveaux écrans, de nouveaux thèmes, voire de nouveaux modes de jeu. Le
+fait qu'il soit écrit principalement en HTML5 et JavaScript permet de l'adapter à la plupart des téléphonnes intelligents et tablettes à
+moindre coût.
+
+Nous espérons que notre travail pourra être réutilisé par l'équipe du LIRMM pour offir une interface au jeu PtiClic qui soit compatible avec
+les plates-formes mobiles.
 
 \newpage
 
