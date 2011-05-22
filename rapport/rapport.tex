@@ -584,63 +584,40 @@ Globalement, nous avons donc réduit le nombre de fonctionnalités à implément
 d'éviter d'avoir une application offrant une multitude de fonctionnalités qui seraient implémentées de manière superficielle.
 
 \subsection{Langages}
-Notre projet c'est decouper en 2 gros parties. La premiere partie, la \og{}partie Serveur\fg{}, permet de realiser des actions sur l'ensemble de la base de donnee (creation de parti, validation de partie\ldots),
-la realisation de celle-ci c'est fait principalement en PHP, l'autre partie etant du SHELL.
-La seconde partie, la \og{}partie Cliente\fg{}, permet a l'utilisateur de pouvoir interagir avec le serveur, et surtout de pouvoir jouee a PtiClic. Elle a ete realiser en Java en utilisant le framework \android{}.
+Notre projet c'est découpé en 2 grosses parties. La première partie, la \og{}partie Serveur\fg{}, permet de réaliser des actions sur l'ensemble de la base de donnée (création de parti, validation de partie\ldots),
+la réalisation de celle-ci c'est fait principalement en PHP, l'autre étant du SHELL.
+La seconde partie, la \og{}partie Cliente\fg{}, permet à l'utilisateur de pouvoir intéragir avec le serveur, et surtout de pouvoir jouée à PtiClic. Elle à été réalisé en Java en utilisant le framework \android{} pour l'application mobile et avec le langage JavaScript pour l'application web.
 
 \subsubsection{PHP}
-Comme cite plus haut, nous avons utiliser PHP pour la creation du serveur. PHP est un langage imperatif, il dispose aussi depuis la version 5 de fonctionnalites objet, mais nous ne les utilisont pas dans projet. Ce langage est
-principalement utilise pour produire des pages Web dynamiques, c'est la raison de sont utilisation dans notre projet. C'est un langage peu type, souple, multiplate-forme, libre et gratuit.
-Nous utilisons donc PHP pour la creation de notre site web \url{http://www.pticlic.fr} ainsi que pour toute la partie generation de partie a savoir la creation, generation, envoie et recuperation de partie PtiClic.
+Comme cité plus haut, nous avons utilisé PHP pour la création du serveur. PHP est un langage impératif, il dispose aussi depuis la version 5 de fonctionnalités objet, mais nous ne les utilisont pas dans notre projet. Ce langage est
+principalement utilisé pour produire des pages Web dynamiques, c'est la raison de sont utilisation dans notre projet. C'est un langage peu typé, souple, multiplate-forme, libre et gratuit.
+Nous utilisons donc PHP pour la création de notre site web \url{http://www.pticlic.fr} ainsi que pour toute la partie génération de partie à savoir la création, génération, envoie et récupération de partie PtiClic.
 
 \subsubsection{SHELL}
-Nous utilisons aussi le langage SHELL. Ce langage est surtout utiliser pour l'initialisation du serveur lors de sont installation sur un serveur different. Sont but, pour notre projet, et de recupere le dernier dump de la base de donnee,
-de convertir ce dump en SQL et de l'insere dans la base de donnee SQLite
+Nous utilisons aussi le langage SHELL. Ce langage est surtout utilisé pour l'initialisation du serveur lors de sont installation sur un serveur différent. Son but, pour notre projet, et de récupérer le dernier dump (archive) de la base de donnée, de convertir ce dump en SQL et de l'insérer dans la base de donnée de type SQLite.
 
 \subsubsection{SQLite3}
-SQLite est un bibliotheque, ecrite en C qui propose un moteur de base de donnees relationnelles accessible par le langage SQL. Contrairement aux serveurs de bases de donnee traditionnels, comme MySQL ou PostgreSQLL, sa paritcularite est
-de ne pas reproduire le schema habituel client-serveur mais d'être directement intégrée aux programmes. L'intégralité de la base de données est stockée dans un fichier indépendant de la plateforme. Le code source de SQLite est dans le domaine public, ce qui permet son utilisation sans restriction aussi bien dans les projets open source que dans les projet propriétaire.
+SQLite est une bibliothéque, écrite en C qui propose un moteur de base de données relationnelles accessible par le langage SQL. Contrairement aux serveurs de bases de donnée traditionnels, comme MySQL ou PostgreSQL, ça particularité est de ne pas reproduire le schéma habituel client-serveur mais d'être directement intégrée aux programmes. L'intégralité de la base de données est stockée dans un fichier indépendant de la plateforme. Le code source de SQLite est dans le domaine public, ce qui permet son utilisation sans restriction aussi bien dans les projets open source que dans les projet propriétaire.
 
 \subsubsection{Java}
-La partie cliente du projet et realiser en Java. Ce langage est le plus utilise dans le monde par les developpeur. Java reprend en grande partie la syntaxe du langage C++. Neanmoins il a ete epure des concepts les plus deroutants du C++ tels que les pointeurs, les references, l'heritage multiple\dots{}
-La grande specificite de ce langage est sa portabilité. En effet lors de la compilation, un bit code est genere, et celui-ci est ensuite lu par un machine virtuelle dependante de la platforme.
+La partie cliente du projet est réalisé en Java. Ce langage est le plus utilisé dans le monde par les développeur. Java reprend en grande partie la syntaxe du langage C++. Néanmoins il a été épuré des concepts les plus déroutants du C++ tels que les pointeurs, les références, l'héritage multiples\dots{} La grande spécificité de ce langage est ça portabilité. En effet lors de la compilation, un bit code est généré, et celui-ci est ensuite lu par une machine virtuelle dépendante de la platforme.
 
 \subsubsection{HTML5, JavaScript et jQuery}
 
-La deuxième version de l'application, écrite en HTML5, utilise langage JavaScript pour l'interaction avec l'utilisateur. La bibliothèque
-jQuery a été lourdement utilisée pour abstraire l'interface DOM (Document Object Model) fournie par le navigateur pour interagir avec le
-document HTML. Cette bibliothèque très extensible permet entre autres de manipuler facilement des collections entières d'éléments pour les
-modifier tous en même temps, de faire des requêtes complexes sur le document pour en récupérer une portion destinée à être manipulée, et
-fournit aussi une couche d'abstraction pour les requêtes réseau asynchrones et la manipulation de données au format JSON (JavaScript Object
-Notation), qui est le format utilisé dans les échanges entre le client et le serveur. Dans le cadre de ce projet, nous avons été amenés à
-écrire plusieurs petites extensions à la bibliothèque jQuery, ce qui a été à chaque fois une tâche relativement aisée, vérifiant ainsi
-l'extensibilité de cette bibliothèque.
+La deuxième version de l'application, écrite en HTML5, utilise le langage JavaScript pour l'interaction avec l'utilisateur. La bibliothèque jQuery a été lourdement utilisée pour abstraire l'interface DOM (Document Object Model) fournie par le navigateur pour interagir avec le document HTML. Cette bibliothèque très extensible permet entre autres de manipuler facilement des collections entières d'éléments pour les modifier tous en même temps, de faire des requêtes complexes sur le document pour en récupérer une portion destinée à être manipulée, et
+fournit aussi une couche d'abstraction pour les requêtes réseau asynchrones et la manipulation de données au format JSON (JavaScript Object Notation), qui est le format utilisé dans les échanges entre le client et le serveur. Dans le cadre de ce projet, nous avons été amenés à écrire plusieurs petites extensions à la bibliothèque jQuery, ce qui a été à chaque fois une tâche relativement aisée, vérifiant ainsi l'extensibilité de cette bibliothèque.
 
 \subsection{Outils utilisés}
 \subsubsection{Gestionnaire de versions~: Git et Github}
 
-Pour synchroniser nos efforts sur le projet, nous avons utilisé le gestionnaire de versions distribué git, et hébergé notre projet sur la
-plate-forme github. Un des avantages d'un gestionnaire de version distribué par rapport à un gestionnaire de versions centralisé tel que
-SVN, est qu'il n'y a pas besoin d'un serveur central pour synchroniser deux copies du projet. Ainsi, nous avons pu partager nos
-modifications via une clé usb, même dans des lieux avec une connectivité réduite, comme la fac, où nous avons régulièrement travaillé.
+Pour synchroniser nos efforts sur le projet, nous avons utilisé le gestionnaire de versions distribué git, et hébergé notre projet sur la plate-forme github. Un des avantages d'un gestionnaire de version distribué par rapport à un gestionnaire de versions centralisé tel que SVN, est qu'il n'y a pas besoin d'un serveur central pour synchroniser deux copies du projet. Ainsi, nous avons pu partager nos modifications via une clé usb, même dans des lieux avec une connectivité réduite, comme la fac, où nous avons régulièrement travaillé. 
+De plus, git possède un algorithme de résolution des conflits d'édition beaucoup plus efficace que celui de SVN, ce qui nous a permis de développer certaines fonctionnalités dans des branches séparées, et de les fusionner par la suite avec la branche principale, sans avoir à craindre une fusion manuelle des deux branches.
 
-De plus, git possède un algorithme de résolution des conflits d'édition beaucoup plus efficace que celui de SVN, ce qui nous a permis de
-développer certaines fonctionnalités dans des branches séparées, et de les fusionner par la suite avec la branche principale, sans avoir à
-craindre une fusion manuelle des deux branches.
+Une autre fonctionnalité appréciable de git est que chaque «clone» d'un dépôt conserve tout l'historique du projet, si bien qu'un crash du serveur n'impacte pas du tout le projet~: On met en place un autre serveur sur lequel on envoie une copie du projet, et tout fonctionne comme avant.
 
-Une autre fonctionnalité appréciable de git est que chaque «clone» d'un dépôt conserve tout l'historique du projet, si bien qu'un crash du
-serveur n'impacte pas du tout le projet~: On met en place un autre serveur sur lequel on envoie une copie du projet, et tout fonctionne
-comme avant.
+Nous avons choisi la plate-forme d'hébergement github pour la facilité de la mise en place d'un dépôt git (quelques clics suffisent), sa disponibilité élevée comparée à un serveur personnel, et parce que nous avions déjà utilisé cette plate-forme avec succès dans d'autres projets.
 
-Nous avons choisi la plate-forme d'hébergement github pour la facilité de la mise en place d'un dépôt git (quelques clics suffisent), sa
-disponibilité élevée comparée à un serveur personnel, et parce que nous avions déjà utilisé cette plate-forme avec succès dans d'autres
-projets.
-
-Github offre des fonctionalités supplémentaires telles que des graphes permettant de visualiser l'avancement du projet, un outil de rapport
-de bug et un wiki pour la documentation. Nous n'avons cependant pas utilisé ces deux dernières fonctionnalités, préférant un simple fichier
-texte pour garder une trace des bugs à corriger et des tâches à effectuer. Une des raisons motivant ce choix est qu'un des membres du groupe
-possède un ordinateur relativement peu performant et une connexion à Internet très peu fiable, qui rendent l'utilisation de ces services
-pénible (voire impossibles lors des fréquentes coupures du réseau).
+Github offre des fonctionalités supplémentaires telles que des graphes permettant de visualiser l'avancement du projet, un outil de rapport de bug et un wiki pour la documentation. Nous n'avons cependant pas utilisé ces deux dernières fonctionnalités, préférant un simple fichier texte pour garder une trace des bugs à corriger et des tâches à effectuer. Une des raisons motivant ce choix est qu'un des membres du groupe possède un ordinateur relativement peu performant et une connexion à Internet très peu fiable, qui rendent l'utilisation de ces services pénible (voire impossibles lors des fréquentes coupures du réseau).
 
 \subsubsection{Environnement intégré de développement~: Eclipse}
 Eclipse est un IDE extensible (par plugin) et polyvalent permettant de créer des projets mettant en oeuvre n'importe quel langage de programmation. Il est écrit en Java, et c'est avec ce langage que l'on peut créer de nouvelles extensions. La grande force de cet IDE est qu'il est développer autour des plugins pour pouvoir l'étendre.
