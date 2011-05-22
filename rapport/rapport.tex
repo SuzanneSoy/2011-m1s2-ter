@@ -1,4 +1,3 @@
-
 \documentclass[a4paper,11pt,french]{article}
 
 \widowpenalty=9999
@@ -557,7 +556,7 @@ Nous avons aussi amélioré le serveur sur les points suivants~:
 \end{itemize}
 
 De plus, au départ, nous pensions fournir directement l'application aux alpha-testeurs, mais étant donné la nécessité d'avoir les noms d'utilisateurs
-et mots de passe dans la base, il semblait peu avantageux gérer ces points manuellement. Nous avons aussi dû créer un site web à destination
+et mots de passe dans la base, il semblait peu avantageux de gérer ces points manuellement. Nous avons aussi dû créer un site web à destination
 des utilisateurs, pour qu'ils puissent s'inscrire, télécharger l'application (avec des explications sur la procédure d'installation), et
 s'informer sur le projet.
 
@@ -585,80 +584,58 @@ Globalement, nous avons donc réduit le nombre de fonctionnalités à implément
 d'éviter d'avoir une application offrant une multitude de fonctionnalités qui seraient implémentées de manière superficielle.
 
 \subsection{Langages}
-Notre projet c'est decouper en 2 gros parties. La premiere partie, la \og{}partie Serveur\fg{}, permet de realiser des actions sur l'ensemble de la base de donnee (creation de parti, validation de partie\ldots),
-la realisation de celle-ci c'est fait principalement en PHP, l'autre partie etant du SHELL.
-La seconde partie, la \og{}partie Cliente\fg{}, permet a l'utilisateur de pouvoir interagir avec le serveur, et surtout de pouvoir jouee a PtiClic. Elle a ete realiser en Java en utilisant le framework \android{}.
+Notre projet c'est découpé en 2 grosses parties. La première partie, la \og{}partie Serveur\fg{}, permet de réaliser des actions sur l'ensemble de la base de donnée (création de parti, validation de partie\ldots),
+la réalisation de celle-ci c'est fait principalement en PHP, l'autre étant du SHELL.
+La seconde partie, la \og{}partie Cliente\fg{}, permet à l'utilisateur de pouvoir intéragir avec le serveur, et surtout de pouvoir jouée à PtiClic. Elle à été réalisé en Java en utilisant le framework \android{} pour l'application mobile et avec le langage JavaScript pour l'application web.
 
 \subsubsection{PHP}
-Comme cite plus haut, nous avons utiliser PHP pour la creation du serveur. PHP est un langage imperatif, il dispose aussi depuis la version 5 de fonctionnalites objet, mais nous ne les utilisont pas dans projet. Ce langage est
-principalement utilise pour produire des pages Web dynamiques, c'est la raison de sont utilisation dans notre projet. C'est un langage peu type, souple, multiplate-forme, libre et gratuit.
-Nous utilisons donc PHP pour la creation de notre site web \url{http://www.pticlic.fr} ainsi que pour toute la partie generation de partie a savoir la creation, generation, envoie et recuperation de partie PtiClic.
+Comme cité plus haut, nous avons utilisé PHP pour la création du serveur. PHP est un langage impératif, il dispose aussi depuis la version 5 de fonctionnalités objet, mais nous ne les utilisont pas dans notre projet. Ce langage est
+principalement utilisé pour produire des pages Web dynamiques, c'est la raison de sont utilisation dans notre projet. C'est un langage peu typé, souple, multiplate-forme, libre et gratuit.
+Nous utilisons donc PHP pour la création de notre site web \url{http://www.pticlic.fr} ainsi que pour toute la partie génération de partie à savoir la création, génération, envoie et récupération de partie PtiClic.
 
 \subsubsection{SHELL}
-Nous utilisons aussi le langage SHELL. Ce langage est surtout utiliser pour l'initialisation du serveur lors de sont installation sur un serveur different. Sont but, pour notre projet, et de recupere le dernier dump de la base de donnee,
-de convertir ce dump en SQL et de l'insere dans la base de donnee SQLite
+Nous utilisons aussi le langage SHELL. Ce langage est surtout utilisé pour l'initialisation du serveur lors de sont installation sur un serveur différent. Son but, pour notre projet, et de récupérer le dernier dump (archive) de la base de donnée, de convertir ce dump en SQL et de l'insérer dans la base de donnée de type SQLite.
 
 \subsubsection{SQLite3}
-SQLite est un bibliotheque, ecrite en C qui propose un moteur de base de donnees relationnelles accessible par le langage SQL. Contrairement aux serveurs de bases de donnee traditionnels, comme MySQL ou PostgreSQLL, sa paritcularite est
-de ne pas reproduire le schema habituel client-serveur mais d'être directement intégrée aux programmes. L'intégralité de la base de données est stockée dans un fichier indépendant de la plateforme. Le code source de SQLite est dans le domaine public, ce qui permet son utilisation sans restriction aussi bien dans les projets open source que dans les projet propriétaire.
+SQLite est une bibliothéque, écrite en C qui propose un moteur de base de données relationnelles accessible par le langage SQL. Contrairement aux serveurs de bases de donnée traditionnels, comme MySQL ou PostgreSQL, ça particularité est de ne pas reproduire le schéma habituel client-serveur mais d'être directement intégrée aux programmes. L'intégralité de la base de données est stockée dans un fichier indépendant de la plateforme. Le code source de SQLite est dans le domaine public, ce qui permet son utilisation sans restriction aussi bien dans les projets open source que dans les projet propriétaire.
 
 \subsubsection{Java}
-La partie cliente du projet et realiser en Java. Ce langage est le plus utilise dans le monde par les developpeur. Java reprend en grande partie la syntaxe du langage C++. Neanmoins il a ete epure des concepts les plus deroutants du C++ tels que les pointeurs, les references, l'heritage multiple\dots{}
-La grande specificite de ce langage est sa portabilité. En effet lors de la compilation, un bit code est genere, et celui-ci est ensuite lu par un machine virtuelle dependante de la platforme.
+La partie cliente du projet est réalisé en Java. Ce langage est le plus utilisé dans le monde par les développeur. Java reprend en grande partie la syntaxe du langage C++. Néanmoins il a été épuré des concepts les plus déroutants du C++ tels que les pointeurs, les références, l'héritage multiples\dots{} La grande spécificité de ce langage est ça portabilité. En effet lors de la compilation, un bit code est généré, et celui-ci est ensuite lu par une machine virtuelle dépendante de la platforme.
 
 \subsubsection{HTML5, JavaScript et jQuery}
 
-La deuxième version de l'application, écrite en HTML5, utilise langage JavaScript pour l'interaction avec l'utilisateur. La bibliothèque
-jQuery a été lourdement utilisée pour abstraire l'interface DOM (Document Object Model) fournie par le navigateur pour interagir avec le
-document HTML. Cette bibliothèque très extensible permet entre autres de manipuler facilement des collections entières d'éléments pour les
-modifier tous en même temps, de faire des requêtes complexes sur le document pour en récupérer une portion destinée à être manipulée, et
-fournit aussi une couche d'abstraction pour les requêtes réseau asynchrones et la manipulation de données au format JSON (JavaScript Object
-Notation), qui est le format utilisé dans les échanges entre le client et le serveur. Dans le cadre de ce projet, nous avons été amenés à
-écrire plusieurs petites extensions à la bibliothèque jQuery, ce qui a été à chaque fois une tâche relativement aisée, vérifiant ainsi
-l'extensibilité de cette bibliothèque.
+La deuxième version de l'application, écrite en HTML5, utilise le langage JavaScript pour l'interaction avec l'utilisateur. La bibliothèque jQuery a été lourdement utilisée pour abstraire l'interface DOM (Document Object Model) fournie par le navigateur pour interagir avec le document HTML. Cette bibliothèque très extensible permet entre autres de manipuler facilement des collections entières d'éléments pour les modifier tous en même temps, de faire des requêtes complexes sur le document pour en récupérer une portion destinée à être manipulée, et
+fournit aussi une couche d'abstraction pour les requêtes réseau asynchrones et la manipulation de données au format JSON (JavaScript Object Notation), qui est le format utilisé dans les échanges entre le client et le serveur. Dans le cadre de ce projet, nous avons été amenés à écrire plusieurs petites extensions à la bibliothèque jQuery, ce qui a été à chaque fois une tâche relativement aisée, vérifiant ainsi l'extensibilité de cette bibliothèque.
 
 \subsection{Outils utilisés}
 \subsubsection{Gestionnaire de versions~: Git et Github}
 
-Pour synchroniser nos efforts sur le projet, nous avons utilisé le gestionnaire de versions distribué git, et hébergé notre projet sur la
-plate-forme github. Un des avantages d'un gestionnaire de version distribué par rapport à un gestionnaire de versions centralisé tel que
-SVN, est qu'il n'y a pas besoin d'un serveur central pour synchroniser deux copies du projet. Ainsi, nous avons pu partager nos
-modifications via une clé usb, même dans des lieux avec une connectivité réduite, comme la fac, où nous avons régulièrement travaillé.
+Pour synchroniser nos efforts sur le projet, nous avons utilisé le gestionnaire de versions distribué git, et hébergé notre projet sur la plate-forme github. Un des avantages d'un gestionnaire de version distribué par rapport à un gestionnaire de versions centralisé tel que SVN, est qu'il n'y a pas besoin d'un serveur central pour synchroniser deux copies du projet. Ainsi, nous avons pu partager nos modifications via une clé usb, même dans des lieux avec une connectivité réduite, comme la fac, où nous avons régulièrement travaillé. 
+De plus, git possède un algorithme de résolution des conflits d'édition beaucoup plus efficace que celui de SVN, ce qui nous a permis de développer certaines fonctionnalités dans des branches séparées, et de les fusionner par la suite avec la branche principale, sans avoir à craindre une fusion manuelle des deux branches.
 
-De plus, git possède un algorithme de résolution des conflits d'édition beaucoup plus efficace que celui de SVN, ce qui nous a permis de
-développer certaines fonctionnalités dans des branches séparées, et de les fusionner par la suite avec la branche principale, sans avoir à
-craindre une fusion manuelle des deux branches.
+Une autre fonctionnalité appréciable de git est que chaque «clone» d'un dépôt conserve tout l'historique du projet, si bien qu'un crash du serveur n'impacte pas du tout le projet~: On met en place un autre serveur sur lequel on envoie une copie du projet, et tout fonctionne comme avant.
 
-Une autre fonctionnalité appréciable de git est que chaque «clone» d'un dépôt conserve tout l'historique du projet, si bien qu'un crash du
-serveur n'impacte pas du tout le projet~: On met en place un autre serveur sur lequel on envoie une copie du projet, et tout fonctionne
-comme avant.
+Nous avons choisi la plate-forme d'hébergement github pour la facilité de la mise en place d'un dépôt git (quelques clics suffisent), sa disponibilité élevée comparée à un serveur personnel, et parce que nous avions déjà utilisé cette plate-forme avec succès dans d'autres projets.
 
-Nous avons choisi la plate-forme d'hébergement github pour la facilité de la mise en place d'un dépôt git (quelques clics suffisent), sa
-disponibilité élevée comparée à un serveur personnel, et parce que nous avions déjà utilisé cette plate-forme avec succès dans d'autres
-projets.
-
-Github offre des fonctionalités supplémentaires telles que des graphes permettant de visualiser l'avancement du projet, un outil de rapport
-de bug et un wiki pour la documentation. Nous n'avons cependant pas utilisé ces deux dernières fonctionnalités, préférant un simple fichier
-texte pour garder une trace des bugs à corriger et des tâches à effectuer. Une des raisons motivant ce choix est qu'un des membres du groupe
-possède un ordinateur relativement peu performant et une connexion à Internet très peu fiable, qui rendent l'utilisation de ces services
-pénible (voire impossibles lors des fréquentes coupures du réseau).
+Github offre des fonctionalités supplémentaires telles que des graphes permettant de visualiser l'avancement du projet, un outil de rapport de bug et un wiki pour la documentation. Nous n'avons cependant pas utilisé ces deux dernières fonctionnalités, préférant un simple fichier texte pour garder une trace des bugs à corriger et des tâches à effectuer. Une des raisons motivant ce choix est qu'un des membres du groupe possède un ordinateur relativement peu performant et une connexion à Internet très peu fiable, qui rendent l'utilisation de ces services pénible (voire impossibles lors des fréquentes coupures du réseau).
 
 \subsubsection{Environnement intégré de développement~: Eclipse}
-Eclipse est un IDE extensible (par plugin) et polyvalent permettant de creer des projets mettant en oeuvre n'importe quel langage de programmation. Eclipse est ecrit en Java, et c'est avec ce langage que l'on peut creer de nouvelle extensions. La grande force de cet IDE est qu'il est developper autour des plugins pour pouvoir etendre l'application.
+Eclipse est un IDE extensible (par plugin) et polyvalent permettant de créer des projets mettant en oeuvre n'importe quel langage de programmation. Il est écrit en Java, et c'est avec ce langage que l'on peut créer de nouvelles extensions. La grande force de cet IDE est qu'il est développer autour des plugins pour pouvoir l'étendre.
+Son choix d'utilisation vient aussi du faite qu'il est présent sur les ordinateurs de la faculté, et que nous avons l'habitude de l'utiliser.
 
 \subsubsection{\android{}}
-Android est un systeme d'exploitation open source pour smartphones. Pour ce TER nous avons donc utilise le framework propose par Google, pour le developpement d'application sur cet OS. Il est donc base sur le langage Java, ce qui permet un apprentissage plus facile (du fait que ce langage est le plus utiliser dans le monde).
+\android{} est un système d'exploitation open source pour smartphones. Pour ce TER nous avons donc utilisé le framework proposé par Google, pour le developpement d'application sur cet OS. Il est basé sur le langage Java, ce qui permet un apprentissage plus facile (du fait que ce langage est le plus utilisé dans le monde).
 
 \paragraph{Software Development Kit (SDK)}
-Le SDK d'\android{} possede un grand nombre de classes et de paquetage sur l'ensemble des fonctionnalitees proposer par les peripherique embarquant cet OS. On peut par exemple trouver un paquetage specialiser dans les acces reseaux, bluetooth, d'autre pour la geolocalisation\dots{} Le developpement avec ce framework repose sur le modele MVC (Model View Controller). Les modeles sont principalement representer avec des classes simple (Heritant directement de \verb!java.lang.Object!). Les controlleurs eux herite de la classe \verb!android.app.Activity! ou d'une de ces classes enfants. Quant aux vues, elle sont representer avec un format XML.
-La connexion entre les controlleurs et le vues est realiser grace a la methode \verb!public View findViewById (int id)! de la classe \verb!android.app.Activity!, qui parcours l'arbre XML pour recupere l'objet correspondant a l'id.
+Le SDK d'\android{} posséde un grand nombre de classes et de paquetages sur l'ensemble des fonctionnalitées proposé par les périphèriques embarquant cet OS. On peut par exemple trouver un paquetage spécialisé dans les accès réseaux, bluetooth, d'autre pour la géolocalisation\dots{} Le developpement avec ce framework repose sur le modele (pattern en anglais) MVC (Model View Controller). Les modèles (du pattern MVC) sont principalement représenté avec des classes simple (héritant directement de \verb!java.lang.Object!). Les contrôlleurs eux hérite de la classe \verb!android.app.Activity! ou d'une de ces classes enfants. Quant aux vues, elles sont représenté avec un format XML.
+La connexion entre les contrôlleurs et le vues est réalisé grâce à la methode \verb!public View findViewById (int id)! de la classe \verb!android.app.Activity!, qui parcours l'arbre XML pour récuperer l'objet correspondant à l'id passé en paramétre.
 
 \paragraph{Developper Toolkit (ADT) Plugin}
-L'ADT est un plugin developper par Google pour facilite le developpement d'application \android{} avec Eclipse. Il propose un menu permettant de creer des projets de type \android{} parfaitement parametre selon ces besoin. Mais aussi un gestionnaire d'emulateur, une disposition DDMS permettant de controler l'emulateur\dots{}
+L'ADT est un plugin développé par Google pour faciliter le developpement d'application \android{} avec Eclipse. Il propose un menu permettant de créer des projets de type \android{} déjà parametré selon les besoins. Mais aussi un gestionnaire d'emulateur, une disposition (au sens d'Eclipse) DDMS permettant de contrôler l'emulateur\dots{}
 
 \section{Revirement des choix de developpement} % TODO : Devrait peut etre etre deplacé
-A la fin de la premiere iteration, nous avons décidé de ne plus utiliser le systeme de creation de vue proposer par le SDK d'\android{}, car, pour nous, la creation de vue en passant par le format proposer nous prennait enormement de temps. \android{} supportant le framework WebKit et notre groupe ayant un peut plus d'experience dans le developpement d'application web (de part notre formation), nous avons décidé de developper les vues de l'application PtiClic en HTML5/javascript. De ce faite, l'application a ete simplifier (une seul Activite) et une classe \verb!JavascriptInterface! realisant l'interface entre le code javascript et le telephone.
-Un autre avantage d'utiliser une application web pour developper PtiClic est le publique viser. En effet avec la version 2 nous avons aussi une application jouable a partir d'un navigateur internet <<normal>>, ce qui permet a un plus grand nombre de personne de pouvoir jouer a PtiClic.
+A la fin de la première iteration, nous avons décidé de ne plus utiliser le système de création de vue proposé par le SDK d'\android{}, car, pour nous, la création de vue en passant par le format proposé nous prennait énormement de temps. \android{} supportant le framework WebKit ainsi que javascript dans son integralité et notre groupe ayant un peu plus d'expérience dans le développement d'application web (de part notre formation), nous avons décidé de développer les vues de l'application PtiClic en HTML5/Javascript. De ce faite, l'application à été simplifié (une seul Activité) et une classe \verb!JavascriptInterface! réalisant un pont entre le code javascript et les fonctionnalitées du téléphone à été ajouté.
+Un autre avantage à l'utilisation d'une application web pour développer PtiClic est le publique visé. En effet, le but de ce jeu étant de récupère des données d'un grand nombres d'utilisateur, fournir l'application à d'autres personnes que celles disposant d'un smartphone sous \android{} nous a semblé interressante. C'est pourquoi avec la version 2 nous avons aussi une application jouable à partir d'un navigateur internet <<normal>>, ce qui permet à un plus grand nombres de personnes de pouvoir jouer à PtiClic.
 
 \section{Discussion}
 \subsection{Difficultés rencontrées}
