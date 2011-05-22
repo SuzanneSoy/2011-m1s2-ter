@@ -17,41 +17,49 @@
 			body, html { margin:0; padding:0; height:100%; overflow:hidden; }
 			.screen { width:100%; height:100%; position:absolute; }
 			.highlight { display:none; width:100%; height:100%; border-width:medium; border-style:solid; border-radius:2em; position:absolute; }
-			a:hover .highlight, a:focus .highlight { display:block; }
-			#frontpage a { text-decoration:none; display:inline-block; width:30%; top:32%; position:absolute; }
+			#frontpage a { display:inline-block; width:30%; top:32%; position:absolute; }
 			#frontpage .icon-container img { display:block; position:relative; margin:0 auto; }
 			#frontpage .icon-label { width:100%; height:30%; position:relative; }
 			.button { text-decoration:none; padding:0.4em; margin:0; display:inline-block; border-width:medium; border-style:solid; border-radius:0.4em; cursor:pointer; }
-			.relationBox { border-width:3px; border-style:solid; border-radius:1em; padding:0.5em; width:95%; margin:0 auto; }
+			.relationBox { border-width:3px; border-style:solid; border-radius:1em; padding:0.5em; width:95%; margin:0 auto; min-height: 20px; }
 			.formElement { width:46%; height:12%; position:absolute; }
 			#score { text-align:center; }
 			.marginBox { width:90%; height:90%; top:5%; left:5%; position:absolute; }
 			#message { left:30%; top:5%; width:40%; height:10%; position:absolute; border-width:medium; border-style:solid; border-radius:0.5em; text-align:center; opacity:0.9; }
-			.theme-button input { position:absolute; left: -9000px; top:-9000px; }
-			a:focus, :focus, input:focus+label { text-decoration:underline; }
-
-			.transition { transition:all 0.7s linear; -moz-transition:all 0.7s linear; -webkit-transition:all 0.7s linear; }
-			.transition-bg { transition:background-color 0.7s linear; -moz-transition:background-color 0.7s linear; -webkit-transition:background-color 0.7s linear; }
+			#theme input { position:absolute; left: -9000px; top:-9000px; }
+			a { text-decoration:none; display:block; }
+			p > a { display:inline; text-decoration:underline; }
+			.fpButton:hover .highlight, .fpButton:focus .highlight { display:block; }
+			
+			.transition { transition:all 7s linear; -moz-transition:all 7s linear; -webkit-transition:all 7s linear; }
+			.transition-bg { transition:background-color 7s linear; -moz-transition:background-color 7s linear; -webkit-transition:background-color 7s linear; }
 			
 			#splash, #nojs { background-color:black; color:white; }
 			/* couleurs green */
-			body, .screen { background-color:#ffffe0; color:black; }
-			.green.theme-button .button, .button { color:black; border-color:#4a4; background-color:#f0f8d0; }
-			#message { background-color:#f0f8d0; color:black; border-color:#4a4; }
-			a { color:black; }
-			#info a { color:#4a4; }
-			#mc-caption { color:#8b4; }
-			#mn-caption-bg { background-color:#f0f8d0; }
-			.mn-caption { color:#4a4; }
-			.borderbar { background-color:#4a4; }
-			.relationBox { background-color:#f0f8d0; border-color:#4a4; }
-			.highlight { background-color:#f0f8d0; border-color:#4a4; }
-			.hot { background-color:yellow; }
+			body.green, .green .screen { background-color:#ffffe0; color:black; }
+			.green .button { color:black; border-color:#4a4; background-color:#f0f8d0; }
+			.green #message { background-color:#f0f8d0; color:black; border-color:#4a4; }
+			.green a { color:black; }
+			.green #info a { color:#4a4; }
+			.green #mc-caption { color:#8b4; }
+			.green #mn-caption-bg { background-color:#f0f8d0; }
+			.green .mn-caption { color:#4a4; }
+			.green .borderbar { background-color:#4a4; }
+			.green .relationBox { background-color:#f0f8d0; border-color:#4a4; }
+			
+			.green .highlight { background-color:#f0f8d0; border-color:#4a4; }
+			.green a.relationBox.hot { background-color:yellow; }
+			.green .relationBox:focus, .green .relationBox:hover,
+			.green input:focus+label.button,
+			.green .button:focus, .green .button:hover { border-color: #452; background-color:#aca; outline:none; }
+			.green #info a:hover, .green #info a:focus { color:#552; }
+			
+			.green #black-theme-button { color:black; border-color: #000; background-color: #888; }
+			.green input:focus+label.button#black-theme-button, .green #black-theme-button:hover { color:white; border-color: #000; background-color: #444; }
 
 			/* couleurs black */
 			body.black, .black .screen { background-color:black; color:white; }
-			.black .button { color:white; border-color:#ccc; background-color:#222; }
-			.green .black.theme-button .button { color:white; border-color: #000; background-color: #444; }
+			.black .button { color:white; border-color:#aaa; background-color:#181818; }
 			.black #message { background-color:#222; color:white; border-color:#ccc; }
 			.black a { color:white; }
 			.black #info a { color:#aaa; }
@@ -60,11 +68,19 @@
 			.black .mn-caption { color:#ccc; }
 			.black .borderbar { background-color:#ccc; }
 			.black .relationBox { background-color:#111; border-color:#ccc; }
+			
 			.black .highlight { background-color:#222; border-color:#ccc; }
-			.black .hot { background-color:#aaa; }
+			.black a.relationBox.hot { background-color:#aaa; }
+			.black .relationBox:focus, .black .relationBox:hover,
+			.black input:focus+label.button,
+			.black .button:focus, .black .button:hover { border-color: #fff; background-color:#444; outline:none; }
+			.black #info a:hover, .black #info a:focus { color:#white; }
+			
+			.black #green-theme-button { color:black; border-color:#4a4; background-color:#f0f8d0; }
+			.black input:focus+label.button#green-theme-button, .black #green-theme-button:hover { border-color: #452; background-color:#aca; outline:none; }
 		</style>
 	</head>
-	<body>
+	<body class="green">
 		<a id="splash" class="screen" href="#frontpage">
 			<img src="ressources/img/splash.png" class="center" style="width:320px; height: 480px;"/>
 		</a>
@@ -75,29 +91,29 @@
 			<div style="width:50%; height:24%; top:4%; left:25%; position:absolute;" class="fitFont">
 				<span class="center">PtiClic</span>
 			</div>
-			<a href="#game" style="right:55%; top:33%;">
+			<a class="fpButton" href="#game" style="right:55%; top:33%;">
 				<div class="highlight"></div>
-				<div class="icon-container"><img alt="" src="ressources/img/72/default.png" /></div>
+				<div class="icon-container"><img alt="" class="icon" src="ressources/img/72/default.png" /></div>
 				<div class="icon-label subFitFont"><span class="text center">Jouer</span></div>
 			</a>
-			<a href="#prefs" style="left:55%; top:33%;">
+			<a class="fpButton" href="#prefs" style="left:55%; top:33%;">
 				<div class="highlight"></div>
-				<div class="icon-container"><img class="iconFitParent" alt="" src="ressources/img/72/default.png" /></div>
+				<div class="icon-container"><img alt="" class="icon" src="ressources/img/72/default.png" /></div>
 				<div class="icon-label subFitFont"><span class="text center">Préférences</span></div>
 			</a>
-			<a href="#connection" style="right:55%; top:66%;">
+			<a class="fpButton" href="#connection" style="right:55%; top:66%;">
 				<div class="highlight"></div>
-				<div class="icon-container"><img class="iconFitParent" alt="" src="ressources/img/72/default.png" /></div>
+				<div class="icon-container"><img alt="" class="icon" src="ressources/img/72/default.png" /></div>
 				<div class="icon-label subFitFont"><span class="text center">Connexion</span></div>
 			</a>
-			<a href="#info" style="left:55%; top:66%;">
+			<a class="fpButton" href="#info" style="left:55%; top:66%;">
 				<div class="highlight"></div>
-				<div class="icon-container"><img class="iconFitParent" alt="" src="ressources/img/72/default.png" /></div>
+				<div class="icon-container"><img alt="" class="icon" src="ressources/img/72/default.png" /></div>
 				<div class="icon-label subFitFont"><span class="text center">À propos</span></div>
 			</a>
 		</div>
 		<div id="game" class="screen">
-			<div style="width: 100%; height:40%; position:absolute;">
+			<div class="header" style="width: 100%; height:20%; position:absolute;">
 				<div style="width: 90%; height:37.5%; top:7.5%; left:5%; position:absolute;" class="fitFont">
 					<div id="mc-caption" class="mc center">Mot central</div>
 				</div>
@@ -107,27 +123,27 @@
 				</div>
 				<div class="borderbar" style="height:5%; width:100%; top:95%; position:absolute;"></div>
 			</div>
-			<div class="relations fitFontGroup" style="height:60%; width:100%; top:40%; position:absolute;">
+			<div class="relations fitFontGroup" style="height:80%; width:100%; top:20%; position:absolute;">
 			</div>
 		</div>
 		<div id="score" class="screen">
 			<h1 class="fitFont" style="width:100%; height:8%; top: 6%; position:absolute; margin:0; text-align:center;">Score total : <span class="scoreTotal"></span></h1>
 			<div class="scores fitFont" style="width:100%; height:62%; top:20%; position:absolute;"></div>
 			<p class="fitFont" style="text-align: center; width:90%; height:12%; top:86%; left:5%; position:absolute; margin:0; padding:0;">
-				<a class="button" href="#">J'ai vu !</a>
+				<a class="button" href="#frontpage">J'ai vu !</a>
 			</p>
 		</div>
 		<div id="prefs" class="screen">
 			<form action="#" method="GET" class="fitFontGroup" style="width:100%; height:100%;">
 				<fieldset id="theme" class="subFitFont" style="width:50%; max-height:25%; margin:0 auto; top:25%; position:relative;">
 					<legend>Thème</legend>
-					<div class="theme-button green" style="float:left;">
+					<div style="float:left;">
 						<input type="radio" id="theme-green" name="theme" value="green" />
-						<label class="button" for="theme-green" style="margin: 0.2em;">Colline verdoyante</label>
+						<label id="green-theme-button" class="button" for="theme-green" style="margin: 0.2em;">Colline verdoyante</label>
 					</div>
-					<div class="theme-button black" style="float:right;">
+					<div style="float:right;">
 						<input type="radio" id="theme-black" name="theme" value="black" />
-						<label class="button" for="theme-black" style="margin: 0.2em;">Bas-fond de cachot</label>
+						<label id="black-theme-button" class="button" for="theme-black" style="margin: 0.2em;">Bas-fond de cachot</label>
 					</div>
 				</fieldset>
 				<div class="formElement subFitFont" style="top:75%; right:52%; text-align:right;">
@@ -190,10 +206,10 @@
 			</p>
 		</div>
 		<div id="templates" style="display: none;">
-			<div class="relationBox subFitFont">
-				<img class="icon" alt="" src="ressources/img/72/default.png" style="width:72px; height:72px; display:inline-block; vertical-align:middle;" />
-				<span class="text" style="vertical-align:middle;"></span>
-			</div>
+			<a href="#" class="relationBox subFitFont">
+				<img class="icon" alt="" src="ressources/img/72/default.png" style="width:72px; height:72px; float:left; vertical-align:middle;" /><!-- ignorer l'espace.
+				--><span class="text" style="vertical-align:middle;"></span>
+			</a>
 			<div class="scoreLine">
 				<span class="word"></span> (<span class="score"></span>)
 			</div>

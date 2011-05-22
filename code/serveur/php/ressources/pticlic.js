@@ -90,43 +90,61 @@ function UI () {
 
 // ==== Nouveau jss
 function jss() {
-		if (jss.running) return;
-		jss.running = true;
-		$('body').removeClass().addClass(runstate.prefs.theme);
-		if ($("#splash img").is(':visible')) {
-			var ratio = Math.min($('#splash').width() / 320, $('#splash').height() / 480);
-			$('#splash.screen img')
-				.wh(320 * ratio, 480 * ratio);
-		}
-		if ($('#game.screen').is(':visible')) {
-			var iconSize = 72;
-			var rel = $('#game.screen .relations');
-			var rb = rel.find('.relationBox');
-			rb.css({
-				borderWidth: ({72:3,48:2,36:1})[iconSize],
+	var iconSize = 0;
+	if (jss.running) return;
+	jss.running = true;
+	$('body').removeClass().addClass(runstate.prefs.theme);
+	if ($("#splash img").is(':visible')) {
+		var ratio = Math.min($('#splash').width() / 320, $('#splash').height() / 480);
+		$('#splash.screen img')
+			.wh(320 * ratio, 480 * ratio);
+	}
+	if ($('#game.screen').is(':visible')) {
+		var rb = $('#game.screen .relationBox');
+		var screenHeight = $('#game.screen').height();
+		var nbRb = rb.size();
+		
+		var calcFreeSpace = function (iconSize) {
+			var rbHeight = (iconSize || 20) + 2*({72:3,48:2,36:1,0:1})[iconSize] + Math.ceil(2*10/72*iconSize); // = iconSize + border + padding
+			return screenHeight - rbHeight*nbRb;
+		};
+		$.each([72,48,36,0], function(i,is) {
+			iconSize = is;
+			return (calcFreeSpace(is) - (nbRb+1)*5 < Math.max(/*Hauteur min du header :*/70, screenHeight*0.2));
+		});
+		var freeSpace = calcFreeSpace(iconSize);
+		var headerHeight = Math.min(screenHeight * 0.35, freeSpace - (nbRb+1)*5);
+		var interRbSpace = (freeSpace - headerHeight) / (nbRb+1);
+
+		$('#game .header').height(headerHeight);
+		$('#game .relations').height(screenHeight - headerHeight).css('top', headerHeight);
+		(rb)
+			.css({
+				borderWidth: ({72:3,48:2,36:1,0:1})[iconSize],
 				padding: 10/72*iconSize,
 				borderRadius: 20/72*iconSize,
-			}).height(iconSize);
-			rb.css({ marginTop: (rel.height() - rb.sumOuterHeight()) / (rb.size() + 1) });
-			rb.find('.icon').css({paddingRight: 10/72*iconSize});
-		}
-		$('#frontpage a').$each(function(i,e) {
-			var img = e.find('img');
-			var size = Math.min($('#frontpage').width() * 0.3, $('#frontpage').height() * 0.32 * 0.5);
-			if (size >= 72) { img.wh(72); }
-			else if (size >= 48) img.wh(48);
-			else if (size >= 36) img.wh(36);
-			else img.wh(0);
-			e.find('.icon-label').height($('#frontpage').height() * 0.32 * 0.3);
-			img.css('padding-top', $('#frontpage').height() * 0.32 * 0.06);
-		});
-		$('.fitFont:visible').$each(function(i,e) { e.fitFont(); });
-		$('.fitFontGroup:visible').each(function(i,e) { $(e).find('.subFitFont').fitFont(); });
-		$('.center:visible').$each(function(i,e) { e.center(e.parent().center()); });
-		if ($('#game.screen').is(':visible')) {
-			$('#game.screen').trigger('update');
-		}
-		jss.running = false;
+				marginTop: interRbSpace
+			})
+			.height(iconSize)
+			.find('img.icon').wh(iconSize).css({paddingRight: 10/72*iconSize});
+	}
+	$('#frontpage:visible a.fpButton').$each(function(i,e) {
+		var img = e.find('img');
+		var size = Math.min($('#frontpage').width() * 0.3, $('#frontpage').height() * 0.32 * 0.5);
+		if (size >= 36) iconSize = 36;
+		if (size >= 48) iconSize = 48;
+		if (size >= 72) iconSize = 72;
+		e.find('.icon-label').height($('#frontpage').height() * 0.32 * 0.3);
+		img.css('padding-top', $('#frontpage').height() * 0.32 * 0.06);
+	});
+	$('.fitFont:visible').$each(function(i,e) { e.fitFont(); });
+	$('.fitFontGroup:visible').each(function(i,e) { $(e).find('.subFitFont').fitFont(); });
+	$('.center:visible').$each(function(i,e) { e.center(e.parent().center()); });
+	$('img.icon:visible').$each(function(i,e){ if(e.data('image') && iconSize) e.attr('src', 'ressources/img/'+iconSize+'/'+e.data('image')+'.png'); e.wh(iconSize); });
+	if ($('#game.screen').is(':visible')) {
+		$('#game.screen').trigger('update');
+	}
+	jss.running = false;
 }
 
 // ==== Bulle pour les messages
@@ -160,6 +178,7 @@ init(function() {
 init(function() {
 	$.screen('frontpage').bind('enter', function() { window.document.title = "PtiClic pre-alpha 0.2"; });
 	if (UI().isAndroid()) $('#back2site').hide();
+	$('#frontpage a.fpButton').$each(function(i,e) { e.find('img.icon').data('image', e.attr('href').substring(1)); });
 });
 
 // ==== Écran connexion
@@ -245,6 +264,7 @@ init(function() {
 						location.hash = encodeHash(h);
 						$(this).addClass("hot");
 					}
+					return false;
 				})
 				.appendTo("#game .relations");
 		});
