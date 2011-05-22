@@ -1,4 +1,3 @@
-
 \documentclass[a4paper,11pt,french]{article}
 
 \widowpenalty=9999
@@ -489,7 +488,7 @@ Nous avons aussi amélioré le serveur sur les points suivants~:
 \end{itemize}
 
 De plus, au départ, nous pensions fournir directement l'application aux alpha-testeurs, mais étant donné la nécessité d'avoir les noms d'utilisateurs
-et mots de passe dans la base, il semblait peu avantageux gérer ces points manuellement. Nous avons aussi dû créer un site web à destination
+et mots de passe dans la base, il semblait peu avantageux de gérer ces points manuellement. Nous avons aussi dû créer un site web à destination
 des utilisateurs, pour qu'ils puissent s'inscrire, télécharger l'application (avec des explications sur la procédure d'installation), et
 s'informer sur le projet.
 
@@ -567,21 +566,22 @@ possède un ordinateur relativement peu performant et une connexion à Internet 
 pénible (voire impossibles lors des fréquentes coupures du réseau).
 
 \subsubsection{Environnement intégré de développement~: Eclipse}
-Eclipse est un IDE extensible (par plugin) et polyvalent permettant de creer des projets mettant en oeuvre n'importe quel langage de programmation. Eclipse est ecrit en Java, et c'est avec ce langage que l'on peut creer de nouvelle extensions. La grande force de cet IDE est qu'il est developper autour des plugins pour pouvoir etendre l'application.
+Eclipse est un IDE extensible (par plugin) et polyvalent permettant de créer des projets mettant en oeuvre n'importe quel langage de programmation. Il est écrit en Java, et c'est avec ce langage que l'on peut créer de nouvelles extensions. La grande force de cet IDE est qu'il est développer autour des plugins pour pouvoir l'étendre.
+Son choix d'utilisation vient aussi du faite qu'il est présent sur les ordinateurs de la faculté, et que nous avons l'habitude de l'utiliser.
 
 \subsubsection{\android{}}
-Android est un systeme d'exploitation open source pour smartphones. Pour ce TER nous avons donc utilise le framework propose par Google, pour le developpement d'application sur cet OS. Il est donc base sur le langage Java, ce qui permet un apprentissage plus facile (du fait que ce langage est le plus utiliser dans le monde).
+\android{} est un système d'exploitation open source pour smartphones. Pour ce TER nous avons donc utilisé le framework proposé par Google, pour le developpement d'application sur cet OS. Il est basé sur le langage Java, ce qui permet un apprentissage plus facile (du fait que ce langage est le plus utilisé dans le monde).
 
 \paragraph{Software Development Kit (SDK)}
-Le SDK d'\android{} possede un grand nombre de classes et de paquetage sur l'ensemble des fonctionnalitees proposer par les peripherique embarquant cet OS. On peut par exemple trouver un paquetage specialiser dans les acces reseaux, bluetooth, d'autre pour la geolocalisation\dots{} Le developpement avec ce framework repose sur le modele MVC (Model View Controller). Les modeles sont principalement representer avec des classes simple (Heritant directement de \verb!java.lang.Object!). Les controlleurs eux herite de la classe \verb!android.app.Activity! ou d'une de ces classes enfants. Quant aux vues, elle sont representer avec un format XML.
-La connexion entre les controlleurs et le vues est realiser grace a la methode \verb!public View findViewById (int id)! de la classe \verb!android.app.Activity!, qui parcours l'arbre XML pour recupere l'objet correspondant a l'id.
+Le SDK d'\android{} posséde un grand nombre de classes et de paquetages sur l'ensemble des fonctionnalitées proposé par les périphèriques embarquant cet OS. On peut par exemple trouver un paquetage spécialisé dans les accès réseaux, bluetooth, d'autre pour la géolocalisation\dots{} Le developpement avec ce framework repose sur le modele (pattern en anglais) MVC (Model View Controller). Les modèles (du pattern MVC) sont principalement représenté avec des classes simple (héritant directement de \verb!java.lang.Object!). Les contrôlleurs eux hérite de la classe \verb!android.app.Activity! ou d'une de ces classes enfants. Quant aux vues, elles sont représenté avec un format XML.
+La connexion entre les contrôlleurs et le vues est réalisé grâce à la methode \verb!public View findViewById (int id)! de la classe \verb!android.app.Activity!, qui parcours l'arbre XML pour récuperer l'objet correspondant à l'id passé en paramétre.
 
 \paragraph{Developper Toolkit (ADT) Plugin}
-L'ADT est un plugin developper par Google pour facilite le developpement d'application \android{} avec Eclipse. Il propose un menu permettant de creer des projets de type \android{} parfaitement parametre selon ces besoin. Mais aussi un gestionnaire d'emulateur, une disposition DDMS permettant de controler l'emulateur\dots{}
+L'ADT est un plugin développé par Google pour faciliter le developpement d'application \android{} avec Eclipse. Il propose un menu permettant de créer des projets de type \android{} déjà parametré selon les besoins. Mais aussi un gestionnaire d'emulateur, une disposition (au sens d'Eclipse) DDMS permettant de contrôler l'emulateur\dots{}
 
 \section{Revirement des choix de developpement} % TODO : Devrait peut etre etre deplacé
-A la fin de la premiere iteration, nous avons décidé de ne plus utiliser le systeme de creation de vue proposer par le SDK d'\android{}, car, pour nous, la creation de vue en passant par le format proposer nous prennait enormement de temps. \android{} supportant le framework WebKit et notre groupe ayant un peut plus d'experience dans le developpement d'application web (de part notre formation), nous avons décidé de developper les vues de l'application PtiClic en HTML5/javascript. De ce faite, l'application a ete simplifier (une seul Activite) et une classe \verb!JavascriptInterface! realisant l'interface entre le code javascript et le telephone.
-Un autre avantage d'utiliser une application web pour developper PtiClic est le publique viser. En effet avec la version 2 nous avons aussi une application jouable a partir d'un navigateur internet <<normal>>, ce qui permet a un plus grand nombre de personne de pouvoir jouer a PtiClic.
+A la fin de la première iteration, nous avons décidé de ne plus utiliser le système de création de vue proposé par le SDK d'\android{}, car, pour nous, la création de vue en passant par le format proposé nous prennait énormement de temps. \android{} supportant le framework WebKit ainsi que javascript dans son integralité et notre groupe ayant un peu plus d'expérience dans le développement d'application web (de part notre formation), nous avons décidé de développer les vues de l'application PtiClic en HTML5/Javascript. De ce faite, l'application à été simplifié (une seul Activité) et une classe \verb!JavascriptInterface! réalisant un pont entre le code javascript et les fonctionnalitées du téléphone.
+Un autre avantage à l'utilisation d'une application web pour développer PtiClic est le publique visé. En effet, le but de ce jeu étant de récupère des données d'un grand nombres d'utilisateur, fournir l'application à d'autres personnes que celles disposant d'un smartphone sous \android{} nous a semblé interressante. C'est pourquoi avec la version 2 nous avons aussi une application jouable à partir d'un navigateur internet <<normal>>, ce qui permet à un plus grand nombres de personnes de pouvoir jouer à PtiClic.
 
 \section{Discussion}
 \subsection{Difficultés rencontrées}
