@@ -65,6 +65,10 @@ public class JavaScriptInterface {
     	webView.reload();
     }
     
+    public boolean isAndroid() {
+    	return true;
+    }
+    
     /** Permet de quitter l'application
      * 
      */
