@@ -5,6 +5,8 @@
 \usetikzlibrary{shapes,positioning,snakes,calc}
 \usetheme{Warsaw}
 
+% \setbeamercolor{alerted text}{fg=blue}
+
 \def\android{Android\texttrademark}
 
 \title{FMIN200 \\ TER~: Reconception du jeu PtiClic sous \android{}}
@@ -105,7 +107,6 @@
   \item Langue et Parole
   \end{itemize}
 \end{frame}
-
 
 \begin{frame}  
 \begin{figure}[h!]
@@ -218,14 +219,15 @@ RELATION &	'mc' & 'mn'	& 'remarques' \\ \hline
 \begin{frame}
   \begin{itemize}
   \item Site web
-  \begin{itemize}
-  \item Présentation de l'application
-  \item Le jeu
-  \end{itemize}
+    \begin{itemize}
+    \item Présentation de l'application
+    \item Le jeu
+    \end{itemize}
   \item Page de création de parties
-  \begin{itemize}
-  \item Architecture
-  \item Bonus
+    \begin{itemize}
+    \item Architecture
+    \item Bonus
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
@@ -282,5 +284,23 @@ Merci de votre attention... \\
 Avez-vous des questions~?
 \end{frame}
 
-\end{document}
+\begin{frame}
+  \begin{tikzpicture}[
+    state/.style={draw, text width=2.3cm},
+    transition/.style={dashed,->}
+    ]
+    \node[state] (frontpage) {\begin{center}Page de garde\end{center}};
+    \node[state, below=of frontpage] (game) {\begin{center}Jeu\end{center}};
+    \node[state, below=of game] (score) {\begin{center}Score\end{center}};
+    
+    \draw[transition] (frontpage) -- (game);
+    \draw[transition] (game) -- (score);
+    \draw[transition] (score) -- ++(-2cm,0) |- (frontpage);
+    \draw[transition] (game.north east) ++(-0.3cm,0) arc (180:-90:0.3cm);
+    
+    \node[state,text width=1.2cm, right=of frontpage] (activite) {Activité};
+    \draw[transition] ($(activite.south)+(-.75cm,-.5cm)$) -- node[auto,swap,font=\footnotesize,scale=0.8] {\shortstack{\shortstack{Évènement\\(Intent)}}} ($(activite.south)+(.75cm,-.5cm)$);
+  \end{tikzpicture}
+\end{frame}
 
+\end{document}
