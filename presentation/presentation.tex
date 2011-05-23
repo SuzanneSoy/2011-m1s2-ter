@@ -18,7 +18,43 @@
   \titlepage
 \end{frame}
 
+\begin{frame}
+% bertrand
+ Caractéristique d'\android{}~:
+  \begin{itemize}
+    \item<+-> développé par Google
+    \item<+-> fondé sur un noyau Linux
+    \item<+-> interface de programmation en Java (Dalvic VM)
+    \item<+-> basé sur le modéle MVC
+  \end{itemize}
+\end{frame}
 
+\begin{frame}
+  Le framework~:
+  \begin{itemize}
+    \item<+-> SDK
+    \item<+-> Emulateur
+    \item<+-> Plugin Eclipse
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  Le developpement~:
+  \begin{itemize}
+    \item<+-> Pattern MVC
+    \item<+-> Modéle héritant \verb!java.lang.Object!
+    \item<+-> Vue modélisé en XML
+    \item<+-> Controlleur héritant de \verb!android.app.Activity!
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  Le cycle de vie d'une activité~:
+  \begin{minipage}{\textwidth}
+   \centering 
+       \includegraphics[width=0.75\textwidth]{img/activity_lifecycle.png}
+  \end{minipage}
+\end{frame}
 
 \begin{frame}
   Planning
@@ -36,7 +72,29 @@
   \end{itemize}
 \end{frame}
 
-
+\begin{frame}
+  % Georges
+  \begin{tikzpicture}[
+    mynode/.style = {circle, minimum size=1.5cm},
+    mc/.style = {mynode,draw=red,text=red},
+    mn/.style = {mynode,draw},
+    mi/.style = {mynode,draw=gray,text=gray},
+    rel/.style = {font=\footnotesize},
+    guess/.style = {->,dashed},
+    exist/.style = {->},
+    auto,swap
+    ]
+    \node[mc] (mc) {Chat};
+    \node[mn] (mn0) at (0,3) {Souris};
+    \node[mi] (mi1) at (3,-2) {matou};
+    \node[mn] (mn2) at (6,0) {animal};
+    \path[exist] (mc) edge[bend right] node[rel]{idée associée} (mn0);
+    \path[exist] (mc) edge node[rel]{synonyme} (mi1);
+    \path[exist] (mi1) edge node[rel]{sorte de} (mn2);
+    \path[guess,swap] (mc) edge node[rel]{sorte de ?} (mn2);
+    \path[guess,swap] (mc) edge[bend left] node[rel]{\shortstack{sorte de ?\\synonyme ?\\\dots}} (mn0);
+  \end{tikzpicture}
+\end{frame}
 
 \begin{frame}
   Ferdinand de Saussure (1857-1913), Cours de linguistique général
@@ -157,40 +215,6 @@ RELATION &	'mc' & 'mn'	& 'remarques' \\ \hline
 \end{center}
 \end{frame}
 
-
-\begin{frame}
-
-\end{frame}
-
-
-\begin{frame}
-
-\end{frame}
-
-\begin{frame}
-  % Georges
-  \begin{tikzpicture}[
-    mynode/.style = {circle, minimum size=1.5cm},
-    mc/.style = {mynode,draw=red,text=red},
-    mn/.style = {mynode,draw},
-    mi/.style = {mynode,draw=gray,text=gray},
-    rel/.style = {font=\footnotesize},
-    guess/.style = {->,dashed},
-    exist/.style = {->},
-    auto,swap
-    ]
-    \node[mc] (mc) {Chat};
-    \node[mn] (mn0) at (0,3) {Souris};
-    \node[mi] (mi1) at (3,-2) {matou};
-    \node[mn] (mn2) at (6,0) {animal};
-    \path[exist] (mc) edge[bend right] node[rel]{idée associée} (mn0);
-    \path[exist] (mc) edge node[rel]{synonyme} (mi1);
-    \path[exist] (mi1) edge node[rel]{sorte de} (mn2);
-    \path[guess,swap] (mc) edge node[rel]{sorte de ?} (mn2);
-    \path[guess,swap] (mc) edge[bend left] node[rel]{\shortstack{sorte de ?\\synonyme ?\\\dots}} (mn0);
-  \end{tikzpicture}
-\end{frame}
-
 \begin{frame}
   % Georges
   \texttt{\textcolor{gray}{http://pticlic.fr/jeu.html}\#\textcolor{red}{game}/\textcolor{green}{1306104746953}/\textcolor{blue}{5,0,5,-1}}
@@ -228,44 +252,5 @@ RELATION &	'mc' & 'mn'	& 'remarques' \\ \hline
   \end{tikzpicture}
 \end{frame}
 
-\begin{frame}
-% bertrand
- Caractéristique d'\android{}~:
-  \begin{itemize}
-    \item<+-> développé par Google
-    \item<+-> fondé sur un noyau Linux
-    \item<+-> interface de programmation en Java (Dalvic VM)
-    \item<+-> basé sur le modéle MVC
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  Le framework~:
-  \begin{itemize}
-    \item<+-> SDK
-    \item<+-> Emulateur
-    \item<+-> Plugin Eclipse
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  Le developpement~:
-  \begin{itemize}
-    \item<+-> Pattern MVC
-    \item<+-> Modéle héritant \verb!java.lang.Object!
-    \item<+-> Vue modélisé en XML
-    \item<+-> Controlleur héritant de \verb!android.app.Activity!
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  Le cycle de vie d'une activité~:
-  \begin{minipage}{\textwidth}
-   \centering 
-       \includegraphics[width=0.75\textwidth]{img/activity_lifecycle.png}
-  \end{minipage}
-\end{frame}
-
 \end{document}
-
 
