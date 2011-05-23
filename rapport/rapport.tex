@@ -322,6 +322,357 @@ Le jeu de base du PtiClic sous \android{} présente exactement les mêmes cas d'
 \section{PtiClic et TALN}
 
 
+Les projets JeuxDeMots et PtiClic s'inscrivent dans le domaine de la recherche en traitement automatique du langage naturel, et plus précisément dans celui du traitement de la sémantique du langage. Les données et les conclusions issues de ces projets pourraient contribuer directement ou indirectement à la recherche et à des applications en traduction automatique, l'indexation des textes, les correcteurs d'orthographes et de grammaires automatiques, la classification et la catégorisation des documents, des algorithmes de moteurs de recherche.
+
+
+\subsection{Ferdiand de Saussure, la linguistique moderne, le TALN, JeuxDeMots et PtiClic}
+
+Dans la partie qui suit, des notions de linguistique générale seront évoquées suivies d'une discussion d'applications dans le traitement automatique du langage naturel~: les dichotomies signifié-signifiant, l'arbitraire du signe, langue et parole, synchronie et diachronie. C'est Ferdinand de Saussure (1857-1913), fondateur de la linguistique moderne, qui a défini formellement pour la première fois ces concepts fondamentaux dans son Cours de linguistique général.\footnote{Ferdinand de Saussure, Cours de linguistique générale, édition originale~: 1916, édition 1979~: Payot, Paris. Il s'agit d'une oeuvre posthume rédigée à partir de notes de cours par deux disciples de Saussure~: Charles Bally et Albert Sechehaye. La publication de cet ouvrage marque le début de la linguistique moderne.}
+
+\subsubsection{Le signe linguistique~: signifié, signifiant, référent}
+
+Selon Saussure, le signe linguistique est une entité à deux faces~: le signifiant et le signifié. Ce principe semble assez simple. A un mot est associé un concept. Le mot 'cheval', c'est-à-dire son occurence orale ou écrite, le signifiant,\footnote{Pour Saussure, le signifiant est la version phonique d'un mot, ce qui est logique car la version graphique du mot n'est qu'une représentation écrite de la version phonique} nous évoque la représentation mentale que nous avons d'un cheval, le signifié. 
+
+
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.5\textwidth]{img/signe-conceptimageacoustique.jpeg}
+  \caption{Une représentation d'une idée, d'une chose, etc. est associée à la forme phonique d'un mot.}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.5\textwidth]{img/signe-cheval.jpeg}
+  \caption{A la représentation qu'on a d'un cheval est associé la forme phonique du mot cheval}
+\end{figure}
+
+Cette notion semble assez simple, mais, au contraire, la relation signifié-signifiant est très complexe. Cette entité a un très grand nombre de caractéristiques et le signifiant comprend des dénotations ainsi que des connotations qui peuvent être liées à des contextes multidimensionnels, généraux et spécifiques. Puis, à la notion de concept s'ajoute l'objet lui-même... s'il s'agit d'un objet physique~! Et s'il s'agit d'une émotion~? D'une action~? D'un sentiment~? D'une idée abstraite~? 
+
+On peut aussi parler de sens figuré et de sens propre des mots. Par exemple au mot 'poésie' on pourrait associer les idées 'littérature', 'écrivain', 'auteur', 'strophes', etc. ... mais aussi 'musique', 'rêve', 'amour'. On parlera de ce deuxième sens lorsque l'on parle de la notion de 'bruit' dans la relation entre mots ou expressions. Et si on prennait en compte la polysémie d'un signifiant~?
+
+Un demi-siècle plus tard, Emile Benveniste ajouta une autre dimension à ce schéma intégrant un 'référent' qui remplace le 'signifié', le 'signifié' étant, pour Benveniste, la dénotation du mot, c'est-à-dire bien l'objet lui-même. 
+
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.5\textwidth]{img/trianglesemiotique.jpeg}
+  \caption{Le signifiant de Saussure correspond au référent de Benveniste, le signifiant de Benveniste étant la dénotation du signifié alors que le référent est la représentation mentale ou 'concept' du signifié, qui englobe aussi des connotations qui peuvent être de nature très étendues telle que les contextes et les expériences personnelles que quelqu'un associe à un signifié.}
+\end{figure}
+
+Bien que ce modèle soit plus complet, cet ajout ne simple en rien notre travail. 
+
+Un des obectifs des projets JeuxDeMots et PtiClic est d'établir des informations complexes concernant la représentation mentale d'un signifiant à travers ses liens avec d'autres signifiants. Bien que le langage soit limité, le langage demeure un des moyens de communication le plus efficace de l'homme.\footnote{'Un' des moyens les plus efficace car les images, les vidéos, etc. sont aussi des moyens de communication qui peuvent être aussi efficace que le langage. Cependant, dans la majorité des cas, le langage reste un mode de communication qui permet de s'exprimer avec le plus de précision} 
+
+Dans le réseau lexical JeuxDeMots, le signifiant est élargi pour comprendre non seulement des mots mais aussi des locutions, des expressions et des raffinements sémantiques. Lorsqu'un mot est polysémique, il peut avoir plusieurs entrées distinctes. Par exemple, pour le mot 'boîte', on trouve 'boîte (contenant)', 'boîte (entreprise)', 'boîte (de nuit)', 'boîte (conserve)', etc.
+
+On verra que dans le réseau lexical JeuxDeMots/PtiClic qu'il est possible de décrire à l'aide d'autres mots un grand nombre de traits sémantiques d'un signifiant à l'aide d'un nombre assez important de relations que ce signifiant entretient avec d'autres signifiants (relations sortantes). Qui plus est, les traits sémantiques du signifiant en question sont encore élargis car il est aussi possible d'associer à lui des signifiants dont il fournit des traits sémantiques (relations entrantes). 
+
+\subsubsection{L'arbitraire du signe}
+
+A l'exception de quelques onomatopés, le lien entre un mot (sous forme orale ou écrite) et son concept est complètement arbitraire. Le mot pour 'arbre' en anglais est 'tree', 'Baum' en allemand. Il n'y a aucun rapport entre la représentation phonique ou graphique d'un mot et sa signification.
+
+Le fait que le signe linguistique est arbitraire rend le travail des chercheurs et des informaticiens en TALN bien plus difficile. Aucun élément dans le mot écrit (qui représente sa forme orale), ou plutôt d'une famille de mots, nous donne des indices quant au sens d'un mot. Il est toutefois possible de déduire le sens d'un mot à partir d'autres mots apparentés ou en se servant des notions d'étymologie provenant d'autres languages (par exemple, le latin et le grec) ou issues de la même langue. Cependant, cela peut aussi donner lieu à des faux amis ou des faux apparentés. 
+
+Ce fait peut sembler évident, mais il est bien d'en être conscient. En effet, si le signe linguistique n'était pas arbitraire, il serait théoriquement possible d'écrire un algorithme pour déduire le sens d'un mot à partir du signifiant, c'est-à-dire le signifié à partir du signifiant, ce qui n'est pas le cas, d'où la complexité du problème que pose la sémantique. 
+
+
+\subsubsection{Synchronie et diachronie}
+
+La notion de synchronie correspond à l'étude ou l'analyse d'une langue à un moment donné, figé dans le temps. La diachronie, elle, s'intéresse à l'évolution d'une langue dans le temps.
+
+Quoiqu'il soit intéressant d'étudier une langue à un moment donné dans le temps, cela ne correspond pas au monde réel. Une langue évolue quotidiennement grâce à ou à cause des nouveaux produits introduits sur le marché et les évènement politique et autre du monde entre autre. Il est donc important de pouvoir tenir compte de ces changements. La base de données de JeuxDeMots tient compte de ces changements grâce au fait que le réseau lexical évolue en temps réel ; le jeu qui alimente ce réseau est en ligne et est alimenté de manière continue. Une telle base de donnée permet aussi d'associer à de nouvelles entrées des dates précises. Il est aussi possible de se servir d'autres outils en TALN et en sémantique plus précisément pour mettre à jour une telle base de données, la LSA, l'analyse sémantique latente, par exemple, qui sera décrite ci-dessous.
+
+Un exemple d'une application qui pourrait prendre en compte la diachronie est un moteur de recherche basé sur un réseau lexical qui est mis à jour en temps réel ou à intervalle de temps très court. Lors d'une histoire qui paraît à la une de tous les journaux concernant un homme politique ou un évènement catastrophique, les relations sémantiques qu'entretienne les mots maître de tels articles changent.
+
+TODO:
+-> article des inventeurs Lauder.... 
+--> références...
+
+\subsubsection{Langue et parole}
+
+Une autre notion fondamentale de linguistique générale est la dichotomie 'langue' et 'parole'. La 'parole' est associée à l'acte individuel de langage alors que 'langue' est la représentation collective de l'ensemble des actes de parole dans l'esprit d'un locuteur natif. La 'parole' est hétérogène, individuel, active alors que 'langue' est collective, sociale, individuelle, passive. 
+
+Enfin, pour avoir une représentation de signification qui est légitime, il est absolument nécessaire qu'il y ait un très grand nombre de sources et/ou de personnes qui alimentent le réseau lexical, sinon, les résultats risque d'être biaisés. Dans la dichotomie 'langue'/'parole' de Saussure, il est essentiel qu'un tel réseau soit une représentation sociale et homogène de la langue en question. Autrement dit, il faut que la base soit représentatif de la 'langue' et non pas de la 'parole' ni quelque part entre 'langue' et 'parole'. Ceci implique qu'il faut aussi des données d'une diversité de sources et de types de sources~: sources écrites et orales, de plusieurs domaines, de plusieurs niveaux de langue. 
+
+D'emblée, la base de données JeuxDeMots/PtiClic n'est pas 'parole' pure car il est nécessaire que deux utilisateurs donne les mêmes réponses, que ce soit concernant le lexique ou les relations sémantiques, sinon, la réponse d'un seul utilisateur n'est pas validée. En outre, le fait que le poids d'une relation augmente lorsque plusieurs paires d'utilisateurs donnent la même réponse tend vers la 'langue' plutôt que vers la 'parole'. Enfin, il est souhaitable qu'un très grand nombre d'utilisateurs contribuent à la base de données JeuxDeMots parce que, justement, il faut que les informations contenues dans la base relève de réellement de 'langue' selon le sens saussurien de ce mot. 
+
+TODO: 
+myriadisation du travail (beaucoup de gens qui travaille)
+ / parcellisation (couper les taches en petites taches)
+lexico-sémantique
+redondance~: poids, chauvauchement... pour renforcer, etc.
+ 
+
+
+
+\subsection{Le réseau lexical JeuxDeMots}
+
+La base de données utilisée pour PtiClic est la même de celle utilisée pour JeuxDeMots, ou, dit de manière plus précise, PtiClic utilise la base de données de JeuxDeMots. Les nouveaux termes, ou noeuds, sont introduit dans le jeu JeuxDeMots ainsi que de nouvelles relations, mais l'objectif principal de PtiClic est d'introduire de nouvelles relations parmi des noeuds existants. Il n'est pas possible d'ajouter de nouveaux noeuds lors d'une partie de PtiClic, seulement de nouvelles relations. 
+
+Un noeud peut correspondre à un mot ("pomme"), une expression ("avant toute chose"), c'est le noeud de type 1. Ces termes figureront dans le mot central et les mots nuage de nos parties. Le noeud de type 4 sont ceux associés avec la catégorie grammaticale des mots et contient les attributs genre et nombre également ("Adj:Fem+SG:InvGen+PL"). D'autres métadonnées concernant les noeuds de type un se trouve dans les noeuds de type 18 qui nous donnent des informations concernant le niveau de langue ("Langue:soutenu", "Langue:familier") et la transitivité des verbes ("Ver:Intransitif") entre autre. 
+
+Les noeuds de type 36 nous donnes des informations très utiles concernant la nature des mots bien plus précis que la catégorie grammaticale. Par exemple, si nous souhaitons que les réponses possibles soit non seulement un nom mais aussi une chose, on pourrait filtrer les résultats grâce au noeud "\_INFO-SEM-THING". Si l'on souhaite que les réponses possibles soit des évènements, des personnes ou des lieux, on peut se servir des relations "\_INFO-SEM-EVENT", "\_INFO-SEM-PERS" et "\_INFO-SEM-PLACE" respectivement, encore faut-il / pourvu ... que des relations vers ces noeuds soit alimentées préalablement. 
+
+Cinquante-cinq différentes types de relations existent qui donneraient des informations de nature morphologique, syntaxique, sémantique, pragmatique et métalinguistique. 
+
+Il existe environ 230 000 noeuds de type 1 (term). Moins de 106 000 de ces mots contiennent des relations sortantes de type 0 (idée), qui est le type de relation le plus général dont presque toutes les autres relations sémantiques sont des sous-ensembles, ce qui représente moins de 50\% des noeuds. Si on prend l'ensemble des relations existant dans la version originale du jeu PtiClic, seulement 122 000 noeuds ont des relations sortantes et moins d'un quart des noeuds du réseau lexical ont des relations entrantes. 
+
+Il serait intéressant d'introduire de nouvelles relations entrantes et sortantes là où il en existe aucune. Toutefois, il serait très difficile voire impossible à partir des relations déjà existantes. Si l'on introduit des mots par hasard dans le nuage, il serait très improbable qu'il y ait des relations avec un mot central, aussi choisi par hasard. Les joueurs du PtiClic ne s'intéresseraient plus au jeu et l'alimentation de la base sera ralentie voir stoppée. Il faudrait un moyen auxiliaire pour introduire de nouvelles relations de ce genre dans la base.  
+
+\subsection{LSA et le réseau lexical JeuxDeMots}
+
+PtiClic combine deux moyens pour la création d'une partie, c'est-à-dire les combinaisons mot central et mots nuages~: LSA et le réseau lexical JeuxDeMots.\footnote{Il semblerait que PtiClic a à un moment donné utilisé ces deux modes afin d'établir des relations sémantiques entre tous les noeuds~: "PtiClic [...] se fondent sur deux méthodes d’acquisition lexicale et ontologique~: l'Analyse Sémantique Latente (LSA) et JeuxDeMots (JDM). (Il est intéressant) de combiner ces deux méthodes afin de combler les lacunes de chacune au travers de (ce) jeux. (...) [C]e jeu permet une double acquisition~: acquisition de vocabulaire par les utilisateurs et acquisition lexicale par la machine. Ceci a donc un intérêt à la fois en TICE et en TALN. Avant de parler de la génération de parties, une explication des deux approches s'impose. Une brève description de ces deux moyens d'analyse sémantique sera donnée dans cette partie." ... "Nous partons d’un réseau déjà existant, celui de JeuxDeMots (http://jeuxdemots.org) et de LSA (latent semantic analysis) qui permet, à partir de textes, de trouver des termes proches d’un terme donné (dans le même champ lexical)." ... "Nous constatons que pour un terme donné, les mots proches fournis par LSA sont couvrent l'ensemble des relations issues de JDM mais que les relations pertinentes restent à identifier." (PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010) (TICE = Technologie de l'Information et de la Communication pour l'Enseignement). Toutefois, selon une discussion avec Mathieu Lafourcade le 4 mai 2011, cela n'est plus le cas et la LSA ne serait pas très efficace lorsqu'elle est appliquée dans la création de partie de PtiClic. Toutefois, étant donné que la moitié des noeuds n'ont aucune relation sémantique entrantes ni sortantes, il est nécessaire d'utiliser d'autres moyens que les relations existantes dans le seul réseau lexical JeuxDeMots afin de créer de nouvelles relations mettant en jeu ces mots. Bien que ceci dépasse le sujet de ce TER, on évoquera ce problème de cette lacune et la LSA dans la suite de la présente discussion.}
+
+
+\subsubsection{La LSA}
+
+Il existe plusieurs systèmes et algorithmes pour évaluer le rapport sémantique entre des mots. Une méthode consiste à chiffrer le lien entre deux mots. Si l'on représente ces liens par un graphe, il y aurait un seul lien ou arc entre deux mots ou noeuds donnés et une valeur associée à la relation qu'entretiennent ces deux mots. Un tel système est la LSA\footnote{'LSA' signifie en anglais Latent Semantic Analysis, ce qui se traduit en français 'Analyse sémantique latente'}. 
+
+Sans rentrer dans les détails de l'algorithme de la LSA, qui est brevetée et payante, cette approche consiste à générer un graphe de relations entre mots à partir de textes écrits. Le résultat de l'algorithme donne un graphe de noeuds (mots) et d'arcs (estimation du degré de lien sémantique entre deux mots) comme suit~:
+
+
+\begin{figure}
+ \begin{minipage}{\textwidth}
+\centering 
+       \includegraphics[width=0.75\textwidth]{img/lsa.jpeg}
+    \caption[Caption for LOF]%
+      {Un example de la LSA appliquée à quatre mots\footnote{PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010}}
+  \end{minipage}
+\end{figure}
+
+
+La LSA est plus fiable lorsque les textes utilisés pour générer les poids de relations sémantiques sont des corpus spécialisés. C'est une méthode rapide, facile à réaliser, efficace. Les données récoltées rélèvent en général de la langue écrite et donc un niveau de langue soutenue et riche. Un tel corpus contient une grande quantité de vocabulaire passif.
+
+Il est plus difficile de se servir de la LSA pour des textes généralistes car elle ne traite pas la polysémie. Si l'on souhaite étudier la langue parlée, il faudrait des corpus qui sont des transcriptions de discours oraux. 
+
+Les inconvénients de la LSA sont nombreux. Outre le fait qu'elle n'aborde pas le problème de la polysémie alors qu'en moyenne un mot donné a quatre significations différentes, lorsqu'il s'agit de textes écrits, les mots les plus courants et les plus évidents sont souvent omis~; les rédacteurs préfèrent utiliser des mots plus recherchés ainsi qu'éviter la répétition afin de conserver un bon style. Ceci va à l'encontre des statistiques sur les poids des relations entre les mots.\footnote{Ceci n'est pas vrai si les types de textes utilisés correspondent exactement aux types de textes auxquelles le résultat de la LSA est appliquée.} La LSA ne nous donne aucune information sur la syntaxe ni la morphologie des mots. Elle ne nous donne aucune information sur la nature des relations (synonymie, contenant/contenu, etc.). Enfin, la LSA traite chaque mot séparément. Autrement dit, chaque mot d'un mot composé est traité individuellement et confondu avec des occurrences individuelles de ces mêmes mots.
+
+Malgré ces inconvénients, malgré des 'erreurs' produites par la LSA, elle est utilisée aujourd'hui car elle nous donne beaucoup d'informations sémantiques justes concernant la relation entre les mots d'un corpus. 
+
+\subsubsection{Le réseau lexical JeuxDeMots}
+
+Etant donné la complexité du signe linguistique, l'idée d'associer à un signe linguistique plusieurs liens sémantiques est très intéressante. Bien que cela croisse la complexité de nos applications, ce choix est tout à fait justifié. On se rend compte que les définitions et les résultats des dictionnaires classiques et de synonymes et antonymes sont insuffisant et ne nous donnes que des informations limités concernant la valeur sémantique d'un mot, surtout qu'elle nous donne peu ou pas d'informations sur la valeur sémantique qu'entretiennent deux mots donnés. En effet, le fait même d'avoir des données concernant plusieurs types de relations existant entre différents mots nous donne des informations supplémentaires quant aux connotations et aux dénotations d'un mot donné que celles d'un dictionnaire classique.
+
+\begin{figure}
+ \begin{minipage}{\textwidth}
+\centering 
+       \includegraphics[width=0.75\textwidth]{img/jdm.jpeg}
+    \caption[Caption for LOF]%
+      {Un example des relations sémantiques du réseau lexical JeuxDeMots appliqué à quatre mots\footnote{Lafourcade et Zampa, PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010}}
+  \end{minipage}
+\end{figure}
+
+A l'inverse de la LSA, le réseau lexical JeuxDeMots est un réseau basé largement sur un vocabulaire actif composé de relations générales, le vocabulaire relevant plutôt de la langue orale créé de manière spontanée par des utilisateurs jouant au jeu. Ce réseau traite la polysémie, contient un grand nombre d'informations concernant les entrées morphologiques, syntaxiques et sémantiques voire pragmatiques. 
+
+Les inconvénients sont que ces informations peuvent contenir des bruits et des silences.\footnote{Lafourcade et Zampa, PtiClic: A Game for Vocabulary Assessment Combining JeuxDeMots and LSA. In proc of CICLingj(Conference on Intelligent text processing and Computational Linguistics). Mexico, 1-7 March, 2009}. Des bruits sont des associations imprécises, qui en général doivent être plus faibles. Ceci peut arriver lorsque les réponses attendus sont celles correspondant au sens propre d'un mot alors que l'utilisateur donne un sens figuré ou bien fait de l'humour, après tout, il s'agit bien d'un jeu. L'exemple du mot poésie par exemple et l'association "est lié à" peut donner lieu à des réponses de sens propre ('auteur', 'rhyme', etc.) ou de sens figuré ('symphonie', 'amour', etc.). L'autre inconvénient est que le réseau JeuxDeMots contient un grand nombre de silences. Un 'silence' est défini comme une association n'existant pas ou qui devraient être plus forte. En effet, les informations sémantiques du réseau JeuxDeMots sont très hétérogènes et pas représentatif de la réalité alors que la LSA est plus hétérogènes quant à sa relation aux textes utilisés pour sa génération. 
+
+Le réseau lexical permet aussi de générer un graphe donnant un seul arc entre deux mots similaire au graphe créer par la LSA. L'algorithme se déroule comme suit~:
+
+\begin{figure}
+ \begin{minipage}{\textwidth}
+\centering 
+       \includegraphics[width=0.75\textwidth]{img/jdm.jpeg}
+    \caption[Caption for LOF]%
+      {Un example des relations sémantiques du réseau lexical JeuxDeMots appliqué à quatre mots\footnote{Lafourcade et Zampa, PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010}}
+  \end{minipage}
+\end{figure}
+
+
+1. Pour un mot M (par exemple, 'musique') en relation avec un terme T (par exemple, 'instrument'), on additionne les relations entrantes et sortantes pour obtenir le 'poids' de la relation, ce poids est calculé pour tous les termes en relation avec le mot M.
+
+\begin{center}
+        \begin{tabular}{ | l | l | l | p{5cm} |}
+        \hline
+        Relation M-T & Calcul du poids & Poids \\ \hline
+        musique-instrument & 450+250+50 & 750 \\ \hline
+        musique-trompette & 310+25 & 335 \\ \hline
+        musique-instrument de musique & 25 & 25 \\
+        \hline
+        \end{tabular}
+\end{center}
+
+2. On normalise cet ensemble comme suit~:
+
+N = \[ 
+\sqrt{((poids (musique-trompette))^2 + (poids (musique-instrument))^2 + (poids (musique-instrument de musique))^2} 
+\]
+
+= 
+\[
+\sqrt{(335^2 + 25^2 +750^2)}
+\]
+
+ =  
+\[ 
+\sqrt{(112225 + 625 + 562500)} 
+\]
+
+= 822
+
+3. On calcule la signature. La signature S de Musique, c'est-à-dire S(Musique) est calculée comme suit~:
+
+S(musique)~: \\
+musique-instrument = 750/822 = 0.91 \\ 
+musique-trompette = 335/822 = 0.40 \\
+musique-instrument de musique = 25/822 = 0.03 \\
+
+Les valeurs ainsi calculées donnent des résultats assez proches de ceux de LSA.
+
+
+\subsection{Analyse pour la réalisation du projet PtiClic sous Android et Smartphone}
+
+Toute la discussion précédente concernant PtiClic et le TALN à l'exception de l'algorithme décrit précédemment était une discussion d'ordre général concernant la raison d'être des projets JeuxDeMots et PtiClic. Le partie qui suit concerne des idées, des informations et des algorithmes directement liés à la réalisation du présent projet. 
+
+L'introduction de nouvelles relations mettant en jeu des noeuds n'ayant aucune relation sémantique associée ne sera pas abordée car nous n'avions pas les moyens de mettre en oeuvre de tels procédés et un tel travail va au-delà du sujet du présent TER.\footnote{Une discussion concernant ce sujet a eu lieu avec Monsieur Lafourcade, qui nous a indiqué clairement de ne pas nous occuper de ce problème précis}  
+
+Dans ce qui suit, 'mc' signifie 'mot central' et 'mn' signifie 'mot nuage'.
+
+Les onze relations qui sont dans la version originale du jeu impose les contraites de catégories grammaticales suivantes~:
+
+
+
+
+\begin{center}
+        \begin{tabular}{ | l | l | l | p{5cm} |}
+        \hline
+        Relation M-T & Calcul du poids & Poids \\ \hline
+        musique-instrument & 450+250+50 & 750 \\ \hline
+        musique-trompette & 310+25 & 335 \\ \hline
+        musique-instrument de musique & 25 & 25 \\ \hline
+        \end{tabular}
+\end{center}
+
+\begin{center}
+        \begin{tabular}{ | l | l | l | l | p{5cm} |}
+        \hline
+RELATION &	'mc' & 'mn'	& 'remarques' \\ \hline
+-1 => "'mn' n'est pas lié à 'mc'" &	adj, adv, noms, verbes & adj, adv, noms, verbes	& \\ \hline
+0 =>  "'mc' est en rapport avec 'mn'" & adj, adv, noms, verbes & adj, adv, noms, verbes & \\ \hline
+5 => "'mc' est un synonyme de 'mn'" & adj, adv, noms, verbes & adj, adv, noms, verbes & même POS \\ \hline
+6 => "'mc' est une sorte de 'mn'" & noms & noms & \\ \hline
+7 => "Un contraire de 'mc' est 'mn'" & adj, adv, noms, verbes &	adj, adv, noms, verbes & même POS \\ \hline
+8 => "Un spécifique de 'mc' est 'mn'" & noms & noms & \\ \hline
+9 => "'mn' est une partie de 'mc'" & noms & noms & \\ \hline
+10 => "'mc' fait partie de 'mn'" & noms & noms & \\ \hline
+13 => "Quoi/Qui pourrait 'mc'" & verbes & noms & \\ \hline
+15 => "Le lieu pour 'mc' est 'mn'" & noms, verbes & noms (lieu NON!!) & \\ \hline
+16 => "Un instrument pour 'mc' est 'mn'" & verbes & noms & \\ \hline
+17 => "Un caractéristique de 'mc' est 'mn'" & noms & adj & \\ \hline
+        \end{tabular}
+\end{center}
+
+Les relations 5 et 7, la synonymie et l'antonymie, bien qu'elle peuvent être de plusieurs catégories grammaticales différentes, doivent contenir un mot central et des mots nuages de la même catégorie grammaticale alors que la relation 0, par exemple, peut avoir un mot central d'une catégorie grammaticale et des mots nuage de plusieurs différentes catégories grammaticales. Le relations 6 et 8, 9 et 10 doivent être des substantifs et ainsi de suite.
+
+Remarquez qu'il ne suffit pas de choisir un mot nuage de la bonne catégorie grammaticale. Par exemple, dans la relation 16, les mots nuages potentiels doivent non seulement être des substantifs, mais doivent aussi être des choses. Le mot 'beauté' est un substantif mais ne sera pas un candidat mot nuage pour la relation 16. 
+
+Il est plus intéressant de créer le nuage à partir de la relation 0 et d'introduire des relations plus spécifiques, c'est-à-dire n'importe quelle relation à l'exception de la relation 0, car presque toute relation est un sous-ensemble de la relation 0, la relation d'antonymie étant parfois une exception à la règle. 
+
+L'isolation d'une seule relation permet d'établir si oui ou si non un mot est lié à un autre mot. Lorsqu'il y a deux ou plusieurs relations, le fait qu'un mot peut appartenir à un seul relation diminue le nombre de fois qu'un mot sera inclu dans une telle relation. 
+
+Certaines relations sont incompatibles. Par exemple, la relation 13 doit avoir comme mot central un verbe alors que la relation 17 doit avoir comme mot central un nom. Si une partie est composée uniquement de la relation 13 et la relation 17, il est évident qu'une des relations n'aura aucune réponse possible car elle sera dépourvue de sens. Un autre exemple d'incompatibilité est dans le relation nuage. Si une partie contient seulement les relations 10 et 17, qui ont toutes les deux comme mot central un substantif, il serait possible de déduire à partir de la catégorie grammaticale quels mots sont candidats aux relations en question~: seuls les adjectifs sont candidats à la relation 17, seuls les noms sont candidats à la relation 10. Il serait intéressant de sanctionner plus sévèrement un utilisateur qui fait ce genre d'erreur lors d'une partie. 
+
+Les relations 5 et 7 vont bien ensemble car elles contiennent exactement les même possibilités de POS comme mots central et nuages. En outre, les relations synonyme/antonyme sont antonymique, donc, il est rare que deux réponse soit possible, bien que la polysémie peut donner lieu à une exception (par exemple, le mot 'terrible' peut être synonyme ou antonyme à la fois de 'très bien' et de 'très mauvais'). Si l'on combine ces relations avec d'autres relations, il faudrait vérifier que les POS correspondent. Par exemple, 5, 7, 8, 9 et 10 peuvent être combiné pourvu que les relations 5 et 7 n'utilise que des noms.
+
+Lorsque l'on trouve un moyen d'introduire de nouvelles relations tels que la LSA, il serait intéressant dans un premier temps d'introduire un mot central, des mots nuages et uniquement la relation 0. Ensuite, les données récupérées à partir de ce procédé pourraient utiliser pour raffiner ces relations. c'est-à-dire, à un mot central C et des mots nuages $N_{1}$ à $N_{n}$ qui ont été liés à C par la relation C, on prend ce même mot central et on introduit des relations autre que la relation 0. 
+
+
+BOOKMARK
+\subsection{*****CE QUI SUIT A ETE REDIGE IL Y A QUELQUE TEMPS ET DOIT ETRE RELU, DEVELOPPE, SUPPRIME OU INTEGRE AU TEXTE CI-DESSUS****}
+
+\subsubsection{Quelles relations mettre ensemble~? Quelles relations seraient en conflit~?}
+
+\subsubsection{La relation 0}
+La relation 0, r\_associated, "\%mn n'est pas lié à \%mc", est très générale et presque toute relation peut aussi être ajoutée à cette relation. Un synonyme a aussi "un rapport avec", un "instrument pour" a aussi "un rapport" avec. La seule exception qui pourrait parfois s'y produire est la relation d'antonymie, mais même là, elle pourrait bien avoir un rapport avec (froid/chaud, chat/chien). Pour cette raison, puisque il est plus intéressant de produire des relations plus spécifiques pour affiner les liens sémantiques, et étant donné que les mots issues de JDM ont été généré à l'aide de cette relation, il n'y a que deux cas où cette relation est intéressante~: 
+
+- pour générer le nuage afin de mettre les mots de cette relation dans des relations plus spécifiques
+- d'introduire des mots issus de LSA dans cette relation pour ensuite pouvoir affiner à l'aide du point précédent
+
+\subsubsection{Nombre de relations}
+Il serait intéressant de varier le nombre de relations. Avoir une seule relation (plus la relation "poubelle") permet d'isoler une seule relation. Il s'agit d'un 'oui' ou 'non' et on élimine la possibilité qu'un mot n'est pas affecté à une relation à cause du fait qu'il irait potentiellement dans deux relations différentes. 
+
+Puis, certains relations sont directement lié et présente aucun conflit. Par exemple, la relation d'antonymie et de synonymie sont elle-même antonymique et prennent les mêmes types de mots (POS) en tant que mots nuages et mot central. Aucun conflit pourrait y arriver si tout mot est de la méme POS.  
+
+
+\subsubsection{Des relations en conflit à cause du POS}
+Certaines relations seraient en conflit si combiner~: Il n'est pas possible de combiner la relation 16 et la relation 17 car le mot central de la relation "Un instrument pour \%mc est \%mn" prend comme mot central un verbe et la relation "Un caractéristique de \%mc est \%mn" prend comme mot central un nom. En outre, les mots nuages correspondants ne sont non plus du même POS~: la relation 16 prend comme mot nuage un nom alors que la relation 17 prend comme mot nuage un adjectif. 
+
+De même, même si un mot central prenait un mot de même POS, si les mots nuages étaient obligatoirement de POS différents, cela faciliterait la tâche du joueur, qui, consciemment ou non, pourrait "tricher" en sachant qu'une des relations prend un nom alors que l'autre prend un adjectif. C'est le cas de la relation 8, 9 et 10 qui ont comme mots central et nuages un nom et la relation 17 qui elle aussi a comme mot central un nom mais qui prend obligatoirement un adjectif comme mot nuage. Ces relations devraient jamais être combinées, ou bien, ce serait intéressant de pénaliser un jour davantage lorsqu'il se trompe de POS attendu. 
+
+
+
+Bien sûr, il est tout à fait possible de mélanger des POS en ayant 3 ou 4 relations et pour tester la légitimité des réponses des joueurs et leur fiabilité, mais cela rend en quelque sorte plus facile au joueur de jouer, quoique tout mot ne va pas forcément dans une catégorie, il existe aussi des mots poubelles, mais cela fournit une aide tout de même pour le joueur, s'il peut savoir à 100\% qu'un mot ne peut pas correspondre à une relation à cause de sa catégorie grammaticale. 
+
+
+
+\subsubsection{POS correct, mais conflit tout de même~!}
+Il peut arriver dans une relation qu'on a les bonnes catégories grammaticales dans les mots nuages, mais que les mots nuages sont inappropriés pour la relation en question. 
+
+Par exemple, pour la relation "Quoi/Qui pourrait \%mc", la relation 13, il ne suffit pas que le mot nuage soit un nom, loin de là~!. Le substantif "honnêteté" ne convient pas du tout~! Il faudrait aussi exploiter d'autres ressources de la base de données, par exemple, un substantif qui est aussi un métier ou une personne ou un animal.
+
+Ou bien, pour la relation partie/tout, il faut absolument que la chose soit un objet physique, une chose. 
+
+Nuage noms -> 6, 8, 9, 10, 13, (15 .. LIEU), 16 (à vérifier)
+
+Noms/choses -> 6, 8, 9, 10 (à vérifier)
+
+
+
+TODO~: 
+
+\subsubsection{Relations qui pourraient être ajoutées au jeu (car lien avec la sémantique)}
+TODO: lister, développer
+
+\subsubsection{Relations qui ne pourraient pas être ajoutées au jeu (car aucun lien avec la sémantique)}
+Liste avec brièves explications
+
+?? des moyens de contourner les problèmes liés au problème de relation à l'aide de la relation 'est de la même famille' et des expressions régulières, etc.~??
+
+
+
+\subsubsection{Algorithmes pour affiner ou renforcer des relations déjà existantes}
+
+Les algorithmes ci-dessous serait potentiellement générateur de nouvelles relations. Ce ne sera pas toujours le cas à cause de la polysémie et le fait que différents mots ont différentes nuances de signification. Il faudrait tester les algorithmes pour savoir ce qu'ils donnent. Il faudrait toujours vérifier que le mot obtenu par ces algorithmes ne produisent pas le mot de départ, de vérifier que le résultat est différent que le ou les mots passés en paramètre. 
+
+\subsubsection{Relation 0 - "\%mn n'est pas lié à \%mc"}
+A ne pas utiliser pour cette fin. Seulement comme indiquer ci-dessus, je répète ici: 
+- pour générer le nuage afin de mettre les mots de cette relation dans des relations plus spécifiques
+- d'introduire des mots issus de LSA dans cette relation pour ensuite pouvoir affiner à l'aide du point précédent
+
+\subsubsection{Relation 5 - "\%mc est un synonyme de \%mn"}
+
+- un synonyme d'un synonyme pourrait être un synonyme, ainsi qu'un synonyme d'un synonyme d'un synonyme
+- un antonyme (relation 7) d'un antonyme pourrait être un synonyme, ansi qu'un antonyme d'un antonyme d'un antonyme  d'un antonyme (Bonjour~!) 
+
+\subsubsection{Relation 6 - "\%mc est une sorte de \%mn"}
+- "Une moto est une sorte véhicule" où "moto" est le mot central et "véhicule" est un parmi plusieurs mots nuages. L'algorithme va partir de "moto" pour trouver "véhicule" ou bien "deux roues" (relation 6), puis faire marche arrière (relation 8, "Un spécifique de \%mc est \%mn"), par exemple, un spécifique "véhicule" est "voiture" ou bien un spécifique de "deux roues" est "vélo". Ensuite, on génère la relation "sorte de" à partir de ce résultat... "voiture" est une sorte de "moyen de transport" ou bien "vélo" est un "équipement de loisir". Le résultat final~: "moto" est-elle un "moyen de transport"~? "moto" est-elle un "équipement de loisir"~? 
+En somme, on effectue la relation 6, la relation 8 puis la relation 6 encore.  
+
+\subsubsection{Relation 7 - "Un contraire de \%mc est \%mn"}
+- un synonyme d'un antonyme pourrait être un antonyme
+- un antonyme d'un synonyme pourrait être un antonyme
+- un antonyme d'un antonyme d'un antonyme pourrait être un antonyme (Bonjour~!)
+
+
+\subsubsection{Relation 8 - "Un spécifique de \%mc est \%mn"}
+
+- C'est l'inverse de la relation 6. On effectue la relation 8, puis la relation 6, puis la relation 8.
+
+
+\subsubsection{Relation 9 -  "\%mn est une partie de \%mc"}
+- "salon" est une partie de "maison". On peut choisir un spécifique de "maison" et ensuite effectuer la relation 9. Si spécifique nous donne "église", il y a des parties de l'église qui sont commune aux parties d'une maison, d'autres qui sont spécifiques à "église".
+- On peut également basculer de la partie vers le tout puis encore vers la partie
+- On peut trouver la partie d'une partie, puis le tout de cette dernière.
+- On peut trouver le tout du mot central "maison" fait partie de "ville", une partie de cette dernière ("ville"), puis encore une partie de cette dernière.  
+
+
+\subsubsection{Relation 10 - "\%mc fait partie de \%mn"}
+- il s'agit de l'inverse de la relation 9. Il suffit d'effectuer les étapes inverses aux algorithmes de la relation 9
+
+
+
+\subsection{CONCLUSIONS}
+Il est intéressant que lorsque l'on fait une recherche dans ce domaine, on apprend énormément de choses de la machine, puis à partir des choses apprises, on modifie le fonctionnement de la machine, qui elle, nous fournit encore des résultats, et ainsi de suite. La machine apprend de nous et nous, nous apprenons de la machine. C'est un vrai dialogue~! ... 
+
+
 
 
 
