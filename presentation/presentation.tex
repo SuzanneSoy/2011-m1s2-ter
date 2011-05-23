@@ -297,18 +297,18 @@ Avez-vous des questions~?
 \begin{frame}
   \begin{tikzpicture}[
     state/.style={draw, text width=2.3cm},
-    transition/.style={dashed,->}
+    transition/.style={->}
     ]
     \node[state] (frontpage) {\begin{center}Page de garde\end{center}};
-    \node[state, below=of frontpage] (game) {\begin{center}Jeu\end{center}};
-    \node[state, below=of game] (score) {\begin{center}Score\end{center}};
+    \node[state, right=of frontpage] (game) {\begin{center}Jeu\end{center}};
+    \node[state, right=of game] (score) {\begin{center}Score\end{center}};
     
     \draw[transition] (frontpage) -- (game);
     \draw[transition] (game) -- (score);
-    \draw[transition] (score) -- ++(-2cm,0) |- (frontpage);
-    \draw[transition] (game.north east) ++(-0.3cm,0) arc (180:-90:0.3cm);
+    \draw[transition] (score.south) -- ++(0,-0.3cm) -| (frontpage);
+    \draw[transition,<-] (game.north) -- ++(0,0.3cm) -| ($.5*(game) + .5*(score)$);
     
-    \node[state,text width=1.2cm, right=of frontpage] (activite) {Activité};
+    \node[state,text width=1.2cm, below=of frontpage] (activite) {Activité};
     \draw[transition] ($(activite.south)+(-.75cm,-.5cm)$) -- node[auto,swap,font=\footnotesize,scale=0.8] {\shortstack{\shortstack{Évènement\\(Intent)}}} ($(activite.south)+(.75cm,-.5cm)$);
   \end{tikzpicture}
 \end{frame}
