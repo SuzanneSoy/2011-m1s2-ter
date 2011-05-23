@@ -309,7 +309,7 @@ Avez-vous des questions~?
     \draw[transition,<-] (game.north) -- ++(0,0.3cm) -| ($.5*(game) + .5*(score)$);
     
     \node[state,text width=1.2cm, below=of frontpage] (activite) {Activité};
-    \draw[transition] ($(activite.south)+(-.75cm,-.5cm)$) -- node[auto,swap,font=\footnotesize,scale=0.8] {\shortstack{\shortstack{Évènement\\(Intent)}}} ($(activite.south)+(.75cm,-.5cm)$);
+    \draw[transition] (activite.north east) ++(0.5cm,0) -- node[auto,swap,font=\footnotesize,scale=0.8] {\shortstack{\shortstack{Évènement\\(Intent)}}} ++(1.5cm,0);
   \end{tikzpicture}
 \end{frame}
 
