@@ -32,44 +32,8 @@
   \titlepage
 \end{frame}
 
-\section{Le Jeu}
-\begin{frame}
- \begin{block}{Version Native}
-   \centering 
-   dessus
- \end{block}
- \begin{block}{Version HTML5}
-   \centering 
-   dessous
- \end{block}
-\end{frame}
-
-\begin{frame}
-% bertrand
- Caractéristique d'\android{}~:
-  \begin{itemize}
-    \item<+-> fondé sur un noyau Linux
-    \item<+-> interface de programmation en Java (Dalvic VM)
-    \item<+-> basé sur le modéle MVC
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  Le framework~:
-  \begin{itemize}
-    \item<+-> SDK
-    \item<+-> Emulateur
-    \item<+-> Plugin Eclipse
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  Le developpement~:
-  \begin{itemize}
-    \item<+-> Le patron de conception MVC (Modele-Vue-Controlleur) % mettre schema MVC Propre a Android
-  \end{itemize}
-\end{frame}
-
+% John
+\section{Introduction}
 \begin{frame}
   Planning
   \begin{itemize}
@@ -86,30 +50,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}
-  % Georges
-  \begin{tikzpicture}[
-    mynode/.style = {circle, minimum size=1.5cm},
-    mc/.style = {mynode,draw=red,text=red},
-    mn/.style = {mynode,draw},
-    mi/.style = {mynode,draw=gray,text=gray},
-    rel/.style = {font=\footnotesize},
-    guess/.style = {->,dashed},
-    exist/.style = {->},
-    auto,swap
-    ]
-    \node[mc] (mc) {Chat};
-    \node[mn] (mn0) at (0,3) {Souris};
-    \node[mi] (mi1) at (3,-2) {matou};
-    \node[mn] (mn2) at (6,0) {animal};
-    \path[exist] (mc) edge[bend right] node[rel]{idée associée} (mn0);
-    \path[exist] (mc) edge node[rel]{synonyme} (mi1);
-    \path[exist] (mi1) edge node[rel]{sorte de} (mn2);
-    \path[guess,swap] (mc) edge node[rel]{sorte de ?} (mn2);
-    \path[guess,swap] (mc) edge[bend left] node[rel]{\shortstack{sorte de ?\\synonyme ?\\\dots}} (mn0);
-  \end{tikzpicture}
-\end{frame}
-
+\section{TALN Theorique}
 \begin{frame}
   Ferdinand de Saussure (1857-1913), Cours de linguistique général
   \begin{itemize}
@@ -228,6 +169,33 @@ RELATION &	'mc' & 'mn'	& 'remarques' \\ \hline
 \end{center}
 \end{frame}
 
+\section{Generation de partie}
+\begin{frame}
+  % Georges
+  \begin{tikzpicture}[
+    mynode/.style = {circle, minimum size=1.5cm},
+    mc/.style = {mynode,draw=red,text=red},
+    mn/.style = {mynode,draw},
+    mi/.style = {mynode,draw=gray,text=gray},
+    rel/.style = {font=\footnotesize},
+    guess/.style = {->,dashed},
+    exist/.style = {->},
+    auto,swap
+    ]
+    \node[mc] (mc) {Chat};
+    \node[mn] (mn0) at (0,3) {Souris};
+    \node[mi] (mi1) at (3,-2) {matou};
+    \node[mn] (mn2) at (6,0) {animal};
+    \path[exist] (mc) edge[bend right] node[rel]{idée associée} (mn0);
+    \path[exist] (mc) edge node[rel]{synonyme} (mi1);
+    \path[exist] (mi1) edge node[rel]{sorte de} (mn2);
+    \path[guess,swap] (mc) edge node[rel]{sorte de ?} (mn2);
+    \path[guess,swap] (mc) edge[bend left] node[rel]{\shortstack{sorte de ?\\synonyme ?\\\dots}} (mn0);
+  \end{tikzpicture}
+\end{frame}
+
+\section{Creation de partie}
+%Yoann
 \begin{frame}
   \begin{itemize}
   \item Site web
@@ -243,8 +211,88 @@ RELATION &	'mc' & 'mn'	& 'remarques' \\ \hline
   \end{itemize}
 \end{frame}
 
+% bertrand
+\section{Le Jeu}
 \begin{frame}
-  % Georges
+\frametitle{Le framework \android{}}
+\begin{block}{Les outils mis à disposition}
+  \begin{itemize}
+    \item<+-> Langage de programmation Java ;
+    \item<+-> Patron de conception MVC (Modèle-Vue-Contrôlleur);
+    \item<+-> Les vues sont réalisé en XML
+  \end{itemize}
+\end{block}
+\begin{alertblock}{Inconvenient}<+->
+  L'édition des vues en XML nous à énorment ralenti lors du développement de l'alpha 1
+\end{alertblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{Le modèle MVC proposé par Google}
+\begin{block}{Modèle-Vue-Contrôlleur}
+  \centering
+  \begin{tikzpicture}[bend angle=10, shorten >=0.1cm, shorten <=0.1cm]
+    \node[draw] (activite) {Activité};
+    \node[draw,below right=of activite] (modele) {Modèle};
+    \node[draw,below left=of activite] (xml) {Vue (XML)};
+    \draw[->] (activite) edge[bend right] (modele);
+    \draw[->] (modele)   edge[bend right] (activite);
+    \draw[->] (activite) edge[bend left] (xml);
+    \draw[->] (xml)      edge[bend left] (activite);
+  \end{tikzpicture}
+\end{block}
+\begin{block}{Détail}
+\begin{description}
+  \item[Modèle] Classe metier permettant de stocker des informations
+  \item[Contrôlleur] Classe héritant d'\verb!Activity! (Activité)
+  \item[Vue] XML affichant les informations
+\end{description}
+\end{block}
+\end{frame}
+
+\begin{frame} % Un peu vide peut etre ajouter les autre activite tel que prefs, info...
+\frametitle{Prototype 1}
+ \begin{block}{Schéma générale de l'enchainement des Activités~:}
+   \centering 
+  \begin{tikzpicture}[
+    state/.style={draw, text width=2.3cm},
+    transition/.style={->}
+    ]
+    \node[state] (frontpage) {\begin{center}Page de garde\end{center}};
+    \node[state, right=of frontpage] (game) {\begin{center}Jeu\end{center}};
+    \node[state, right=of game] (score) {\begin{center}Score\end{center}};
+    
+    \draw[transition] (frontpage) -- (game);
+    \draw[transition] (game) -- (score);
+    \draw[transition] (score.south) -- ++(0,-0.3cm) -| (frontpage);
+    \draw[transition,<-] (game.north) -- ++(0,0.3cm) -| ($.5*(game) + .5*(score)$);
+    
+    \node[state,text width=1.2cm, below=of frontpage] (activite) {Activité};
+    \draw[transition] (activite.north east) ++(0.5cm,0) -- node[auto,swap,font=\footnotesize,scale=0.8] {\shortstack{\shortstack{Évènement\\(Intent)}}} ++(1.5cm,0);
+  \end{tikzpicture}
+ \end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Passage au HTML}
+\begin{block}{Défauts constatés}
+  \begin{itemize}
+    \item<+-> Perte de temps avec les ajustements des vues ;
+    \item<+-> Public visé trop faible ;
+  \end{itemize}
+\end{block}
+\begin{block}{Solutions proposées}<+->
+  \begin{itemize}
+    \item<+-> Utilisation du web pour toucher plus de personnes ;
+    \item<+-> Utilisation du framework WebKit proposé par \android{} ;
+  \end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Prototype 2}
+ \begin{block}{Schéma générale de l'enchainement des pages~:}
+   \centering 
   \texttt{\textcolor{gray}{http://pticlic.fr/jeu.html}\#\textcolor{red}{game}/\textcolor{blue}{1306104746953}/\textcolor{blue}{5,0,5,-1}}
   \vskip 1em%
   \begin{tikzpicture}[
@@ -255,7 +303,7 @@ RELATION &	'mc' & 'mn'	& 'remarques' \\ \hline
     auto,
     secondary/.style={draw=gray}
     ]
-    \node[state] (goto) {goto};
+    \node[state] (goto) {\shortstack{aller\\vers}};
     \node[left=of goto] (arbitrary) {$*$};
     \node[state, right=of goto] (pre-enter) {\shortstack{pre-\\enter}};
     \node[state, right=of pre-enter] (enter) {enter};
@@ -277,8 +325,17 @@ RELATION &	'mc' & 'mn'	& 'remarques' \\ \hline
     \draw[event,secondary] (ajax) -- (enter);
     \draw[event,draw=blue] (hash.east) to[out=0, in=135] (update);
   \end{tikzpicture}
+ \end{block}
 \end{frame}
 
+\section{Demonstration}
+\begin{frame}
+\begin{center}
+Démonstration\dots{}
+\end{center}
+\end{frame}
+
+\section{Conclusion}
 \begin{frame}
 Conclusion
 \begin{itemize}
@@ -292,37 +349,6 @@ Conclusion
 \centering
 Merci de votre attention... \\
 Avez-vous des questions~?
-\end{frame}
-
-\begin{frame}
-  \begin{tikzpicture}[
-    state/.style={draw, text width=2.3cm},
-    transition/.style={->}
-    ]
-    \node[state] (frontpage) {\begin{center}Page de garde\end{center}};
-    \node[state, right=of frontpage] (game) {\begin{center}Jeu\end{center}};
-    \node[state, right=of game] (score) {\begin{center}Score\end{center}};
-    
-    \draw[transition] (frontpage) -- (game);
-    \draw[transition] (game) -- (score);
-    \draw[transition] (score.south) -- ++(0,-0.3cm) -| (frontpage);
-    \draw[transition,<-] (game.north) -- ++(0,0.3cm) -| ($.5*(game) + .5*(score)$);
-    
-    \node[state,text width=1.2cm, below=of frontpage] (activite) {Activité};
-    \draw[transition] (activite.north east) ++(0.5cm,0) -- node[auto,swap,font=\footnotesize,scale=0.8] {\shortstack{\shortstack{Évènement\\(Intent)}}} ++(1.5cm,0);
-  \end{tikzpicture}
-\end{frame}
-
-\begin{frame}
-  \begin{tikzpicture}[bend angle=10, shorten >=0.1cm, shorten <=0.1cm]
-    \node[draw] (activite) {Activité};
-    \node[draw,below right=of activite] (modele) {Modèle};
-    \node[draw,below left=of activite] (xml) {Vue (XML)};
-    \draw[->] (activite) edge[bend right] (modele);
-    \draw[->] (modele)   edge[bend right] (activite);
-    \draw[->] (activite) edge[bend left] (xml);
-    \draw[->] (xml)      edge[bend left] (activite);
-  \end{tikzpicture}
 \end{frame}
 
 \end{document}
