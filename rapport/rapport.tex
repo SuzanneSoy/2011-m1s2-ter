@@ -640,15 +640,12 @@ Un autre avantage à l'utilisation d'une application web pour développer PtiCli
 \section{Discussion}
 \subsection{Difficultés rencontrées}
 \label{sec:difficultes}
-\subsubsection{Itération 1, semaine 1}
 \begin{itemize}
 \item Outil de création de diagrammes de GANTT (planner) est assez mauvais.
-\item Lenteur de l'émulateur \android{} : impossible de travailler sur mon PC.% gd
-\item Caractères non échappés dans le dump de la base.% gd
-\end{itemize}
-
-\subsubsection{Itération 1, semaine 3}
-\begin{itemize}
+\item Lenteur de l'émulateur \android{} : impossible de travailler sur le PC de Georges, ni sur les netbook des autres.
+\item Nous avons installé l'émulateur \android{}, l'ADT et le plugin Eclipse sur les machines du rezufr, mais la configuration était un
+  cauchemar et nous a fait perdre beaucoup de temps.
+\item Caractères non échappés et autres bizarreries dans le dump de la base.
 \item SQLite3 n'est pas capable d'utiliser un index pour la requête extérieure sur une requête du type
 
 \begin{verbatim}
@@ -665,7 +662,16 @@ select * from table limit 100 order by random();
   en une requête qui récupère tout le set de résultats, ajoute une colonne random(), prend les 100 premiers résultats et les trie. Mais cela
   l'oblige à récupérer tout le set de résultats, et calculer le random() pour chaque ligne, pour ensuite jeter tout ce qui dépasse la ligne
   100. Cela est évidemment très coûteux dans le cadre de requêtes avec beaucoup de résultats, et nous avons donc dû isoler la requête avec
-  \verb!limit! de son \verb!order by! avec des «hacks» assez tordus.
+  \verb!limit! de son \verb!order by! avec des «hacks» assez tordus pour tromper l'optimiseur.
+\item Le volume de données à traiter (base de données de plus de 100Mo) nous a ralentis lors de l'élaboration de l'algorithme de création de
+  parties.
+\item Le langage de description des interfaces utilisateur d'\android{}, qui est une application XML, est totalement incompréhensible pour
+  ce qui concerne la mise en page (disposition et tailles relatives des éléments). C'est une des raisons pour l'abandon de la plate-forme
+  \android{} + Java, en faveur de HTML5 + CSS + JavaScript. CSS est aussi cryptique que le langage de mise en page d'\android{}, mais au
+  moins nous avons l'habitude de contourner certains de ses problèmes.
+\item Dans l'application HTML5, l'omniprésence d'évènements asynchrones nous a causés pas mal de bugs et de soucis.
+\item Des légères différences de comportement entre le navigateur web d'\android{} et les navigateurs sur les PC ont causé des bugs très
+  difficiles à trouver.
 \end{itemize}
 
 \subsection{Perspectives}
@@ -725,24 +731,23 @@ Android Developer, 2011. (\url{http://developer.android.com/})
 
 
 
-\section{Notes Georges}
-Les relations suivantes seront peut-être utilisées (* = oui, c'est sûr, on a/doit faire les icônes et des requêtes sql)~:
+% \section{Notes Georges}
+% Les relations suivantes seront peut-être utilisées (* = oui, c'est sûr, on a/doit faire les icônes et des requêtes sql)~:
 
-\begin{tabular}{|c|l|l|l|}
-\hline
-icône~? & nom & num & signification \\
-\hline
-$*$ & r\_syn       & 5  & synonyme (chat -> matou) \\
-$*$ & r\_anto      & 7  & antonyme (bon -> mauvais) \\
-$*$ & r\_has\_part & 9  & A comme partie (chat -> patte) \\
-$*$ & r\_holo      & 10 & Fait partie de (patte -> chat) \\
-    & r\_agent     & 13 & Peut exécuter comme action (chat -> manger) \\
-    & r\_patient   & 14 & Peut subir comme action (chat -> laver) \\
-    & r\_carac     & 17 & Caractéristique (chat -> affectueux (ou pas…)) \\
-\hline
-\end{tabular}
+% \begin{tabular}{|c|l|l|l|}
+% \hline
+% icône~? & nom & num & signification \\
+% \hline
+% $*$ & r\_syn       & 5  & synonyme (chat -> matou) \\
+% $*$ & r\_anto      & 7  & antonyme (bon -> mauvais) \\
+% $*$ & r\_has\_part & 9  & A comme partie (chat -> patte) \\
+% $*$ & r\_holo      & 10 & Fait partie de (patte -> chat) \\
+%     & r\_agent     & 13 & Peut exécuter comme action (chat -> manger) \\
+%     & r\_patient   & 14 & Peut subir comme action (chat -> laver) \\
+%     & r\_carac     & 17 & Caractéristique (chat -> affectueux (ou pas…)) \\
+% \hline
+% \end{tabular}
 
-% TODO : graphique sélection des mots.
 \newpage
 
 \appendix
@@ -754,26 +759,24 @@ $*$ & r\_holo      & 10 & Fait partie de (patte -> chat) \\
 \includegraphics[trim=1.7cm 19cm 1.7cm 4cm,clip,width=20cm]{../feuille-route/gp-pticlic.pdf}
 \newpage
 
+% \section{Annexe A}
+
+% \subsection{14 janvier 2010}
+
+% Durée du projet 4 mois (4 itérations de 4 semaines)
+
+% Conventions de code : \url{http://java.sun.com/docs/codeconv/html/CodeConventions.doc6.html}
+
+% Code (noms de variables, etc.) en anglais, commentaires en français, javadoc en français.
+
+% \subsection{26 janvier 2011}
+% Mettre le serveur (PHP) sur free.fr, pour pouvoir tester facilement
+
+% Utilisation d'une classe \verb!Constant!
+
+% Écran d'accueil du jeu : Image (splash), puis directement les icônes des modes de jeu + configuration, au lieu d'avoir un écran avec le logo et jouer/config, suivi du choix du mode de jeu.
+
 \section{Annexe A}
-
-
-\subsection{14 janvier 2010}
-
-
-Durée du projet 4 mois (4 itérations de 4 semaines)
-
-Conventions de code : \url{http://java.sun.com/docs/codeconv/html/CodeConventions.doc6.html}
-
-Code (noms de variables, etc.) en anglais, commentaires en français, javadoc en français.
-
-\subsection{26 janvier 2011}
-Mettre le serveur (PHP) sur free.fr, pour pouvoir tester facilement
-
-Utilisation d'une classe \verb!Constant!
-
-Écran d'accueil du jeu : Image (splash), puis directement les icônes des modes de jeu + configuration, au lieu d'avoir un écran avec le logo et jouer/config, suivi du choix du mode de jeu.
-
-\section{Annexe B}
 
 %\subsection{Serveur}
 
@@ -783,7 +786,6 @@ Utilisation d'une classe \verb!Constant!
 dump.url -- contient l'URL du dump le plus récent
 dump2mysql.sh -- Script pour convertir dump de Lafourcade en sql (pas terminé~? On utilise sqlite, donc on a laissé tombé~?)
 dump2sqlite.sh  -- Script pour convertir dump de Lafourcade en sql
-parties.json  -- ??
 README.sh -- Ce n'est pas un README, c'est un script pour faire l'ensemble de la création de la BD, du téléchargement à la création d'indexes en passant par la création des tables et les insertions.
 sql -- Le script sql à proprement parler
 php\/db -- fichier binaire sqlite pour le chargement de la bd
@@ -796,7 +798,6 @@ php\/db.php -- fichier pour ouvrir et fermer ou récupérer l'instance de l'ouve
 php\/pticlic.php -- contient un grand nombre de fonctions pour le jeu
 php\/relations.php -- contient un tableau et les phrases 'relation'
 php\/server.php --
-php\/showGame.php -- ??
 
 
 
