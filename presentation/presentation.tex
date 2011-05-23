@@ -19,6 +19,22 @@
 \end{frame}
 
 \begin{frame}
+  Planning
+  \begin{itemize}
+  \item planning initial~: quatre itérations
+  \item planning réel~: deux itérations
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  Planning : deux itérations = 2 prototypes
+  \begin{itemize}
+  \item prototype Android Java
+  \item prototype Smartphone
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
 % bertrand
  Caractéristique d'\android{}~:
   \begin{itemize}
@@ -52,24 +68,8 @@
   Le cycle de vie d'une activité~:
   \begin{minipage}{\textwidth}
    \centering 
-       \includegraphics[width=0.75\textwidth]{img/activity_lifecycle.png}
+       \includegraphics[width=0.60\textwidth]{img/activity_lifecycle.png}
   \end{minipage}
-\end{frame}
-
-\begin{frame}
-  Planning
-  \begin{itemize}
-  \item planning initial~: quatre itérations
-  \item planning réel~: deux itérations
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  Planning : deux itérations = 2 prototypes
-  \begin{itemize}
-  \item prototype Android Java
-  \item prototype Smartphone
-  \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -159,7 +159,7 @@
 \begin{frame}
   Réseau lexical JeuxDeMots~: quelques statistiques
   \begin{itemize}
-  \item environ 45% des noeuds ne sont pas liés à des relations sémantiques sortantes
+  \item environ 45\% des noeuds ne sont pas liés à des relations sémantiques sortantes
   \item environ 70\% des noeuds ne sont pas liés à des relations sémantiques entrantes
   \end{itemize}
 \end{frame}
@@ -196,21 +196,21 @@
 
 \begin{frame}
 \begin{center}
-        \begin{tabular}{ | l | l | l | l | p{5cm} |}
+	\begin{tabular}{ | l | l | l | l | p{5cm} |}
         \hline
-RELATION &	'mc' & 'mn'	& 'remarques' \\ \hline
--1 => "'mn' n'est pas lié à 'mc'" &	adj, adv, noms, verbes & adj, adv, noms, verbes	& \\ \hline
-0 =>  "'mc' est en rapport avec 'mn'" & adj, adv, noms, verbes & adj, adv, noms, verbes & \\ \hline
-5 => "'mc' est un synonyme de 'mn'" & adj, adv, noms, verbes & adj, adv, noms, verbes & même POS \\ \hline
-6 => "'mc' est une sorte de 'mn'" & noms & noms & \\ \hline
-7 => "Un contraire de 'mc' est 'mn'" & adj, adv, noms, verbes &	adj, adv, noms, verbes & même POS \\ \hline
-8 => "Un spécifique de 'mc' est 'mn'" & noms & noms & \\ \hline
-9 => "'mn' est une partie de 'mc'" & noms & noms & \\ \hline
-10 => "'mc' fait partie de 'mn'" & noms & noms & \\ \hline
-13 => "Quoi/Qui pourrait 'mc'" & verbes & noms & \\ \hline
-15 => "Le lieu pour 'mc' est 'mn'" & noms, verbes & noms (lieu NON!!) & \\ \hline
-16 => "Un instrument pour 'mc' est 'mn'" & verbes & noms & \\ \hline
-17 => "Un caractéristique de 'mc' est 'mn'" & noms & adj & \\ \hline
+\footnotesize{RELATION} & \footnotesize{'mc'} & \footnotesize{'mn'} & \footnotesize{rem.} \\ \hline
+\footnotesize{-1 $\Rightarrow$ "'mn' n'est pas lié à 'mc'"} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{} \\ \hline
+\footnotesize{0 $\Rightarrow$  "'mc' est en rapport avec 'mn'"} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{} \\ \hline
+\footnotesize{5 $\Rightarrow$ "'mc' est un synonyme de 'mn'"} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{\shortstack{même\\POS}} \\ \hline
+\footnotesize{6 $\Rightarrow$ "'mc' est une sorte de 'mn'"} & \footnotesize{noms} & \footnotesize{noms} & \footnotesize{} \\ \hline
+\footnotesize{7 $\Rightarrow$ "Un contraire de 'mc' est 'mn'"} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{\shortstack{même\\POS}} \\ \hline
+\footnotesize{8 $\Rightarrow$ "Un spécifique de 'mc' est 'mn'"} & \footnotesize{noms} & \footnotesize{noms} & \footnotesize{} \\ \hline
+\footnotesize{9 $\Rightarrow$ "'mn' est une partie de 'mc'"} & \footnotesize{noms} & \footnotesize{noms} & \footnotesize{} \\ \hline
+\footnotesize{10 $\Rightarrow$ "'mc' fait partie de 'mn'"} & \footnotesize{noms} & \footnotesize{noms} & \footnotesize{} \\ \hline
+\footnotesize{13 $\Rightarrow$ "Quoi/Qui pourrait 'mc'"} & \footnotesize{verbes} & \footnotesize{noms} & \footnotesize{} \\ \hline
+\footnotesize{15 $\Rightarrow$ "Le lieu pour 'mc' est 'mn'"} & \footnotesize{noms, verbes} & \footnotesize{\shortstack{noms\\(lieu NON!!)}} & \footnotesize{} \\ \hline
+\footnotesize{16 $\Rightarrow$ "Instrument pour 'mc' est 'mn'"} & \footnotesize{verbes} & \footnotesize{noms} & \footnotesize{} \\ \hline
+\footnotesize{17 $\Rightarrow$ "'mn' Caractéristique de 'mc'"} & \footnotesize{noms} & \footnotesize{adj} & \footnotesize{} \\ \hline
         \end{tabular}
 \end{center}
 \end{frame}
@@ -263,9 +263,17 @@ Conclusion
 \end{frame}
 
 \begin{frame}
-\centering
-Merci de votre attention... \\
-Avez-vous des questions~?
+\begin{center}
+\huge{Démonstration}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\huge{Merci de votre attention\dots}
+\vskip 1em
+\huge{Avez-vous des questions~?}
+\end{center}
 \end{frame}
 
 \end{document}
