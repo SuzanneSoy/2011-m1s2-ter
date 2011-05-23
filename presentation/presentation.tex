@@ -301,4 +301,17 @@ Avez-vous des questions~?
   \end{tikzpicture}
 \end{frame}
 
+\begin{frame}
+  \begin{tikzpicture}[bend angle=10, shorten >=0.1cm, shorten <=0.1cm]
+    \node[draw] (activite) {Activité};
+    \node[draw,below right=of activite] (modele) {Modèle};
+    \node[draw,below left=of activite] (xml) {Vue (XML)};
+    \draw[->] (activite) edge[bend right] (modele);
+    \draw[->] (modele)   edge[bend right] (activite);
+    \draw[->] (activite) edge[bend left] (xml);
+    \draw[->] (xml)      edge[bend left] (activite);
+  \end{tikzpicture}
+\end{frame}
+
+
 \end{document}
