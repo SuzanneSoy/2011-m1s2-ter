@@ -18,11 +18,11 @@
   \titlepage
 \end{frame}
 
+\section{Le developpement du jeu}
 \begin{frame}
 % bertrand
  Caractéristique d'\android{}~:
   \begin{itemize}
-    \item<+-> développé par Google
     \item<+-> fondé sur un noyau Linux
     \item<+-> interface de programmation en Java (Dalvic VM)
     \item<+-> basé sur le modéle MVC
@@ -41,19 +41,8 @@
 \begin{frame}
   Le developpement~:
   \begin{itemize}
-    \item<+-> Pattern MVC
-    \item<+-> Modéle héritant \verb!java.lang.Object!
-    \item<+-> Vue modélisé en XML
-    \item<+-> Controlleur héritant de \verb!android.app.Activity!
+    \item<+-> Le patron de conception MVC (Modele-Vue-Controlleur) % mettre schema MVC Propre a Android
   \end{itemize}
-\end{frame}
-
-\begin{frame}
-  Le cycle de vie d'une activité~:
-  \begin{minipage}{\textwidth}
-   \centering 
-       \includegraphics[width=0.75\textwidth]{img/activity_lifecycle.png}
-  \end{minipage}
 \end{frame}
 
 \begin{frame}
@@ -217,14 +206,14 @@ RELATION &	'mc' & 'mn'	& 'remarques' \\ \hline
 
 \begin{frame}
   % Georges
-  \texttt{\textcolor{gray}{http://pticlic.fr/jeu.html}\#\textcolor{red}{game}/\textcolor{green}{1306104746953}/\textcolor{blue}{5,0,5,-1}}
+  \texttt{\textcolor{gray}{http://pticlic.fr/jeu.html}\#\textcolor{red}{game}/\textcolor{blue}{1306104746953}/\textcolor{blue}{5,0,5,-1}}
   \vskip 1em%
   \begin{tikzpicture}[
     state/.style = {circle,draw,minimum size=1.5cm},
     transition/.style = {->},
     event/.style = {->, decorate, decoration={snake, post length=.5mm}, segment amplitude=.4mm, segment length=2mm},
     source/.style = {},
-    auto,swap,
+    auto,
     secondary/.style={draw=gray}
     ]
     \node[state] (goto) {goto};
@@ -238,17 +227,16 @@ RELATION &	'mc' & 'mn'	& 'remarques' \\ \hline
     \node[state] (ajax) at ($0.5*(c1) + 0.5*(c2)$) {AJAX};
     \node[source, above=of goto] (hash) {hashchange};
 
-    \draw[transition] (goto) -- (pre-enter);
+    \draw[transition] (goto) edge node {2} (pre-enter);
     \draw[transition,dashed] (pre-enter) -- (enter);
     \draw[transition] (enter) -- (update);
-    \draw[event] (goto) -- (leave);
-    \draw[event] (hash) -- (goto);
-    \draw[event] (hash) -- (goto);
+    \draw[transition] (goto) edge node {1} (leave);
+    \draw[event,draw=red] (hash) -- (goto);
     \draw[event] (arbitrary) -- (goto);
-    \draw[event,secondary] (arbitrary) to[out=90, in=225] (hash.south west);
+    \draw[event] (arbitrary) to[out=90, in=225] (hash.south west);
     \draw[event,secondary] (pre-enter) -- (ajax);
     \draw[event,secondary] (ajax) -- (enter);
-    \draw[event,secondary] (hash.east) to[out=0, in=135] (update);
+    \draw[event,draw=blue] (hash.east) to[out=0, in=135] (update);
   \end{tikzpicture}
 \end{frame}
 
