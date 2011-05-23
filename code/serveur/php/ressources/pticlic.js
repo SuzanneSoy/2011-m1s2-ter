@@ -286,12 +286,14 @@ init(function() {
 		
 		var isForward = (state.answers.length - oldstate.answers.length) >= 0;
 		var rb = runstate.relationBox[(isForward ? state : oldstate).answers[(isForward ? state : oldstate).answers.length - 1]];
-		
-		if (!runstate.currentMNCaption || oldstate.screen != 'game')
-			runstate.currentMNCaption = $('<span class="mn-caption"/>');
+
+		if (runstate.currentMNCaption && oldstate.screen != 'game')
+			runstate.currentMNCaption.remove();
+		if (!runstate.currentMNCaption)
+			runstate.currentMNCaption = $('<span class="mn-caption"/>').attr('id', Math.random());
 		var tmp = runstate.game.cloud[oldstate.answers.length];
 		var a = runstate.currentMNCaption.text(tmp ? tmp.name : '…');
-		var b = $('<span class="mn-caption"/>').text(runstate.game.cloud[state.answers.length].name);
+		var b = $('<span class="mn-caption"/>').attr('id', Math.random()).text(runstate.game.cloud[state.answers.length].name);
 		if (!rb || (isForward && (oldstate.screen != 'game' || state.answers.length == oldstate.answers.length))) {
 			isForward = true;
 			a.remove();

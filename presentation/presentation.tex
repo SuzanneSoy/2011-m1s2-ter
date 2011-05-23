@@ -5,6 +5,8 @@
 \usetikzlibrary{shapes,positioning,snakes,calc}
 \usetheme{Warsaw}
 
+% \setbeamercolor{alerted text}{fg=blue}
+
 \def\android{Android\texttrademark}
 
 \title{FMIN200 \\ TER~: Reconception du jeu PtiClic sous \android{}}
@@ -12,12 +14,31 @@
 \institute{Université Montpellier II, Département informatique}
 \date{Lundi, 23 mai 2011}
 
+\defbeamertemplate*{footline}{shadow theme}
+{%
+  \leavevmode%
+  \hbox{\begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm plus1fil,rightskip=.3cm]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertframenumber\,/\,\inserttotalframenumber\hfill\url{http://pticlic.fr/}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm,rightskip=.3cm plus1fil]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle%
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
 \begin{document}
 
 \begin{frame}
   \titlepage
 \end{frame}
 
+% John
+\section{Introduction}
+\begin{frame}
+\begin{center}
+  Introduction\\John \textsc{CHARRON}
+\end{center}
+\end{frame}
 \begin{frame}
   Planning
   \begin{itemize}
@@ -34,68 +55,12 @@
   \end{itemize}
 \end{frame}
 
+\section{TALN Theorique}
 \begin{frame}
-% bertrand
- Caractéristique d'\android{}~:
-  \begin{itemize}
-    \item<+-> développé par Google
-    \item<+-> fondé sur un noyau Linux
-    \item<+-> interface de programmation en Java (Dalvic VM)
-    \item<+-> basé sur le modéle MVC
-  \end{itemize}
+\begin{center}
+  TALN Theorique\\John \textsc{CHARRON}
+\end{center}
 \end{frame}
-
-\begin{frame}
-  Le framework~:
-  \begin{itemize}
-    \item<+-> SDK
-    \item<+-> Emulateur
-    \item<+-> Plugin Eclipse
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  Le developpement~:
-  \begin{itemize}
-    \item<+-> Pattern MVC
-    \item<+-> Modéle héritant \verb!java.lang.Object!
-    \item<+-> Vue modélisé en XML
-    \item<+-> Controlleur héritant de \verb!android.app.Activity!
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  Le cycle de vie d'une activité~:
-  \begin{minipage}{\textwidth}
-   \centering 
-       \includegraphics[width=0.60\textwidth]{img/activity_lifecycle.png}
-  \end{minipage}
-\end{frame}
-
-\begin{frame}
-  % Georges
-  \begin{tikzpicture}[
-    mynode/.style = {circle, minimum size=1.5cm},
-    mc/.style = {mynode,draw=red,text=red},
-    mn/.style = {mynode,draw},
-    mi/.style = {mynode,draw=gray,text=gray},
-    rel/.style = {font=\footnotesize},
-    guess/.style = {->,dashed},
-    exist/.style = {->},
-    auto,swap
-    ]
-    \node[mc] (mc) {Chat};
-    \node[mn] (mn0) at (0,3) {Souris};
-    \node[mi] (mi1) at (3,-2) {matou};
-    \node[mn] (mn2) at (6,0) {animal};
-    \path[exist] (mc) edge[bend right] node[rel]{idée associée} (mn0);
-    \path[exist] (mc) edge node[rel]{synonyme} (mi1);
-    \path[exist] (mi1) edge node[rel]{sorte de} (mn2);
-    \path[guess,swap] (mc) edge node[rel]{sorte de ?} (mn2);
-    \path[guess,swap] (mc) edge[bend left] node[rel]{\shortstack{sorte de ?\\synonyme ?\\\dots}} (mn0);
-  \end{tikzpicture}
-\end{frame}
-
 \begin{frame}
   Ferdinand de Saussure (1857-1913), Cours de linguistique général
   \begin{itemize}
@@ -105,7 +70,6 @@
   \item Langue et Parole
   \end{itemize}
 \end{frame}
-
 
 \begin{frame}  
 \begin{figure}[h!]
@@ -215,19 +179,157 @@
 \end{center}
 \end{frame}
 
+\section{Generation de partie}
+\begin{frame}
+\begin{center}
+  Generation de partie\\Georges \textsc{dupéron}
+\end{center}
+\end{frame}
 \begin{frame}
   % Georges
-  \texttt{\textcolor{gray}{http://pticlic.fr/jeu.html}\#\textcolor{red}{game}/\textcolor{green}{1306104746953}/\textcolor{blue}{5,0,5,-1}}
+  \begin{tikzpicture}[
+    mynode/.style = {circle, minimum size=1.5cm},
+    mc/.style = {mynode,draw=red,text=red},
+    mn/.style = {mynode,draw},
+    mi/.style = {mynode,draw=gray,text=gray},
+    rel/.style = {font=\footnotesize},
+    guess/.style = {->,dashed},
+    exist/.style = {->},
+    auto,swap
+    ]
+    \node[mc] (mc) {Chat};
+    \node[mn] (mn0) at (0,3) {Souris};
+    \node[mi] (mi1) at (3,-2) {matou};
+    \node[mn] (mn2) at (6,0) {animal};
+    \path[exist] (mc) edge[bend right] node[rel]{idée associée} (mn0);
+    \path[exist] (mc) edge node[rel]{synonyme} (mi1);
+    \path[exist] (mi1) edge node[rel]{sorte de} (mn2);
+    \path[guess,swap] (mc) edge node[rel]{sorte de ?} (mn2);
+    \path[guess,swap] (mc) edge[bend left] node[rel]{\shortstack{sorte de ?\\synonyme ?\\\dots}} (mn0);
+  \end{tikzpicture}
+\end{frame}
+
+\section{Creation de partie}
+\begin{frame}
+\begin{center}
+  Creation de partie\\Yoann \textsc{Bonavero}
+\end{center}
+\end{frame}
+%Yoann
+\begin{frame}
+  \begin{itemize}
+  \item Site web
+    \begin{itemize}
+    \item Présentation de l'application
+    \item Le jeu
+    \end{itemize}
+  \item Page de création de parties
+    \begin{itemize}
+    \item Architecture
+    \item Bonus
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% bertrand
+\section{Le Jeu}
+\begin{frame}
+\begin{center}
+  Le Jeu\\Bertrand \textsc{Brun}
+\end{center}
+\end{frame}
+\begin{frame}
+\frametitle{Le framework \android{}}
+\begin{block}{Les outils mis à disposition}
+  \begin{itemize}
+    \item<+-> Langage de programmation Java ;
+    \item<+-> Patron de conception MVC (Modèle-Vue-Contrôlleur);
+    \item<+-> Les vues sont réalisé en XML
+  \end{itemize}
+\end{block}
+\begin{alertblock}{Inconvenient}<+->
+  L'édition des vues en XML nous à énorment ralenti lors du développement de l'alpha 1
+\end{alertblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{Le modèle MVC proposé par Google}
+\begin{block}{Modèle-Vue-Contrôlleur}
+  \centering
+  \begin{tikzpicture}[bend angle=10, shorten >=0.1cm, shorten <=0.1cm]
+    \node[draw] (activite) {Activité};
+    \node[draw,below right=of activite] (modele) {Modèle};
+    \node[draw,below left=of activite] (xml) {Vue (XML)};
+    \draw[->] (activite.east) ++(0,+.1cm) to[out=0,   in=90] ($(modele.north)+(+.1cm,0)$);
+    \draw[<-] (activite.east) ++(0,-.1cm) to[out=0,   in=90] ($(modele.north)+(-.1cm,0)$);
+    \draw[->] (activite.west) ++(0,+.1cm) to[out=180, in=90] ($(xml.north)+(-.1cm,0)$);
+    \draw[<-] (activite.west) ++(0,-.1cm) to[out=180, in=90] ($(xml.north)+(+.1cm,0)$);
+  \end{tikzpicture}
+\end{block}
+\begin{block}{Détail}
+\begin{description}
+  \item[Modèle] Classe metier permettant de stocker des informations
+  \item[Contrôlleur] Classe héritant d'\verb!Activity! (Activité)
+  \item[Vue] XML affichant les informations
+\end{description}
+\end{block}
+\end{frame}
+
+\begin{frame} % Un peu vide peut etre ajouter les autre activite tel que prefs, info...
+\frametitle{Prototype 1}
+ \begin{block}{Schéma générale de l'enchainement des Activités~:}
+   \centering 
+  \begin{tikzpicture}[
+    state/.style={draw},
+    transition/.style={->}
+    ]
+    \node[state] (frontpage) {Page de garde};
+    \node[state, right=of frontpage] (game) {Jeu};
+    \node[state, right=of game] (score) {Score};
+    
+    \draw[transition] (frontpage) -- (game);
+    \draw[transition] (game) -- (score);
+    \draw[transition] (score.south) -- ++(0,-0.3cm) -| (frontpage);
+    \draw[transition,<-] (game.north) -- ++(0,0.3cm) -| ($.5*(game) + .5*(score)$);
+    
+    \node[state,text width=1.2cm, below=of frontpage] (activite) {Activité};
+    \draw[transition] (activite.north east) ++(0.5cm,0) -- node[auto,swap,font=\footnotesize,scale=0.8] {\shortstack{\shortstack{Évènement\\(Intent)}}} ++(1.5cm,0);
+  \end{tikzpicture}
+ \end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Passage au HTML}
+\begin{block}{Défauts constatés}
+  \begin{itemize}
+    \item<+-> Perte de temps avec les ajustements des vues ;
+    \item<+-> Public visé trop faible ;
+  \end{itemize}
+\end{block}
+\begin{block}{Solutions proposées}<+->
+  \begin{itemize}
+    \item<+-> Développement de l'application en Javascript/HTML5 pour les vues ;
+    \item<+-> Utilisation du framework WebKit proposé par \android{} ;
+    \item<+-> Utilisation du web pour toucher plus de personnes ;
+  \end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Prototype 2}
+ \begin{block}{Schéma générale de l'enchainement des pages~:}
+   \centering 
+  \texttt{\textcolor{gray}{http://pticlic.fr/jeu.html}\#\textcolor{red}{game}/\textcolor{blue}{1306104746953}/\textcolor{blue}{5,0,5,-1}}
   \vskip 1em%
   \begin{tikzpicture}[
     state/.style = {circle,draw,minimum size=1.5cm},
     transition/.style = {->},
     event/.style = {->, decorate, decoration={snake, post length=.5mm}, segment amplitude=.4mm, segment length=2mm},
     source/.style = {},
-    auto,swap,
+    auto,
     secondary/.style={draw=gray}
     ]
-    \node[state] (goto) {goto};
+    \node[state] (goto) {\shortstack{aller\\vers}};
     \node[left=of goto] (arbitrary) {$*$};
     \node[state, right=of goto] (pre-enter) {\shortstack{pre-\\enter}};
     \node[state, right=of pre-enter] (enter) {enter};
@@ -238,34 +340,35 @@
     \node[state] (ajax) at ($0.5*(c1) + 0.5*(c2)$) {AJAX};
     \node[source, above=of goto] (hash) {hashchange};
 
-    \draw[transition] (goto) -- (pre-enter);
+    \draw[transition] (goto) edge node {2} (pre-enter);
     \draw[transition,dashed] (pre-enter) -- (enter);
     \draw[transition] (enter) -- (update);
-    \draw[event] (goto) -- (leave);
-    \draw[event] (hash) -- (goto);
-    \draw[event] (hash) -- (goto);
+    \draw[transition] (goto) edge node {1} (leave);
+    \draw[event,draw=red] (hash) -- (goto);
     \draw[event] (arbitrary) -- (goto);
-    \draw[event,secondary] (arbitrary) to[out=90, in=225] (hash.south west);
+    \draw[event] (arbitrary) to[out=90, in=225] (hash.south west);
     \draw[event,secondary] (pre-enter) -- (ajax);
     \draw[event,secondary] (ajax) -- (enter);
-    \draw[event,secondary] (hash.east) to[out=0, in=135] (update);
+    \draw[event,draw=blue] (hash.east) to[out=0, in=135] (update);
   \end{tikzpicture}
+ \end{block}
 \end{frame}
 
+\section{Demonstration}
+\begin{frame}
+\begin{center}
+\huge{Démonstration\dots{}}
+\end{center}
+\end{frame}
+
+\section{Conclusion}
 \begin{frame}
 Conclusion
 \begin{itemize}
-
-\item reste à faire
-\item alpha tests
-\item situation réelle de réalisation de projet
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\begin{center}
-\huge{Démonstration}
-\end{center}
+  \item reste à faire
+  \item alpha tests
+  \item situation réelle de réalisation de projet
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -276,5 +379,56 @@ Conclusion
 \end{center}
 \end{frame}
 
-\end{document}
+\begin{frame}
+  \begin{center}
+    \begin{tikzpicture}[
+      bend angle=10, shorten >=0.05cm, shorten <=0.05cm, text height=0.35cm,
+      communication/.style={draw,dashed,<->}
+      ]
+      
+      \node[draw] (appli) {Application \android{}};
+      % Pour que l'animation ne bouge pas.
+      \path[use as bounding box] (-5.2,0.4) rectangle (5.2,-5.1);
+      
+      \path<2-8> node[draw,below=of appli] (frontpage) {Écran principal};
+      \path[draw,->]<2-8> (appli) -- (frontpage);
+      
+      \path<3-8> node[draw,below=of frontpage, anchor=north east, xshift=-0.3cm] (game) {Jeu};
+      \path[draw,->]<3-8> (frontpage) -- (game);
+      
+      \path<4-> node[draw,left=of appli] (prefs) {Préférences};
+      
+      \path<4-8> node[draw,below=of prefs,xshift=0.1cm] (reseau) {Réseau};
+      \path[communication]<4-8> (game) -- (prefs);
+      \path[communication]<4-8> (game) -- (reseau.south east);
+      
+      \path[draw,->]<5-8> (game.south west) ++ (0,0.35cm) arc (90:360:0.35cm);
+      
+      \path<6-8> node[draw,below=of frontpage, anchor=north west, xshift=0.3cm] (score) {score};
+      \path[draw,->]<6-8> (game) -- (score);
+      
+      \path[draw,->]<7-8> (score) -- (frontpage);
+      
+      \path<8-8> node[draw,below left=of frontpage] (prefs-screen) {Préférences};
+      \path<8-8> node[draw,below right=of frontpage] (about) {À propos};
+      \path[draw,->]<8-8> (frontpage) -- (prefs-screen);
+      \path[draw,->]<8-8> (frontpage) -- (about);
+      \path[communication]<8-8> (prefs-screen.north west) to[bend left] (prefs.south west);
+      \path[communication]<8-8> (prefs-screen) -- (reseau);
+      
+      \node[below=of appli, text height=0.25cm, minimum width=2cm] (fake-webkit) {\phantom{Webkit}};
+      \path<9-> node[draw,below=of fake-webkit, text height=1.5cm, minimum width=2cm, text centered] (html5) {\shortstack{Html5\\JavaScript\\jQuery\\CSS}};
+      
+      \path[draw,->]<10-> (html5.south east) ++ (0,0.35cm) arc (90:-180:0.35cm);
+      
+      \path<11-> node[draw,below=of appli, text height=0.25cm, minimum width=2cm] (webkit) {Webkit};
+      \path[draw,->]<11-> (appli) -- (webkit);
+      \path[draw,->]<11-> (webkit) -- (html5);
+      
+      \path<12-> node[coordinate] (waypoint) at ($0.5*(webkit.center)+0.5*(webkit.west)$) {};
+      \path[communication]<12-> (html5) to[controls=(waypoint) and (waypoint)] node[pos=0.16, anchor=east, xshift=-0.1cm, font=\small] {Interface JavaScript} (prefs.south east);
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
 
+\end{document}
