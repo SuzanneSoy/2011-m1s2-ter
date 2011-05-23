@@ -14,6 +14,18 @@
 \institute{Université Montpellier II, Département informatique}
 \date{Lundi, 23 mai 2011}
 
+\defbeamertemplate*{footline}{shadow theme}
+{%
+  \leavevmode%
+  \hbox{\begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm plus1fil,rightskip=.3cm]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertframenumber\,/\,\inserttotalframenumber\hfill\url{http://pticlic.fr/}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm,rightskip=.3cm plus1fil]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle%
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
 \begin{document}
 
 \begin{frame}
@@ -312,6 +324,5 @@ Avez-vous des questions~?
     \draw[->] (xml)      edge[bend left] (activite);
   \end{tikzpicture}
 \end{frame}
-
 
 \end{document}
