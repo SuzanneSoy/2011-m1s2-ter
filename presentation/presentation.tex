@@ -2,6 +2,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage[frenchb]{babel}
 \usepackage{tikz}
+\usepackage{subfigure}
+\usepackage[scriptsize]{caption}
+\renewcommand*{\figurename}{}
 \usetikzlibrary{shapes,positioning,snakes,calc}
 \usetheme{Warsaw}
 
@@ -34,97 +37,131 @@
 
 % John
 \section{Introduction}
-\begin{frame}
-\begin{center}
-  Introduction\\John \textsc{CHARRON}
-\end{center}
-\end{frame}
-\begin{frame}
-  Planning
-  \begin{itemize}
-  \item planning initial~: quatre itérations
-  \item planning réel~: deux itérations
-  \end{itemize}
-\end{frame}
 
-\begin{frame}
-  Planning : deux itérations = 2 prototypes
-  \begin{itemize}
-  \item prototype Android Java
-  \item prototype Smartphone
-  \end{itemize}
-\end{frame}
-
-\section{TALN Theorique}
-\begin{frame}
-\begin{center}
-  TALN Theorique\\John \textsc{CHARRON}
-\end{center}
-\end{frame}
-\begin{frame}
-  Ferdinand de Saussure (1857-1913), Cours de linguistique général
-  \begin{itemize}
-  \item Signe linguistique
-  \item Arbitraire du signe
-  \item Synchronie et diachronie
-  \item Langue et Parole
-  \end{itemize}
+\begin{frame}  
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.8\textwidth]{img/PtiClicJeu.png}
+\caption{PtiClic de Mathieu LAFOURCADE et Virginie ZAMPA}
+\end{figure}
 \end{frame}
 
 \begin{frame}  
 \begin{figure}[h!]
   \centering
-      \includegraphics[width=0.5\textwidth]{img/signe-conceptimageacoustique.jpeg}
+      \includegraphics[width=0.4\textwidth]{img/preterit01.jpg}
+\caption{Reconception PtiClic Version HTML5}
 \end{figure}
 \end{frame}
 
-\begin{frame}
+\begin{frame}  
 \begin{figure}[h!]
   \centering
-      \includegraphics[width=0.5\textwidth]{img/signe-cheval.jpeg}
+      \includegraphics[width=0.4\textwidth]{img/preterit02.jpg}
+\caption{Reconception PtiClic Version HTML5}
 \end{figure}
 \end{frame}
 
-\begin{frame}
+\begin{frame}  
 \begin{figure}[h!]
   \centering
-      \includegraphics[width=0.5\textwidth]{img/trianglesemiotique.jpeg}
+      \includegraphics[width=0.4\textwidth]{img/preterit03.jpg}
+\caption{Reconception PtiClic Version HTML5}
 \end{figure}
 \end{frame}
 
+\begin{frame}  
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.4\textwidth]{img/preterit04.jpg}
+\caption{Reconception PtiClic Version HTML5}
+\end{figure}
+\end{frame}
+
+\begin{frame}  
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.4\textwidth]{img/preterit05.jpg}
+\caption{Reconception PtiClic Version HTML5}
+\end{figure}
+\end{frame}
+
+\begin{frame}  
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.4\textwidth]{img/preterit06.jpg}
+\caption{Reconception PtiClic Version HTML5}
+\end{figure}
+\end{frame}
+
+\begin{frame}  
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.4\textwidth]{img/preterit07.jpg}
+\caption{Reconception PtiClic Version HTML5}
+\end{figure}
+\end{frame}
+
+\begin{frame}  
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.4\textwidth]{img/preterit08.jpg}
+\caption{Reconception PtiClic Version HTML5}
+\end{figure}
+\end{frame}
+
+
+
+\section{Paquetage TALN}
+
 \begin{frame}
-  Réseau lexical JeuxDeMots
+  Ferdinand de Saussure (1857-1913), Cours de linguistique générale
   \begin{itemize}
-  \item noeuds
-  \item relations
+  \item Signe linguistique
+
+  \begin{figure}
+\centering
+\mbox{
+\subfigure{\includegraphics[scale=0.3]{img/signe-conceptimageacoustique.jpeg}}\quad
+\subfigure{\includegraphics[scale=0.3]{img/signe-cheval.jpeg}}\quad
+\subfigure{\includegraphics[scale=0.3]{img/trianglesemiotique.jpeg}}
+}
+\end{figure}
+  
+\item Arbitraire du signe
+  \item Synchronie et Diachronie
+  \item Langue et Parole
   \end{itemize}
+  
 \end{frame}
 
 \begin{frame}
-  Réseau lexical JeuxDeMots~: types de noeuds
+\begin{center}
+  Réseau lexical JeuxDeMots  \\\
+  \end{center}
+
+Types de noeuds
   \begin{itemize}
   \item termes
   \item catégories grammaticales
-  \item informations métalinguistiques supplémentaires (types 18 et 36)
+  \item informations métalinguistiques supplémentaires 
   \end{itemize}
-\end{frame}
 
-\begin{frame}
-  Réseau lexical JeuxDeMots~: types de relations
+  \textcolor{white}{text}\\
+  Types de relations 
   \begin{itemize}
   \item morphologique
-  \item syntaxique
   \item sémantique
-  \item pragmatique
   \item métalinguistique
   \end{itemize}
+  
 \end{frame}
 
 \begin{frame}
   Réseau lexical JeuxDeMots~: quelques statistiques
   \begin{itemize}
-  \item environ 45\% des noeuds ne sont pas liés à des relations sémantiques sortantes
-  \item environ 70\% des noeuds ne sont pas liés à des relations sémantiques entrantes
+  \item environ 45\% des noeuds n'ont pas de relations sémantiques sortantes
+  \item environ 70\% des noeuds n'ont pas de relations sémantiques entrantes
   \end{itemize}
 \end{frame}
 
@@ -162,22 +199,34 @@
 \begin{center}
 	\begin{tabular}{ | l | l | l | l | p{5cm} |}
         \hline
-\footnotesize{RELATION} & \footnotesize{'mc'} & \footnotesize{'mn'} & \footnotesize{rem.} \\ \hline
-\footnotesize{-1 $\Rightarrow$ "'mn' n'est pas lié à 'mc'"} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{} \\ \hline
-\footnotesize{0 $\Rightarrow$  "'mc' est en rapport avec 'mn'"} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{} \\ \hline
-\footnotesize{5 $\Rightarrow$ "'mc' est un synonyme de 'mn'"} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{\shortstack{même\\POS}} \\ \hline
-\footnotesize{6 $\Rightarrow$ "'mc' est une sorte de 'mn'"} & \footnotesize{noms} & \footnotesize{noms} & \footnotesize{} \\ \hline
-\footnotesize{7 $\Rightarrow$ "Un contraire de 'mc' est 'mn'"} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{\shortstack{adj, adv,\\noms, verbes}} & \footnotesize{\shortstack{même\\POS}} \\ \hline
-\footnotesize{8 $\Rightarrow$ "Un spécifique de 'mc' est 'mn'"} & \footnotesize{noms} & \footnotesize{noms} & \footnotesize{} \\ \hline
-\footnotesize{9 $\Rightarrow$ "'mn' est une partie de 'mc'"} & \footnotesize{noms} & \footnotesize{noms} & \footnotesize{} \\ \hline
-\footnotesize{10 $\Rightarrow$ "'mc' fait partie de 'mn'"} & \footnotesize{noms} & \footnotesize{noms} & \footnotesize{} \\ \hline
-\footnotesize{13 $\Rightarrow$ "Quoi/Qui pourrait 'mc'"} & \footnotesize{verbes} & \footnotesize{noms} & \footnotesize{} \\ \hline
-\footnotesize{15 $\Rightarrow$ "Le lieu pour 'mc' est 'mn'"} & \footnotesize{noms, verbes} & \footnotesize{\shortstack{noms\\(lieu NON!!)}} & \footnotesize{} \\ \hline
-\footnotesize{16 $\Rightarrow$ "Instrument pour 'mc' est 'mn'"} & \footnotesize{verbes} & \footnotesize{noms} & \footnotesize{} \\ \hline
-\footnotesize{17 $\Rightarrow$ "'mn' Caractéristique de 'mc'"} & \footnotesize{noms} & \footnotesize{adj} & \footnotesize{} \\ \hline
+\footnotesize{Relation} & \footnotesize{Mot central} & \footnotesize{Mots nuage} & \footnotesize{Remarques} \\ \hline
+\footnotesize{-1 'mn' n'est pas lié à 'mc'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{} \\ \hline
+\footnotesize{0 'mc' est en rapport avec 'mn'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{} \\ \hline
+\footnotesize{5 'mc' est un synonyme de 'mn'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{même POS}} \\ \hline
+\footnotesize{6 'mc' est une sorte de 'mn'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
+\footnotesize{7 Un contraire de 'mc' est 'mn'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{même POS}} \\ \hline
+\footnotesize{8 Un spécifique de 'mc' est 'mn'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
+\footnotesize{9 'mn' est une partie de 'mc'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
+\footnotesize{10 'mc' fait partie de 'mn'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
+\footnotesize{13 'mn' pourrait 'mc'} & \footnotesize{v} & \footnotesize{n} & \footnotesize{} \\ \hline
+\footnotesize{15 Le lieu pour 'mc' est 'mn'} & \footnotesize{n v} & \footnotesize{\shortstack{n}} & \footnotesize{} \\ \hline
+\footnotesize{16 Instrument pour 'mc' est 'mn'} & \footnotesize{v} & \footnotesize{n} & \footnotesize{} \\ \hline
+\footnotesize{17 'mn' Caractéristique de 'mc'} & \footnotesize{n} & \footnotesize{adj} & \footnotesize{} \\ \hline
         \end{tabular}
 \end{center}
 \end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
 
 \section{Generation de partie}
 \begin{frame}
