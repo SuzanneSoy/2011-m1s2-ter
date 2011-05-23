@@ -318,10 +318,10 @@ Avez-vous des questions~?
     \node[draw] (activite) {Activité};
     \node[draw,below right=of activite] (modele) {Modèle};
     \node[draw,below left=of activite] (xml) {Vue (XML)};
-    \draw[->] (activite) edge[bend right] (modele);
-    \draw[->] (modele)   edge[bend right] (activite);
-    \draw[->] (activite) edge[bend left] (xml);
-    \draw[->] (xml)      edge[bend left] (activite);
+    \draw[->] (activite.east) ++(0,+.1cm) to[out=0,   in=90] ($(modele.north)+(+.1cm,0)$);
+    \draw[<-] (activite.east) ++(0,-.1cm) to[out=0,   in=90] ($(modele.north)+(-.1cm,0)$);
+    \draw[->] (activite.west) ++(0,+.1cm) to[out=180, in=90] ($(xml.north)+(-.1cm,0)$);
+    \draw[<-] (activite.west) ++(0,-.1cm) to[out=180, in=90] ($(xml.north)+(+.1cm,0)$);
   \end{tikzpicture}
 \end{frame}
 
