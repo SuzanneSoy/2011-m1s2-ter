@@ -1,6 +1,8 @@
 \documentclass{beamer}
 \usepackage[utf8]{inputenc}
 \usepackage[frenchb]{babel}
+\usepackage{tikz}
+\usetikzlibrary{shapes,positioning,snakes,calc}
 \usetheme{Warsaw}
 
 \def\android{Android\texttrademark}
@@ -33,6 +35,67 @@
   Et c'est facile.
 \end{frame}
 
+\begin{frame}
+  % Georges
+  \begin{tikzpicture}[
+    mynode/.style = {circle, minimum size=1.5cm},
+    mc/.style = {mynode,draw=red,text=red},
+    mn/.style = {mynode,draw},
+    mi/.style = {mynode,draw=gray,text=gray},
+    rel/.style = {font=\footnotesize},
+    guess/.style = {->,dashed},
+    exist/.style = {->},
+    auto,swap
+    ]
+    \node[mc] (mc) {Chat};
+    \node[mn] (mn0) at (0,3) {Souris};
+    \node[mi] (mi1) at (3,-2) {matou};
+    \node[mn] (mn2) at (6,0) {animal};
+    \path[exist] (mc) edge[bend right] node[rel]{idée associée} (mn0);
+    \path[exist] (mc) edge node[rel]{synonyme} (mi1);
+    \path[exist] (mi1) edge node[rel]{sorte de} (mn2);
+    \path[guess,swap] (mc) edge node[rel]{sorte de ?} (mn2);
+    \path[guess,swap] (mc) edge[bend left] node[rel]{\shortstack{sorte de ?\\synonyme ?\\\dots}} (mn0);
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+  % Georges
+  \texttt{\textcolor{gray}{http://pticlic.fr/jeu.html}\#\textcolor{red}{game}/\textcolor{green}{1306104746953}/\textcolor{blue}{5,0,5,-1}}
+  \vskip 1em%
+  \begin{tikzpicture}[
+    state/.style = {circle,draw,minimum size=1.5cm},
+    transition/.style = {->},
+    event/.style = {->, decorate, decoration={snake, post length=.5mm}, segment amplitude=.4mm, segment length=2mm},
+    source/.style = {},
+    auto,swap,
+    secondary/.style={draw=gray}
+    ]
+    \node[state] (goto) {goto};
+    \node[left=of goto] (arbitrary) {$*$};
+    \node[state, right=of goto] (pre-enter) {\shortstack{pre-\\enter}};
+    \node[state, right=of pre-enter] (enter) {enter};
+    \node[state, right=of enter] (update) {update};
+    \node[state, below=of goto] (leave) {leave};
+    \node[coordinate, below=of pre-enter] (c1) {};
+    \node[coordinate, below=of enter] (c2) {};
+    \node[state] (ajax) at ($0.5*(c1) + 0.5*(c2)$) {AJAX};
+    \node[source, above=of goto] (hash) {hashchange};
+
+    \draw[transition] (goto) -- (pre-enter);
+    \draw[transition,dashed] (pre-enter) -- (enter);
+    \draw[transition] (enter) -- (update);
+    \draw[event] (goto) -- (leave);
+    \draw[event] (hash) -- (goto);
+    \draw[event] (hash) -- (goto);
+    \draw[event] (arbitrary) -- (goto);
+    \draw[event,secondary] (arbitrary) to[out=90, in=225] (hash.south west);
+    \draw[event,secondary] (pre-enter) -- (ajax);
+    \draw[event,secondary] (ajax) -- (enter);
+    \draw[event,secondary] (hash.east) to[out=0, in=135] (update);
+  \end{tikzpicture}
+\end{frame}
+
 \end{document}
 
-            
+
