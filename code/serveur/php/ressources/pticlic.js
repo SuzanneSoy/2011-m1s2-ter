@@ -3,7 +3,7 @@ function init(fn) {
 	$(window).queue('init', function(next) {fn(); next();});
 }
 
-$.ajaj = function(url, data, callback) {
+$.ajaj = function(url, data, dfd, retryCheck, callback) {
 	var user = '' + UI().getPreference("user");
 	var passwd = '' + UI().getPreference("passwd");
 	user = runstate.user || user;
@@ -12,7 +12,28 @@ $.ajaj = function(url, data, callback) {
 		if (!data.user) data.user = user;
 		if (!data.passwd) data.passwd = passwd;
 	}
-	return $.getJSON(url, data, callback);
+	var fromScreen = state.screen;
+	if (callback) return $.getJSON(url, data, callback);
+	return $.getJSON(url, data, function(data) {
+		if (data.isError) {
+			isConnected(false);
+			dfd.reject(data);
+			message("Erreur", data.msg);
+			if ((data.error == 10 || data.error == 3) && state.screen == fromScreen && (!retryCheck || retryCheck())) {
+				$.screen('connection').trigger('goto');
+			} else if (runstate.screen == fromScreen) {
+				$.screen('frontpage').trigger('goto');
+			}
+		} else {
+			isConnected(true);
+			dfd.resolve(data);
+		}
+	}).fail(function(data) {
+		isConnected(false);
+		dfd.reject(data);
+		$("#frontpage").trigger('goto');
+		message("Erreur", "Une erreur est survenue, veuillez nous en excuser.");
+	});
 };
 
 $(function() {
@@ -176,60 +197,75 @@ init(function() {
 
 // ==== Écran d'accueil
 init(function() {
-	$.screen('frontpage').bind('enter', function() { window.document.title = "PtiClic pre-alpha 0.2"; });
+	$.screen('frontpage').bind('enter', function() {
+		window.document.title = "PtiClic pre-alpha 0.2";
+		if (runstate.pendingSetPrefs) runstate.pendingSetPrefs();
+	});
+	$.screen('frontpage').bind('update', function() {
+		$('.dis-connect').text(isConnected() ? "Déconnexion" : "Connexion");
+	});
 	if (UI().isAndroid()) $('#back2site').hide();
-	$('#frontpage a.fpButton').$each(function(i,e) { e.find('img.icon').data('image', e.attr('href').substring(1)); });
+	$('#frontpage a.fpButton').$each(function(i,e) {
+		e.find('img.icon').data('image', e.attr('href').substring(1));
+	});
 });
 
 // ==== Écran connexion
+function isConnected(arg) {
+	if (typeof arg == 'undefined') {
+		return !!runstate.connected;
+	} else {
+		runstate.connected = !!arg;
+		if (runstate.screen == 'frontpage') $.screen('frontpage').trigger('update');
+	}
+}
+
 init(function() {
 	$('#connection.screen form').submit(function() {
 		runstate.user = $('#user').val();
 		runstate.passwd = $('#passwd').val();
 		UI().setPreference('user', runstate.user);
 		UI().setPreference('passwd', runstate.passwd);
-		if (runstate.pendingSetPrefs) {
-			runstate.pendingSetPrefs();
-		} else {
+		if (!runstate.pendingSetPrefs) {
 			runstate.pendingGetPrefs();
 		}
 		if (state.screen == 'game') {
 			$('#game').trigger('goto');
 		} else if (state.screen == 'score') {
 			$('#score').trigger('goto');
-		} else if (location.hash == "#frontpage") {
-			$.screen('frontpage').trigger('goto');
+		} else if (state.screen == "frontpage") {
+			$.screen('frontpage').trigger('goto'); // Ne devrait jamais être appellé.
 		} else {
 			location.hash = "#frontpage";
 		}
 		return false;
 	});
 
-	$('#connection.screen').bind('leave', function() {
-		runstate.pendingSetPrefs = false;
-		runstate.pendingGetGame = false;
+	$('#connection.screen .back').click(function() {
+		if (runstate.pendingSetPrefs)
+			runstate.cancelPendingSetPrefs();
+		if (state.screen == 'frontpage') $.screen('frontpage').trigger('goto');
+	});
+	
+	$('a[href="#connection"]').click(function() {
+		if (isConnected()) {
+			UI().setPreference("user", '');
+			UI().setPreference("passwd", '');
+			runstate.user = '';
+			runstate.passwd = '';
+			$.ajaj("server.php?callback=?", { action: 9 }, null, null, function(data) {
+				isConnected(false);
+				message("Succès", "Vous êtes déconnecté.");
+				loadPrefs({theme:"green"});
+			});
+			return false;
+		}
 	});
 });
 
 // ==== Écran game
 runstate.gameCache = new Cache(function getGame(k, dfd) {
-	$.ajaj("getGame.php?callback=?", {pgid:k}, function(data) {
-		if (data.isError) {
-			dfd.reject(data);
-			message("Erreur", data.msg);
-			if ((data.error == 10 || data.error == 3) && state.screen == 'game' && state.pgid == k) {
-				$.screen('connection').trigger('goto');
-			} else if (runstate.screen == 'game') {
-				$.screen('frontpage').trigger('goto');
-			}
-		} else {
-            dfd.resolve(data);
-		}
-	}).fail(function(data) {
-		dfd.reject(data);
-		$("#frontpage").trigger('goto');
-		message("Erreur", "Une erreur est survenue, veuillez nous en excuser.");
-	});
+	$.ajaj("getGame.php?callback=?", {pgid:k}, dfd, function() { return state.pgid == k; });
 });
 
 init(function() {
@@ -324,23 +360,7 @@ runstate.scoreCache = new Cache(function getScore(k, dfd, arg) {
 		action: 1,
 		pgid: k,
 		answers: arg,
-	}, function(data) {
-		if (data.isError) {
-			dfd.reject(data);
-			message("Erreur", data.msg);
-			if ((data.error == 10 || data.error == 3) && state.screen == 'score' && state.pgid == k) {
-				$.screen('connection').trigger('goto');
-			} else if (runstate.screen == 'score') {
-				$.screen('frontpage').trigger('goto');
-			}
-		} else {
-            dfd.resolve(data);
-		}
-	}).fail(function(data) {
-		dfd.reject(data);
-		$("#frontpage").trigger('goto');
-		message("Erreur", "Une erreur est survenue, veuillez nous en excuser.");
-	});
+	}, dfd, function() { return state.pgid == k; });
 });
 
 init(function() {
@@ -370,10 +390,12 @@ init(function() {
 
 // ==== Écran Préférences
 runstate.prefs = { theme: "green" };
+runstate.serverPrefs = $.extend({}, runstate.prefs);
 
 function loadPrefs(prefs) {
 	var previousTheme = runstate.prefs ? runstate.prefs.theme : 'green';
 	if (prefs && prefs.theme) {
+		isConnected(prefs.connected);
 		runstate.prefs = prefs;
 		runstate.serverPrefs = $.extend({}, runstate.prefs);
 		if (runstate.loaded && previousTheme != runstate.prefs.theme) jss();
@@ -381,31 +403,25 @@ function loadPrefs(prefs) {
 }
 
 function setPrefs(prefs, callback) {
+	var dfd = $.Deferred();
 	$.ajaj("server.php?callback=?", {
 		action: 8,
 		key: 'theme',
 		value: prefs.theme
-	}, function(data) {
-		if ((data.error == 10 || data.error == 3) && (state.screen == 'frontpage' || state.screen == 'prefs')) {
-			$.screen('connection').trigger('goto');
-		} else {
-			if (data.theme) {
-				runstate.pendingSetPrefs = false;
-				loadPrefs(data);
-				message("Préférences", "Les préférences ont été enregistrées.");
-			} else {
-				message("Erreur", data.msg);
-				message("Préférences", "Les préférences n'ont pas pu être enregistrées.");
-			}
-		}
-	});
+	}, dfd);
+	return dfd;
 }
 
 runstate.pendingGetPrefs = function() {
-	$.ajaj("server.php?callback=?", { action: 7 }, function(data) {
-		if (data.theme) { message("Succès", "Vous êtes connecté.", data.msg); loadPrefs(data); }
-		if (data.isError) message("Erreur", data.msg);
+	$.ajaj("server.php?callback=?", { action: 7 }, null, null, function(data) {
+		if (data.theme) { isConnected(true); message("Succès", "Vous êtes connecté."); loadPrefs(data); }
+		if (data.isError) { isConnected(false); message("Erreur", data.msg); }
 	});
+};
+
+runstate.cancelPendingSetPrefs = function() {
+	runstate.pendingSetPrefs = false;
+	message("Préférences", "Les préférences n'ont pas pu être enregistrées.");
 };
 
 init(function() {
@@ -425,14 +441,26 @@ init(function() {
 	
 	$("#prefs form").submit(function() {
 		readPrefs();
-		location.href = "#frontpage"
 		var p = $.extend({}, runstate.prefs);
-		runstate.pendingSetPrefs = function() { setPrefs(p); }
-		runstate.pendingSetPrefs();
+		runstate.pendingSetPrefs = function() {
+			setPrefs(p)
+				.fail(function(data) {
+					if (!data || (data.error != 10 && data.error != 3)) {
+						message("Erreur", data.msg);
+						runstate.cancelPendingSetPrefs();
+					}
+				})
+				.done(function(data) {
+					runstate.pendingSetPrefs = false;
+					loadPrefs(data);
+					message("Préférences", "Les préférences ont été enregistrées.");
+				});
+		};
+		location.href = "#frontpage";
 		return false;
 	});
 	$("#prefs form").bind('reset', function() {
-		runstate.prefs = runstate.serverPrefs;
+		runstate.prefs = $.extend({}, runstate.serverPrefs);
 		location.hash = "#frontpage";
 	});
 	$("#prefs form input:radio[name=theme]").bind('change click', readPrefs);

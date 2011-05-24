@@ -701,6 +701,7 @@ function userPrefs($user) {
 		$x = getUserInfo($user, $k);
 		if ($x !== null) $v = $x;
 	}
+	$res['connected'] = true;
 	echo JSON_encode($res);
 }
 
