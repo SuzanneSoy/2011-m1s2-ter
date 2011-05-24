@@ -174,17 +174,16 @@ Types de noeuds
   \end{itemize}
 \end{frame}
 
-
 \begin{frame}
 \begin{figure}
- \begin{minipage}{\textwidth}
-\centering 
-       \includegraphics[width=0.75\textwidth]{img/jdm.jpeg}
-    \end{minipage}
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{img/jdm.jpeg}
+  \end{center}
 \end{figure}
 \end{frame}
 
 \begin{frame}
+<<<<<<< HEAD
 \begin{center}
 	\begin{tabular}{ | l | l | l | l | p{5cm} |}
         \hline
@@ -205,6 +204,47 @@ Types de noeuds
 \end{center}
 \end{frame}
 
+=======
+  \begin{figure}
+    \pgfdeclarelayer{background}
+    \pgfdeclarelayer{foreground}
+    \pgfsetlayers{background,main,foreground}
+    \begin{tikzpicture}[
+      txt/.style = {fill=white,font=\footnotesize,scale=0.75, inner sep=1pt},
+      earlymidway/.style = {pos=0.4},
+      latemidway/.style = {pos=0.6}
+      ]
+      \node (n0) {musique};
+      \node[above left  = 2cm of n0] (n1) {trompette};
+      \node[above right = 2cm of n0] (n2) {instrument};
+      \node[below left  = 2cm of n0] (n3) {champignon};
+      \node[below right = 2cm of n0] (n4) {instrument de musique};
+      
+      \foreach \direction/\nfrom/\nto/\angle/\pos/\anchor/\text in {
+        ->/n0/n2/15/near end/east/idée associée 450,
+        <-/n0/n2/0/midway/center/idée associée 250,
+        <-/n0/n2/-15/near start/west/hyperonyme 50,
+        % 
+        ->/n0/n4/-20/midway/center/idée associée 25,
+        % 
+        ->/n2/n4/-15/near end/east/hyponyme 50,
+        ->/n2/n4/0/latemidway/east/locution 70,
+        ->/n2/n4/15/latemidway/west/idée associée 25,
+        <-/n2/n4/30/near end/west/idée associée 25,
+        % 
+        ->/n1/n3/-15/very near end/east/hyperonyme 70,
+        <-/n1/n3/0/latemidway/center/idée associée 50,
+        <-/n1/n3/15/very near end/west/hyperonyme 50
+      }{
+        \draw[\direction] (\nfrom) to[bend left=\angle] (\nto);
+        \begin{pgfonlayer}{foreground}
+          \path[\direction] (\nfrom) to[bend left=\angle] node[\pos, anchor=\anchor, txt] {\text} (\nto);
+        \end{pgfonlayer}
+      }
+    \end{tikzpicture}
+  \end{figure}
+\end{frame}
+>>>>>>> bffc88a4813d0c8b3230606bc4f3a4666f38198f
 
 \begin{frame}
   Pas de conflit de relations et la bonne catégorie grammaticale~: conditions nécessaires mais pas suffisantes 
