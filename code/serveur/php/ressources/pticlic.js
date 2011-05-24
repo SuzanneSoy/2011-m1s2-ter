@@ -219,7 +219,7 @@ runstate.gameCache = new Cache(function getGame(k, dfd) {
 			message("Erreur", data.msg);
 			if ((data.error == 10 || data.error == 3) && state.screen == 'game' && state.pgid == k) {
 				$.screen('connection').trigger('goto');
-			} else {
+			} else if (runstate.screen == 'game') {
 				$.screen('frontpage').trigger('goto');
 			}
 		} else {
@@ -328,9 +328,9 @@ runstate.scoreCache = new Cache(function getScore(k, dfd, arg) {
 		if (data.isError) {
 			dfd.reject(data);
 			message("Erreur", data.msg);
-			if ((data.error == 10 || data.error == 3) && state.screen == 'score' && state.pgid == k && state.answers.equalp(arg)) {
+			if ((data.error == 10 || data.error == 3) && state.screen == 'score' && state.pgid == k) {
 				$.screen('connection').trigger('goto');
-			} else {
+			} else if (runstate.screen == 'score') {
 				$.screen('frontpage').trigger('goto');
 			}
 		} else {

@@ -8,14 +8,6 @@ Number.prototype.mapInterval = function(a,b,x,y) {
 	return x + ((this-a) / (b-a) * (y-x));
 }
 
-Array.prototype.equalp = function(a) {
-	if (this.length != a.length) return false;
-	for (var i = 0; i < this.length; i++) {
-		if (this[i] !== a[i]) return false;
-	}
-	return true;
-};
-
 function dichotomy(start, isBigger) {
 	try {
 	var i = 0, min = 0, max, half;
@@ -54,7 +46,9 @@ $.fn.fitFont = function() {
 	this.find('.center').css({top:0, left:0}); // Petit hack pour que ça ne déborde pas à cause de l'offset mis par .center().
 	var size = dichotomy(parseInt(this.css("font-size"), 10), function(x) {
 		setFont.css("fontSize", x);
-		return that.$ormap(function(i,e) { return e.hasScroll(); });
+		var ret = false;
+		that.$each(function(i,e) { return !(ret = e.hasScroll()); }); // ormap
+		return ret;
 	});
 	this.css({overflow: 'hidden'});
 	this.css("font-size", Math.max(0, size));
@@ -62,20 +56,8 @@ $.fn.fitFont = function() {
 	} catch(e) {alert("Error $.fn.fitFont");alert(e);throw(e);}
 };
 
-$.fn.swapCSS = function(k,v) {
-	var old = this.css(k);
-	this.css(k, v);
-	return old;
-};
-
 $.fn.$each = function(fn) {
 	this.each(function(i,e) { return fn(i, $(e)); });
-};
-
-$.fn.$ormap = function(fn) {
-	var ret = false;
-	this.each(function(i,e) { if (fn(i, $(e))) { ret = true; return false; } });
-	return ret;
 };
 
 function queueize(method) {
@@ -97,7 +79,6 @@ $.fn.qRemove = queueize("remove");
 $.fn.qShow = queueize("show");
 $.fn.qHide = queueize("hide");
 $.fn.qCss = queueize("css");
-$.fn.qText = queueize("text");
 
 $.fn.wh = function(w, h) {
 	try {
@@ -107,11 +88,10 @@ $.fn.wh = function(w, h) {
 	} catch(e) {alert("Error $.fn.wh");alert(e);}
 };
 
-$.fn.relativePos = function(xAnchor, yAnchor, to, justCss) {
-	try {
+$.fn.center = function(to, justCss) {
 	if (to) this.css("position", "absolute");
-	var deltaX = this.outerWidth()  * xAnchor;
-	var deltaY = this.outerHeight() * yAnchor;
+	var deltaX = this.outerWidth()/2;
+	var deltaY = this.outerHeight()/2;
 
 	if (to) {
 		var css = {
@@ -125,35 +105,6 @@ $.fn.relativePos = function(xAnchor, yAnchor, to, justCss) {
 		pos.top  += deltaY;
 		return pos;
 	}
-	} catch(e) {alert("Error $.fn.relativePos");alert(e);}
-};
-
-$.each({
-	center:    {x:0.5, y:0.5},
-	north:     {x:0.5, y:0},
-	northEast: {x:1,   y:0},
-	east:      {x:1,   y:0.5},
-	southEast: {x:1,   y:1},
-	south:     {x:0.5, y:1},
-	southWest: {x:0,   y:1},
-	west:      {x:0,   y:0.5},
-	northWest: {x:0,   y:0},
-}, function(i,e) {
-	try {
-	var x = e.x;
-	var y = e.y;
-	$.fn[i] = function(to, justCss) {
-		try {
-		return this.relativePos(x, y, to, justCss);
-		} catch(e) {alert("Error auto-generated $.fn." + i);alert(e);}
-	};
-	} catch(e) {alert("Error top-level anonymous in my-extensions");alert(e);}
-});
-
-$.fn.clickOnce = function(fn) {
-	try {
-	this.unbind("click",fn).click(fn);
-	} catch(e) {alert("Error $.fn.clickOnce");alert(e);}
 };
 
 /**
