@@ -15,7 +15,7 @@
 \title{FMIN200 \\ TER~: Reconception du jeu PtiClic sous \android{}}
 \author{DUPÉRON Georges \and\\ CHARRON John \and\\ BRUN Bertrand \and\\ BONAVERO Yoann}
 \institute{Université Montpellier II, Département informatique}
-\date{Lundi, 23 mai 2011}
+\date{Jeudi, 26 mai 2011}
 
 \defbeamertemplate*{footline}{shadow theme}
 {%
@@ -184,17 +184,6 @@ Types de noeuds
 \end{figure}
 \end{frame}
 
-
-\begin{frame}
-\begin{figure}
- \begin{minipage}{\textwidth}
-\centering 
-       \includegraphics[width=0.75\textwidth]{img/lsa.jpeg}
-  \end{minipage}
-\end{figure}
-\end{frame}
-
-
 \begin{frame}
 \begin{center}
 	\begin{tabular}{ | l | l | l | l | p{5cm} |}
@@ -217,23 +206,57 @@ Types de noeuds
 \end{frame}
 
 
+\begin{frame}
+  Pas de conflit de relations et la bonne catégorie grammaticale~: conditions nécessaires mais pas suffisantes 
+  \begin{itemize}
+  \item 'mn' est une partie de 'mc'~: les mots doivent être des noms, mais doivent aussi être des choses physiques. Le mot "honnêteté' ne marchera pas
+  \item 'mn' pourrait 'mc' (Qui/Quoi pourrait 'mc')~: les mots doivent être des noms et un verbe respectivement, mais un verbe d'état ne conviendrait pas
+  \item le lieu de 'mc' est 'mn'~: les mots doivent être un nom ou verbe puis un nom, mais le nom doit pouvoir signifier un lieu, un endroit
+Il existe un dispositif dans la base de données prévu pour nous donner des informations métalinguistiques afin de faire ses distinctions, mais souvent la base n'est pas suffisemment alimentées pour pouvoir exploiter ces attributs sémantiques.
+  \end{itemize} 
+\end{frame}
 
 
+\begin{frame}
+  Algorithme de base pour introduire des mots sans aucune relation sémantique 
+  \begin{enumerate}
+  \item On génère le nuage à l'aide d'une méthode ou algorithme auxiliaire (LSA ou autre) à partir d'un mot central choisi au hasard
+  \item On choisit la seule relation sémantique "idée associée" afin de valider les mots générés par l'étape précédente (ainsi on établit des relations sortantes "idée associée" à partir d'un mot)
+  \item Algorithme suivant sera utilisé pour affiner les informations concernant le mot central en question
+  \end{enumerate} 
+\end{frame}
 
 
+\begin{frame}
+LSA ou autres méthodes d'établir des liens sémantiques
+\begin{figure}
+ \begin{minipage}{\textwidth}
+\centering 
+       \includegraphics[width=0.75\textwidth]{img/lsa.jpeg}
+  \end{minipage}
+\end{figure}
+\end{frame}
 
+\begin{frame}
+  Algorithme pour affiner des relations de types "idée associée"
+  \begin{enumerate}
+  \item On génère le nuage à partir de la relation sémantique le plus général, quasiment toutes les autres relations sémantiques étant un sous-ensemble de cette relation
+  \item On choisit des relations sémantiques plus spécifiques sans conflits (tableau "relations" précédent)
+  \end{enumerate}  
+\end{frame}
 
-
-
-
-
+\begin{frame}
+  Algorithme pour renforcer ajouter et renforcer des relations sémantiques spécifiques, quelques exemples
+\begin{itemize}
+\item Pour la relation de synonymie, on génère des mots nuage "synonyme de synonyme" ou bien "antonyme d'antonyme" du mot central
+\item Pour la relation d'antonymie, on génère des mots nuage "antonyme de synonyme" ou bien "synonyme d'antonyme" du mot central
+\item Pour la relation "spécifique de" on bascule une fois entre "est une sorte de" et "est un spécifique du" mot central une fois (et inversement dans le cas inverse, on peut aussi appliquer le même principe aux relations contenu/contenant, etc.
+\end{itemize}
+Inconvénient~: on n'introduit pas de nouvelles relations sémantiques spécifiques et le renforcement est possible à l'aide de l'algorithme du transparent précédent
+\end{frame}
 
 \section{Generation de partie}
-\begin{frame}
-\begin{center}
-  Generation de partie\\Georges \textsc{dupéron}
-\end{center}
-\end{frame}
+
 \begin{frame}
   % Georges
   \begin{tikzpicture}[
@@ -259,11 +282,7 @@ Types de noeuds
 \end{frame}
 
 \section{Creation de partie}
-\begin{frame}
-\begin{center}
-  Creation de partie\\Yoann \textsc{Bonavero}
-\end{center}
-\end{frame}
+
 %Yoann
 \begin{frame}
   \begin{itemize}
@@ -282,11 +301,7 @@ Types de noeuds
 
 % bertrand
 \section{Le Jeu}
-\begin{frame}
-\begin{center}
-  Le Jeu\\Bertrand \textsc{Brun}
-\end{center}
-\end{frame}
+
 \begin{frame}
 \frametitle{Le framework \android{}}
 \begin{block}{Les outils mis à disposition}
