@@ -395,7 +395,7 @@ runstate.serverPrefs = $.extend({}, runstate.prefs);
 function loadPrefs(prefs) {
 	var previousTheme = runstate.prefs ? runstate.prefs.theme : 'green';
 	if (prefs && prefs.theme) {
-		isConnected(true);
+		isConnected(prefs.connected);
 		runstate.prefs = prefs;
 		runstate.serverPrefs = $.extend({}, runstate.prefs);
 		if (runstate.loaded && previousTheme != runstate.prefs.theme) jss();
