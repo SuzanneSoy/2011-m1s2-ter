@@ -111,8 +111,10 @@ function main()
 			
 		setUserPref($user, $_GET['key'], $_GET['value']);
 		userPrefs($user);
-	}
-	else {
+	} elseif ($action == 9) {
+		session_destroy();
+		echo '{"disconnected":true}';
+	} else {
 		throw new Exception("Commande inconnue", 2);
 	}
 }

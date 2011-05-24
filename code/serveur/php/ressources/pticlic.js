@@ -16,6 +16,7 @@ $.ajaj = function(url, data, dfd, retryCheck, callback) {
 	if (callback) return $.getJSON(url, data, callback);
 	return $.getJSON(url, data, function(data) {
 		if (data.isError) {
+			isConnected(false);
 			dfd.reject(data);
 			message("Erreur", data.msg);
 			if ((data.error == 10 || data.error == 3) && state.screen == fromScreen && (!retryCheck || retryCheck())) {
@@ -24,9 +25,11 @@ $.ajaj = function(url, data, dfd, retryCheck, callback) {
 				$.screen('frontpage').trigger('goto');
 			}
 		} else {
+			isConnected(true);
 			dfd.resolve(data);
 		}
 	}).fail(function(data) {
+		isConnected(false);
 		dfd.reject(data);
 		$("#frontpage").trigger('goto');
 		message("Erreur", "Une erreur est survenue, veuillez nous en excuser.");
@@ -198,6 +201,9 @@ init(function() {
 		window.document.title = "PtiClic pre-alpha 0.2";
 		if (runstate.pendingSetPrefs) runstate.pendingSetPrefs();
 	});
+	$.screen('frontpage').bind('update', function() {
+		$('.dis-connect').text(isConnected() ? "Déconnexion" : "Connexion");
+	});
 	if (UI().isAndroid()) $('#back2site').hide();
 	$('#frontpage a.fpButton').$each(function(i,e) {
 		e.find('img.icon').data('image', e.attr('href').substring(1));
@@ -205,6 +211,15 @@ init(function() {
 });
 
 // ==== Écran connexion
+function isConnected(arg) {
+	if (typeof arg == 'undefined') {
+		return !!runstate.connected;
+	} else {
+		runstate.connected = !!arg;
+		if (runstate.screen == 'frontpage') $.screen('frontpage').trigger('update');
+	}
+}
+
 init(function() {
 	$('#connection.screen form').submit(function() {
 		runstate.user = $('#user').val();
@@ -230,6 +245,21 @@ init(function() {
 		if (runstate.pendingSetPrefs)
 			runstate.cancelPendingSetPrefs();
 		if (state.screen == 'frontpage') $.screen('frontpage').trigger('goto');
+	});
+	
+	$('a[href="#connection"]').click(function() {
+		if (isConnected()) {
+			UI().setPreference("user", '');
+			UI().setPreference("passwd", '');
+			runstate.user = '';
+			runstate.passwd = '';
+			$.ajaj("server.php?callback=?", { action: 9 }, null, null, function(data) {
+				isConnected(false);
+				message("Succès", "Vous êtes déconnecté.");
+				loadPrefs({theme:"green"});
+			});
+			return false;
+		}
 	});
 });
 
@@ -365,6 +395,7 @@ runstate.serverPrefs = $.extend({}, runstate.prefs);
 function loadPrefs(prefs) {
 	var previousTheme = runstate.prefs ? runstate.prefs.theme : 'green';
 	if (prefs && prefs.theme) {
+		isConnected(true);
 		runstate.prefs = prefs;
 		runstate.serverPrefs = $.extend({}, runstate.prefs);
 		if (runstate.loaded && previousTheme != runstate.prefs.theme) jss();
@@ -383,8 +414,8 @@ function setPrefs(prefs, callback) {
 
 runstate.pendingGetPrefs = function() {
 	$.ajaj("server.php?callback=?", { action: 7 }, null, null, function(data) {
-		if (data.theme) { runstate.connected = true; message("Succès", "Vous êtes connecté.", data.msg); loadPrefs(data); }
-		if (data.isError) message("Erreur", data.msg);
+		if (data.theme) { isConnected(true); message("Succès", "Vous êtes connecté."); loadPrefs(data); }
+		if (data.isError) { isConnected(false); message("Erreur", data.msg); }
 	});
 };
 
