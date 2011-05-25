@@ -42,14 +42,14 @@ $(function() {
 		
 		var updateRelationLabels = function() {
 			$('#relations option').each(function(i,e) {
-				$(e).text(applyFormat($(e).data("format"), $('#centralWord').val() || 'mot central', '…'));
+				$(e).text(applyFormat($(e).data("format"), $('#centralWord').val().trim() || 'mot central', '…'));
 			});
 			
 			$('.relationLabel').each(function(i,e) {
 				$(e).text(applyFormat(
 					$(e).data("format"),
-					$('#centralWord').val() || 'mot central',
-					$(e).closest('.wordLine').find('.word').val() || '…'));
+					$('#centralWord').val().trim() || 'mot central',
+					$(e).closest('.wordLine').find('.word').val().trim() || '…'));
 			});
 		}
 		
@@ -92,26 +92,22 @@ $(function() {
 			$("#button").html('<input type="button" id="addLine" name="addLine" value="Ajouter" />');
 			$("#addLine").click(function(){ displayNWordLines(1); });
 			
-			$("#button").append('<input type="button" id="validate" name="validate" value="Valider" />');
-			$("#validate").click(function(){ formOK(); });
+			$("#button").append('<input type="submit" id="validate" name="validate" value="Valider" />');
+			$("form").submit(formOK);
 		};
 		
 		var checkWord = function () {
 			updateRelationLabels();
 			var input = $(this);
-			var word = input.val();
+			var word = input.val().trim();
 
 			input.closest(".wordLine, #center").removeClass("valid invalid");
 
 			if (word != "") {
-				$.ajax({
-					type: "GET",
-					url: "server.php?",
-   					data: "action=4&word="+word, //+"&user="+user+"&passwd="+passwd,
-   					success: function(msg){
-   						input.closest(".wordLine, #center").addClass(msg == false ? "invalid" : "valid");
-   						wordsOK[input.attr("id")] = !(msg == false);
-    				}});
+				$.getJSON("server.php",{action:4,word:word}, function(msg){
+   					input.closest(".wordLine, #center").addClass(msg ? "valid" : "invalid");
+   					wordsOK[input.attr("id")] = !(msg == false);
+    			});
     		}
 		};
 		
@@ -120,7 +116,7 @@ $(function() {
 		   	
 			if ($("#relation1").val() == $("#relation2").val())
 				displayError("Les deux relation doivent être différents");
-			else if ($("#centralWord").val() == "")
+			else if ($("#centralWord").val().trim() == "")
 				displayError("Le mot central doit être renseigné.");
 			else if (badWord())
 				displayError("Il existe des mots incorrects");   			
@@ -146,7 +142,7 @@ $(function() {
 		
 		var badWord = function() {
 			for (word in wordsOK)
-   			if ($("#"+word).val() != "" && wordsOK[word] == false)
+   			if ($("#"+word).val().trim() != "" && wordsOK[word] == false)
    				return true;
    			
    		return false;
@@ -167,13 +163,13 @@ $(function() {
 			var exit;
 			var cloud = "";
 			
-			exit = {center:$("#centralWord").val(),
+			exit = {center:$("#centralWord").val().trim(),
 					  relations:[$("#relation1").val(),$("#relation2").val(),0,-1],
 					  cloud:[]};
 					  
 			for(i=1;i<numWord;i++) {
 				exit.cloud.push({
-					name:$("#word-"+i).val(),
+					name:$("#word-"+i).val().trim(),
 					relations:[
 						$("#r1-"+i).is(":checked") ? "1":"0",
 						$("#r2-"+i).is(":checked") ? "1":"0",
@@ -183,9 +179,9 @@ $(function() {
 					});
 			}
 			
-			$.get("server.php",{action:"6",game:exit},function (data) {
+			$.getJSON("server.php",{action:6,game:exit},function (data) {
 				//$(".word").closest(".wordLine, #center").removeClass("valid invalid");
-					if(data == true) {
+					if(data === true) {
 						displaySuccess("La partie à bien été enregistrée");
 						$('#newCreationLink').show();
 						$('#center').hide();
@@ -193,22 +189,25 @@ $(function() {
 						$('#wordLines').hide();
 						$('#button').hide();
 					}
-					else if (data == false) {
+					else if (data === false) {
 						$('input').removeAttr('disabled');
 						displayError("Le nuage doit contenir au moins "+nbWordMin+" mots valides.");
 					}
-					else if (data != true) {
+					else if (data.length) {
 						$('input').removeAttr('disabled');
-						var that = $(this);
-
-
-						$.each(data,function(i,e) {
+						
+						$.each(data,function(i,bad) {
 							$('.word')
-								.filter(function() { return that.val() == e; })
+								.removeClass("invalid")
+								.addClass("valid")
+								.filter(function(i,w) { return $(w).val().trim() == bad; })
 								.closest(".wordLine, #center")
-								.removeClass("valid invalid")
+								.removeClass("valid")
 								.addClass("invalid");
 						});
+					} else {
+						$('input').removeAttr('disabled');
+						displayError("Une erreur inconnue est survenue. 42.");
 					}
 			});
 			

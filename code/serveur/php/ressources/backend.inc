@@ -23,8 +23,7 @@ require_once("ressources/db.inc");
 *	computeUserReputation($score);
 *	normalizeProbas($row);
 *	setGame($user, $pgid, $gid, $answers);
-*	get_game_relations();
-*	getGameRelationsJSON();
+*	getGameRelations();
 *	setGameGetScore($user, $pgid, $gid, $answers);
 *	getNodeEid($node);
 *	wordExist($node);
@@ -34,8 +33,10 @@ require_once("ressources/db.inc");
 *	setUserPref($user, $key, $value);
 *	getJAimePgid($user, $pgid);
 *	setJAimePgid($user, $pgid, $value);
+* 	addGameCreationBonus($user, $nb);
+* function deleteOneGameCreation($user);
+* 	getNbGameCreationRemained($user);
 */
-
 
 
 /* Les définitions
@@ -300,6 +301,7 @@ function decodeAndInsertGame($user,$game) {
 		echo JSON_encode(false);
 	} else {
 		insertCreatedGame($centerEid,$cloud,$r1,$r2,10,$user);
+		deleteOneGameCreation($user);
 		echo JSON_encode(true);
 	}
 }
@@ -356,7 +358,32 @@ function insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty, $user
 */
 function randomGameCore() {
 	$db = getDB();
-	return $db->querySingle("select gid from game where gid = (abs(random()) % (select max(gid) from game))+1 or gid = (select max(gid) from game where gid > 0) order by gid limit 1;");
+	
+	$game = $db->query('SELECT gid,(nb_like - nb_dislike + 5 * (author != "bot")) AS coef FROM game');
+	$game = $game->fetchArray();
+	
+	foreach($game as $g) {
+		if($g['coef'] < -5)
+			$g['coef'] = 0;
+		else
+			$g['coef'] += 5;
+
+		$sum += $g['coef'];
+	}
+	
+	$game = rand(0,$sum);
+	
+	foreach($game as $g) {
+		$count += $g['coef'];
+		
+		if($count >= $randomValue)
+			return $g['gid'];
+	}
+	
+	return 0;
+
+	// Ancienne requêtes de sélection.
+	//return $db->querySingle("select gid from game where gid = (abs(random()) % (select max(gid) from game))+1 or gid = (select max(gid) from game where gid > 0) order by gid limit 1;");
 }
 
 /** Sélection aléatoire d'une partie de la base de données parmis les parties à jouer.
@@ -723,6 +750,24 @@ function setJAimePgid($user, $pgid, $value) {
 	getDB()->querySingle("UPDATE played_game SET like = ".$value." WHERE login = '".SQLite3::escapeString($user)."' and pgid = ".longStrVal($pgid).";");
 	getDB()->querySingle("UPDATE game SET nb_like = nb_like".($original == 1 ? " - 1" : "").($value == 1 ? " + 1" : "")." WHERE login = '".SQLite3::escapeString($user)."' and pgid = ".longStrVal($pgid).";");
 	getDB()->querySingle("UPDATE game SET nb_dislike = nb_dislike".($original == -1 ? " - 1" : "").($value == -1 ? " + 1" : "")." WHERE login = '".SQLite3::escapeString($user)."' and pgid = ".longStrVal($pgid).";");
+}
+
+function addGameCreationBonus($user, $nb) {
+	if($nb > 0) {
+		getDB()->exec('UPDATE user SET cgCount = cgCount + '.$ng.' WHERE login=\''.$user.'\'');
+		return true;
+	}
+
+	return false;
+}
+
+function deleteOneGameCreation($user) {
+	if(getNbGameCreationRemained($user) > 0)
+		getDB()->exec('UPDATE user SET cgCount=cgCount-1 WHERE login=\''.$user.'\'');
+}
+
+function getNbGameCreationRemained($user) {
+	return getDB()->querySingle('SELECT cgCount FROM user WHERE login=\''.$user.'\'');
 }
 
 ?>
