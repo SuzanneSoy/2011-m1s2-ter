@@ -37,9 +37,10 @@ create table random_cloud_node(eid,nbneighbors);
 create table random_center_node(eid);
 create table user_info(user, key, value, primary key (user, key));
 
-insert into user(login, mail, hash_passwd, score, ugroup) values('$(echo "$user" | sed -e "s/'/''/g")', 'foo@isp.com', '$(echo "$passwd" | dd bs=1 
+insert into user(login, mail, hash_passwd, score, ugroup, cgCount) values('$(echo "$user" | sed -e "s/'/''/g")', 'foo@isp.com', '$(echo "$passwd" | 
+dd bs=1 
 count="${#passwd}" | (if which md5sum >/dev/null 2>&1; then md5sum; else md5; fi) | cut -d ' ' -f 1)', 0, 1, 0);
-insert into user(login, mail, hash_passwd, score, ugroup) values('bot', 'no mail', 'no password', 0, 1, 0);
+insert into user(login, mail, hash_passwd, score, ugroup, cgCount) values('bot', 'no mail', 'no password', 0, 1, 0);
 EOF
 
 # tr : pour virer le CRLF qui traîne
