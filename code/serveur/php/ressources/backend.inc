@@ -23,8 +23,7 @@ require_once("ressources/db.inc");
 *	computeUserReputation($score);
 *	normalizeProbas($row);
 *	setGame($user, $pgid, $gid, $answers);
-*	get_game_relations();
-*	getGameRelationsJSON();
+*	getGameRelations();
 *	setGameGetScore($user, $pgid, $gid, $answers);
 *	getNodeEid($node);
 *	wordExist($node);
@@ -35,7 +34,6 @@ require_once("ressources/db.inc");
 *	getJAimePgid($user, $pgid);
 *	setJAimePgid($user, $pgid, $value);
 */
-
 
 
 /* Les définitions
@@ -356,7 +354,32 @@ function insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty, $user
 */
 function randomGameCore() {
 	$db = getDB();
-	return $db->querySingle("select gid from game where gid = (abs(random()) % (select max(gid) from game))+1 or gid = (select max(gid) from game where gid > 0) order by gid limit 1;");
+	
+	$game = $db->query('SELECT gid,(nb_like - nb_dislike + 5 * (author != "bot")) AS coef FROM game');
+	$game = $game->fetchArray();
+	
+	foreach($game as $g) {
+		if($g['coef'] < -5)
+			$g['coef'] = 0;
+		else
+			$g['coef'] += 5;
+
+		$sum += $g['coef'];
+	}
+	
+	$game = rand(0,$sum);
+	
+	foreach($game as $g) {
+		$count += $g['coef'];
+		
+		if($count >= $randomValue)
+			return $g['gid'];
+	}
+	
+	return 0;
+
+	// Ancienne requêtes de sélection.
+	//return $db->querySingle("select gid from game where gid = (abs(random()) % (select max(gid) from game))+1 or gid = (select max(gid) from game where gid > 0) order by gid limit 1;");
 }
 
 /** Sélection aléatoire d'une partie de la base de données parmis les parties à jouer.
