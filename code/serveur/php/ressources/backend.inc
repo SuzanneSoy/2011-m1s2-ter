@@ -5,33 +5,35 @@ require_once("ressources/db.inc");
 
 
 /* Les prototypes des fonctions :
-* ===============================>
-*   checkLogin($user, $passwd);
-*   randomCenterNode();
-*   randomCloudNode();
-*   cgBuildResultSets($cloudSize, $centerEid, $r1, $r2);
-*   cgChooseRelations();
-*   cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights);
-*   insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty, $userName);
-*   randomGameCore();
-*   randomGame();
-*   formatWord($word);
-*   game2array($user, $pgid);
-*   createGame($nbParties, $mode);
-*   createGameCore($cloudSize);
-*   computeScore($probas, $difficulty, $answer, $userReputation);
-*   computeUserReputation($score);
-*   normalizeProbas($row);
-*   setGame($user, $pgid, $gid, $answers);
-*   get_game_relations();
-*   getGameRelationsJSON();
-*   setGameGetScore($user, $pgid, $gid, $answers);
-*   getNodeEid($node);
-* 	wordExist($node);
-* 	setUserInfo($user, $key, $value);
+*===============================>
+*	checkLogin($user, $passwd);
+*	randomCenterNode();
+*	randomCloudNode();
+*	cgBuildResultSets($cloudSize, $centerEid, $r1, $r2);
+*	cgChooseRelations();
+*	cgBuildCloud($centerEid, $cloudSize, $sources, $sumWeights);
+*	insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty, $userName);
+*	randomGameCore();
+*	randomGame();
+*	formatWord($word);
+*	game2array($user, $pgid);
+*	createGame($nbParties, $mode);
+*	createGameCore($cloudSize);
+*	computeScore($probas, $difficulty, $answer, $userReputation);
+*	computeUserReputation($score);
+*	normalizeProbas($row);
+*	setGame($user, $pgid, $gid, $answers);
+*	get_game_relations();
+*	getGameRelationsJSON();
+*	setGameGetScore($user, $pgid, $gid, $answers);
+*	getNodeEid($node);
+*	wordExist($node);
+*	setUserInfo($user, $key, $value);
 *	userPrefsDefaults();
 *	userPrefs($user);
-* 	setUserPref($user, $key, $value);
+*	setUserPref($user, $key, $value);
+*	getJAimePgid($user, $pgid);
+*	setJAimePgid($user, $pgid, $value);
 */
 
 
@@ -709,6 +711,18 @@ function setUserPref($user, $key, $value) {
 	if (array_key_exists($key, userPrefsDefaults())) {
 		setUserInfo($user, $key, $value);
 	}
+}
+
+function getJAimePgid($user, $pgid) {
+	getDB()->querySingle("SELECT like FROM played_game WHERE login = '".SQLite3::escapeString($user)."' and pgid = ".longStrVal($pgid).";");
+}
+
+function setJAimePgid($user, $pgid, $value) {
+	$value = intval($value) / abs(intval($value) || 1); // Calcule le signe de $value : -1 ou 0 ou 1
+	$original = getJAimePgid($user, $pgid);
+	getDB()->querySingle("UPDATE played_game SET like = ".$value." WHERE login = '".SQLite3::escapeString($user)."' and pgid = ".longStrVal($pgid).";");
+	getDB()->querySingle("UPDATE game SET nb_like = nb_like".($original == 1 ? " - 1" : "").($value == 1 ? " + 1" : "")." WHERE login = '".SQLite3::escapeString($user)."' and pgid = ".longStrVal($pgid).";");
+	getDB()->querySingle("UPDATE game SET nb_dislike = nb_dislike".($original == -1 ? " - 1" : "").($value == -1 ? " + 1" : "")." WHERE login = '".SQLite3::escapeString($user)."' and pgid = ".longStrVal($pgid).";");
 }
 
 ?>

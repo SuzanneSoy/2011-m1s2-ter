@@ -114,6 +114,10 @@ function main()
 	} elseif ($action == 9) {
 		session_destroy();
 		echo '{"disconnected":true}';
+	} elseif ($action == 10) { // Set J'aime / J'aime pas
+		if (!isset($_GET['value']) || !isset($_GET['pgid']))
+			throw new Exception("La requête est incomplète", 2);
+		setJAimePgid($user, $_GET['pgid'], intval($_GET['value']));
 	} else {
 		throw new Exception("Commande inconnue", 2);
 	}

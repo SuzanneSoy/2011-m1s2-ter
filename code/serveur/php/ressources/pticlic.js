@@ -312,6 +312,7 @@ init(function() {
 		if (updating) return false;
 		updating = true;
 		if (!runstate.game || state.pgid != runstate.game.pgid) {
+			updating = false;
 			$('#game').trigger('goto');
 			return;
 		}
