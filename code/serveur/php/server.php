@@ -118,6 +118,7 @@ function main()
 		if (!isset($_GET['value']) || !isset($_GET['pgid']))
 			throw new Exception("La requête est incomplète", 2);
 		setJAimePgid($user, $_GET['pgid'], intval($_GET['value']));
+		echo '{"JAimePas":true}';
 	} else {
 		throw new Exception("Commande inconnue", 2);
 	}

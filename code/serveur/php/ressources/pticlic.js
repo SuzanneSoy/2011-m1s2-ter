@@ -4,6 +4,7 @@ function init(fn) {
 }
 
 $.ajaj = function(url, data, dfd, retryCheck, callback) {
+	dfd = dfd || $.Deferred();
 	var user = '' + UI().getPreference("user");
 	var passwd = '' + UI().getPreference("passwd");
 	user = runstate.user || user;
@@ -364,6 +365,14 @@ runstate.scoreCache = new Cache(function getScore(k, dfd, arg) {
 	}, dfd, function() { return state.pgid == k; });
 });
 
+function jAime(aime) {
+	$.ajaj('server.php?callback=?', {
+		pgid: state.pgid,
+		action: 10,
+		value: (aime ? 1 : -1)
+	});
+}
+
 init(function() {
 	var score = $.screen('score');
 	score.bind('pre-enter', function() {
@@ -387,6 +396,8 @@ init(function() {
 				.appendTo("#score .scores");
 		});
 	});
+	$('#jaime').click(function() { jAime(true); });
+	$('#jaimepas').click(function() { jAime(false); });
 });
 
 // ==== Écran Préférences
