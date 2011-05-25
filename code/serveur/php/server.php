@@ -111,10 +111,25 @@ function main()
 			
 		setUserPref($user, $_GET['key'], $_GET['value']);
 		userPrefs($user);
-	} elseif ($action == 9) {
+	}
+	elseif ($action == 9) {
 		session_destroy();
 		echo '{"disconnected":true}';
-	} else {
+	}
+	elseif ($action == 10) { // Set J'aime / J'aime pas
+		if (!isset($_GET['value']) || !isset($_GET['pgid']))
+			throw new Exception("La requête est incomplète", 2);
+			
+		setJAimePgid($user, $_GET['pgid'], intval($_GET['value']));
+		echo '{"JAimePas":true}';
+	}
+	elseif ($action == 11) {				// bonus création de parties
+		if (!isset($_GET['value']))
+			throw new Exception("La requête est incomplète", 2);
+			
+		addGameCreationBonus($user, $_GET['value']);
+	}
+	else {
 		throw new Exception("Commande inconnue", 2);
 	}
 }
