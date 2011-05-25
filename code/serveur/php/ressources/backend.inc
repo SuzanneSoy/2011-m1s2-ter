@@ -33,6 +33,8 @@ require_once("ressources/db.inc");
 *	setUserPref($user, $key, $value);
 *	getJAimePgid($user, $pgid);
 *	setJAimePgid($user, $pgid, $value);
+* 	addGameCreationBonus($user, $nb);
+* 	getNbGameCreationRemained($user);
 */
 
 
@@ -746,6 +748,19 @@ function setJAimePgid($user, $pgid, $value) {
 	getDB()->querySingle("UPDATE played_game SET like = ".$value." WHERE login = '".SQLite3::escapeString($user)."' and pgid = ".longStrVal($pgid).";");
 	getDB()->querySingle("UPDATE game SET nb_like = nb_like".($original == 1 ? " - 1" : "").($value == 1 ? " + 1" : "")." WHERE login = '".SQLite3::escapeString($user)."' and pgid = ".longStrVal($pgid).";");
 	getDB()->querySingle("UPDATE game SET nb_dislike = nb_dislike".($original == -1 ? " - 1" : "").($value == -1 ? " + 1" : "")." WHERE login = '".SQLite3::escapeString($user)."' and pgid = ".longStrVal($pgid).";");
+}
+
+function addGameCreationBonus($user, $nb) {
+	if($nb > 0) {
+		getDB()->exec('UPDATE user SET cgCount = cgCount + '.$ng.' WHERE user='.$user);
+		return true;
+	}
+
+	return false;
+}
+
+function getNbGameCreationRemained() {
+	return getDB()->querySingle('SELECT cgCount FROM user WHERE user='.$user);
 }
 
 ?>
