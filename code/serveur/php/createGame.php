@@ -102,7 +102,7 @@ if(!isset($_SESSION['userId']))
 	</head>
 	<body>
 		<?php include("ressources/menu.inc"); ?>	
-		<div class="content creategame">
+		<form class="content creategame">
 			<h2>Création de parties</h2>
 			<p>Cette page vous permet de créer des parties personalisées en indiquant les mots qui seront affiché pour un mot central.<br /><br />
 			<div id="errorDiv" class="message warning" style="display:none;"></div>
@@ -159,9 +159,7 @@ if(!isset($_SESSION['userId']))
 				</table>
 			</div>
 			<div id="button"></div>
-		</div>
-		<div id="templates" style="display:none">
-		</div>
+		</form>
 		<?php include("ressources/footer.inc"); ?>
 	</body>
 </html>
