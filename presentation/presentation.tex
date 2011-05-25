@@ -4,9 +4,10 @@
 \usepackage{tikz}
 \usepackage{subfigure}
 \usepackage[scriptsize]{caption}
+\usepackage{multicol}
 \renewcommand*{\figurename}{}
 \usetikzlibrary{shapes,positioning,snakes,calc}
-\usetheme{Warsaw}
+\usetheme{Darmstadt}
 
 % \setbeamercolor{alerted text}{fg=blue}
 
@@ -319,24 +320,6 @@ Inconvénient~: on n'introduit pas de nouvelles relations sémantiques spécifiq
   \end{tikzpicture}
 \end{frame}
 
-\section{Creation de partie}
-
-%Yoann
-\begin{frame}
-  \begin{itemize}
-  \item Site web
-    \begin{itemize}
-    \item Présentation de l'application
-    \item Le jeu
-    \end{itemize}
-  \item Page de création de parties
-    \begin{itemize}
-    \item Architecture
-    \item Bonus
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
 % bertrand
 \section{Le Jeu}
 
@@ -454,6 +437,55 @@ Inconvénient~: on n'introduit pas de nouvelles relations sémantiques spécifiq
     \draw[event,draw=blue] (hash.east) to[out=0, in=135] (update);
   \end{tikzpicture}
  \end{block}
+\end{frame}
+
+%Yoann
+\section{Création de partie}
+\begin{frame}
+  \frametitle{Création manuelle de parties}
+  Un exemple de partie crée automatiquement
+    \begin{center}
+		tsé tsé
+    \end{center}
+	  \begin{multicols}{2}
+		\begin{itemize}
+		  \item mouche
+		  \item tsé-tsé
+		  \item mouche tsé-tsé
+		  \item mouche tsétsé
+		  \item géohistoire
+		  \item ensommeiller
+		  \item fatigue
+		  \item \dots{}
+	    \end{itemize}
+	  \end{multicols}
+	  avec comme relations :
+	  \begin{itemize}
+	  	\item \dots{} est une sorte de \dots{}
+		\item un instrument pour \dots{} est \dots{}
+	  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Création manuelle de parties}
+  \large Quel intérêt pour les joueurs ?
+
+  \begin{itemize}
+    \item Valorise le joueur
+    \item Crée des relations entre joueurs
+    \item Donne un intérêt aux parties
+    \item Permet de jouer sur des parties contenant un message.
+  \end{itemize}
+\end{frame}
+
+\section{Site Internet}
+\begin{frame}
+  \frametitle{Le site Internet}
+  \large Un site internet, pourquoi faire ?
+  \newline \\
+  \large Que peut-on y trouver ?
+  \newline \\
+  \large Jouez directement sur le site !
 \end{frame}
 
 \section{Demonstration}

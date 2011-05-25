@@ -17,7 +17,10 @@
 \setlength{\parskip}{2ex}
 
 
-\title{Rapport de TER\\---\\Reconception du jeu Pticlic sous \android{}}
+\title{Rapport de TER
+\\Master 1 Informatique
+\\---\\
+Reconception du jeu Pticlic sous \android{}}
 \author{Yoann \textsc{Bonavero} \and Bertrand \textsc{Brun} \and John \textsc{Charron} \and Georges \textsc{Dupéron}}
 
 \begin{document}
@@ -762,20 +765,63 @@ TODO: UML, diagrammes de classes, Use cases, etc.
 
 \subsection{Site Internet}
 % TODO : Yoann
-Afin de pouvoir utiliser le jeu il faut posséder un compte utilisateur. Un utilisateur qui installe pour la première fois l'application sur son smartphone devra obtenir un compte avant de profiter du jeu.
+\subsubsection{Un site internet, pourquoi ?}
+Lorsqu'une nouvelle application ou jeux vidéo est développé, il est difficile de faire connaitre l'application
+sans utiliser de support de communication.
+La communication est une étape fondamentale dans la chaine de création d'une application ou celle de création d'un jeu.
+Internet est devene un support de communication très important et très influant qui permet de faire décourir aux
+personnes qui l'utilise un grand nombre de nouveau produits et permet également dans certain cas de les influencer.
+L'outil internet et plus particulièrement c'est révélé être une solution adapté à nos besoins.
 
-Le site Internet permet de réaliser cette inscription grâce à un formulaire qui permet la saisie des informations nécessaires. Il est également un moyen de présenter le projet, l'application et de prendre contact avec les développeurs.
+Le site Internet est une vitrine de notre application. Il permetra de présenter notre projet et le jeu sur la plate-forme \android{}.
 
-Le site est constitué d'un petit nombre de pages à savoir : une présentation de l'application et du projet, l'inscription et l'authentification, une page de téléchargement de l'application et de procédure d'installation, ainsi que quelques pages permettant de créer et afficher des parties.
+Si on veut faire passer un message clair et précis, le support de communication doit également être clair. Le site Internet 
+doit par conséquent être constitué d'un petit nombre de pages. Chaque page devant être aérée et cible un théme important.
 
-Les deux dernières pages citées concernant la création et l'affichage de parties ne sont pas accessibles à tout le monde. Il faudra que l'utilisateur débloque ce mode en obtenant un certain nombre de points dans le jeu.
+\subsubsection{Téléchargement et installation}
+Il comportera aussi une page dédié au télécharge de l'application sur \android{] avec une série d'instructions qui permettront
+aux utilisateur d'installer en toute simplicité l'application sur leurs smartphone.
+
+\subsubsection{L'inscription}
+Si une personne est intéressé par notre jeu et qu'il souhaite y jouer, il devra tout d'abord s'inscrire afin qu'il
+soit connu de du service. Cette opération se devra réaliser à partir du site Internet par le biais d'un formulaire comportant
+simplement les trois ilformations : "nom d'utilisateur", "mot de passe" et "e-mail". Le formulaire se limite à trois informations
+distinctes pour éviter de décourager les utiliser dès le formulaire d'inscription.
+
+L'inscription se réalisera simplement la première fois qu'une personne souhaite jouer au jeu. Cette inscription est
+définitive et permettra aux utilisateurs de jouer librement et d'utiliser à leur guise les différents services qui
+pourront être proposés.
+
+\subsubsection{Contact}
+Pour qu'une application soit en accord avec ses utilisateurs, il faut un certain temps et apporter un certain nombre
+de modifications pour répondre à la demande et aux besoins de l'utilisateur final. Dans but de récupérer les avis,
+remarques, critiques, encouragement des utilisateurs un formulaire de contact devra être disponible sur le site. Ce formulaire
+sera accessible sans inscriptions ce qui permetra d'envoyer un message par exemple si il y a un problèem et qu'une
+personne n'arrive pas à s'incrire.
+
+\subsubsection{La création de partie}
+Un algorithme automatique de création de partie permet de créer un grand nombre de partie très simplement. Cependant ce moyen
+de génération de partie est assez limité et donne régulièrement des résultat trop peu satisfaisant voire même incohérents.
+Pour palier à ce problème, un solution serai de mettre en place un service permettant aux joueurs de créer eux-même des parties. Ce qu i
+aurait pour effet d'obtenir des parites bien plus intéressentes avec de l'humour etc. Une page du site Internet sera donc consacrée
+à la création manuelle de partie. Elle permetra de créer des parties de taille variée et de thème différents. Le joueurs pourra
+indiquer les mots qu'il souhaites voir dans la partie ainsi que les deux relations principales.
+Les parties ainsi créées pourront être jouées par les autres joueurs et permettrons d'améliorer l'attractivité et l'intérêt du jeu.
 
 \subsection{Site Internet 2}
-Le site Internet est en grande partie "statique" (langage HTML). Les pages "statiques" sont les pages de présentation, de contact et de téléchargement.
+\subsubsection{La création de partie}
+La deuxième version du site à pour but de rendre plus intuitif et plus certain points un peu complexe comme la création de partie.
+Le service de création de partie sera dévoloppé en JavaScript au lieu de PHP ce qui permettra d'avoir une intéraction en temps avec l'utilisateur.
+En effet lorsqu'un utilisateur saisie un mot il est important pour lui de savoir si ce mot existe ou non, de ce fait une requête pourra être
+émise en direction du serveur afin de vérifier la validité du mots saisi. D'autre lorsqu'un utilisateur souhaite créer une nouvelle partie 
+il ne sais pas forcément combien de mots va composer sa partie. Il devra par conséquent être en mesure d'augmenter au besoin le nombre de mots
+composants la partie.
 
-Certain éléments comme l'inscription, la connexion\dots{} ont une partie PHP qui permet d'intérroger la base de données afin de valider ou non l'action.
+\subsubsection{jouez en ligne !}
+La seconde évolution majeure qui est liée à une nouvelle version de l'interface de jeu est qu'il est possible de jouer directement depuis
+le site Internet sans forcéement disposer de téléphone sous \android{}. Cette option permettra de toucher un public bien plus large tout en 
+ne pénalisant pas ceux qui disposent d'un smartphone \android{}
 
-La création de parties est, elle, réalisée en PHP et JavaScript afin de rendre plus intuitif l'interraction avec l'utilisateur. Les parties générées par les utilisateurs sont ajoutées dans la base de données pour qu'elle puissent par la suite être jouées par les autres joueurs. Le nom de la personne ayant créer la partie est associé à celle-ci ce qui permettra d'indiquer aux joueurs la personne qui à créer la partie à laquelle il sont entrain ou ils viennent de jouer. Par soucis de maintien d'une base de donnée propre, l'utilisateur ne peux pas rentrer de nouveaux mots dans la base de données. Lorsqu'il souhaite créer une nouvelle partie il doit utiliser des mots "connus". Le JavaScript permet de vérifier dynamique la validité des mots et ainsi indiquer immédiatement à l'utilisateur si le mot qu'il vient saisir est correct ou non.
 
 \subsection{Version html5 du jeu}
 \label{sec:html5}
