@@ -353,27 +353,51 @@ Types de noeuds
   \end{center}
 \end{frame}
 \begin{frame}
-  % Georges
-  \begin{tikzpicture}[
-    mynode/.style = {circle, minimum size=1.5cm},
-    mc/.style = {mynode,draw=red,text=red},
-    mn/.style = {mynode,draw},
-    mi/.style = {mynode,draw=gray,text=gray},
-    rel/.style = {font=\footnotesize},
-    guess/.style = {->,dashed},
-    exist/.style = {->},
-    auto,swap
-    ]
-    \node[mc] (mc) {Chat};
-    \node[mn] (mn0) at (0,3) {Souris};
-    \node[mi] (mi1) at (3,-2) {matou};
-    \node[mn] (mn2) at (6,0) {animal};
-    \path[exist] (mc) edge[bend right] node[rel]{idée associée} (mn0);
-    \path[exist] (mc) edge node[rel]{synonyme} (mi1);
-    \path[exist] (mi1) edge node[rel]{sorte de} (mn2);
-    \path[guess,swap] (mc) edge node[rel]{sorte de ?} (mn2);
-    \path[guess,swap] (mc) edge[bend left] node[rel]{\shortstack{sorte de ?\\synonyme ?\\\dots}} (mn0);
-  \end{tikzpicture}
+  \begin{center}
+    \begin{tikzpicture}[
+      mynode/.style = {circle, minimum size=1.5cm},
+      mc/.style = {mynode,draw=red,text=red},
+      mn/.style = {mynode,draw},
+      mi/.style = {mynode,draw=gray,text=gray},
+      rel/.style = {font=\footnotesize},
+      guess/.style = {->,dashed},
+      exist/.style = {->},
+      auto,swap
+      ]
+      \node[mc] (mc) {Chat};
+      \node[mn] (mn0) at (0,3) {Souris};
+      \node[mi] (mi1) at (3,-2) {matou};
+      \node[mn] (mn2) at (6,0) {animal};
+      \path[exist] (mc) edge[bend right] node[rel]{idée associée} (mn0);
+      \path[exist] (mc) edge node[rel]{synonyme} (mi1);
+      \path[exist] (mi1) edge node[rel]{sorte de} (mn2);
+      \path[guess,swap] (mc) edge node[rel]{sorte de ?} (mn2);
+      \path[guess,swap] (mc) edge[bend left] node[rel]{\shortstack{sorte de ?\\synonyme ?\\\dots}} (mn0);
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \begin{tikzpicture}[
+      mynode/.style = {circle, minimum size=1.5cm},
+      mc/.style = {mynode,draw=red,text=red},
+      mn/.style = {mynode,draw},
+      mi/.style = {mynode,draw=gray,text=gray},
+      rel/.style = {font=\footnotesize},
+      guess/.style = {->,dashed},
+      exist/.style = {->},
+      auto
+      ]
+      \node[mc] (mc) {\shortstack{Mot central\\\action<3->{\footnotesize{POS 1}}}};
+      \node[mi, above right=of mc] (mi) {\shortstack{\footnotesize{Intermédiaire}\\\action<3->{\footnotesize{POS 2}}}};
+      \node[mn, below right=of mi] (mn) {\shortstack{Mot nuage\\\action<3->{\footnotesize{POS 3}}}};
+      
+      \path[draw,->] (mc) edge node {Relation 1} (mi);
+      \path[draw,->] (mi) edge node {Relation 2} (mn);
+      \path<2->[draw,->] (mc) edge node[swap] {Relation déduite} (mn);
+    \end{tikzpicture}
+  \end{center}
 \end{frame}
 
 % bertrand
