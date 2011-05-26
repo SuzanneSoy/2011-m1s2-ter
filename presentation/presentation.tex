@@ -51,63 +51,14 @@
 \begin{frame}  
 \begin{figure}[h!]
   \centering
-      \includegraphics[width=0.4\textwidth]{img/preterit01.jpg}
-\caption{Reconception PtiClic Version HTML5}
-\end{figure}
-\end{frame}
-
-\begin{frame}  
-\begin{figure}[h!]
-  \centering
-      \includegraphics[width=0.4\textwidth]{img/preterit02.jpg}
-\caption{Reconception PtiClic Version HTML5}
-\end{figure}
-\end{frame}
-
-\begin{frame}  
-\begin{figure}[h!]
-  \centering
-      \includegraphics[width=0.4\textwidth]{img/preterit03.jpg}
-\caption{Reconception PtiClic Version HTML5}
-\end{figure}
-\end{frame}
-
-\begin{frame}  
-\begin{figure}[h!]
-  \centering
-      \includegraphics[width=0.4\textwidth]{img/preterit04.jpg}
-\caption{Reconception PtiClic Version HTML5}
-\end{figure}
-\end{frame}
-
-\begin{frame}  
-\begin{figure}[h!]
-  \centering
-      \includegraphics[width=0.4\textwidth]{img/preterit05.jpg}
-\caption{Reconception PtiClic Version HTML5}
-\end{figure}
-\end{frame}
-
-\begin{frame}  
-\begin{figure}[h!]
-  \centering
-      \includegraphics[width=0.4\textwidth]{img/preterit06.jpg}
-\caption{Reconception PtiClic Version HTML5}
-\end{figure}
-\end{frame}
-
-\begin{frame}  
-\begin{figure}[h!]
-  \centering
-      \includegraphics[width=0.4\textwidth]{img/preterit07.jpg}
-\caption{Reconception PtiClic Version HTML5}
-\end{figure}
-\end{frame}
-
-\begin{frame}  
-\begin{figure}[h!]
-  \centering
-      \includegraphics[width=0.4\textwidth]{img/preterit08.jpg}
+      \only<1>{\includegraphics[width=0.4\textwidth]{img/preterit01.jpg}}%
+      \only<2>{\includegraphics[width=0.4\textwidth]{img/preterit02.jpg}}%
+      \only<3>{\includegraphics[width=0.4\textwidth]{img/preterit03.jpg}}%
+      \only<4>{\includegraphics[width=0.4\textwidth]{img/preterit04.jpg}}%
+      \only<5>{\includegraphics[width=0.4\textwidth]{img/preterit05.jpg}}%
+      \only<6>{\includegraphics[width=0.4\textwidth]{img/preterit06.jpg}}%
+      \only<7>{\includegraphics[width=0.4\textwidth]{img/preterit07.jpg}}%
+      \only<8>{\includegraphics[width=0.4\textwidth]{img/preterit08.jpg}}%
 \caption{Reconception PtiClic Version HTML5}
 \end{figure}
 \end{frame}
@@ -145,42 +96,44 @@
 \end{frame}
 
 \begin{frame}
-\begin{center}
-  Réseau lexical JeuxDeMots  \\\
-  \end{center}
+\frametitle{Réseau lexical JeuxDeMots - 1/2}
 
-Types de noeuds
+\begin{block}{Types de noeuds}
   \begin{itemize}
   \item termes
   \item catégories grammaticales
   \item informations métalinguistiques supplémentaires 
   \end{itemize}
+\end{block}
 
   \textcolor{white}{text}\\
-  Types de relations 
+  \begin{block}{Types de relations} 
   \begin{itemize}
   \item morphologique
   \item sémantique
   \item métalinguistique
   \end{itemize}
-  
+  \end{block}
 \end{frame}
 
 \begin{frame}
-  Réseau lexical JeuxDeMots~: quelques statistiques
+\frametitle{Réseau lexical JeuxDeMots - 2/2}
+  \begin{block}{Quelques statistiques}
   \begin{itemize}
   \item environ 45\% des noeuds n'ont pas de relations sémantiques sortantes
   \item environ 70\% des noeuds n'ont pas de relations sémantiques entrantes
   \end{itemize}
+  \end{block}
 \end{frame}
 
 \begin{frame}
-  Bruits et silences
+  \begin{block}{Bruits et silences}
   \begin{itemize}
   \item bruits = relations plus fortes que la réalité 
   \item silence = relations non existantes ou trop faible par rapport à la réalité 
   \item bruits et/ou silences = couverture de relations sémantiques hétérogènes
   \end{itemize}
+  \end{block}
 \end{frame}
 
 \begin{frame}
@@ -259,22 +212,26 @@ Types de noeuds
 \end{frame}
 
 \begin{frame}
+\begin{block}{}
   Pas de conflit de relations + bonne catégorie grammaticale = conditions nécessaires mais pas suffisantes 
   \begin{itemize}
   \item 'mn' est une partie de 'mc'~ : noms, mais objets physiques aussi. 
   \item 'mn' pourrait 'mc' (Qui/Quoi pourrait 'mc')~: noms et verbe respectivement, mais verbe d'état ne fonctionne pas
   \item le lieu de 'mc' est 'mn'~: nom ou verbe puis nom, etc.
-  \end{itemize} 
+  \end{itemize}
+  \end{block} 
 \end{frame}
 
 
 \begin{frame}
-  Algorithme de base pour introduire des mots sans aucune relation sémantique 
+\frametitle{Introduction des mots sans aucune relation sémantique}
+  \begin{block}{Algorithme de base} 
   \begin{enumerate}
   \item On génère le nuage à l'aide d'une méthode ou algorithme auxiliaire (LSA ou autre) à partir d'un mot central choisi au hasard
   \item On choisit la seule relation sémantique "idée associée" afin de valider les mots générés par l'étape précédente
   \item Algorithme suivant est utilisé pour affiner les informations concernant le mot central en question
   \end{enumerate} 
+  \end{block}
 \end{frame}
 
 
@@ -325,30 +282,36 @@ Types de noeuds
 \end{frame}
 
 \begin{frame}
-  Algorithme pour affiner des relations de types "idée associée"
+\frametitle{Affinage des relations de types "idée associée"}
+  \begin{block}{Algorithme}
   \begin{enumerate}
   \item On génère le nuage à partir de la relation sémantique le plus général, "idée associée"
   \item On choisit des relations sémantiques plus spécifiques sans conflits (tableau "relations" précédent)
   \end{enumerate}  
+  \end{block}
 \end{frame}
 
 \begin{frame}
-  Algorithmes de renforcement de relations
+\frametitle{Renforcement de relations}
+  \begin{block}{Algorithmes}
 \begin{itemize}
 \item Synonymie~: synonyme de synonyme" ou "antonyme d'antonyme" du mot central
 \item Antonymie~: "antonyme de synonyme" ou "synonyme d'antonyme" du mot central
 \item Spécifique~: "spécifique d'un générique d'un spécifique" du mot central 
 \item etc.
 \end{itemize}
+\end{block}
 \end{frame}
 
 
 \begin{frame}
-  Expériences en TALN~: interactions homme-machine
+\frametitle{Expériences en TALN}
+  \begin{block}{Interactions homme-machine}
 \begin{itemize}
 \item On apprend de la machine
 \item La machine "apprend" de nous~: modifications d'algorithmes, de stratégies et d'approches par rapport aux résultats
 \end{itemize}
+\end{block}
 \end{frame}
 
 
