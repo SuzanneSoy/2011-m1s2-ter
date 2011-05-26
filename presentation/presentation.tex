@@ -452,64 +452,83 @@ Types de noeuds
 \end{frame}
 
 \begin{frame}
-\frametitle{Passage au HTML}
-\begin{block}{Défauts constatés}
-  \begin{itemize}
-    \item<+-> Perte de temps avec les ajustements des vues ;
-    \item<+-> Public visé trop faible ;
-  \end{itemize}
-\end{block}
-\begin{block}{Solutions proposées}<+->
-  \begin{itemize}
-    \item<+-> Développement de l'application en Javascript/HTML5 pour les vues ;
-    \item<+-> Utilisation du framework WebKit proposé par \android{} ;
-    \item<+-> Utilisation du web pour toucher plus de personnes ;
-  \end{itemize}
-\end{block}
+  \frametitle{Passage au HTML}
+  \begin{alertblock}{Défauts constatés}
+    \begin{itemize}
+    \item<2-> Perte de temps avec les ajustements des vues ;
+    \item<3-> Public visé trop faible ;
+    \end{itemize}
+  \end{alertblock}
+  \begin{block}{Solutions proposées}<4->
+    \begin{itemize}
+    \item<5-> Développement de l'application en Javascript/HTML5 pour les vues ;
+    \item<6-> Utilisation du framework WebKit proposé par \android{} ;
+    \item<7-> Utilisation du web pour toucher plus de personnes ;
+    \end{itemize}
+  \end{block}
 \end{frame}
 
 \begin{frame}
-\frametitle{Prototype 2}
- \begin{block}{Schéma général de l'enchainement des pages~:}
-   \centering 
-  \footnotesize{\texttt{\textcolor{gray}{http://www.pticlic.fr/jeu.html}\#\textcolor{red}{game}/\textcolor{blue}{1306104746953}/\textcolor{blue}{5,0,5,-1}}}
-  \vskip 1em%
-  \begin{tikzpicture}[
-    state/.style = {circle,draw,minimum size=1.3cm},
-    transition/.style = {->},
-    event/.style = {->, decorate, decoration={snake, post length=.5mm}, segment amplitude=.4mm, segment length=2mm},
-    source/.style = {},
-    auto,
-    secondary/.style={draw=gray}
-    ]
-    \node[state] (goto) {\shortstack{aller\\vers}};
-    \node[left=of goto] (arbitrary) {$*$};
-    \node[state, right=of goto] (pre-enter) {\shortstack{pr\'e-\\entr\'ee}};
-    \node[state, right=of pre-enter] (enter) {entr\'e};
-    \node[state, right=of enter] (update) {\shortstack{mise\\\`a\\jour}};
-    \node[state, below=of goto] (leave) {quitter};
-    \node[coordinate, below=of pre-enter] (c1) {};
-    \node[coordinate, below=of enter] (c2) {};
-    \node[state] (ajax) at ($0.5*(c1) + 0.5*(c2)$) {AJAX};
-    \node[source, above=of goto] (hash) {hashchange};
+  \frametitle{Prototype 2}
+  \begin{block}{Schéma général de l'enchaînement des pages~:}
+    \footnotesize{
+      \texttt{
+        \textcolor{gray}{http://www.pticlic.fr/jeu.html}%
+        \only<1-1>{\#frontpage}%
+        \only<2-8>{\#\textcolor{red}{game}/1306104746953}%
+        \only<9>{\#game/\textcolor{blue}{1306104746953}/\textcolor{blue}{5}}%
+        \only<10>{\#game/1306104746953/5,\textcolor{blue}{0}}%
+        \only<11>{\#game/1306104746953/5,0,\textcolor{blue}{5}}%
+        \only<12>{\#game/1306104746953/5,0,5,\textcolor{blue}{-1}}%
+        \only<13>{\#game/1306104746953/5,0,5,-1}%
+      }
+    }
+    \begin{center}
+      \vskip 0.5em%
+      \begin{tikzpicture}[
+        state/.style = {circle,draw,minimum size=1.3cm},
+        sync/.style = {draw, ->},
+        async/.style = {draw, ->, decorate, decoration={snake, post length=.5mm}, segment amplitude=.4mm, segment length=2mm},
+        source/.style = {},
+        auto,
+        secondary/.style={draw=gray}
+        ]
+        \path[use as bounding box] (-1,-4.8) rectangle (7.8,0.3);
+        
+        \path<2-3> node[source] (hash) {\color{red}{hashchange}};
+        \path<3>  node[state, below=of hash, color=red] (goto) {\shortstack{aller\\vers}};
+        \path<4-8> node[source] (hash) {hashchange};
+        \path<4-> node[state, below=of hash] (goto) {\shortstack{aller\\vers}};
+        \path<4-> node[state, below=of goto] (leave) {quitter};
+        \path<5-> node[state, right=of goto] (pre-enter) {\shortstack{pré-\\entrée}};
+        \path<6-> node[state, right=of pre-enter] (enter) {entrée};
+        \path<7-> node[coordinate, below=of pre-enter] (c1) {};
+        \path<7-> node[coordinate, below=of enter] (c2) {};
+        \path<7-> node[state] (ajax) at ($0.5*(c1) + 0.5*(c2)$) {AJAX};
+        \path<8> node[state, right=of enter] (update) {\shortstack{mise\\\`a\\jour}};
+        \path<9-12> node[state, right=of enter, color=blue] (update) {\shortstack{mise\\à\\jour}};
+        \path<9-12>  node[source] (hash) {\color{blue}{hashchange}};
+        \path<13>  node[source] (hash) {hashchange};
+        \path<13> node[state, right=of enter] (update) {\shortstack{mise\\à\\jour}};
 
-    \draw[transition] (goto) edge node {2} (pre-enter);
-    \draw[transition,dashed] (pre-enter) -- (enter);
-    \draw[transition] (enter) -- (update);
-    \draw[transition] (goto) edge node {1} (leave);
-    \draw[event,draw=red] (hash) -- (goto);
-    \draw[event] (arbitrary) -- (goto);
-    \draw[event] (arbitrary) to[out=90, in=225] (hash.south west);
-    \draw[event,secondary] (pre-enter) -- (ajax);
-    \draw[event,secondary] (ajax) -- (enter);
-    \draw[event,draw=blue] (hash.east) to[out=0, in=135] (update);
-  \end{tikzpicture}
- \end{block}
+        \path<3>[sync,draw=red] (hash) -- (goto);
+        \path<4->[sync] (hash) -- (goto);
+        \path<4-> [sync] (goto) edge node {1} (leave);
+        \path<5-> [sync] (goto) edge node {2} (pre-enter);
+        \path<6-> [sync,dashed] (pre-enter) -- (enter);
+        \path<8-> [sync] (enter) -- (update);
+        \path<7-> [async,secondary] (pre-enter) -- (ajax);
+        \path<7-> [async,secondary] (ajax) -- (enter);
+        \path<9-12> [sync,draw=blue] (hash.east) to[out=0, in=135] (update);
+        \path<13> [sync] (hash.east) to[out=0, in=135] (update);
+      \end{tikzpicture}
+    \end{center}
+  \end{block}
 \end{frame}
 
 \begin{frame}
   \frametitle{\'Evolution de l'architecture}
-  \begin{block}{}
+  \begin{block}{Architecture de la \only<-8>{première}\only<9->{deuxième} version}
   \begin{center}
     \begin{tikzpicture}[
       bend angle=10, shorten >=0.05cm, shorten <=0.05cm, text height=0.35cm,
