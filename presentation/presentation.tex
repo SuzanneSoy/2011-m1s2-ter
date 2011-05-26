@@ -192,27 +192,37 @@ Types de noeuds
       earlymidway/.style = {pos=0.4},
       latemidway/.style = {pos=0.6}
       ]
-      \node (n0) {mot4};
-      \node[above left  = 2cm of n0] (n1) {mot1};
-      \node[above right = 2cm of n0] (n2) {mot3};
-      \node[below left  = 2cm of n0] (n3) {mot2};
-      \node[below right = 2cm of n0] (n4) {mot5};
+      \node (n4) {mot4};
+      \node[above left  = 2cm of n4] (n1) {mot1};
+      \node[above right = 2cm of n4] (n3) {mot3};
+      \node[below left  = 2cm of n4] (n2) {mot2};
+      \node[below right = 2cm of n4] (n5) {mot5};
       
       \foreach \direction/\nfrom/\nto/\angle/\pos/\anchor/\text in {
-        ->/n0/n2/15/near end/east/idée associée 450,
-        <-/n0/n2/0/midway/center/idée associée 250,
-        <-/n0/n2/-15/near start/west/hyperonyme 50,
+        ->/n4/n3/15/near end/east/idée associée 450,
+        <-/n4/n3/0/midway/center/idée associée 250,
+        <-/n4/n3/-15/near start/west/hyperonyme 50,
         % 
-        ->/n0/n4/-20/midway/center/idée associée 25,
+        ->/n4/n5/-20/midway/center/idée associée 25,
         % 
-        ->/n2/n4/-15/near end/east/hyponyme 50,
-        ->/n2/n4/0/latemidway/east/locution 70,
-        ->/n2/n4/15/latemidway/west/idée associée 25,
-        <-/n2/n4/30/near end/west/idée associée 25,
+        ->/n3/n5/-15/near end/east/hyponyme 50,
+        ->/n3/n5/0/latemidway/east/locution 70,
+        ->/n3/n5/15/latemidway/west/idée associée 25,
+        <-/n3/n5/30/near end/west/idée associée 25,
         % 
-        ->/n1/n3/-15/very near end/east/hyperonyme 70,
-        <-/n1/n3/0/latemidway/center/idée associée 50,
-        <-/n1/n3/15/very near end/west/hyperonyme 50
+        ->/n1/n2/-15/very near end/east/hyperonyme 70,
+        <-/n1/n2/0/latemidway/center/idée associée 50,
+        <-/n1/n2/15/very near end/west/hyperonyme 50,
+        % 
+        ->/n1/n4/-15/near end/center/domaine 25,
+        ->/n1/n4/5/midway/center/idée associée 310,
+        % 
+        ->/n1/n5/-30/very near end/east/domaine 25,
+        % 
+        ->/n1/n3/40/midway/center/idée associée 200,
+        ->/n1/n3/25/midway/center/hyperonyme 80,
+        <-/n1/n3/12/midway/center/hyponyme 100,
+        <-/n1/n3/0/midway/center/idée associée 60
       }{
         \draw[\direction] (\nfrom) to[bend left=\angle] (\nto);
         \begin{pgfonlayer}{foreground}
@@ -342,10 +352,10 @@ Types de noeuds
 
 
 
-\section{Generation de partie}
+\section{Génération de partie}
 \begin{frame}
   \begin{center}
-    Generation de partie\\(Georges DUP\'ERON)
+    Génération de partie\\(Georges DUP\'ERON)
   \end{center}
 \end{frame}
 \begin{frame}
