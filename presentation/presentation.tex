@@ -400,9 +400,9 @@ Types de noeuds
 \begin{block}{Modèle-Vue-Contrôlleur}
   \centering
   \begin{tikzpicture}[bend angle=10, shorten >=0.1cm, shorten <=0.1cm]
-    \node[draw] (activite) {Activité};
-    \node[draw,below right=of activite] (modele) {Modèle};
-    \node[draw,below left=of activite] (xml) {Vue (XML)};
+    \node[draw] (activite) {Contr\^olleur (Activité)};
+    \node[draw,below right=of activite, anchor=east, xshift=1cm] (modele) {Modèle};
+    \node[draw,below left=of activite, anchor=west, xshift=-1cm] (xml) {Vue (XML)};
     \draw[->] (activite.east) ++(0,+.1cm) to[out=0,   in=90] ($(modele.north)+(+.1cm,0)$);
     \draw[<-] (activite.east) ++(0,-.1cm) to[out=0,   in=90] ($(modele.north)+(-.1cm,0)$);
     \draw[->] (activite.west) ++(0,+.1cm) to[out=180, in=90] ($(xml.north)+(-.1cm,0)$);
@@ -474,10 +474,10 @@ Types de noeuds
     ]
     \node[state] (goto) {\shortstack{aller\\vers}};
     \node[left=of goto] (arbitrary) {$*$};
-    \node[state, right=of goto] (pre-enter) {\shortstack{pre-\\enter}};
-    \node[state, right=of pre-enter] (enter) {enter};
-    \node[state, right=of enter] (update) {update};
-    \node[state, below=of goto] (leave) {leave};
+    \node[state, right=of goto] (pre-enter) {\shortstack{pr\'e-\\entr\'ee}};
+    \node[state, right=of pre-enter] (enter) {entr\'e};
+    \node[state, right=of enter] (update) {\shortstack{mise\\\`a\\jour}};
+    \node[state, below=of goto] (leave) {quitter};
     \node[coordinate, below=of pre-enter] (c1) {};
     \node[coordinate, below=of enter] (c2) {};
     \node[state] (ajax) at ($0.5*(c1) + 0.5*(c2)$) {AJAX};
