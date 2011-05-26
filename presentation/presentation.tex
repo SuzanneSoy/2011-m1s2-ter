@@ -15,14 +15,14 @@
 
 \title{FMIN200 \\ TER~: Reconception du jeu PtiClic sous \android{}}
 \author{DUPÉRON Georges \and\\ CHARRON John \and\\ BRUN Bertrand \and\\ BONAVERO Yoann}
-\institute{Université Montpellier II, Département informatique}
+\institute{Université Montpellier II, Département informatique  \\ Master 1 IFPRU \\ Sous la direction de Monsieur Mathieu LAFOURCADE}
 \date{Jeudi, 26 mai 2011}
 
 \defbeamertemplate*{footline}{shadow theme}
 {%
   \leavevmode%
   \hbox{\begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm plus1fil,rightskip=.3cm]{author in head/foot}%
-    \usebeamerfont{author in head/foot}\insertframenumber\,/\,\inserttotalframenumber\hfill\url{http://pticlic.fr/}
+    \usebeamerfont{author in head/foot}\insertframenumber\,/\,\inserttotalframenumber\hfill\url{http://www.pticlic.fr/}
   \end{beamercolorbox}%
   \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm,rightskip=.3cm plus1fil]{title in head/foot}%
     \usebeamerfont{title in head/foot}\insertshorttitle%
@@ -171,37 +171,8 @@ Types de noeuds
   \begin{itemize}
   \item bruits = relations plus fortes que la réalité 
   \item silence = relations non existantes ou trop faible par rapport à la réalité 
-  \item bruits + silences = couverture de relations sémantiques hétérogènes
+  \item bruits et/ou silences = couverture de relations sémantiques hétérogènes
   \end{itemize}
-\end{frame}
-
-\begin{frame}
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=0.75\textwidth]{img/jdm.jpeg}
-  \end{center}
-\end{figure}
-\end{frame}
-
-\begin{frame}
-\begin{center}
-	\begin{tabular}{ | l | l | l | l | p{5cm} |}
-        \hline
-\footnotesize{Relation} & \footnotesize{Mot central} & \footnotesize{Mots nuage} & \footnotesize{Remarques} \\ \hline
-\footnotesize{-1 'mn' n'est pas lié à 'mc'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{} \\ \hline
-\footnotesize{0 'mc' est en rapport avec 'mn'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{} \\ \hline
-\footnotesize{5 'mc' est un synonyme de 'mn'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{même POS}} \\ \hline
-\footnotesize{6 'mc' est une sorte de 'mn'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
-\footnotesize{7 Un contraire de 'mc' est 'mn'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{même POS}} \\ \hline
-\footnotesize{8 Un spécifique de 'mc' est 'mn'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
-\footnotesize{9 'mn' est une partie de 'mc'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
-\footnotesize{10 'mc' fait partie de 'mn'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
-\footnotesize{13 'mn' pourrait 'mc'} & \footnotesize{v} & \footnotesize{n} & \footnotesize{} \\ \hline
-\footnotesize{15 Le lieu pour 'mc' est 'mn'} & \footnotesize{n v} & \footnotesize{\shortstack{n}} & \footnotesize{} \\ \hline
-\footnotesize{16 Instrument pour 'mc' est 'mn'} & \footnotesize{v} & \footnotesize{n} & \footnotesize{} \\ \hline
-\footnotesize{17 'mn' Caractéristique de 'mc'} & \footnotesize{n} & \footnotesize{adj} & \footnotesize{} \\ \hline
-        \end{tabular}
-\end{center}
 \end{frame}
 
 \begin{frame}
@@ -214,11 +185,11 @@ Types de noeuds
       earlymidway/.style = {pos=0.4},
       latemidway/.style = {pos=0.6}
       ]
-      \node (n0) {musique};
-      \node[above left  = 2cm of n0] (n1) {trompette};
-      \node[above right = 2cm of n0] (n2) {instrument};
-      \node[below left  = 2cm of n0] (n3) {champignon};
-      \node[below right = 2cm of n0] (n4) {instrument de musique};
+      \node (n0) {mot4};
+      \node[above left  = 2cm of n0] (n1) {mot1};
+      \node[above right = 2cm of n0] (n2) {mot3};
+      \node[below left  = 2cm of n0] (n3) {mot2};
+      \node[below right = 2cm of n0] (n4) {mot5};
       
       \foreach \direction/\nfrom/\nto/\angle/\pos/\anchor/\text in {
         ->/n0/n2/15/near end/east/idée associée 450,
@@ -246,12 +217,32 @@ Types de noeuds
 \end{frame}
 
 \begin{frame}
-  Pas de conflit de relations et la bonne catégorie grammaticale~: conditions nécessaires mais pas suffisantes 
+\begin{center}
+	\begin{tabular}{ | l | l | l | l | p{5cm} |}
+        \hline
+\footnotesize{Relation} & \footnotesize{Mot central} & \footnotesize{Mots nuage} & \footnotesize{Remarques} \\ \hline
+\footnotesize{-1 'mn' n'est pas lié à 'mc'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{} \\ \hline
+\footnotesize{0 'mc' est en rapport avec 'mn'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{} \\ \hline
+\footnotesize{5 'mc' est un synonyme de 'mn'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{même POS}} \\ \hline
+\footnotesize{6 'mc' est une sorte de 'mn'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
+\footnotesize{7 Un contraire de 'mc' est 'mn'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{même POS}} \\ \hline
+\footnotesize{8 Un spécifique de 'mc' est 'mn'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
+\footnotesize{9 'mn' est une partie de 'mc'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
+\footnotesize{10 'mc' fait partie de 'mn'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
+\footnotesize{13 'mn' pourrait 'mc'} & \footnotesize{v} & \footnotesize{n} & \footnotesize{} \\ \hline
+\footnotesize{15 Le lieu pour 'mc' est 'mn'} & \footnotesize{n v} & \footnotesize{\shortstack{n}} & \footnotesize{} \\ \hline
+\footnotesize{16 Instrument pour 'mc' est 'mn'} & \footnotesize{v} & \footnotesize{n} & \footnotesize{} \\ \hline
+\footnotesize{17 Un caractéristique de 'mc' est 'mn'} & \footnotesize{n} & \footnotesize{adj} & \footnotesize{} \\ \hline
+        \end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}
+  Pas de conflit de relations + bonne catégorie grammaticale = conditions nécessaires mais pas suffisantes 
   \begin{itemize}
-  \item 'mn' est une partie de 'mc'~: les mots doivent être des noms, mais doivent aussi être des choses physiques. Le mot "honnêteté' ne marchera pas
-  \item 'mn' pourrait 'mc' (Qui/Quoi pourrait 'mc')~: les mots doivent être des noms et un verbe respectivement, mais un verbe d'état ne conviendrait pas
-  \item le lieu de 'mc' est 'mn'~: les mots doivent être un nom ou verbe puis un nom, mais le nom doit pouvoir signifier un lieu, un endroit
-Il existe un dispositif dans la base de données prévu pour nous donner des informations métalinguistiques afin de faire ses distinctions, mais souvent la base n'est pas suffisemment alimentées pour pouvoir exploiter ces attributs sémantiques.
+  \item 'mn' est une partie de 'mc'~ : noms, mais objets physiques aussi. 
+  \item 'mn' pourrait 'mc' (Qui/Quoi pourrait 'mc')~: noms et verbe respectivement, mais verbe d'état ne fonctionne pas
+  \item le lieu de 'mc' est 'mn'~: nom ou verbe puis nom, etc.
   \end{itemize} 
 \end{frame}
 
@@ -260,39 +251,86 @@ Il existe un dispositif dans la base de données prévu pour nous donner des inf
   Algorithme de base pour introduire des mots sans aucune relation sémantique 
   \begin{enumerate}
   \item On génère le nuage à l'aide d'une méthode ou algorithme auxiliaire (LSA ou autre) à partir d'un mot central choisi au hasard
-  \item On choisit la seule relation sémantique "idée associée" afin de valider les mots générés par l'étape précédente (ainsi on établit des relations sortantes "idée associée" à partir d'un mot)
-  \item Algorithme suivant sera utilisé pour affiner les informations concernant le mot central en question
+  \item On choisit la seule relation sémantique "idée associée" afin de valider les mots générés par l'étape précédente
+  \item Algorithme suivant est utilisé pour affiner les informations concernant le mot central en question
   \end{enumerate} 
 \end{frame}
 
 
 \begin{frame}
-LSA ou autres méthodes d'établir des liens sémantiques
-\begin{figure}
- \begin{minipage}{\textwidth}
-\centering 
-       \includegraphics[width=0.75\textwidth]{img/lsa.jpeg}
-  \end{minipage}
-\end{figure}
+  \begin{figure}
+    \pgfdeclarelayer{background}
+    \pgfdeclarelayer{foreground}
+    \pgfsetlayers{background,main,foreground}
+    \begin{tikzpicture}[
+      txt/.style = {fill=white,font=\footnotesize,scale=0.75, inner sep=1pt},
+      earlymidway/.style = {pos=0.4},
+      latemidway/.style = {pos=0.6}
+      ]
+      \node (n0) {mot4};
+      \node[above left  = 2cm of n0] (n1) {mot1};
+      \node[above right = 2cm of n0] (n2) {mot3};
+      \node[below left  = 2cm of n0] (n3) {mot2};
+      \node[below right = 2cm of n0] (n4) {mot5};
+      
+      \foreach \direction/\nfrom/\nto/\angle/\pos/\anchor/\text in {
+        -/n0/n1/15/near end/east/0.28,
+        % 
+        -/n0/n2/-20/midway/center/0.48,
+        % 
+        -/n0/n3/-15/near end/east/0.12,
+        % 
+        -/n0/n4/-15/very near end/east/0.4,
+        % 
+        -/n1/n2/-20/midway/center/0.94,
+        % 
+        -/n1/n3/-15/near end/east/0.75,
+        % 
+        -/n1/n4/-15/very near end/east/0.42,
+	%
+        -/n2/n3/-15/near end/east/0.04,
+        % 
+        -/n2/n4/-15/very near end/east/0.39,
+	%
+        -/n3/n4/-20/midway/center/0.88
+}{
+        \draw[\direction] (\nfrom) to[bend left=\angle] (\nto);
+        \begin{pgfonlayer}{foreground}
+          \path[\direction] (\nfrom) to[bend left=\angle] node[\pos, anchor=\anchor, txt] {\text} (\nto);
+        \end{pgfonlayer}
+      }
+    \end{tikzpicture}
+  \end{figure}
 \end{frame}
 
 \begin{frame}
   Algorithme pour affiner des relations de types "idée associée"
   \begin{enumerate}
-  \item On génère le nuage à partir de la relation sémantique le plus général, quasiment toutes les autres relations sémantiques étant un sous-ensemble de cette relation
+  \item On génère le nuage à partir de la relation sémantique le plus général, "idée associée"
   \item On choisit des relations sémantiques plus spécifiques sans conflits (tableau "relations" précédent)
   \end{enumerate}  
 \end{frame}
 
 \begin{frame}
-  Algorithme pour renforcer ajouter et renforcer des relations sémantiques spécifiques, quelques exemples
+  Algorithmes de renforcement de relations
 \begin{itemize}
-\item Pour la relation de synonymie, on génère des mots nuage "synonyme de synonyme" ou bien "antonyme d'antonyme" du mot central
-\item Pour la relation d'antonymie, on génère des mots nuage "antonyme de synonyme" ou bien "synonyme d'antonyme" du mot central
-\item Pour la relation "spécifique de" on bascule une fois entre "est une sorte de" et "est un spécifique du" mot central une fois (et inversement dans le cas inverse, on peut aussi appliquer le même principe aux relations contenu/contenant, etc.
+\item Synonymie~: synonyme de synonyme" ou "antonyme d'antonyme" du mot central
+\item Antonymie~: "antonyme de synonyme" ou "synonyme d'antonyme" du mot central
+\item Spécifique~: "spécifique d'un générique d'un spécifique" du mot central 
+\item etc.
 \end{itemize}
-Inconvénient~: on n'introduit pas de nouvelles relations sémantiques spécifiques et le renforcement est possible à l'aide de l'algorithme du transparent précédent
 \end{frame}
+
+
+\begin{frame}
+  Expériences en TALN~: interactions homme-machine
+\begin{itemize}
+\item On apprend de la machine
+\item La machine "apprend" de nous~: modifications d'algorithmes, de stratégies et d'approches par rapport aux résultats
+\end{itemize}
+\end{frame}
+
+
 
 \section{Generation de partie}
 
@@ -410,7 +448,7 @@ Inconvénient~: on n'introduit pas de nouvelles relations sémantiques spécifiq
 \frametitle{Prototype 2}
  \begin{block}{Schéma générale de l'enchainement des pages~:}
    \centering 
-  \texttt{\textcolor{gray}{http://pticlic.fr/jeu.html}\#\textcolor{red}{game}/\textcolor{blue}{1306104746953}/\textcolor{blue}{5,0,5,-1}}
+  \texttt{\textcolor{gray}{http://www.pticlic.fr/jeu.html}\#\textcolor{red}{game}/\textcolor{blue}{1306104746953}/\textcolor{blue}{5,0,5,-1}}
   \vskip 1em%
   \begin{tikzpicture}[
     state/.style = {circle,draw,minimum size=1.5cm},

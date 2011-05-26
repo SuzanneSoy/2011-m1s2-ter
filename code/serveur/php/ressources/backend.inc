@@ -34,6 +34,7 @@ require_once("ressources/db.inc");
 *	getJAimePgid($user, $pgid);
 *	setJAimePgid($user, $pgid, $value);
 * 	addGameCreationBonus($user, $nb);
+* function deleteOneGameCreation($user);
 * 	getNbGameCreationRemained($user);
 */
 
@@ -300,6 +301,7 @@ function decodeAndInsertGame($user,$game) {
 		echo JSON_encode(false);
 	} else {
 		insertCreatedGame($centerEid,$cloud,$r1,$r2,10,$user);
+		deleteOneGameCreation($user);
 		echo JSON_encode(true);
 	}
 }
@@ -752,15 +754,20 @@ function setJAimePgid($user, $pgid, $value) {
 
 function addGameCreationBonus($user, $nb) {
 	if($nb > 0) {
-		getDB()->exec('UPDATE user SET cgCount = cgCount + '.$ng.' WHERE user='.$user);
+		getDB()->exec('UPDATE user SET cgCount = cgCount + '.$ng.' WHERE login=\''.$user.'\'');
 		return true;
 	}
 
 	return false;
 }
 
-function getNbGameCreationRemained() {
-	return getDB()->querySingle('SELECT cgCount FROM user WHERE user='.$user);
+function deleteOneGameCreation($user) {
+	if(getNbGameCreationRemained($user) > 0)
+		getDB()->exec('UPDATE user SET cgCount=cgCount-1 WHERE login=\''.$user.'\'');
+}
+
+function getNbGameCreationRemained($user) {
+	return getDB()->querySingle('SELECT cgCount FROM user WHERE login=\''.$user.'\'');
 }
 
 ?>
