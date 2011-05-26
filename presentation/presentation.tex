@@ -116,6 +116,12 @@
 \section{Paquetage TALN}
 
 \begin{frame}
+  \begin{center}
+    Paquetage TALN\\(John CHARRON)
+  \end{center}
+\end{frame}
+
+\begin{frame}
   Ferdinand de Saussure (1857-1913), Cours de linguistique générale
   \begin{itemize}
   \item Signe linguistique
@@ -333,7 +339,11 @@ Types de noeuds
 
 
 \section{Generation de partie}
-
+\begin{frame}
+  \begin{center}
+    Generation de partie\\(Georges DUP\'ERON)
+  \end{center}
+\end{frame}
 \begin{frame}
   % Georges
   \begin{tikzpicture}[
@@ -483,8 +493,71 @@ Types de noeuds
  \end{block}
 \end{frame}
 
+\begin{frame}
+  \frametitle{\'Evolution de l'architecture}
+  \begin{block}{}
+  \begin{center}
+    \begin{tikzpicture}[
+      bend angle=10, shorten >=0.05cm, shorten <=0.05cm, text height=0.35cm,
+      communication/.style={draw,dashed,<->}
+      ]
+      
+      \node[draw] (appli) {Application \android{}};
+      % Pour que l'animation ne bouge pas.
+      \path[use as bounding box] (-5.2,0.4) rectangle (5.2,-5.1);
+      
+      \path<2-8> node[draw,below=of appli] (frontpage) {Écran principal};
+      \path[draw,->]<2-8> (appli) -- (frontpage);
+      
+      \path<3-8> node[draw,below=of frontpage, anchor=north east, xshift=-0.3cm] (game) {Jeu};
+      \path[draw,->]<3-8> (frontpage) -- (game);
+      
+      \path<4-> node[draw,left=of appli] (prefs) {Préférences};
+      
+      \path<4-8> node[draw,below=of prefs,xshift=0.1cm] (reseau) {Réseau};
+      \path[communication]<4-8> (game) -- (prefs);
+      \path[communication]<4-8> (game) -- (reseau.south east);
+      
+      \path[draw,->]<5-8> (game.south west) ++ (0,0.35cm) arc (90:360:0.35cm);
+      
+      \path<6-8> node[draw,below=of frontpage, anchor=north west, xshift=0.3cm] (score) {score};
+      \path[draw,->]<6-8> (game) -- (score);
+      
+      \path[draw,->]<7-8> (score) -- (frontpage);
+      
+      \path<8-8> node[draw,below left=of frontpage] (prefs-screen) {Préférences};
+      \path<8-8> node[draw,below right=of frontpage] (about) {À propos};
+      \path[draw,->]<8-8> (frontpage) -- (prefs-screen);
+      \path[draw,->]<8-8> (frontpage) -- (about);
+      \path[communication]<8-8> (prefs-screen.north west) to[bend left] (prefs.south west);
+      \path[communication]<8-8> (prefs-screen) -- (reseau);
+      
+      \node[below=of appli, text height=0.25cm, minimum width=2cm] (fake-webkit) {\phantom{Webkit}};
+      \path<9-> node[draw,below=of fake-webkit, text height=1.5cm, minimum width=2cm, text centered] (html5) {\shortstack{Html5\\JavaScript\\jQuery\\CSS}};
+      
+      \path[draw,->]<10-> (html5.south east) ++ (0,0.35cm) arc (90:-180:0.35cm);
+      
+      \path<11-> node[draw,below=of appli, text height=0.25cm, minimum width=2cm] (webkit) {Webkit};
+      \path[draw,->]<11-> (appli) -- (webkit);
+      \path[draw,->]<11-> (webkit) -- (html5);
+      
+      \path<12-> node[coordinate] (waypoint) at ($0.5*(webkit.center)+0.5*(webkit.west)$) {};
+      \path[communication]<12-> (html5) to[controls=(waypoint) and (waypoint)] node[pos=0.16, anchor=east, xshift=-0.1cm, font=\small] {Interface JavaScript} (prefs.south east);
+    \end{tikzpicture}
+  \end{center}
+  \end{block}
+\end{frame}
+
+
 %Yoann
 \section{Création de partie}
+
+\begin{frame}
+  \begin{center}
+    Cr\'eation de partie\\(Yoann BONAVERO)
+  \end{center}
+\end{frame}
+
 \begin{frame}
   \frametitle{Création manuelle de parties}
   Un exemple de partie crée automatiquement
@@ -555,58 +628,6 @@ Conclusion
 \vskip 1em
 \huge{Avez-vous des questions~?}
 \end{center}
-\end{frame}
-
-\begin{frame}
-  \begin{center}
-    \begin{tikzpicture}[
-      bend angle=10, shorten >=0.05cm, shorten <=0.05cm, text height=0.35cm,
-      communication/.style={draw,dashed,<->}
-      ]
-      
-      \node[draw] (appli) {Application \android{}};
-      % Pour que l'animation ne bouge pas.
-      \path[use as bounding box] (-5.2,0.4) rectangle (5.2,-5.1);
-      
-      \path<2-8> node[draw,below=of appli] (frontpage) {Écran principal};
-      \path[draw,->]<2-8> (appli) -- (frontpage);
-      
-      \path<3-8> node[draw,below=of frontpage, anchor=north east, xshift=-0.3cm] (game) {Jeu};
-      \path[draw,->]<3-8> (frontpage) -- (game);
-      
-      \path<4-> node[draw,left=of appli] (prefs) {Préférences};
-      
-      \path<4-8> node[draw,below=of prefs,xshift=0.1cm] (reseau) {Réseau};
-      \path[communication]<4-8> (game) -- (prefs);
-      \path[communication]<4-8> (game) -- (reseau.south east);
-      
-      \path[draw,->]<5-8> (game.south west) ++ (0,0.35cm) arc (90:360:0.35cm);
-      
-      \path<6-8> node[draw,below=of frontpage, anchor=north west, xshift=0.3cm] (score) {score};
-      \path[draw,->]<6-8> (game) -- (score);
-      
-      \path[draw,->]<7-8> (score) -- (frontpage);
-      
-      \path<8-8> node[draw,below left=of frontpage] (prefs-screen) {Préférences};
-      \path<8-8> node[draw,below right=of frontpage] (about) {À propos};
-      \path[draw,->]<8-8> (frontpage) -- (prefs-screen);
-      \path[draw,->]<8-8> (frontpage) -- (about);
-      \path[communication]<8-8> (prefs-screen.north west) to[bend left] (prefs.south west);
-      \path[communication]<8-8> (prefs-screen) -- (reseau);
-      
-      \node[below=of appli, text height=0.25cm, minimum width=2cm] (fake-webkit) {\phantom{Webkit}};
-      \path<9-> node[draw,below=of fake-webkit, text height=1.5cm, minimum width=2cm, text centered] (html5) {\shortstack{Html5\\JavaScript\\jQuery\\CSS}};
-      
-      \path[draw,->]<10-> (html5.south east) ++ (0,0.35cm) arc (90:-180:0.35cm);
-      
-      \path<11-> node[draw,below=of appli, text height=0.25cm, minimum width=2cm] (webkit) {Webkit};
-      \path[draw,->]<11-> (appli) -- (webkit);
-      \path[draw,->]<11-> (webkit) -- (html5);
-      
-      \path<12-> node[coordinate] (waypoint) at ($0.5*(webkit.center)+0.5*(webkit.west)$) {};
-      \path[communication]<12-> (html5) to[controls=(waypoint) and (waypoint)] node[pos=0.16, anchor=east, xshift=-0.1cm, font=\small] {Interface JavaScript} (prefs.south east);
-    \end{tikzpicture}
-  \end{center}
 \end{frame}
 
 \end{document}
