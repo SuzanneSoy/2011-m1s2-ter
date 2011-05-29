@@ -2,6 +2,7 @@
 
 % TODO : partie "triche dans le jeu et pourrir la base"
 % TODO : partie API client/serveur (réutilisable), décrire l'API
+% TODO : Faut-il le diagramme UML de la première version ?
 
 \widowpenalty=9999
 \clubpenalty=9999
@@ -14,7 +15,8 @@
 \usepackage{um2/um2}
 \usepackage{verbatim}
 \usepackage{graphicx}
-
+\usepackage{alltt}
+\usepackage{enumitem}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{2ex}
@@ -42,7 +44,6 @@ Reconception du jeu Pticlic sous \android{}}
 \newpage
 \setcounter{page}{1}
 \pagestyle{plain}
-
 
 \section{Introduction}
 
@@ -810,8 +811,8 @@ remarques, critiques, encouragement des utilisateurs un formulaire de contact de
 sera accessible sans inscriptions ce qui permetra d'envoyer un message par exemple si il y a un problèem et qu'une
 personne n'arrive pas à s'incrire.
 
-\subsubsection{La création de partie}
-Un algorithme automatique de création de partie permet de créer un grand nombre de partie très simplement. Cependant ce moyen
+\subsubsection{La création de parties}
+Un algorithme automatique de création de parties permet de créer un grand nombre de partie très simplement. Cependant ce moyen
 de génération de partie est assez limité et donne régulièrement des résultat trop peu satisfaisant voire même incohérents.
 Pour palier à ce problème, un solution serai de mettre en place un service permettant aux joueurs de créer eux-même des parties. Ce qu i
 aurait pour effet d'obtenir des parites bien plus intéressentes avec de l'humour etc. Une page du site Internet sera donc consacrée
@@ -828,7 +829,7 @@ En effet lorsqu'un utilisateur saisie un mot il est important pour lui de savoir
 il ne sais pas forcément combien de mots va composer sa partie. Il devra par conséquent être en mesure d'augmenter au besoin le nombre de mots
 composants la partie.
 
-\subsubsection{jouez en ligne !}
+\subsubsection{Jouez en ligne !}
 La seconde évolution majeure qui est liée à une nouvelle version de l'interface de jeu est qu'il est possible de jouer directement depuis
 le site Internet sans forcéement disposer de téléphone sous \android{}. Cette option permettra de toucher un public bien plus large tout en 
 ne pénalisant pas ceux qui disposent d'un smartphone \android{}
@@ -902,6 +903,76 @@ Nous avons aussi employé une forme limitée de programmation réactive pour le 
 
 Enfin, nous avons utilisé les capactités de javaScript lui-même, qui est un langage objet basé sur les prototypes (et non les classes), pour
 étendre le langage là où cela s'est avéré nécessaire.
+
+\subsubsection{API Client-serveur}
+Le client et le serveur utilisent tout deux une API qui permet de facilement remplacer un des deux composants. Tous les appels au serveur se font en HTTP GET et peuvent avoir les deux paramètres \verb!user! et \verb!password!. De plus, elles peuvent renvoyer une erreur au format suivant~:
+\begin{alltt}
+\{"error":\textit{Code d'erreur}, "msg":\textit{Message d'erreur}, "isError":true\}
+\end{alltt}
+
+Voici les principaux messages que supporte le serveur~:
+\begin{itemize}
+\item Récupérer une partie jouable~:
+
+\verb!server.php?action=0!
+{
+\small
+\begin{alltt}
+\{
+\quad"author":"\textit{Créateur de la partie}",
+\quad"gid":\textit{Numéro de la partie},
+\quad"pgid":\textit{Numéro de la partie jouable},
+\quad"relations":[
+\quad\quad\{"id":7,"name":"Un contraire de %mc est %mn"\},
+\quad\quad…
+\quad],
+\quad"center":\{"id":\textit{eid mot central},"name":"\textit{Mot central}"\},
+\quad"cloud":[
+\quad\quad\{"id":\textit{eid mot nuage},"name":"\textit{Mot nuage}"\},
+\quad\quad…
+\quad]
+\}
+\end{alltt}
+}
+\item Répondre à une partie~:
+
+\verb!server.php?action=1&gid=!\textit{\texttt{numéro de partie}}\verb!&pgid=!\textit{\texttt{numéro de partie}}
+
+Cette requête doit aussi prendre un couple \textit{\texttt{numéro du mot du nuage}}\verb!=!\textit{\texttt{numéro de la relation}} pour
+chaque réponse. Elle renvoie la structure suivante~:
+{
+\small
+\begin{alltt}
+\{
+\quad"scoreTotal":\textit{Score pour la partie},
+\quad"alreadyPlayed":\textit{true si la partie a déjà été jouée, false sinon},
+\quad"author":\textit{Créateur de la partie}",
+\quad"minScore":\textit{Plus petit score pour un mot},
+\quad"maxScore":\textit{Plus grand score pour un mot},
+\quad"newGame":\textit{Nouvelle partie, même format que action=0},
+\quad"scores":[
+\quad\quad\{"name":"\textit{Mot nuage}", "score":\textit{Score pour le mot}\}
+\quad]
+\}
+\end{alltt}
+}
+
+\item D'autres actions de moindre intérêt sont disponibles, et permettent de~:
+\begin{description}
+\item[\verb!action=2!] Déclencher la création automatique de parties;
+\item[\verb!action=3!] Vérifier si un couple utilisateur/mot de passe est valide;
+\item[\verb!action=4!] Vérifier si un mot existe dans la base de données;
+% N°5 :
+\item[\verb!action=5!] Récupérer la liste des relations disponibles («fait partie de», «synonyme»…);
+\item[\verb!action=6!] Stocker une partie créée manuellement;
+\item[\verb!action=7!] Récupérer les préférences de l'utilisateur;
+\item[\verb!action=8!] Modifier les préférences de l'utilisateur;
+\item[\verb!action=9!] Terminer la session et déconnecter l'utilisateur;
+% n°10 :
+\item[\verb!action=10!] Indiquer si l'utilisateur aime ou non la partie à laquelle il a joué.
+\end{description}
+
+\end{itemize}
 
 \section{Réalisation}
 \subsection{Cahier des charges}
