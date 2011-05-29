@@ -359,20 +359,19 @@ function insertCreatedGame($centerEid, $cloud, $r1, $r2, $totalDifficulty, $user
 function randomGameCore() {
 	$db = getDB();
 	
-	$game = $db->query('SELECT gid,(nb_like - nb_dislike + 5 * (author != "bot")) AS coef FROM game');
-	$game = $game->fetchArray();
-	
-	foreach($game as $g) {
-		if($g['coef'] < -5)
-			$g['coef'] = 0;
-		else
-			$g['coef'] += 5;
+	$q = $db->query('SELECT gid,(nb_like - nb_dislike + 5 * (author != "bot") + 5) AS coef FROM game');
 
-		$sum += $g['coef'];
+	$game = array();
+	$sum = 0;
+	while($g = $q->fetchArray()) {
+		if($g['coef'] > 0) {
+			$game[] = $g;
+			$sum += $g['coef'];
+		}
 	}
 	
-	$game = rand(0,$sum);
-	
+	$randomValue = rand(0,$sum-1);
+	$count = 0;
 	foreach($game as $g) {
 		$count += $g['coef'];
 		
@@ -380,7 +379,7 @@ function randomGameCore() {
 			return $g['gid'];
 	}
 	
-	return 0;
+	return null;
 
 	// Ancienne requêtes de sélection.
 	//return $db->querySingle("select gid from game where gid = (abs(random()) % (select max(gid) from game))+1 or gid = (select max(gid) from game where gid > 0) order by gid limit 1;");
