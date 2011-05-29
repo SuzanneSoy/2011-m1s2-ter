@@ -119,8 +119,8 @@
 \frametitle{Réseau lexical JeuxDeMots - 2/2}
   \begin{block}{Quelques statistiques}
   \begin{itemize}
-  \item environ 45\% des noeuds n'ont pas de relations sémantiques sortantes
-  \item environ 70\% des noeuds n'ont pas de relations sémantiques entrantes
+  \item environ 45\% des noeuds n'ont pas de relation sémantique sortante
+  \item environ 70\% des noeuds n'ont pas de relation sémantique entrante
   \end{itemize}
   \end{block}
 \end{frame}
@@ -128,8 +128,8 @@
 \begin{frame}
   \begin{block}{Bruits et silences}
   \begin{itemize}
-  \item bruits = relations plus fortes que la réalité 
-  \item silence = relations non existantes ou trop faible par rapport à la réalité 
+  \item bruit = relations plus fortes que la réalité 
+  \item silence = relations non existantes ou trop faibles par rapport à la réalité 
   \item bruits et/ou silences = couverture de relations sémantiques hétérogènes
   \end{itemize}
   \end{block}
@@ -214,7 +214,7 @@
 \begin{block}{}
   Pas de conflit de relations + bonne catégorie grammaticale = conditions nécessaires mais pas suffisantes 
   \begin{itemize}
-  \item 'mn' est une partie de 'mc'~ : noms, mais objets physiques aussi. 
+  \item 'mn' est une partie de 'mc'~ : noms, mais objets physiques aussi
   \item 'mn' pourrait 'mc' (Qui/Quoi pourrait 'mc')~: noms et verbe respectivement, mais verbe d'état ne fonctionne pas
   \item le lieu de 'mc' est 'mn'~: nom ou verbe puis nom, etc.
   \end{itemize}
@@ -284,7 +284,7 @@
 \frametitle{Affinage des relations de types "idée associée"}
   \begin{block}{Algorithme}
   \begin{enumerate}
-  \item On génère le nuage à partir de la relation sémantique le plus général, "idée associée"
+  \item On génère le nuage à partir de la relation sémantique le plus générale, "idée associée"
   \item On choisit des relations sémantiques plus spécifiques sans conflits (tableau "relations" précédent)
   \end{enumerate}  
   \end{block}
@@ -294,7 +294,7 @@
 \frametitle{Renforcement de relations}
   \begin{block}{Algorithmes}
 \begin{itemize}
-\item Synonymie~: synonyme de synonyme" ou "antonyme d'antonyme" du mot central
+\item Synonymie~: "synonyme de synonyme" ou "antonyme d'antonyme" du mot central
 \item Antonymie~: "antonyme de synonyme" ou "synonyme d'antonyme" du mot central
 \item Spécifique~: "spécifique d'un générique d'un spécifique" du mot central 
 \item etc.
@@ -423,7 +423,7 @@
 \begin{frame}
   \frametitle{Le site Internet}
   \begin{block}{}
-  \large Un site internet, pourquoi faire ?
+  \large Un site internet, pour quoi faire ?
   \newline \\
   \large Que peut-on y trouver ?
   \newline \\
@@ -446,18 +446,18 @@
 \begin{block}{Les outils mis à disposition}
   \begin{itemize}
     \item<+-> Langage de programmation Java ;
-    \item<+-> Patron de conception MVC (Modèle-Vue-Contrôlleur);
-    \item<+-> Les vues sont réalisé en XML
+    \item<+-> Patron de conception MVC (Modèle-Vue-Contrôleur);
+    \item<+-> Les vues sont réalisées en XML
   \end{itemize}
 \end{block}
 \begin{alertblock}{Inconvenient}<+->
-  L'édition des vues en XML nous à énorment ralenti lors du développement de l'alpha 1
+  L'édition des vues en XML nous a énorment ralenti lors du développement de l'alpha 1
 \end{alertblock}
 \end{frame}
 
 \begin{frame}
 \frametitle{Le modèle MVC proposé par Google}
-\begin{block}{Modèle-Vue-Contrôlleur}
+\begin{block}{Modèle-Vue-Contrôleur}
   \centering
   \begin{tikzpicture}[bend angle=10, shorten >=0.1cm, shorten <=0.1cm]
     \node[draw] (activite) {Contr\^olleur (Activité)};
@@ -472,7 +472,7 @@
 \begin{block}{Détail}
 \begin{description}
   \item[Modèle] Classe metier permettant de stocker des informations
-  \item[Contrôlleur] Classe héritant d'\verb!Activity! (Activité)
+  \item[Contrôleur] Classe héritant d'\verb!Activity! (Activité)
   \item[Vue] XML affichant les informations
 \end{description}
 \end{block}
@@ -480,7 +480,7 @@
 
 \begin{frame} % Un peu vide peut etre ajouter les autre activite tel que prefs, info...
 \frametitle{Prototype 1}
- \begin{block}{Schéma générale de l'enchainement des Activités~:}
+ \begin{block}{Schéma général de l'enchainement des Activités~:}
    \centering 
   \begin{tikzpicture}[
     state/.style={draw},
@@ -647,13 +647,13 @@
 \end{frame}
 
 \begin{frame}
-  \begin{block}{Chiffre~:}
+  \begin{block}{Chiffres~:}
     \begin{itemize}
-      \item<2-> Nombre de participant~: 27 ;
-      \item<3-> Nombre de partie jou\'ee~: 145 ;
+      \item<2-> Nombre de participants~: 27 ;
+      \item<3-> Nombre de parties jouées~: 145 ;
     \end{itemize}
   \end{block}
-  \begin{block}{Am\'elioration~:}<4->
+  \begin{block}{Am\'eliorations~:}<4->
     \begin{itemize}
       \item<5-> Implémentation de l'algorithme de prédiction d'arcs dans un graphe ;
       \item<6-> Mettre l'application sur Android Market ;
