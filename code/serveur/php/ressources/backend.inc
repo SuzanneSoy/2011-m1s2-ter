@@ -747,8 +747,9 @@ function setJAimePgid($user, $pgid, $value) {
 	$value = intval($value) / abs(intval($value) || 1); // Calcule le signe de $value : -1 ou 0 ou 1
 	$original = getJAimePgid($user, $pgid);
 	getDB()->querySingle("UPDATE played_game SET like = ".$value." WHERE login = '".SQLite3::escapeString($user)."' and pgid = ".longStrVal($pgid).";");
-	getDB()->querySingle("UPDATE game SET nb_like = nb_like".($original == 1 ? " - 1" : "").($value == 1 ? " + 1" : "")." WHERE login = '".SQLite3::escapeString($user)."' and pgid = ".longStrVal($pgid).";");
-	getDB()->querySingle("UPDATE game SET nb_dislike = nb_dislike".($original == -1 ? " - 1" : "").($value == -1 ? " + 1" : "")." WHERE login = '".SQLite3::escapeString($user)."' and pgid = ".longStrVal($pgid).";");
+	$gid = getGidFromPgid(longStrVal($pgid));
+	getDB()->querySingle("UPDATE game SET nb_like = nb_like".($original == 1 ? " - 1" : "").($value == 1 ? " + 1" : "")." WHERE gid = ".intval($gid).";");
+	getDB()->querySingle("UPDATE game SET nb_dislike = nb_dislike".($original == -1 ? " - 1" : "").($value == -1 ? " + 1" : "")." WHERE gid = ".intval($gid).";");
 }
 
 function addGameCreationBonus($user, $nb) {

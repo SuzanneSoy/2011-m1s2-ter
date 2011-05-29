@@ -78,7 +78,7 @@ function main()
 		echo JSON_encode(game2array($user, isset($_GET['pgid']) ? $_GET['pgid'] : null));
 	}
 	else if($action == 1) {				// "Set partie"
-		// Requête POST : http://serveur/server.php?action=1&mode=normal&user=foo&passwd=bar&gid=1234&pgid=12357&0=0&1=-1&2=22&3=13&9=-1
+		// Requête POST : http://serveur/server.php?action=1&user=foo&passwd=bar&gid=1234&pgid=12357&0=0&1=-1&2=22&3=13&9=-1
 		if (!isset($_GET['pgid']) || !isset($_GET['answers']))
 			throw new Exception("La requête est incomplète", 2);
 
