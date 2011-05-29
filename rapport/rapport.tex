@@ -1,7 +1,5 @@
 \documentclass[a4paper,11pt,french]{article}
 
-% TODO : partie "triche dans le jeu et pourrir la base"
-% TODO : partie API client/serveur (réutilisable), décrire l'API
 % TODO : Faut-il le diagramme UML de la première version ?
 
 \widowpenalty=9999
@@ -974,9 +972,22 @@ chaque réponse. Elle renvoie la structure suivante~:
 
 \end{itemize}
 
-\section{Réalisation}
-\subsection{Cahier des charges}
+\subsection{Protection contre les attaques des joueurs}
 
+Le serveur prévient quelques types d'attaques que des joueurs pourraient effectuer pour améliorer leur score. Entre autres, lorsqu'un joueur
+a envoyé ses réponses à une partie, et que ses scores lui ont été envoyés, la modification des réponses est refusée s'il tente de renvoyer
+d'autres réponses. Cela permet d'éviter qu'un joueur améliore son score en donnant les réponses attendues une fois qu'il les connait.
+
+Nous n'avons cependant pas de protection contre un utilisateur qui donnerait exprès les mauvaises réponses (une forme de SPAM qui influerait
+la base de données). La détection de ce comportement est difficile car il est tout à fait possible que les réponses que notre algorithme
+estime être les bonnes soient justes, et il est tout à fait légitime qu'un utilisateur soit en désacord avec les autres.
+
+Dans le cas de l'utilisation d'un robot pour donner en masse de mauvaises réponses, il serait possible de détecter la fréquence élevée des
+parties jouées, ce qui n'empêcherait cependant pas un robot de se créer plusieurs comptes pour éviter cette détection. De même que la
+détection de courriers indésirables est difficile dans le cadre de la messagerie électronique, la détection de la transmission massive de
+mauvaises réponses à notre serveur est compliquée, d'autant plus que peu de données sont transmises pour chaque partie.
+
+\section{Réalisation}
 \subsection{Cahier des charges initial}
 Avant le début du projet, nous avions planifié l'implémentation des fonctionnalités souhaitées de notre application. Le déroulement du
 travail devait s'effectuer sur 4 itérations, décrites ci-dessous.
