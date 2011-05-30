@@ -336,8 +336,8 @@ Il existe plusieurs systèmes et algorithmes pour évaluer le rapport sémantiqu
 Sans entrer dans les détails de l'algorithme de la LSA, qui est brevetée et payante, cette approche consiste à générer un graphe de relations entre mots à partir de textes écrits. Le résultat de l'algorithme donne un graphe de noeuds (mots) et d'arcs (estimation du degré de lien sémantique entre deux mots) comme suit~:
 
 
-\begin{comment}
-  \begin{figure}
+\begin{figure}
+  \begin{center}
     \pgfdeclarelayer{background}
     \pgfdeclarelayer{foreground}
     \pgfsetlayers{background,main,foreground}
@@ -379,8 +379,10 @@ Sans entrer dans les détails de l'algorithme de la LSA, qui est brevetée et pa
         \end{pgfonlayer}
       }
     \end{tikzpicture}
-  \end{figure}
-\end{comment}
+  \end{center}
+  \caption{}
+  \label{}
+\end{figure}
 
 La LSA est plus fiable lorsque les textes utilisés pour générer les poids de relations sémantiques sont des corpus spécialisés et donc relativement homogène. C'est une méthode rapide, facile à réaliser, efficace. Les données récoltées rélèvent en général de la langue écrite et donc d'un niveau de langue soutenue et riche. Un tel corpus contient une grande quantité de vocabulaire passif. 
 
@@ -401,8 +403,8 @@ L'inconvénient est que ces informations peuvent contenir des bruits et des sile
 Un graphe du réseau lexical JeuxDeMots est de la forme qui suit, toutefois, il faut imaginer non pas cinq noeuds, mais plus de 200 000 noeuds~:
 
 
-\begin{comment}
-  \begin{figure}
+\begin{figure}
+  \begin{center}
     \pgfdeclarelayer{background}
     \pgfdeclarelayer{foreground}
     \pgfsetlayers{background,main,foreground}
@@ -449,8 +451,10 @@ Un graphe du réseau lexical JeuxDeMots est de la forme qui suit, toutefois, il 
         \end{pgfonlayer}
       }
     \end{tikzpicture}
-  \end{figure} 
-\end{comment}
+  \end{center}
+  \caption{}
+  \label{}
+\end{figure}
 
 Le réseau lexical JeuxDeMots permet aussi de générer un graphe donnant un seul arc entre deux mots similaire au graphe créer par la LSA. L'algorithme pour générer un graphe contenant des simples liens entre noeuds et qui donne des résultats très proche de la LSA est décrit dans Lafourcade et Zampa 2011.\footnote{PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010}
 
@@ -639,7 +643,7 @@ Pour palier à ce problème, une solution est de mettre en place un service perm
 \end{center}
 
 
-. Une page du site Internet sera donc consacrée
+Une page du site Internet sera donc consacrée
 à la création manuelle de partie. Elle permetra de créer des parties de taille variée et de thème différents. Le joueurs pourra
 indiquer les mots qu'il souhaites voir dans la partie ainsi que les deux relations principales.
 Les parties ainsi créées pourront être jouées par les autres joueurs et permettrons d'améliorer l'attractivité et l'intérêt du jeu.
