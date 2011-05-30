@@ -57,7 +57,7 @@ PtiClic is a fun game word game in which users play and lexical and semantic dat
 The purpose of this project is to create a prototype for telephones using the Android operating system. The application would permit users to play anywhere, anytime. The topic of the project was widened to include an application that can run on many different types of smartphones, not only those using the Android operating system. The advantages, drawbacks, problems and solutions associated with adapting the application for mobile phones are discussed throughout the document.
 
  
-
+\pagebreak
 
 \section{Introduction}
 
@@ -70,26 +70,21 @@ Des linguistes et des informaticiens récupèrent les données liées aux partie
 Notre travail consiste à créer une version du PtiClic sous \android{}, une version modifiée du jeu adaptée pour téléphone mobile. Le sujet du TER définit clairement l'objectif de ce projet~:
 
 \begin{quotation}
-  L'étude et le prototypage d'une version fonctionnant sur \android{} semble intéressante. En particulier on s'intéressera à deux aspects :
+\noindent  L'étude et le prototypage d'une version fonctionnant sur \android{} semble intéressante. En particulier on s'intéressera à deux aspects :
   \begin{itemize}
   \item les contraintes imposées par l'environnement smartphone
   \item le biais qu'imposent ces contraintes sur le jeu et les données récoltées.
   \end{itemize}
   
-  Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel.
+\noindent  Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel.
 \end{quotation}
 
-Dans un premier temps, une version de base sera conçue et réalisée. Ensuite, des fonctionnalités supplémentaires seront ajoutées. La démarche adoptée par notre groupe est une approche itérative. Les quatres livraisons vont d'une version de base vers des versions plus élaborées~: un joueur pourrait, entre autres, modifier ses préférences ou choisir son niveau. L'idée est aussi de rendre le jeu plus attirant afin d'accroître le nombre de sujets participant aux études liées au résultat des données extraits des parties jouées.
+Dans un premier temps, une version de base a été conçue et réalisée. Ensuite, il a été prévu d'ajouter des fonctionnalités supplémentaires. La démarche adoptée par notre groupe a été une approche itérative. Initialement, quatre itérations et quatre livraisons devaient donner comme résultat une version de base et des versions plus élaborées~: un joueur pourrait, entre autres, modifier ses préférences ou choisir son niveau. L'idée était aussi de rendre le jeu plus attirant afin d'accroître le nombre de sujets participant aux études liées au résultat des données extraits des parties jouées.
+
+Nos objectifs initiaux ont été modifié, nous avons créé deux prototypes, l'une sous Android en Java, l'autre en HTML5 élargissant notre public leur donnant la possibilité de jouer au jeu sur divers types de smartphones.  
 
 
-\subsection{\android{}}
-
-\android{} est un système d'exploitation pour téléphone mobile basé sur le noyau Linux développé par \android{} Inc., racheté par Google en 2005. Google et d'autres membres du Open Handset Alliance ont par la suite contribué à son développement et le \android{} Open Source Project (AOSP) est chargé de la maintenance et l'évolution d'\android{}. Ce système d'exploitation est utilisé notamment dans des smartphones, appelé aussi ordiphones, «terminaux de poche» ou «téléphones intelligents», produits et distribués par un grand nombre de fabriquants de téléphones mobiles. Le nombre de téléphones mobiles intégrant le système d'exploitation d'\android{} a cru sensiblement récemment.
-
-Un grand nombre de développeurs ont créé des applications pour étendre la fonctionnalité des téléphones sous \android{} et il y a aujourd'hui
-plus de 200 000 applications disponibles. Bien qu'\android{} Market soit le magasin en ligne opéré par Google, il existe d'autres distributeurs
-d'applications \android{}. La majorité des applications sont écrites en Java, bien qu'il soit possible de développer des applications en
-Python, en Ruby et d'autres par le biais du \android{} Scripting Environment.
+\pagebreak
 
  
 \section{Analyse de l'existant}
@@ -98,17 +93,17 @@ L'application du jeu du PtiClic d'origine est une application disponible en lign
 n'avions pas accès au code source de l'application ni à des diagrammes UML. La seule partie de cette application qui nous a été fournie est
 une archive de la base de données dans un format textuel.
 
-L'analyse de l'existant consistait donc d'une analyse du format et du contenu de cetta archive de la base de données ainsi que l'application sur Internet que nous avons testé et analysé.
+L'analyse de l'existant consistait donc d'une analyse du format et du contenu de cette archive ainsi que l'application sur Internet que nous avons testé et analysé. Il était également possible d'avoir d'autres informations concernant l'application Web PtiClic à travers de nombreux articles écrits sur ce sujet et en communiquant avec les créateurs du jeu.
 
 \subsection{Le déroulement du jeu}
-L'utilisateur clique sur le boutont «Je joue !». Un mot se dirige vers le centre de la page , c'est mot central. D'autres mots viennent entourer le mot central, ce sont les mots nuage. La police du mot central est plus grande que celle des mots nuages. Le mot central et les mots du nuage sont sont de couleurs contrastées.
+L'utilisateur clique sur le boutont «Je joue !». Un mot\footnote{Pour simplifier l'écriture, nous parlons de 'mots', mais un mot peu aussi être un mot composé, un syntagme ou une phrase, y compris des noms propres} se dirige vers le centre de la page, c'est le 'mot central'. D'autres mots viennent entourer le mot central, ce sont les 'mots nuage'. La police du mot central est plus grande que celle des mots nuages. Le mot central et les mots du nuage sont de couleurs contrastées.
 
 \subsubsection{L'écran du jeu}
 \begin{center}
 \includegraphics[width=14cm]{img/PtiClicJeu.png}
 \end{center}
 
-Les relations apparaissent à droite des mots. Une partie peut comporter de une à quatre relations. Un carré apparaît à droite de la relation suivi de la relation sous forme de syntagme tel que «\emph{(mot central)} est en rapport avec\dots{}», «Quoi/Qui pourrait \emph{(mot central)}~?». S'il y a plus d'une relation, les relations apparaîssent les unes en dessous les autres, toujours à droite des mots.
+Les relations apparaissent à droite des mots. Une partie peut comporter d'une à quatre relations. Un carré apparaît à droite de la relation suivi de la relation sous forme de syntagme tel que «\emph{(mot central)} est en rapport avec\dots{}», «Quoi/Qui pourrait \emph{(mot central)}~?». S'il y a plus d'une relation, les relations apparaîssent les unes en dessous les autres, toujours à droite des mots.
 
 Encore plus à droite, un bref explicatif du principe du jeu, et tout en bas, le bouton «J'ai fini~!», 
 
@@ -120,16 +115,16 @@ Le principe du jeu est simple. Lorsque l'utilisateur estime qu'un mot nuage est 
 \end{center}
 
 Si le joueur se trompe, il peut double-cliquer sur le carré pour extraire le dernier mot déposé. En fait, le joueur peut double-cliquer
-autant de fois qu'il le veut pour extraire tous les mots ayant été mis dans la relation un par en afin de modifier ses choix. Lorsque le
-joueur a fait ses choix et souhaite finir sa partie, il clique sur «J'ai fini !», ce qui renvoie vers la page des résultats et du score. Il
-n'y a aucune limite de temps pour terminer la partie.
+autant de fois qu'il le veut pour extraire tous les mots ayant été mis dans la relation un par un afin de modifier ses choix. Lorsque le
+joueur a fait ses choix et souhaite terminer la partie, il clique sur «J'ai fini~!», ce qui renvoie vers la page des résultats et du score. Il
+n'y a aucune limite de temps pour terminer une partie.
 
 \subsubsection{Score obtenu}
 \begin{center}
 \includegraphics[width=14cm]{img/PtiClicResultats.png}
 \end{center}
 
-La page des scores contient aussi le corrigé de la partie. Les mots qui ont été mis dans la bonne categorie apparaissent en vert, les
+La page des scores contient aussi le corrigé de la partie\footnote{Un joueur joue contre un autre joueur. Le 'corrigé' contient donc les réponses qui correspondent à celles du joueur contre qui il joue. En conséquence, une 'bonne' réponse peut correspondre à deux mauvaises réponses, mais qui ont été choisit par les deux joueurs en question. Toutefois, le poids des relations augmentent seulement si plusieurs paires de joueurs donne les mêmes réponses.} . Les mots qui ont été mis dans la bonne categorie apparaissent en vert, les
 mauvaises réponses en rouge et les omissions en gris. Un point est marqué par bonne réponse tandis qu'une mauvaise réponse ou une omission
 fait perdre un demi-point. Lorsque deux réponses sont possibles, le point est marqué quelque soit la relation choisie. Le score final est
 soit un entier, soit un entier plus un demi point~; il peut être négatif, nul ou positif.
@@ -145,12 +140,10 @@ Le joueur par défaut est l'utilisateur "joueur". Il est aussi possible de s'ins
 de passe afin de cumuler des points à chaque partie joué. Les dix joueurs qui ont cumulé le plus grand nombre de points sont inscrits sur la
 liste des «Top 10». Les points cumulés par le joueur «joueur», qui est l'ensemble de parties jouées par des internautes non inscrits au
 site, figure parmi les «Top 10». A droite de ceci, le score du joueur en question, c'est-à-dire, la somme totale des scores de toutes les
-parties jouées par l'utilisateur. Si l'utilisateur veut jouer une partie de plus, il clique sur le bouton «Je joue !» en bas de la page et
+parties jouées par l'utilisateur. Si l'utilisateur veut jouer une partie de plus, il clique sur le bouton «Je joue~!» en bas de la page et
 une nouvelle partie est entamée.
 
-Huit styles de couleurs sont disponibles et modifiables dans le menu déroulant en haut à droite de la page d'accueil. Lorsque le joueur s'authentifie avec succès, son identifiant apparaît dans le fond de page en très grande taille.
-
-% TODO: MES AMIS ---> EXPLICATION DE COMMENT SONT CALCULES LES SCORES, C'EST PAR RAPPORT A UN AUTRE JOUEUR JE PENSE, ET NON PAS PAR RAPPORT A UN DICO... 
+Huit styles de couleurs sont disponibles et modifiables dans le menu déroulant en haut à droite de la page d'accueil. D'autres modifications résultent lors d'un changement de style, par exemple, les phrases associées aux relations. Lorsque le joueur s'authentifie avec succès, son identifiant apparaît dans le fond de page en très grande taille.
 
 Lorsqu'un utilisateur souhaite s'inscrire au site, il est invité à lire un document explicatif de l'objectif du jeu dans le cadre du projet
 de recherche de ce dernier. Il est aussi averti du contenu potentiel du jeu : comme les mots centraux et du nuage sont fournis par d'autres
@@ -158,22 +151,20 @@ utilisateurs, le vocabulaire rencontré peut ne pas convenir aux moins de 16 ans
 
 
 
-\subsection{Le dump de la base de données}
+\subsection{L'archive de la base de données}
 
-Le dump de la base de données est un fichier plat d'environ 2 000 000 lignes. Ce fichier contient un grand nombre de caractères accentués et
-la version à notre disposition lorsque nous avons commencé à l'analyser, en extraire des données puis créer notre propre base de données,
-n'était pas encodée en UTF-8 (bien qu'il y ait quelques mots qui soient encodés en UTF-8).
+L'archive de la base de données est un fichier plat d'environ 2 000 000 lignes. Ce fichier contient un grand nombre de caractères accentués et
+la version à notre disposition lorsque nous avons commencé à l'analyser, en extraire des données puis à créer notre propre base de données
+n'était pas encodée en UTF-8.
 
-La base de données de laquelle est extraite ce dump provient d'un autre jeu de l'équipe TALN du Lirmm, nommé Jeuxdemots. Jeuxdemots propose
-à l'utilisateur de donner des mots associés au mot central, ce qui, en quelque sorte, construit un nuage de mots. Cependant, les relations
-entre le mot central et les mots du nuage ne peuvent pas être déterminées par Jeuxdemots, et c'est là le rôle de PtiClic.
+La base de données de laquelle est extraite ce dump provient d'un autre jeu de l'équipe TALN du Lirmm, nommé Jeuxdemots. L'objectif principal de JeuxDeMots est d'ajouter des mots et des expressions au réseau lexical alors que l'objectif principal de PtiClic est d'accroître le nombre de relations sémantiques entre les mots du réseau.
 
-Le dump contient en tout début des remerciements et quelques explications des acronymes et des abréviations utilisés, puis des statistiques, à savoir, le nombre d'occurrences de relations, la fréquence des noeuds, les 50 termes les plus fréquents. Plus un terme ou expression est fréquent, plus son poids est élevé. 
+L'archive contient en tout début des remerciements et quelques explications des acronymes et des abréviations utilisés, puis des statistiques, à savoir, le nombre d'occurrences de relations, la fréquence des noeuds, les 50 termes les plus fréquents. Plus un terme ou expression est fréquent, plus son poids est élevé. 
 
-Le dump a proprement parler contient deux grandes parties~: une partie «noeuds» (\verb!NODES!) et une partie relations (\verb!RELATIONS!). La partie «noeuds»  contient non seulement des adjectifs, des adverbes, des substantifs et des verbes, mais aussi des locutions et des syntagmes, des mots tels que les prépositions, les conjonctions, les pronoms, les articles et les déterminants. Les substantifs peuvent être des noms propres, y compris des noms de lieux, des noms de personnes. 
+L'archive a proprement parler contient deux grandes parties~: une partie 'noeuds' (\verb!NODES!) et une partie 'relations' (\verb!RELATIONS!). La partie 'noeuds'  contient sont de divers types. Les noeuds de type 'terme' contiennent non seulement des adjectifs, des adverbes, des substantifs et des verbes, mais aussi des locutions et des syntagmes, des mots tels que les prépositions, les conjonctions, les pronoms, les articles et les déterminants. Les substantifs peuvent être des noms propres, y compris des noms de lieux, des noms de personnes. Il existe de noeuds qui donnent d'autres informations, et on verra plus tard que ceux qui nous intéressent le plus, outre les termes, sont ceux concernant la catégorie grammaticale des mots et d'autres informations métalinguistiques plus précises.
 
-Dans la partie "mots et expressions", chaque entrée -- chaque ligne -- contient un $eid$ (Entry IDentifier), un nom $n$ (name), un type $t$ et un poids $w$ (weight). En voici un exemple~:
-\begin{verbatim}
+Dans la partie 'mots et expressions', chaque entrée -- chaque ligne -- contient un $eid$ (Entry IDentifier), un nom $n$ (name), un type $t$ et un poids $w$ (weight). En voici un exemple~:
+\indent \begin{verbatim}
 eid=231064:n="pour femme":t=1:w=50
 \end{verbatim}
 
@@ -183,135 +174,35 @@ rid=430049:n1=82029:n2=151553:t=12:w=18
 \end{verbatim}
 
 \subsection{Analyse plus approfondie du jeu}
-Bien que le dump de la base de données contienne 55 relations différentes, la version en ligne du jeu du PtiClic n'en utilise que treize (uniquement celles qui sont pertinentes pour le jeu)~:
+Bien que l'archive de la base de données contienne 55 relations différentes, la version en ligne du jeu du PtiClic n'en utilise que treize (uniquement celles qui sont pertinentes pour le jeu)~:
 
 \begin{itemize}
-
-\item r\_associated|0|idée|Tout terme lié d'une façon ou d'une autre au mot cible\dots{} Ce mot vous fait penser à quoi~? \\
-{\bf \verb![mot central]! est en rapport avec...} \\
-
-\item r\_syn|5|synonyme|A partir d'un terme, il est demandé d'énumérer les synonymes ou quasi-synonymes de ce terme. \\
-{\bf \verb![mot central]! a comme synonyme...} \\
-
-\item r\_isa|6|générique|'animal' est un générique de «chat', «mammifère', «être vivant' etc. en sont d'autres\dots{} \\
-{\bf \verb![mot central]! est une sorte de...}
-
-\item r\_anto|7|contraire|'chaud' est le contraire de «froid', vous vous rappelez~? :) \\
-{\bf Un contraire de \verb![mot central]! est...} \\
-
-\item r\_hypo|8|spécifique|'mouche', «abeille', «guêpe' sont des spécifiques de «insecte»\dots{} \\
-{\bf un spécifique de \verb![mot central]! est...} \\
-
-\item r\_has\_part|9|partie|Il faut donner des parties/constituants/éléments du mot cible. Par exemple, «voiture» pourrait avoir comme parties : «porte», «roue», «moteur»\dots{} \\
-{\bf ... est une partie de \verb![mot central]!} \\
-
-\item r\_holo|10|tout|Le tout est ce qui contient l'objet en question. Pour «main', on aura «bras', «corps', «personne', etc. On peut aussi voir le tout comme l'ensemble auquel appartient un élément, comme «classe' pour «élève'. \\
-{\bf \verb![mot central]! fait partie de...} \\
-
-\item r\_agent|13|action>agent|L'agent (qu'on appelle aussi le sujet) est l'entité qui effectue l'action. Par exemple dans - Le chat mange la souris -, l'agent est le chat. Des agents typiques de «courir» peuvent être «sportif», «enfant»\dots{} \\
-{\bf Quoi/Qui pourrait \verb![mot central]!~?} \\
-
-\item r\_lieu|15|chose>lieu|A partir d'un nom d'objet (ou autre), il est demandé d'énumérer les lieux typiques où peut se trouver l'objet en question. \\
-{\bf Un lieu pour \verb![mot central]! est...} \\
-
-\item r\_instr|16|action>instrument|L'instrument est l'objet avec lequel on fait l'action. Dans - Il mange sa salade avec une fourchette -, fourchette est l'instrument. Des instruments typiques de «tuer» peuvent être «arme», «pistolet», «poison»\dots{} \\
-{\bf Un instrument pour \verb![mot central]! est...} \\
-
-\item r\_carac|17|caractéristique|Pour une terme donné, en général un objet, il est demandé d'énumérer les caractéristiques possibles et/ou typiques de cet objet. Par exemple, pour «eau' on pourra avoir «liquide', «froide', «chaude', etc. \\
-{\bf Une caractéristique de \verb![mot central]! est...}
-
+\item r\_associated|0|idée|Tout terme lié d'une façon ou d'une autre au mot cible\dots{} Ce mot vous fait penser à quoi~? 
+\item r\_syn|5|synonyme|A partir d'un terme, il est demandé d'énumérer les synonymes ou quasi-synonymes de ce terme. \item r\_isa|6|générique|'animal' est un générique de «chat', «mammifère', «être vivant' etc. en sont d'autres\dots{}
+\item r\_anto|7|contraire|'chaud' est le contraire de «froid', vous vous rappelez~? :)
+\item r\_hypo|8|spécifique|'mouche', «abeille', «guêpe' sont des spécifiques de «insecte»\dots{}
+\item r\_has\_part|9|partie|Il faut donner des parties/constituants/éléments du mot cible. Par exemple, «voiture» pourrait avoir comme parties : «porte», «roue», «moteur»\dots{}
+\item r\_holo|10|tout|Le tout est ce qui contient l'objet en question. Pour «main', on aura «bras', «corps', «personne', etc. On peut aussi voir le tout comme l'ensemble auquel appartient un élément, comme «classe' pour «élève'.
+\item r\_agent|13|action>agent|L'agent (qu'on appelle aussi le sujet) est l'entité qui effectue l'action. Par exemple dans - Le chat mange la souris -, l'agent est le chat. Des agents typiques de «courir» peuvent être «sportif», «enfant»\dots{} 
+\item r\_lieu|15|chose>lieu|A partir d'un nom d'objet (ou autre), il est demandé d'énumérer les lieux typiques où peut se trouver l'objet en question.
+\item r\_instr|16|action>instrument|L'instrument est l'objet avec lequel on fait l'action. Dans - Il mange sa salade avec une fourchette -, fourchette est l'instrument. Des instruments typiques de «tuer» peuvent être «arme», «pistolet», «poison»\dots{}
+\item r\_carac|17|caractéristique|Pour une terme donné, en général un objet, il est demandé d'énumérer les caractéristiques possibles et/ou typiques de cet objet. Par exemple, pour «eau' on pourra avoir «liquide', «froide', «chaude', etc.
 \item r\_lieu\_action|30|lieu>action|A partir d'un lieu, énumérer les action typiques possibles dans ce lieu.
-
 \item r\_action\_lieu|31|action>lieu|A partir d'une action (un verbe), énumérer les lieux typiques possibles où peut être réalisée cette action.
-{\bf Un lieu pour \verb![mot central]! est...} \\
-
 \end{itemize}
 
-D'autres relations qui figurent dans la base de données d'origine ne sont pas utilisées dans l'application~:
-
-TODO: COMPLETER LES RELATIONS MANQUANTES, IL Y EN A 55 EN TOUT !
-
-\begin{itemize}
-\item r\_raff\_sem|1|raffinement sémantique|Raffinement sémantique vers un usage particulier du terme source
-
-\item r\_raff\_morpho|2|raffinement morphologique|Raffinement morphologique vers un usage particulier du terme source
-
-\item r\_domain|3|domaine|Il est demandé de fournir des domaines relatifs au mot cible. Par exemple, pour «corner', on pourra donner les domaines «football' ou «sport'.
-
-\item r\_pos|4|r\_pos|Partie du discours (Nom, Verbe, Adjectif, Adverbe, etc.)
-
-\item r\_holo|10|tout|Le tout est ce qui contient l'objet en question. Pour «main», on aura «bras», «corps», «personne', etc. On peut aussi voir le tout comme l'ensemble auquel appartient un élément, comme «classe' pour «élève'.
-
-\item r\_locution|11|locution|A partir d'un terme, il est demandé d'énumérer les locutions, expression ou mots composés en rapport avec ce terme. Par exemple, pour «moulin', ou pourra avoir «moulin à vent', «moulin à eau', «moulin à café'. Pour «vendre', on pourra avoir «vendre la peau de l'ours avant de l'avoir tué', «vendre à perte', etc..
-
-\item r\_flpot|12|potentiel de FL|(interne) potentiel de relation
-
-\item r\_patient|14|action>patient|Le patient (qu'on appelle aussi l'objet) est l'entité qui subit l'action. Par exemple dans - Le chat mange la souris -, le patient est la souris. Des patients typiques de manger peuvent être «viande», «légume», «pain»\dots{}
-
-\item r\_data|18|r\_data|Informations diverses
-
-\item r\_lemma|19|r\_lemma|Le lemme
-
-\item r\_magn|20|magn|La magnification ou amplification, par exemple - forte fièvre - ou - fièvre de cheval - pour fièvre. Ou encore - amour fou - pour amour, - peur bleue - pour peur.
-
-\item r\_antimagn|21|antimagn|L'inverse de la magnification, par exemple - bruine - pour pluie.
-
-\item r\_familly|22|famille|Des mots de la même famille sont demandés. Par exemple, pour «lait' on pourrait mettre «laitier', «laitage', «laiterie', etc.
-
-\item r\_chunk\_pred|29|predicat|(interne) d'un chunk quel prédicat ?
-
-\item r\_sentiment|32|sentiment|Pour un terme donné, évoquer des SENTIMENTS ou EMOTIONS que vous pourriez associer à ce terme. Par exemple, la joie, le plaisir, le dégoût, la peur, la haine, l'amour, l'indifférence, l'envie, etc.
-
-\item r\_error|33|erreur|lien d'erreur
-
-\item r\_maner|34|manière|De quelles MANIERES peut être effectuée l'action (le verbe) proposée. Il s'agira d'un adverbe ou d'un équivalent comme une locution adverbiale, par exemple : «rapidement', «sur le pouce», «goulûment», «salement»\dots{} pour «manger».
-
-\item r\_meaning|35|sens/signification|Quels SENS/SIGNIFICATIONS pouvez vous donner au terme proposé. Il s'agira de termes évoquant chacun des sens possibles, par exemple : «forces de l'ordre», «contrat d'assurance», «police typographique»\dots{} pour «police».
-
-\item r\_infopot|36|information potentielle|Information sémantique potentielle
-
-\item r\_telic\_role|37|rôle télique|Le rôle télique indique le but ou la fonction du nom. Par exemple, couper pour couteau, scier pour scie, etc.
-
-\item r\_agentif\_role|38|rôle agentif|Le rôle agentif indique le mode de création du nom. Par exemple, construire pour maison, rédiger ou imprimer pour livre, etc.
-
-\item r\_causatif|42|cause|B (que vous devez donner) est une cause possible de A. A et B sont des verbes ou des noms.  Exemples : se blesser -> tomber ; vol -> pauvreté ; incendie -> négligence ; mort --> maladie ; etc.
-
-\item r\_conseq|41|conséquence|B (que vous devez donner) est une conséquence possible de A. A et B sont des verbes ou des noms.  Exemples : tomber -> se blesser ; faim -> voler ; allumer -> incendie ; négligence --> accident ; etc.
-
-\item r\_succession|52|succession|Qu'est ce qui peut SUIVRE (par exemple Noêl -> jour de l'an, guerre -> paix, jour -> nuit,  pluie -> beau temps, repas -> sieste, etc) le terme suivant :
-
-\item r\_make|53|produit|Que peut PRODUIRE le terme ? (par exemple abeille -> miel)
-
-\item r\_product\_of|54|est le produit de|Le terme est le RESULTAT/PRODUIT de quoi ?
-
-\item r\_against|55|s'oppose à|A quoi le terme suivant S'OPPOSE/COMBAT/EMPECHE ?
-
-\end{itemize}
-
-
-Pour un mot central donné, seulement un nombre limité de relations sont possibles~:
-
-TODO: INTEGRER L'ANALYSE PLUS APPROFONDIE ICI
-
-SUBSTANTIF~: synonyme, contraire, spécifique, générique, partie, tout, lieu
-VERB~: synonyme, contraire, lieu, instrument, agent
-ADJECTIF~: synonyme, contraire
-ADVERB~: synonyme, contraire
-
-Les adverbes et LES locutions adverbiales sont relativement peu fréquents. La grande majorité des mots sont des substantifs, des verbes et des adjectifs ainsi que des locutions nominales, verbales et adjectivales. 
-
-La relation "patient" est possible pour un mot central qui est un verbe, mais elle est plus complexe car elle ne fonctionnera que si le verbe en question est transitif. 
+Pour un mot central donné, seulement un nombre limité de relations sont possibles. Les adverbes et les locutions adverbiales sont relativement peu fréquents. La grande majorité des mots sont des substantifs, des verbes et des adjectifs ainsi que des locutions nominales, verbales et adjectivales. La relation "patient" est possible pour un mot central qui est un verbe, mais elle est plus complexe car elle ne fonctionnera que si le verbe en question est transitif. 
 
 \section{Analyse des besoins}
 
 \begin{quotation}
-  L'étude et le prototypage d'une version fonctionnant sur \android{} semble intéressante. En particulier on s'intéressera à deux aspects :
+\noindent  L'étude et le prototypage d'une version fonctionnant sur \android{} semble intéressante. En particulier on s'intéressera à deux aspects :
   \begin{itemize}
   \item les contraintes imposées par l'environnement smartphone
   \item le biais qu'imposent ces contraintes sur le jeu et les données récoltées.
   \end{itemize}
   
-  Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel.
+\noindent  Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel.
 \end{quotation}
 
 \subsection{Les contraintes de l'environnement smartphone}
@@ -327,17 +218,17 @@ que l'utilisation d'une souris à cause de la petite taille de l'écran et des d
 glissement-et-déposé par exemple.
 
 Le faible espace de stockage et les limites d'autonomie et d'énergie se traduisent par une nécessité d'économie de la part des concepteurs
-d'applications par rapport aux ordinateurs classiques de plus en plus performants actuellement. C'est pour cette raison que le smartphone
-n'est pas le plus adapté pour effectuer des tâches de longue haleine telles que l'édition de vidéos. Notamment, dans notre cas,
-l'utilisation du réseau est lente, potentiellement coûteuse pour l'utilisateur (forfaits facturant à la quantité de données), et
+d'applications par rapport aux ordinateurs classiques, de plus en plus performants actuellement. C'est pour cette raison que le smartphone
+n'est pas le plus adapté pour effectuer des tâches de longue haleine telles que la rédaction des textes ou l'édition de vidéos. Notamment, dans notre cas,
+l'utilisation du réseau est lente, potentiellement coûteuse pour l'utilisateur -- les forfaits facturant souvent à la quantité de données -- et
 consommatrice d'énergie.
 
 Les applications bien adaptées au smartphone sont des applications telles que les calculatrices, les logiciels de prise de notes, les jeux
-simples (casual games), et le jeu du PtiClic n'est pas une exception à cette dernière catégorie. L'avantage de ces applications sur un smartphone est
-qu'il est possible d'y jouer lorsque l'on est en file d'attente à la Poste ou à la Préfecture ou bien dans les transports en commun. Un tel
+simples (casual games) et le jeu du PtiClic n'est pas une exception à cette dernière catégorie. L'avantage de ces applications sur un smartphone est
+qu'il est possible d'y jouer lorsque l'on est en file d'attente à la Poste ou à la Préfecture ou bien dans les transports en commun. En effet, lorsque l'on a un smartphone, on peut jouer n'importe quand et n'importe où. Un tel
 prototypage du jeu demande toutefois une réflexion non seulement quant aux limites d'un smartphone mais aussi ses avantages.
 
-Le jeu de base du PtiClic sous \android{} présente exactement les mêmes cas d'utilisations que l'application d'origine. 
+Le jeu de base du PtiClic sous \android{} présente plus ou moins les mêmes cas d'utilisations que l'application d'origine. Toutefois, le 'comment' de ces cas d'utilisation sont loin d'être les mêmes, la plus grande différence étant la gestion des mots nuage. Une discussion de ce sujet fera l'objet des chapitres 'Conception' et 'Réalisation'.
 
 
 \section{PtiClic et TALN}
@@ -404,27 +295,13 @@ Quoiqu'il soit intéressant d'étudier une langue à un moment donné dans le te
 
 Un exemple d'une application qui pourrait prendre en compte la diachronie est un moteur de recherche basé sur un réseau lexical mis à jour en temps réel ou à intervalle de temps très court. Lorsqu'une affaire paraît à la une des journaux concernant un homme politique ou une catastrophique, les relations sémantiques qu'entretiennent les mots maîtres de tels articles changent.
 
-TODO:
--> article des inventeurs Lauder.... 
---> références...
-
 \subsubsection{Langue et parole}
 
 Une autre notion fondamentale de linguistique générale est la dichotomie 'langue' et 'parole'. La 'parole' est associée à l'acte individuel de langage alors que 'langue' est la représentation collective de l'ensemble des actes de parole dans l'esprit d'un locuteur natif. La 'parole' est hétérogène, individuelle, active alors que la 'langue' est collective, sociale, individuelle, passive. 
 
 Enfin, pour avoir une représentation de signification qui est légitime, il est absolument nécessaire qu'il y ait un très grand nombre de sources et/ou de personnes qui alimentent le réseau lexical, sinon, les résultats risquent d'être biaisés. Dans la dichotomie 'langue'/'parole' de Saussure, il est essentiel qu'un tel réseau soit une représentation sociale et homogène de la langue en question. Autrement dit, il faut que la base soit représentative de la 'langue' et non pas de la 'parole' ni quelque part entre 'langue' et 'parole'. Ceci implique qu'il faut aussi des données d'une diversité de sources et de types de sources~: sources écrites et orales, de tous domaines, de tous niveaux de langue. 
 
-TODO: REVOIR PARAGRAPHE QUI SUIT
-
-D'emblée, la base de données JeuxDeMots/PtiClic n'est pas 'parole' pure car il est nécessaire que deux utilisateurs donnent les mêmes réponses qui affectent le lexique ou les relations sémantiques, sinon la réponse d'un seul utilisateur n'est pas validée. En outre, le fait que le poids d'une relation augmente lorsque plusieurs paires d'utilisateurs donnent la même réponse tend vers la 'langue' plutôt que vers la 'parole'. Enfin, il est souhaitable qu'un très grand nombre d'utilisateurs contribuent à la base de données JeuxDeMots parce que, justement, il faut que les informations contenues dans la base relèvent réellement de 'langue' selon le sens saussurien de ce mot. 
-
-TODO: 
-myriadisation du travail (beaucoup de gens qui travaille)
- / parcellisation (couper les taches en petites taches)
-lexico-sémantique
-redondance~: poids, chauvauchement... pour renforcer, etc.
- 
-
+D'emblée, la base de données JeuxDeMots/PtiClic n'est pas 'parole' pure car il est nécessaire que deux utilisateurs donnent les mêmes réponses pour que leurs réponses soient validées. En outre, le fait que le poids d'une relation augmente lorsque plusieurs paires d'utilisateurs donnent la même réponse tend vers la 'langue' plutôt que vers la 'parole'. Enfin, il est souhaitable qu'un très grand nombre d'utilisateurs contribuent à la base de données JeuxDeMots parce que, justement, il faut que les informations contenues dans la base relèvent réellement de 'langue' selon le sens saussurien de ce mot. 
 
 
 \subsection{Le réseau lexical JeuxDeMots}
@@ -439,41 +316,72 @@ Cinquante-cinq types différents de relations existent qui donnent des informati
 
 Il existe environ 230 000 noeuds de type 1 (term). Moins de 106 000 de ces mots contiennent des relations sortantes de type 0 (idée), qui est le type de relation le plus général dont presque toutes les autres relations sémantiques sont des sous-ensembles, ce qui représente moins de 50\% des noeuds. Si on prend l'ensemble des relations existant dans la version originale du jeu PtiClic, seulement 122 000 noeuds ont des relations sortantes et moins d'un quart des noeuds du réseau lexical ont des relations entrantes. 
 
-TODO: probability..
 
 Il serait intéressant d'introduire de nouvelles relations entrantes et sortantes là où il n'en existe aucune. Toutefois, cela serait très difficile voire impossible à partir des relations déjà existantes. Si l'on introduit des mots par hasard dans le nuage, il serait très improbable qu'il y ait des relations avec un mot central, aussi choisi par hasard. Les joueurs du PtiClic ne s'intéresseraient plus au jeu et l'alimentation de la base serait ralentie voire arrêtée. Il faudrait un moyen auxiliaire pour introduire de nouvelles relations de ce genre dans la base.  
 
 \subsection{LSA et le réseau lexical JeuxDeMots}
 
-PtiClic combine deux moyens pour la création d'une partie, c'est-à-dire la composition mot central et mots nuages~: LSA et le réseau lexical JeuxDeMots.\footnote{Il semblerait que PtiClic a à un moment donné utilisé ces deux modes afin d'établir des relations sémantiques entre tous les noeuds~: "PtiClic [...] se fondent sur deux méthodes d’acquisition lexicale et ontologique~: l'Analyse Sémantique Latente (LSA) et JeuxDeMots (JDM). (Il est intéressant) de combiner ces deux méthodes afin de combler les lacunes de chacune au travers de (ce) jeux. (...) [C]e jeu permet une double acquisition~: acquisition de vocabulaire par les utilisateurs et acquisition lexicale par la machine. Ceci a donc un intérêt à la fois en TICE et en TALN. Avant de parler de la génération de parties, une explication des deux approches s'impose. Une brève description de ces deux moyens d'analyse sémantique sera donnée dans cette partie." ... "Nous partons d’un réseau déjà existant, celui de JeuxDeMots (http://jeuxdemots.org) et de LSA (latent semantic analysis) qui permet, à partir de textes, de trouver des termes proches d’un terme donné (dans le même champ lexical)." ... "Nous constatons que pour un terme donné, les mots proches fournis par LSA sont couvrent l'ensemble des relations issues de JDM mais que les relations pertinentes restent à identifier." (PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010) (TICE = Technologie de l'Information et de la Communication pour l'Enseignement). Toutefois, selon une discussion avec Mathieu Lafourcade le 4 mai 2011, cela n'est plus le cas et la LSA ne serait pas très efficace lorsqu'elle est appliquée dans la création de partie de PtiClic. Toutefois, étant donné que la moitié des noeuds n'ont aucune relation sémantique entrantes ni sortantes, il est nécessaire d'utiliser d'autres moyens que les relations existantes dans le seul réseau lexical JeuxDeMots afin de créer de nouvelles relations mettant en jeu ces mots. Bien que ceci dépasse le sujet de ce TER, on évoquera ce problème de cette lacune et la LSA dans la suite de la présente discussion.}
+PtiClic combine deux moyens pour la création d'une partie, c'est-à-dire la composition mot central et mots nuages~: LSA et le réseau lexical JeuxDeMots.\footnote{PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010 et PtiClic: a game for vocabulary assessment combining JeuxDeMots and LSA. In proc of CICLing (Conference on Intelligent text processing and Comptational Linguistics). Mexico : 1-7 mars.}
 
 
 \subsubsection{La LSA}
 
-Il existe plusieurs systèmes et algorithmes pour évaluer le rapport sémantique entre des mots. Une méthode consiste à chiffrer le lien entre deux mots. Si l'on représente ces liens par un graphe, il y aura un seul lien ou arc entre deux mots ou noeuds donnés et une valeur associée à la relation qu'entretiennent ces deux mots. Un tel système est la LSA\footnote{'LSA' signifie en anglais Latent Semantic Analysis, ce qui se traduit en français 'Analyse sémantique latente'}. 
+Il existe plusieurs systèmes et algorithmes pour évaluer le rapport sémantique entre des mots. Une méthode consiste à chiffrer le lien entre deux mots. Si l'on représente ces liens par un graphe, il y aura un seul lien ou arête (non orientée) entre deux mots ou noeuds donnés et une valeur associée à la relation qu'entretiennent ces deux mots. Un tel système est la LSA\footnote{Wikipedia, 'Latent Semantic Analysis' et 'Analyse sémantique latente', http:\/\/en.wikipedia.org\/wiki\/Latent\_semantic\_analysis et http:\/\/fr.wikipedia.org\/wiki\/Analyse\_s\%C3\%A9mantique\_latente}. 
 
 Sans entrer dans les détails de l'algorithme de la LSA, qui est brevetée et payante, cette approche consiste à générer un graphe de relations entre mots à partir de textes écrits. Le résultat de l'algorithme donne un graphe de noeuds (mots) et d'arcs (estimation du degré de lien sémantique entre deux mots) comme suit~:
 
-TODO: DIAGRAM PROBLEM
 
-\begin{figure}
- \begin{minipage}{\textwidth}
-\centering 
-       \includegraphics[width=0.75\textwidth]{img/lsa.jpeg}
-    \caption[Caption for LOF]%
-      {Un example de la LSA appliquée à quatre mots\footnote{PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010}}
-  \end{minipage}
-\end{figure}
+\begin{comment}
+  \begin{figure}
+    \pgfdeclarelayer{background}
+    \pgfdeclarelayer{foreground}
+    \pgfsetlayers{background,main,foreground}
+    \begin{tikzpicture}[
+      txt/.style = {fill=white,font=\footnotesize,scale=0.75, inner sep=1pt},
+      earlymidway/.style = {pos=0.4},
+      latemidway/.style = {pos=0.6}
+      ]
+      \node (n0) {mot4};
+      \node[above left  = 2cm of n0] (n1) {mot1};
+      \node[above right = 2cm of n0] (n2) {mot3};
+      \node[below left  = 2cm of n0] (n3) {mot2};
+      \node[below right = 2cm of n0] (n4) {mot5};
+      
+      \foreach \direction/\nfrom/\nto/\angle/\pos/\anchor/\text in {
+        -/n0/n1/15/near end/east/0.28,
+        % 
+        -/n0/n2/-20/midway/center/0.48,
+        % 
+        -/n0/n3/-15/near end/east/0.12,
+        % 
+        -/n0/n4/-15/very near end/east/0.4,
+        % 
+        -/n1/n2/-20/midway/center/0.94,
+        % 
+        -/n1/n3/-15/near end/east/0.75,
+        % 
+        -/n1/n4/-15/very near end/east/0.42,
+		%
+        -/n2/n3/-15/near end/east/0.04,
+        % 
+        -/n2/n4/-15/very near end/east/0.39,
+		%
+        -/n3/n4/-20/midway/center/0.88
+}{
+        \draw[\direction] (\nfrom) to[bend left=\angle] (\nto);
+        \begin{pgfonlayer}{foreground}
+          \path[\direction] (\nfrom) to[bend left=\angle] node[\pos, anchor=\anchor, txt] {\text} (\nto);
+        \end{pgfonlayer}
+      }
+    \end{tikzpicture}
+  \end{figure}
+\end{comment}
 
-
-La LSA est plus fiable lorsque les textes utilisés pour générer les poids de relations sémantiques sont des corpus spécialisés. C'est une méthode rapide, facile à réaliser, efficace. Les données récoltées rélèvent en général de la langue écrite et donc d'un niveau de langue soutenue et riche. Un tel corpus contient une grande quantité de vocabulaire passif.
+La LSA est plus fiable lorsque les textes utilisés pour générer les poids de relations sémantiques sont des corpus spécialisés et donc relativement homogène. C'est une méthode rapide, facile à réaliser, efficace. Les données récoltées rélèvent en général de la langue écrite et donc d'un niveau de langue soutenue et riche. Un tel corpus contient une grande quantité de vocabulaire passif. 
 
 Il est plus difficile de se servir de la LSA pour des textes généralistes car elle ne traite pas la polysémie. Si l'on souhaite étudier la langue parlée, il faut des corpus qui soient des transcriptions de discours oraux. 
 
-Les inconvénients de la LSA sont nombreux. Outre le fait qu'elle n'aborde pas le problème de la polysémie alors qu'en moyenne un mot donné a quatre significations différentes, lorsqu'il s'agit de textes écrits, les mots les plus courants et les plus évidents sont souvent omis~; les rédacteurs préfèrent utiliser des mots plus recherchés et aussi éviter la répétition afin de conserver un bon style. Ceci va à l'encontre des statistiques sur le poids des relations entre les mots.\footnote{Ceci n'est pas vrai si les types de textes utilisés correspondent exactement aux types de textes auxquelles le résultat de la LSA est appliquée.} La LSA ne nous donne aucune information sur la syntaxe ni la morphologie des mots. Elle ne nous donne aucune information sur la nature des relations (synonymie, contenant/contenu, etc.). Enfin, la LSA traite chaque mot séparément. Autrement dit, chaque élément d'un mot composé est traité individuellement et confondu avec des occurrences individuelles de ces mêmes mots.
-
-TODO: informations ... réelles..
-
+Les inconvénients de la LSA sont nombreux. Outre le fait qu'elle n'aborde pas le problème de la polysémie alors qu'en moyenne un mot donné a quatre significations différentes, lorsqu'il s'agit de textes écrits, les mots les plus courants et les plus évidents sont souvent omis~; les rédacteurs préfèrent utiliser des mots plus recherchés et éviter la répétition afin de conserver un bon style. Ceci peut aller à l'encontre des statistiques sur le poids des relations entre les mots.\footnote{Ceci n'est pas vrai si les types de textes utilisés correspondent exactement aux types de textes auxquelles le résultat de la LSA est appliquée.} La LSA ne nous donne aucune information sur la syntaxe ni la morphologie des mots. Elle ne nous donne aucune information sur la nature des relations (synonymie, contenant/contenu, etc.). Enfin, la LSA traite chaque mot séparément. Autrement dit, chaque élément d'un mot composé est traité individuellement et confondu avec des occurrences individuelles de ces mêmes mots.
 
 Malgré ces inconvénients, malgré des 'erreurs' produites par la LSA, elle est utilisée aujourd'hui car elle nous donne beaucoup d'informations sémantiques justes concernant la relation entre les mots d'un corpus. 
 
@@ -481,115 +389,115 @@ Malgré ces inconvénients, malgré des 'erreurs' produites par la LSA, elle est
 
 Etant donné la complexité du signe linguistique, l'idée d'associer à un signe linguistique plusieurs liens sémantiques est très intéressante. Bien que cela augmente la complexité de nos applications, ce choix est tout à fait justifié. On se rend compte que les définitions et les résultats des dictionnaires classiques et de synonymes et antonymes sont insuffisants et ne nous donnent que des informations limitées concernant la valeur sémantique d'un mot, surtout qu'ils nous donnent peu ou pas d'informations sur la valeur sémantique qu'entretiennent deux mots donnés. En effet, le fait même d'avoir des données concernant plusieurs types de relations existant entre différents mots nous donne plus d'informations quant aux connotations et aux dénotations d'un mot donné que celles d'un dictionnaire classique.
 
-\begin{figure}
- \begin{minipage}{\textwidth}
-\centering 
-       \includegraphics[width=0.75\textwidth]{img/jdm.jpeg}
-    \caption[Caption for LOF]%
-      {Un example des relations sémantiques du réseau lexical JeuxDeMots appliqué à quatre mots\footnote{Lafourcade et Zampa, PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010}}
-  \end{minipage}
-\end{figure}
+A l'inverse de la LSA, le réseau lexical JeuxDeMots est un réseau basé largement sur un vocabulaire actif composé de relations générales, le lexique, relevant plutôt de la langue orale, est alimenté de manière spontanée par des utilisateurs jouant au jeu. Ce réseau traite la polysémie, contient un grand nombre d'informations concernant la morphologie, la sémantique et des aspect métalinguistiques des termes.
 
-A l'inverse de la LSA, le réseau lexical JeuxDeMots est un réseau basé largement sur un vocabulaire actif composé de relations générales, le lexique, relevant plutôt de la langue orale, est alimenté de manière spontanée par des utilisateurs jouant au jeu. Ce réseau traite la polysémie, contient un grand nombre d'informations concernant les entrées morphologiques, syntaxiques et sémantiques voire pragmatiques. 
+L'inconvénient est que ces informations peuvent contenir des bruits et des silences.\footnote{Lafourcade et Zampa, PtiClic: A Game for Vocabulary Assessment Combining JeuxDeMots and LSA. In proc of CICLingj(Conference on Intelligent text processing and Computational Linguistics). Mexico, 1-7 March, 2009}. Des bruits sont des associations imprécises, qui en général doivent être plus faibles. Ceci peut arriver lorsque les réponses attendus sont celles correspondant au sens propre d'un mot alors que l'utilisateur donne un sens figuré ou bien fait de l'humour, après tout, il s'agit bien d'un jeu. L'exemple du mot poésie par exemple et l'association 'est lié à' peut donner lieu à des réponses de sens propre ('auteur', 'rhyme', etc.) ou de sens figuré ('symphonie', 'amour', etc.). L'autre inconvénient est que le réseau JeuxDeMots contient un grand nombre de silences. Un 'silence' est défini comme une association n'existant pas ou qui devraient être plus forte. En effet, les informations sémantiques du réseau JeuxDeMots sont très hétérogènes et pas représentatif de la réalité alors que la LSA est plus hétérogènes quant à sa relation aux textes utilisés pour sa génération.
 
-L'inconvénient est que ces informations peuvent contenir des bruits et des silences.\footnote{Lafourcade et Zampa, PtiClic: A Game for Vocabulary Assessment Combining JeuxDeMots and LSA. In proc of CICLingj(Conference on Intelligent text processing and Computational Linguistics). Mexico, 1-7 March, 2009}. Des bruits sont des associations imprécises, qui en général doivent être plus faibles. Ceci peut arriver lorsque les réponses attendus sont celles correspondant au sens propre d'un mot alors que l'utilisateur donne un sens figuré ou bien fait de l'humour, après tout, il s'agit bien d'un jeu. L'exemple du mot poésie par exemple et l'association "est lié à" peut donner lieu à des réponses de sens propre ('auteur', 'rhyme', etc.) ou de sens figuré ('symphonie', 'amour', etc.). L'autre inconvénient est que le réseau JeuxDeMots contient un grand nombre de silences. Un 'silence' est défini comme une association n'existant pas ou qui devraient être plus forte. En effet, les informations sémantiques du réseau JeuxDeMots sont très hétérogènes et pas représentatif de la réalité alors que la LSA est plus hétérogènes quant à sa relation aux textes utilisés pour sa génération. 
-
-Le réseau lexical permet aussi de générer un graphe donnant un seul arc entre deux mots similaire au graphe créer par la LSA. L'algorithme se déroule comme suit~:
-
-\begin{figure}
- \begin{minipage}{\textwidth}
-\centering 
-       \includegraphics[width=0.75\textwidth]{img/jdm.jpeg}
-    \caption[Caption for LOF]%
-      {Un example des relations sémantiques du réseau lexical JeuxDeMots appliqué à quatre mots\footnote{Lafourcade et Zampa, PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010}}
-  \end{minipage}
-\end{figure}
+Un graphe du réseau lexical JeuxDeMots est de la forme qui suit, toutefois, il faut imaginer non pas cinq noeuds, mais plus de 200 000 noeuds~:
 
 
-1. Pour un mot M (par exemple, 'musique') en relation avec un terme T (par exemple, 'instrument'), on additionne les relations entrantes et sortantes pour obtenir le 'poids' de la relation, ce poids est calculé pour tous les termes en relation avec le mot M.
+\begin{comment}
+  \begin{figure}
+    \pgfdeclarelayer{background}
+    \pgfdeclarelayer{foreground}
+    \pgfsetlayers{background,main,foreground}
+    \begin{tikzpicture}[
+      txt/.style = {fill=white,font=\footnotesize,scale=0.75, inner sep=1pt},
+      earlymidway/.style = {pos=0.4},
+      latemidway/.style = {pos=0.6}
+      ]
+      \node (n4) {mot4};
+      \node[above left  = 2cm of n4] (n1) {mot1};
+      \node[above right = 2cm of n4] (n3) {mot3};
+      \node[below left  = 2cm of n4] (n2) {mot2};
+      \node[below right = 2cm of n4] (n5) {mot5};
+      
+      \foreach \direction/\nfrom/\nto/\angle/\pos/\anchor/\text in {
+        ->/n4/n3/15/near end/east/idée associée 450,
+        <-/n4/n3/0/midway/center/idée associée 250,
+        <-/n4/n3/-15/near start/west/hyperonyme 50,
+        % 
+        ->/n4/n5/-20/midway/center/idée associée 25,
+        % 
+        ->/n3/n5/-15/near end/east/hyponyme 50,
+        ->/n3/n5/0/latemidway/east/locution 70,
+        ->/n3/n5/15/latemidway/west/idée associée 25,
+        <-/n3/n5/30/near end/west/idée associée 25,
+        % 
+        ->/n1/n2/-15/very near end/east/hyperonyme 70,
+        <-/n1/n2/0/latemidway/center/idée associée 50,
+        <-/n1/n2/15/very near end/west/hyperonyme 50,
+        % 
+        ->/n1/n4/-15/near end/center/domaine 25,
+        ->/n1/n4/5/midway/center/idée associée 310,
+        % 
+        ->/n1/n5/-30/very near end/east/domaine 25,
+        % 
+        ->/n1/n3/40/midway/center/idée associée 200,
+        ->/n1/n3/25/midway/center/hyperonyme 80,
+        <-/n1/n3/12/midway/center/hyponyme 100,
+        <-/n1/n3/0/midway/center/idée associée 60
+      }{
+        \draw[\direction] (\nfrom) to[bend left=\angle] (\nto);
+        \begin{pgfonlayer}{foreground}
+          \path[\direction] (\nfrom) to[bend left=\angle] node[\pos, anchor=\anchor, txt] {\text} (\nto);
+        \end{pgfonlayer}
+      }
+    \end{tikzpicture}
+  \end{figure} 
+\end{comment}
 
-\begin{center}
-        \begin{tabular}{ | l | l | l | p{5cm} |}
-        \hline
-        Relation M-T & Calcul du poids & Poids \\ \hline
-        musique-instrument & 450+250+50 & 750 \\ \hline
-        musique-trompette & 310+25 & 335 \\ \hline
-        musique-instrument de musique & 25 & 25 \\
-        \hline
-        \end{tabular}
-\end{center}
-
-2. On normalise cet ensemble comme suit~:
-
-N = \[ 
-\sqrt{((poids (musique-trompette))^2 + (poids (musique-instrument))^2 + (poids (musique-instrument de musique))^2} 
-\]
-
-= 
-\[
-\sqrt{(335^2 + 25^2 +750^2)}
-\]
-
- =  
-\[ 
-\sqrt{(112225 + 625 + 562500)} 
-\]
-
-= 822
-
-3. On calcule la signature. La signature S de Musique, c'est-à-dire S(Musique) est calculée comme suit~:
-
-S(musique)~: \\
-musique-instrument = 750/822 = 0.91 \\ 
-musique-trompette = 335/822 = 0.40 \\
-musique-instrument de musique = 25/822 = 0.03 \\
-
-Les valeurs ainsi calculées donnent des résultats assez proches de ceux de LSA.
-
+Le réseau lexical JeuxDeMots permet aussi de générer un graphe donnant un seul arc entre deux mots similaire au graphe créer par la LSA. L'algorithme pour générer un graphe contenant des simples liens entre noeuds et qui donne des résultats très proche de la LSA est décrit dans Lafourcade et Zampa 2011.\footnote{PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010}
 
 \subsection{Analyse pour la réalisation du projet PtiClic sous Android et Smartphone}
 
-Toute la discussion précédente concernant PtiClic et le TALN à l'exception de l'algorithme décrit précédemment était une discussion d'ordre général concernant la raison d'être des projets JeuxDeMots et PtiClic. Le partie qui suit concerne des idées, des informations et des algorithmes directement liés à la réalisation du présent projet. 
+\subsubsection{Généralités}
 
-L'introduction de nouvelles relations mettant en jeu des noeuds n'ayant aucune relation sémantique associée ne sera pas abordée car nous n'avions pas les moyens de mettre en oeuvre de tels procédés et un tel travail va au-delà du sujet du présent TER.\footnote{Une discussion concernant ce sujet a eu lieu avec Monsieur Lafourcade, qui nous a indiqué clairement de ne pas nous occuper de ce problème précis}  
+Toute la discussion précédente concernant PtiClic et le TALN à l'exception de l'algorithme décrit précédemment était une discussion d'ordre général concernant la raison d'être des projets JeuxDeMots et PtiClic. Le partie qui suit concerne des idées, des informations et des algorithmes directement liés au présent projet.
 
-Dans ce qui suit, 'mc' signifie 'mot central' et 'mn' signifie 'mot nuage'.
+Nous avons sous-estimé la dimension TALN du projet lors de notre planification initiale. Pour cette raison, une analyse spécifiquement destinée à ce sujet a fait l'objet d'un travail, hélas vers la fin du projet. 
 
-Les onze relations qui sont dans la version originale du jeu impose les contraites de catégories grammaticales suivantes~:
+Il existe un paquetage TALN dans le code source du projet. L'idée de départ était d'effectuer des expériences dans un premier temps, de créer une bibliothèque TALN pour la génération automatique des parties puis d'intégrer cette bibliothèque au projet. Hélas, ce paquetage est toujours au stade éxpérimental et n'a pas été intégré au projet.   
 
+\subsubsection{Analyse}
 
+Tout d'abord, il est important de se rappeler que 45\% des noeuds ('termes') du réseau lexical JeuxDeMots n'ont aucune relation sémantique sortante et que plus de 70\% des ces nodues n'ont aucune relation sémantique entrante. A part la possibilité d'utiliser le lien d'apparenté entre mots afin d'introduire de nouveaux liens sémantiques\footnote{Si par exemple le mot 'lait' contient un grand nombre de liens sémantique, il serait envisageable d'utiliser la relation 22, r\_family pour trouver des mots apparentés ('laitière' par exemple, le cas échéant) mais qui n'ont pas de relations sémantiques et en introduire de nouvelles relations à ces mots} là où il n'en existe aucun, il n'est pas possible de créer des jeux intéressant en choisissant un bouquet mot central / mots nuage par hasard. 
 
+En effet, l'introduction de nouvelles relations mettant en jeu des noeuds n'ayant aucune relation sémantique associée ne sera pas abordée dans la partie qui suit car nous n'avions pas les moyens de mettre en oeuvre de tels procédés et un tel travail va au-delà du sujet du présent TER.\footnote{Une discussion concernant ce sujet a eu lieu avec Monsieur Lafourcade, qui nous a indiqué clairement de ne pas nous occuper de ce problème précis}  
 
-\begin{center}
-        \begin{tabular}{ | l | l | l | p{5cm} |}
-        \hline
-        Relation M-T & Calcul du poids & Poids \\ \hline
-        musique-instrument & 450+250+50 & 750 \\ \hline
-        musique-trompette & 310+25 & 335 \\ \hline
-        musique-instrument de musique & 25 & 25 \\ \hline
-        \end{tabular}
-\end{center}
+Le nouveau paquetage TALN prévoit d'utiliser onze relations. Ces onzes relations imposent des contraintes qui doivent absolument être respectées. 
+
+La relation 0, r\_idea, est la relation la plus générale~; toute autre relation sémantique est a priori un sous-ensemble de la relation 0. 
 
 \begin{center}
-        \begin{tabular}{ | l | l | l | l | p{5cm} |}
-        \hline
-RELATION &	'mc' & 'mn'	& 'remarques' \\ \hline
--1 => "'mn' n'est pas lié à 'mc'" &	adj, adv, noms, verbes & adj, adv, noms, verbes	& \\ \hline
-0 =>  "'mc' est en rapport avec 'mn'" & adj, adv, noms, verbes & adj, adv, noms, verbes & \\ \hline
-5 => "'mc' est un synonyme de 'mn'" & adj, adv, noms, verbes & adj, adv, noms, verbes & même POS \\ \hline
-6 => "'mc' est une sorte de 'mn'" & noms & noms & \\ \hline
-7 => "Un contraire de 'mc' est 'mn'" & adj, adv, noms, verbes &	adj, adv, noms, verbes & même POS \\ \hline
-8 => "Un spécifique de 'mc' est 'mn'" & noms & noms & \\ \hline
-9 => "'mn' est une partie de 'mc'" & noms & noms & \\ \hline
-10 => "'mc' fait partie de 'mn'" & noms & noms & \\ \hline
-13 => "Quoi/Qui pourrait 'mc'" & verbes & noms & \\ \hline
-15 => "Le lieu pour 'mc' est 'mn'" & noms, verbes & noms (lieu NON!!) & \\ \hline
-16 => "Un instrument pour 'mc' est 'mn'" & verbes & noms & \\ \hline
-17 => "Un caractéristique de 'mc' est 'mn'" & noms & adj & \\ \hline
-        \end{tabular}
+  \hskip -15.1em
+  \begin{minipage}{15em}
+	\begin{tabular}{ | l | l | l | l | p{5cm} |}
+      \hline
+      \footnotesize{Relation} & \footnotesize{Mot central} & \footnotesize{Mots nuage} & \footnotesize{Remarques} \\ \hline
+      \footnotesize{-1 'mn' n'est pas lié à 'mc'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{} \\ \hline
+      \footnotesize{0 'mc' est en rapport avec 'mn'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{} \\ \hline
+      \footnotesize{5 'mc' est un synonyme de 'mn'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{même POS}} \\ \hline
+      \footnotesize{6 'mc' est une sorte de 'mn'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
+      \footnotesize{7 Un contraire de 'mc' est 'mn'} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{adj adv n v}} & \footnotesize{\shortstack{même POS}} \\ \hline
+      \footnotesize{8 Un spécifique de 'mc' est 'mn'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
+      \footnotesize{9 'mn' est une partie de 'mc'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
+      \footnotesize{10 'mc' fait partie de 'mn'} & \footnotesize{n} & \footnotesize{n} & \footnotesize{} \\ \hline
+      \footnotesize{13 'mn' pourrait 'mc'} & \footnotesize{v} & \footnotesize{n} & \footnotesize{} \\ \hline
+      \footnotesize{15 Le lieu pour 'mc' est 'mn'} & \footnotesize{n v} & \footnotesize{\shortstack{n}} & \footnotesize{} \\ \hline
+      \footnotesize{16 Instrument pour 'mc' est 'mn'} & \footnotesize{v} & \footnotesize{n} & \footnotesize{} \\ \hline
+      \footnotesize{17 Un caractéristique de 'mc' est 'mn'} & \footnotesize{n} & \footnotesize{adj} & \footnotesize{} \\ \hline
+    \end{tabular}
+  \end{minipage}
 \end{center}
 
-Les relations 5 et 7, la synonymie et l'antonymie, bien qu'elle peuvent être de plusieurs catégories grammaticales différentes, doivent contenir un mot central et des mots nuages de la même catégorie grammaticale alors que la relation 0, par exemple, peut avoir un mot central d'une catégorie grammaticale et des mots nuage de plusieurs différentes catégories grammaticales. Le relations 6 et 8, 9 et 10 doivent être des substantifs et ainsi de suite.
+On voit que les relations n'utilise que quatre catégories grammaticales~: des noms, des verbes, des adjectifs et des adverbes. Les adverbes sont bien moins fréquents que les noms, les verbes et les adjectifs.
+
+Dans la relation 0, la relation la plus générale, n'importe quelle catégorie de mot peut être associée à n'importe quelle autre catégorie de mot, ce qui n'est pas le cas des autres relations sémantiques. Dans les relations de synonymies et d'antonymies, le mot central peut être de n'importe quelle des ces quatre catégories grammaticales, mais les mots nuage corresondants doivent être de la même catégorie grammaticale que le mot central. Il n'est pas possible qu'un nom ait comme synonyme un adjectif ou un verbe. D'autres relations impose des contraintes bien plus fortes. Dans la relation 13 ('mc'\footnote{mot central} pourrait 'mn'\footnote{mot nuage}, le mot central doit être un verbe et le mot nuage doit être un adjectif, sinon il est sûr et certain que la relation, si elle a été choisie, est fausse. Ces contraintes doivent être prises en compte dans l'application non seulement dans l'algorithme de génération de nuage mais aussi lorsqu'un joueur tente de donner une telle réponse. Une telle réponse ne doivent jamais être correcte, même si deux joueurs jouant l'un contre l'autre donne de telles réponses. Par ailleurs, de telles réponses pourraient être pénalisées plus fortement ou être utilisées pour détecter des personnes ou logiciels malveillants tentant de nuire à la base de données.   
+
+Le fait que les mots soient de la bonne catégorie grammaticale est une condition nécessaire mais non suffisante. 
+
+
 
 Remarquez qu'il ne suffit pas de choisir un mot nuage de la bonne catégorie grammaticale. Par exemple, dans la relation 16, les mots nuages potentiels doivent non seulement être des substantifs, mais doivent aussi être des choses. Le mot 'beauté' est un substantif mais ne sera pas un candidat mot nuage pour la relation 16. 
 
@@ -1142,6 +1050,13 @@ Son choix d'utilisation vient aussi du faite qu'il est présent sur les ordinate
 
 \subsubsection{\android{}}
 \android{} est un système d'exploitation open source pour smartphones. Pour ce TER nous avons donc utilisé le framework proposé par Google, pour le developpement d'application sur cet OS. Il est basé sur le langage Java, ce qui permet un apprentissage plus facile (du fait que ce langage est le plus utilisé dans le monde).
+
+\android{} est un système d'exploitation pour téléphone mobile basé sur le noyau Linux développé par \android{} Inc., racheté par Google en 2005. Google et d'autres membres du Open Handset Alliance ont par la suite contribué à son développement et le \android{} Open Source Project (AOSP) est chargé de la maintenance et l'évolution d'\android{}. Ce système d'exploitation est utilisé notamment dans des smartphones, appelé aussi ordiphones, «terminaux de poche» ou «téléphones intelligents», produits et distribués par un grand nombre de fabriquants de téléphones mobiles. Le nombre de téléphones mobiles intégrant le système d'exploitation d'\android{} a cru sensiblement récemment.
+
+Un grand nombre de développeurs ont créé des applications pour étendre la fonctionnalité des téléphones sous \android{} et il y a aujourd'hui
+plus de 200 000 applications disponibles. Bien qu'\android{} Market soit le magasin en ligne opéré par Google, il existe d'autres distributeurs
+d'applications \android{}. La majorité des applications sont écrites en Java, bien qu'il soit possible de développer des applications en
+Python, en Ruby et d'autres par le biais du \android{} Scripting Environment.
 
 \paragraph{Software Development Kit (SDK)}
 Le SDK d'\android{} posséde un grand nombre de classes et de paquetages sur l'ensemble des fonctionnalitées proposé par les périphèriques embarquant cet OS. On peut par exemple trouver un paquetage spécialisé dans les accès réseaux, bluetooth, d'autre pour la géolocalisation\dots{} Le developpement avec ce framework repose sur le modele (pattern en anglais) MVC (Model View Controller). Les modèles (du pattern MVC) sont principalement représenté avec des classes simple (héritant directement de \verb!java.lang.Object!). Les contrôlleurs eux hérite de la classe \verb!android.app.Activity! ou d'une de ces classes enfants. Quant aux vues, elles sont représenté avec un format XML.
