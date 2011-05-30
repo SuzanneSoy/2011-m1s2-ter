@@ -205,19 +205,9 @@ Bien que l'archive de la base de données contienne 55 relations différentes, l
 
 Pour un mot central donné, seulement un nombre limité de relations sont possibles. Les adverbes et les locutions adverbiales sont relativement peu fréquents. La grande majorité des mots sont des substantifs, des verbes et des adjectifs ainsi que des locutions nominales, verbales et adjectivales. La relation "patient" est possible pour un mot central qui est un verbe, mais elle est plus complexe car elle ne fonctionnera que si le verbe en question est transitif. 
 
+\pagebreak
+
 \section{Analyse des besoins}
-
-\begin{quotation}
-\noindent  L'étude et le prototypage d'une version fonctionnant sur \android{} semble intéressante. En particulier on s'intéressera à deux aspects :
-  \begin{itemize}
-  \item les contraintes imposées par l'environnement smartphone
-  \item le biais qu'imposent ces contraintes sur le jeu et les données récoltées.
-  \end{itemize}
-  
-\noindent  Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel.
-\end{quotation}
-
-\subsection{Les contraintes de l'environnement smartphone}
 
 Comme tout outil, l'environnement smartphone présente à la fois des avantages et des inconvéniants. 
 
@@ -242,6 +232,7 @@ prototypage du jeu demande toutefois une réflexion non seulement quant aux limi
 
 Le jeu de base du PtiClic sous \android{} présente plus ou moins les mêmes cas d'utilisations que l'application d'origine. Toutefois, le 'comment' de ces cas d'utilisation sont loin d'être les mêmes, la plus grande différence étant la gestion des mots nuage. Une discussion de ce sujet fera l'objet des chapitres 'Conception' et 'Réalisation'.
 
+\pagebreak
 
 \section{PtiClic et TALN}
 
@@ -532,8 +523,10 @@ On peut parfois faire des observations et des constatations lors de telles expé
 
 Pour conclure, les expériences menées dans le paquetage TALN ont été très enrichissantes dans l'interaction entre l'homme et la machine. Ayant des connaissances linguistiques, il est très intéressant de partir d'une idée, de lancer un algorithme avec un grand nombre de données, d'avoir les résultats instantanément puis d'en faire de déductions,\footnote{telles que celles de la relation 8 décrites dans le paragraphe précédent} ensuite, de modifier l'algorithme grace à ce que l'algorithme précédent nous a appris. En effet, l'homme apprend de la machine, et la machine 'apprend' de l'homme, qui modifie ses algorithmes. Ces expériences nous permet d'apprendre des faits sur la langue et le langage qui ne serait pas possible sans l'outil informatique que nous avons à notre disposition aujourd'hui.  
 
+\pagebreak
 
 \section{Conception}
+
 
 
 \subsection{Base de données}
@@ -575,10 +568,14 @@ $n_1$ à «start», $n_2$ à «end», $t$ à «type» et $w$ à «weight» de la
 
 
 
+\pagebreak
+
 \subsection{Site Internet}
 % TODO : Yoann
+
+
 \subsubsection{Pourquoi un site Internet~?}
-Lorsqu'une nouvelle application ou jeux vidéo est développé, il est essentiel de faire connaître l'application.
+Lorsqu'une nouvelle application ou jeu est développé, il est essentiel de faire connaître l'application.
 La communication est une étape fondamentale dans la chaîne de création d'une application et la création d'un jeu n'en fait pas exception.
 Internet est devenu un support de communication très important et très influant qui permet de faire découvrir aux
 personnes qui l'utilise un grand nombre de nouveaux produits. Il permet également dans certain cas d'influencer son public.
@@ -587,29 +584,47 @@ L'outil Internet, et plus particulièrement de développement d'un site Web, s'e
 Le site Internet est une vitrine de notre application. Il permet de présenter notre projet et le jeu sur la plate-forme \android{}.
 
 Si on veut faire passer un message clair et précis, le support de communication doit également être clair, intuitif et ergonomique. Le site Internet 
-doit par conséquent être constitué d'un nombre limité de pages aérée ciblant un thème important, chacune des pages ayant un objectif bien précis.
+doit par conséquent être constitué d'un nombre limité de pages aérée, chacune des pages ciblant un thème important et ayant donc un objectif bien précis.
+
+\begin{center}
+\includegraphics[width=14cm]{img/siteAccueil.png}
+\end{center}
 
 Dans les parties suivantes, les différentes pages de notre site seront décrites. 
 
-\subsubsection{Téléchargement et installation}
-Il comportera aussi une page dédiée au téléchargement de l'application sur \android{} avec une série d'instructions qui permettront
-aux utilisateur d'installer en toute simplicité l'application sur leurs smartphone.
+
+
+\subsubsection{Téléchargement}
+
+\begin{center}
+\includegraphics[width=14cm]{img/siteTelechargement.png}
+\end{center}
+
+La page 'Téléchargement' contient des instructions pour installer l'application Android de PtiClic. L'application peut être télécharger directement à partir d'un téléphone ou bien par le biais d'un ordinateur classique. 
+
+Quant à la version HTML5, aucune installation est nécessaire, mais il est nécessaire de s'inscrire et s'authentifier afin d'y jouer. 
 
 \subsubsection{L'inscription}
-Si une personne est intéressé par notre jeu et qu'il souhaite y jouer, il devra tout d'abord s'inscrire afin qu'il
-soit connu de du service. Cette opération se devra réaliser à partir du site Internet par le biais d'un formulaire comportant
-simplement les trois ilformations : "nom d'utilisateur", "mot de passe" et "e-mail". Le formulaire se limite à trois informations
-distinctes pour éviter de décourager les utiliser dès le formulaire d'inscription.
+Si une personne est intéressée par notre jeu et qu'il souhaite y jouer, il devra tout d'abord s'inscrire afin qu'il
+soit reconnu par le système. Cette opération est réalisée à partir du site à l'aide d'un formulaire comportant
+trois informations obligatoires~: 'nom d'utilisateur', 'mot de passe' et 'mail'. Le formulaire se limite à champs (deux champs 'mot de passe') pour éviter de décourager les utilisateurs de s'inscrire.
 
-L'inscription se réalisera simplement la première fois qu'une personne souhaite jouer au jeu. Cette inscription est
-définitive et permettra aux utilisateurs de jouer librement et d'utiliser à leur guise les différents services qui
-pourront être proposés.
+\begin{center}
+\includegraphics[width=14cm]{img/siteInscription.png}
+\end{center}
+
+L'inscription se réalise la première fois qu'un internaute souhaite jouer au jeu~; lorsque l'on essayé de jouer au jeu sans être authentifié, on est invité soit à s'identifier soit à s'inscrire et l'utilisateur choisit selon le cas qui lui convient. L'inscription, une fois faite, définitive, permet aux utilisateurs de jouer librement et peuvent comparer leur performances à d'autres joueurs.
 
 \subsubsection{Contact}
 Pour qu'une application soit en accord avec ses utilisateurs, il faut un certain temps et apporter un certain nombre
-de modifications pour répondre à la demande et aux besoins de l'utilisateur final. Dans but de récupérer les avis,
-remarques, critiques, encouragement des utilisateurs un formulaire de contact devra être disponible sur le site. Ce formulaire
-sera accessible sans inscriptions ce qui permetra d'envoyer un message par exemple si il y a un problèem et qu'une
+de modifications pour répondre à la demande et aux besoins de l'utilisateur final. Dans le but de récupérer les avis positifs et négatifs, les remarques et les critiques des utilisateurs, un formulaire de contact est disponible sur le site. 
+
+\begin{center}
+\includegraphics[width=14cm]{img/siteContact.png}
+\end{center}
+
+BOOKMARK
+Ce formulaire est accessible sans inscriptions ce qui permettra d'envoyer un message par exemple si il y a un problèem et qu'une
 personne n'arrive pas à s'incrire.
 
 \subsubsection{La création de parties}
