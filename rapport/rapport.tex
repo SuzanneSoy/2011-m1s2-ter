@@ -336,8 +336,10 @@ Il existe plusieurs systèmes et algorithmes pour évaluer le rapport sémantiqu
 Sans entrer dans les détails de l'algorithme de la LSA, qui est brevetée et payante, cette approche consiste à générer un graphe de relations entre mots à partir de textes écrits. Le résultat de l'algorithme donne un graphe de noeuds (mots) et d'arcs (estimation du degré de lien sémantique entre deux mots) comme suit~:
 
 
-
   \begin{figure}
+
+  \begin{center}
+
     \pgfdeclarelayer{background}
     \pgfdeclarelayer{foreground}
     \pgfsetlayers{background,main,foreground}
@@ -379,7 +381,11 @@ Sans entrer dans les détails de l'algorithme de la LSA, qui est brevetée et pa
         \end{pgfonlayer}
       }
     \end{tikzpicture}
-  \end{figure}
+
+  \end{center}
+  \caption{}
+  \label{}
+\end{figure}
 
 
 La LSA est plus fiable lorsque les textes utilisés pour générer les poids de relations sémantiques sont des corpus spécialisés et donc relativement homogène. C'est une méthode rapide, facile à réaliser, efficace. Les données récoltées rélèvent en général de la langue écrite et donc d'un niveau de langue soutenue et riche. Un tel corpus contient une grande quantité de vocabulaire passif. 
@@ -401,7 +407,9 @@ L'inconvénient est que ces informations peuvent contenir des bruits et des sile
 Un graphe du réseau lexical JeuxDeMots est de la forme qui suit, toutefois, il faut imaginer non pas cinq noeuds, mais plus de 200 000 noeuds~:
 
 
-  \begin{figure}
+
+\begin{figure}
+  \begin{center}
     \pgfdeclarelayer{background}
     \pgfdeclarelayer{foreground}
     \pgfsetlayers{background,main,foreground}
@@ -448,7 +456,10 @@ Un graphe du réseau lexical JeuxDeMots est de la forme qui suit, toutefois, il 
         \end{pgfonlayer}
       }
     \end{tikzpicture}
-  \end{figure} 
+  \end{center}
+  \caption{}
+  \label{}
+\end{figure}
 
 
 Le réseau lexical JeuxDeMots permet aussi de générer un graphe donnant un seul arc entre deux mots similaire au graphe créer par la LSA. L'algorithme pour générer un graphe contenant des simples liens entre noeuds et qui donne des résultats très proche de la LSA est décrit dans Lafourcade et Zampa 2011.\footnote{PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010}
@@ -643,6 +654,26 @@ il ne sais pas forcément combien de mots va composer sa partie. Il devra par co
 \subsubsection{Jouez en ligne~!}
 La seconde évolution majeure concernant le deuxième prototype du jeu est qu'il est possible de jouer directement depuis
 le site Internet sans forcément disposer de téléphone sous \android{}. Cette option permet de toucher un public bien plus large sans pénaliser ceux qui disposent d'un smartphone \android{}
+
+Une page du site Internet sera donc consacrée
+à la création manuelle de partie. Elle permetra de créer des parties de taille variée et de thème différents. Le joueurs pourra
+indiquer les mots qu'il souhaites voir dans la partie ainsi que les deux relations principales.
+Les parties ainsi créées pourront être jouées par les autres joueurs et permettrons d'améliorer l'attractivité et l'intérêt du jeu.
+
+\subsection{Site Internet 2}
+\subsubsection{La création de partie}
+La deuxième version du site à pour but de rendre plus intuitif et plus certain points un peu complexe comme la création de partie.
+Le service de création de partie sera dévoloppé en JavaScript au lieu de PHP ce qui permettra d'avoir une intéraction en temps avec l'utilisateur.
+En effet lorsqu'un utilisateur saisie un mot il est important pour lui de savoir si ce mot existe ou non, de ce fait une requête pourra être
+émise en direction du serveur afin de vérifier la validité du mots saisi. D'autre lorsqu'un utilisateur souhaite créer une nouvelle partie 
+il ne sais pas forcément combien de mots va composer sa partie. Il devra par conséquent être en mesure d'augmenter au besoin le nombre de mots
+composants la partie.
+
+\subsubsection{Jouez en ligne !}
+La seconde évolution majeure qui est liée à une nouvelle version de l'interface de jeu est qu'il est possible de jouer directement depuis
+le site Internet sans forcéement disposer de téléphone sous \android{}. Cette option permettra de toucher un public bien plus large tout en 
+ne pénalisant pas ceux qui disposent d'un smartphone \android{}.
+
 
 
 \subsection{Version html5 du jeu}
