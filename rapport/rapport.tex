@@ -1,7 +1,5 @@
 \documentclass[a4paper,11pt,french]{article}
 
-% TODO : Faut-il le diagramme UML de la première version ?
-
 \widowpenalty=9999
 \clubpenalty=9999
 
@@ -1082,39 +1080,38 @@ L'ADT est un plugin développé par Google pour faciliter le developpement d'app
 \section{Discussion}
 \subsection{Difficultés rencontrées}
 \label{sec:difficultes}
-\begin{itemize}
-\item Outil de création de diagrammes de GANTT (planner) est assez mauvais.
-\item Lenteur de l'émulateur \android{} : impossible de travailler sur le PC de Georges, ni sur les netbook des autres.
-\item Nous avons installé l'émulateur \android{}, l'ADT et le plugin Eclipse sur les machines du rezufr, mais la configuration était un
-  cauchemar et nous a fait perdre beaucoup de temps.
-\item Caractères non échappés et autres bizarreries dans le dump de la base.
-\item SQLite3 n'est pas capable d'utiliser un index pour la requête extérieure sur une requête du type
+Dès le début du projet, nous avons été confrontés à des difficultés techniques. L'émulateur \android{} qui devait nous permettre de tester
+l'application lors du développement s'est révélé être très lent, au point d'être innutilisable sur les ordinateurs de plusieurs des membres
+du groupe. Pour contourner ce problème, nous avons installé l'émulateur sur les machines du RezUFR (bâtiments 5, 6 et 16), mais sa
+configuration était très pénible, ce qui nous a fait perdre beaucoup de temps, pour finalement nous rendre compte que l'installation était
+plutôt instable.
 
+En ce qui concerne le travail sur le serveur, la tâche a été compliquée par des erreurs de syntaxe (guillemets non échappés, etc.) dans
+l'archive de la base de données qui nous a été fournie, ce qui nous a obligés à passer du temps à contourner ces erreurs avant de pouvoir
+analyser la base de données. Pour cette analyse, le volume de données à traiter (base de données de plus de 100Mo) nous a ralentis lors de
+l'élaboration de l'algorithme de création de parties.
+
+Lors de la construction des requêtes utilisées dans le serveur, nous nous sommes confrontés à d'autres problèmes~:
+
+SQLite3 n'est pas capable d'utiliser un index pour la requête extérieure sur une requête du type
 \begin{verbatim}
 select * from (select * from table where condition) where condition
 \end{verbatim}
-
 Donc nécessité de ré-écrire certaines requêtes avec des jointures à priori beaucoup moins efficaces, mais qui le sont plus grâce aux index.
-\item SQLite3 tranforme les requêtes de la forme~:
 
-\begin{verbatim}
-select * from table limit 100 order by random();
-\end{verbatim}
+SQLite3 tranforme les requêtes de la forme \verb!select * from table limit 100 order by random();! en une requête qui récupère tout le set
+de résultats, ajoute une colonne random(), prend les 100 premiers résultats et les trie. Mais cela l'oblige à récupérer tout le set de
+résultats, et calculer le random() pour chaque ligne, pour ensuite jeter tout ce qui dépasse la ligne 100. Cela est évidemment très coûteux
+dans le cadre de requêtes avec beaucoup de résultats, et nous avons donc dû isoler la requête avec \verb!limit! de son \verb!order by! avec
+des «hacks» assez tordus pour tromper l'optimiseur.
 
-  en une requête qui récupère tout le set de résultats, ajoute une colonne random(), prend les 100 premiers résultats et les trie. Mais cela
-  l'oblige à récupérer tout le set de résultats, et calculer le random() pour chaque ligne, pour ensuite jeter tout ce qui dépasse la ligne
-  100. Cela est évidemment très coûteux dans le cadre de requêtes avec beaucoup de résultats, et nous avons donc dû isoler la requête avec
-  \verb!limit! de son \verb!order by! avec des «hacks» assez tordus pour tromper l'optimiseur.
-\item Le volume de données à traiter (base de données de plus de 100Mo) nous a ralentis lors de l'élaboration de l'algorithme de création de
-  parties.
-\item Le langage de description des interfaces utilisateur d'\android{}, qui est une application XML, est totalement incompréhensible pour
-  ce qui concerne la mise en page (disposition et tailles relatives des éléments). C'est une des raisons pour l'abandon de la plate-forme
-  \android{} + Java, en faveur de HTML5 + CSS + JavaScript. CSS est aussi cryptique que le langage de mise en page d'\android{}, mais au
-  moins nous avons l'habitude de contourner certains de ses problèmes.
-\item Dans l'application HTML5, l'omniprésence d'évènements asynchrones nous a causés pas mal de bugs et de soucis.
-\item Des légères différences de comportement entre le navigateur web d'\android{} et les navigateurs sur les PC ont causé des bugs très
-  difficiles à trouver.
-\end{itemize}
+Lors du développement de l'application Java, le langage de description des interfaces utilisateur d'\android{}, qui est une application XML,
+s'est montré peu pratique pour la construction de l'interface d'un jeu, et difficile à modifier pour de petits ajustements (ajout d'un
+bouton, d'une icône…). C'est une des raisons pour l'abandon de la plate-forme \android{} + Java, en faveur de HTML5 + CSS + JavaScript.
+
+Dans l'application HTML5, l'omniprésence d'évènements asynchrones a été la source de nombreux bugs. De plus, des légères différences de
+comportement entre le navigateur web d'\android{} et les navigateurs sur les PC ont fait en sorte que certains problèmes ne se posaient que
+sur le téléphonne physique, ce qui a rendu leur résolution difficile.
 
 \subsection{Perspectives}
 
