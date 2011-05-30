@@ -14,6 +14,9 @@
 \usepackage{alltt}
 \usepackage{enumitem}
 
+\usepackage{tikz}
+\usetikzlibrary{shapes,positioning,snakes,calc}
+
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{2ex}
 
@@ -990,7 +993,7 @@ Un autre point améliorable est la qualité des nuages de mots générés. Actue
 compte de la partie du discours à laquelle le mot central et les mots du nuage appartiennent. Par exemple, la relation «fait partie de» n'a
 de sens que pour des noms, alors que notre algorithme peut aussi bien la choisir avec un adjectif comme mot central.
 
-Nous avons pensé à utiliser une forme de réseau de neuronnes pour déterminer si un mot central et des mots du nuage sont pertinants pour une
+Nous avons pensé à utiliser une forme de réseau de neurones pour déterminer si un mot central et des mots du nuage sont pertinants pour une
 relation donnée. Nous avons commencé à implémenter un tel algorithme, mais n'avons pas eu le temps terminer cette amélioration.
 
 Il est aussi à noter que l'application bénéficierait d'une restructuration du code. Nous avons effectué cette restructuration et un gros
@@ -1126,5 +1129,190 @@ php\/ressources/strings.inc -- fichier de configuration des strings (phrases uti
 
 \section{Mentions légales}
 Android is a trademark of Google Inc. Use of this subject to Google Permissions.
+
+\section{Algo de création du nuage}
+
+Pour construire le nuage de mots à partir d'un mot central et de deux relations, nous avons étudié les algorithmes suivants.
+
+\subsection{Mots à proximité}
+\begin{figure}[ht]
+  \begin{center}
+    \begin{tikzpicture}[
+      mynode/.style = {circle, minimum size=1.5cm},
+      mc/.style = {mynode,draw=red,text=red},
+      mn/.style = {mynode,draw},
+      mi/.style = {mynode,draw=gray,text=gray},
+      rel/.style = {font=\footnotesize},
+      guess/.style = {->,dashed},
+      exist/.style = {->},
+      auto,swap
+      ]
+      \node[mc] (mc) {Chat};
+      \node[mn] (mn0) at (0,3) {Souris};
+      \node[mi] (mi1) at (3,-2) {matou};
+      \node[mn] (mn2) at (6,0) {animal};
+      \node[mn] (mn3) at (-3,-2) {félin};
+      \path[exist] (mc) edge[bend right] node[rel]{idée associée} (mn0);
+      \path[exist] (mc) edge node[rel]{synonyme} (mi1);
+      \path[exist] (mi1) edge node[rel]{sorte de} (mn2);
+      \path[guess,swap] (mc) edge node[rel]{sorte de ?} (mn2);
+      \path[guess,swap] (mc) edge[bend left] node[rel]{\shortstack{sorte de ?\\synonyme ?\\\dots}} (mn0);
+      \path[exist] (mn3) edge[bend right] node[rel]{spécifique} (mc);
+      \path[guess] (mc) edge[bend right] node[rel]{sorte de ?} (mn3);
+    \end{tikzpicture}
+    \caption{Algorithme de création d'un nuage de mot par sélection des mots proches du mot central.}
+    \label{fig:algo-proximite}
+  \end{center}
+\end{figure}
+
+Cet algorithme (Fig. \ref{fig:algo-proximite}) sélectionne des mots proches du mot central en empruntant~:
+\begin{itemize}
+\item La relation «Idée Associée», pour la spécialiser;
+\item Des relations qui «entrent» dans le mot central;
+\item Un enchaînement de deux relations. Dans ce dernier cas, le fait qu'une des deux relations soit «Sysnonyme» est privilégié.
+\end{itemize}
+
+Cet algorithme a donné de bons résultats après que nous ayons filtré les mots centraux pour ne prendre en compte que ceux dont le nombre de
+relations sortantes dépassaient un certain seuil, de manière à s'assurer qu'ils auraient suffisemment de liens pour pouvoir construire un
+nuage intéressant. De plus, nous avons pondéré la fréquence à laquelle les différentes méthodes (arc avant, arc arrière, enchaînement de
+deux arcs) étaient utilisées, de manière à avoir plus de mots du nuage pertinants.
+
+L'avantage de cet algorithme est d'avoir une assez grande couverture du voisinage du mot central, et la possibilité de raffiner les
+relations («Idée Associée» vers une autre relation par exemple). Un inconvénient est que les relations proposées ne sont pas toujours
+pertinantes (relation «sorte de» pour des verbes par exemple). De plus, l'algorithme pourra proposer en déduction de l'enchaînement de deux
+relation une relation quelconque, qui ne sera pas forcément logique par rapport aux deux autres.
+
+Pour résoudre ce dernier défaut, nous avons élaboré un autre algorithme.
+
+\subsection{Algorithme des «triangles»}
+\begin{figure}[ht]
+  \centering
+  \begin{center}
+    \begin{tikzpicture}[
+      mynode/.style = {circle, minimum size=1.5cm},
+      mc/.style = {mynode,draw=red,text=red},
+      mn/.style = {mynode,draw},
+      mi/.style = {mynode,draw=gray,text=gray},
+      rel/.style = {font=\footnotesize},
+      guess/.style = {->,dashed},
+      exist/.style = {->},
+      auto
+      ]
+      \node[mc] (mc) {Mot central};
+      \node[mi, above right=of mc] (mi) {Intermédiaire};
+      \node[mn, below right=of mi] (mn) {Mot nuage};
+      
+      \path[draw,->] (mc) edge node {Relation 1} (mi);
+      \path[draw,->] (mi) edge node {Relation 2} (mn);
+      \path[draw,->] (mc) edge node[swap] {Relation déduite} (mn);
+    \end{tikzpicture}
+  \end{center}
+  \caption{Une relation déductible grâce aux deux autres}
+  \label{fig:algo-triangles}
+\end{figure}
+
+Cet algorithme (Fig. \ref{fig:algo-triangles}) compte le nombre de «triangles» (cliques composées de trois noeuds) que l'on peut trouver
+dans les relations existantes, pour un triplet de relations donné, et le divise par le nombre d'occurences des deux côtés du triangle (du
+mot central au mot intermédiaire, et du mot intermédiaire au mot nuage), sans prendre en compte le troisième côté. Cela permet d'associer à
+chaque triplet de relations la probabilité qu'on puisse déduire la troisième à partir des deux autres.
+
+La génération du nuage se déroule alors de la manière suivante~: On sélectionne tous les mots que l'on peut atteindre par l'enchaînement de
+deux relations, et on les inclue dans le nuage en fonction de la probabilité qu'on puisse déduire une des deux relations de la partie en
+utilisant les deux relations empruntées.
+
+Cette technique est équivalente à l'utilisation d'un réseau de neurones (Fig. \ref{fig:reseau-neurones}) pour classifier les mots du nuage
+parmi les différentes relations disponibles.
+
+\begin{figure}[ht]
+  \begin{center}
+    \begin{tikzpicture}[
+      node/.style={draw,ellipse,font=\footnotesize, minimum width=3cm, minimum height=0.7cm},
+      hidden/.style={minimum width=4cm}
+      ]
+      \node[node,anchor=east] (R1) at (-3.5,1.2) {Type relation 1};
+      \node[node,anchor=east] (R2) at (-3.5,-1.2) {Type relation 2};
+      \node[node, hidden] (H1) at (0,2.4) {$R1 = 5 \wedge R2 = 5$};
+      \node[node, hidden] (H2) at (0,1.2) {$R1 = 5 \wedge R2 = 7$};
+      \node[node, hidden] (H3) at (0,0) {…};
+      \node[node, hidden] (H4) at (0,-1.2) {$R1 = 22 \wedge R2 = 13$};
+      \node[node, hidden] (H5) at (0,-2.4) {$R1 = 22 \wedge R2 = 22$};
+      \node[node,anchor=west] (R31) at (3.5,1.2) {Synonyme};
+      \node[node,anchor=west] (R32) at (3.5,0) {Contraire};
+      \node[node,anchor=west] (R33) at (3.5,-1.2) {…};
+      
+      \foreach \hidden in {H1,H2,H3,H4,H5}{
+        \draw (R1.east) -- (\hidden.west);
+        \draw (R2.east) -- (\hidden.west);
+      }
+      \foreach \hidden in {H3,H4,H5}{
+        \draw (\hidden.east) -- (R31.west);
+        \draw (\hidden.east) -- (R32.west);
+        \draw (\hidden.east) -- (R33.west);
+      }
+      \draw[draw=green!50!black] (H1.east) edge node[near start,text=green!50!black] {1} (R31.west);
+      \draw[draw=red] (H2.east) edge node[near start,text=red] {0} (R31.west);
+      \draw[draw=red] (H1.east) edge node[near start,text=red] {0} (R32.west);
+      \draw[draw=green!50!black] (H2.east) edge node[near start,text=green!50!black] {1} (R32.west);
+      \draw (H1.east) -- (R33.west);
+      \draw (H2.east) -- (R33.west);
+    \end{tikzpicture}
+    \caption{Réseau de neurones pour la classification des mots du nuage parmi les relations disponibles, en fonction des arcs qui les
+      ratachent au mot central.}
+    \label{fig:reseau-neurones}
+  \end{center}
+\end{figure}
+
+Les probabilités recueillies par l'algorithme décrit ci-dessus correspondent à la valeur de sortie des neurones de la couche interne, et les
+types des relations sur les deux premiers arcs correspondent à la fonction d'activation de ces mêmes neurones. Pour chaque type du troisième
+arc, on a une catégorie en sortie du réseau de neurones.
+
+Par exemple, sur la figure \ref{fig:reseau-neurones}, sachant que la relation 5 est «Synonyme» et la relation 7 «Contraire», le premier
+neurone de la couche interne s'active si les deux relations qui relient le mot central au mot du nuage sont toutes deux «Synonyme». Sa
+valeur de sortie pour la catégorie «Synonyme» est alors proche de 1 (le synonyme d'un synonyme est souvent un synonyme), tandis que sa
+valeur pour la catégorie «Contraire» est proche de 0 (le contraire d'un synonyme est un contraire, pas un synonyme).
+
+Cet algorithme a donné d'excellents résultats pour les relations qui pouvaient se déduire avec de fortes probabilités, cependant bon nombre
+de relations ne s'appliquent à des mots n'appartenant qu'à une partie du discours donnée (nom, adjectif, verbe…), et la probabilité de les
+voir apparaître en déduction de deux autres était très faible.
+
+\subsection{Algorithme des «triangles» avec les parties du discours}
+
+Nous avons donc élaboré une variante (Fig. \ref{fig:algo-triangles-pos}) de cet algorithme qui prenait en compte les parties du discours
+(Part Of Speach) auxquelles appartenaient les noeuds.
+
+\begin{figure}[ht]
+  \centering
+  \begin{center}
+    \begin{tikzpicture}[
+      mynode/.style = {circle, minimum size=1.5cm},
+      mc/.style = {mynode,draw=red,text=red},
+      mn/.style = {mynode,draw},
+      mi/.style = {mynode,draw=gray,text=gray},
+      rel/.style = {font=\footnotesize},
+      guess/.style = {->,dashed},
+      exist/.style = {->},
+      auto
+      ]
+      \node[mc] (mc) {\shortstack{Mot central\\POS 1}};
+      \node[mi, above right=of mc] (mi) {\shortstack{Intermédiaire\\POS 2}};
+      \node[mn, below right=of mi] (mn) {\shortstack{Mot nuage\\POS 3}};
+      
+      \path[draw,->] (mc) edge node {Relation 1} (mi);
+      \path[draw,->] (mi) edge node {Relation 2} (mn);
+      \path[draw,->] (mc) edge node[swap] {Relation déduite} (mn);
+    \end{tikzpicture}
+  \end{center}
+  \caption{Une relation déductible grâce aux deux autres}
+  \label{fig:algo-triangles-pos}
+\end{figure}
+
+Le probleme qui s'est alors posé, est que'avec environ 12 parties du discours différentes, et 16 relations différentes, le nombre de
+6-uplets distincts dans l'ensemble $POS^3\times Rel^3$ s'élevait à plus de 7 millions. Cela signifie que nous avions plus de 7 millions de
+«types» de triangles à considérer, alors que seulement peu d'entre eux montraient une réelle possibilité de déduction. De plus, il n'y a
+dans la base de données qu'environ un million de relations existantes, nous nous trouverions donc dans une situation de surapprentissage.
+
+Ce problème montre la nécessité d'étudier manuellement quelles parties du discours ont un intérêt pour quelles relations, afin de réduire
+l'espace des 6-uplets constitués des parties du discours des noeuds et des types de relations formant les arcs qui permettent la déduction
+du dernier arc.
 
 \end{document}
