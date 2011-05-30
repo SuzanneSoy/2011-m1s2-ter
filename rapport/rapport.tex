@@ -537,45 +537,44 @@ Pour conclure, les expériences menées dans le paquetage TALN ont été très e
 
 \pagebreak
 
-\section{Conception}
+\section{Conception et Réalisation}
 
+\subsection{Outils}
 
-\subsection{Outils utilisés}
-
-\subsubsection{Les Langages}
-Notre projet c'est découpé en 2 grosses parties. La première partie, la \og{}partie Serveur\fg{}, permet de réaliser des actions sur l'ensemble de la base de donnée (création de parti, validation de partie\ldots),
-la réalisation de celle-ci c'est fait principalement en PHP, l'autre étant du SHELL.
-La seconde partie, la \og{}partie Cliente\fg{}, permet à l'utilisateur de pouvoir intéragir avec le serveur, et surtout de pouvoir jouée à PtiClic. Elle à été réalisé en Java en utilisant le framework \android{} pour l'application mobile et avec le langage JavaScript pour l'application web.
+Notre projet s'est découpé en deux grosses parties. La première partie, la \og{}partie serveur\fg{}, permet de réaliser des actions sur l'ensemble de la base de donnée (génération de parties, validation de parties\ldots),
+la réalisation de celle-ci s'est fait principalement en PHP, l'autre étant du SHELL.
+La seconde partie, la \og{}partie client\fg{}, permet à l'utilisateur de pouvoir interagir avec le serveur, de pouvoir jouée à PtiClic. On verra que le premier prototype a été réalisée en Java en utilisant le framework \android{} alors   que la deuxième version a été réalisée en HTML5 et JavaScript.
 
 \subsubsection{PHP}
-Comme cité plus haut, nous avons utilisé PHP pour la création du serveur. PHP est un langage impératif, il dispose aussi depuis la version 5 de fonctionnalités objet, mais nous ne les utilisont pas dans notre projet. Ce langage est
-principalement utilisé pour produire des pages Web dynamiques, c'est la raison de sont utilisation dans notre projet. C'est un langage peu typé, souple, multiplate-forme, libre et gratuit.
-Nous utilisons donc PHP pour la création de notre site web \url{http://www.pticlic.fr} ainsi que pour toute la partie génération de partie à savoir la création, génération, envoie et récupération de partie PtiClic.
+Nous avons utilisé PHP pour la création du serveur. PHP est un langage impératif, il dispose aussi depuis la version 5 de fonctionnalités objet, mais nous ne les avons pas utilisées dans notre projet. Outil par excellence pour produire des pages Web dynamiques, c'est pour cette raison que nous l'avons utilisé dans notre projet. C'est un langage peu typé, souple, multiplate-forme, libre et gratuit.
+Nous avons utilisé PHP pour la création de notre site web \url{http://www.pticlic.fr} ainsi que pour la génération de partie, à savoir la création, la génération, l'envoie et la récupération de parties PtiClic.
 
 \subsubsection{SHELL}
-Nous utilisons aussi le langage SHELL. Ce langage est surtout utilisé pour l'initialisation du serveur lors de sont installation sur un serveur différent. Son but, pour notre projet, et de récupérer le dernier dump (archive) de la base de donnée, de convertir ce dump en SQL et de l'insérer dans la base de donnée de type SQLite.
+Nous nous sommes servi aussi du langage SHELL. Ce langage est surtout utilisé pour l'initialisation du serveur lors de sont installation sur un serveur. Son but, pour notre projet, est de récupérer la dernière archive de la base de données, de convertir cette archive en SQL et de peupler la base de donnée.
 
 \subsubsection{SQLite3}
-SQLite est une bibliothéque, écrite en C qui propose un moteur de base de données relationnelles accessible par le langage SQL. Contrairement aux serveurs de bases de donnée traditionnels, comme MySQL ou PostgreSQL, ça particularité est de ne pas reproduire le schéma habituel client-serveur mais d'être directement intégrée aux programmes. L'intégralité de la base de données est stockée dans un fichier indépendant de la plateforme. Le code source de SQLite est dans le domaine public, ce qui permet son utilisation sans restriction aussi bien dans les projets open source que dans les projet propriétaire.
+SQLite est une bibliothéque, écrite en C, qui propose un moteur de base de données relationnelles accessible par le langage SQL. Contrairement aux serveurs de bases de donnée traditionnels comme MySQL ou PostgreSQL, sa particularité est de ne pas reproduire le schéma habituel client-serveur mais d'être directement intégrée aux programmes. L'intégralité de la base de données est stockée dans un fichier indépendant de la plateforme. Le code source de SQLite est dans le domaine public, ce qui permet son utilisation sans restrictions aussi bien dans les projets open source que dans les projet propriétaire.
 
 \subsubsection{Java}
-La partie cliente du projet est réalisé en Java. Ce langage est le plus utilisé dans le monde par les développeur. Java reprend en grande partie la syntaxe du langage C++. Néanmoins il a été épuré des concepts les plus déroutants du C++ tels que les pointeurs, les références, l'héritage multiples\dots{} La grande spécificité de ce langage est ça portabilité. En effet lors de la compilation, un bit code est généré, et celui-ci est ensuite lu par une machine virtuelle dépendante de la platforme.
+La partie client du projet a été réalisée en Java. Ce langage est le langage le plus utilisé dans le monde par les développeurs. Java reprend en grande partie la syntaxe du langage C++, néanmoins il a été épuré des concepts les plus déroutants du C++ tels que les pointeurs, les références et l'héritage multiple. La grande spécificité de ce langage est sa portabilité. En effet, lors de la compilation, un bit code est généré et celui-ci est ensuite lu par une machine virtuelle dépendante de la platforme utilisée.
 
 \subsubsection{HTML5, JavaScript et jQuery}
 
-La deuxième version de l'application, écrite en HTML5, utilise le langage JavaScript pour l'interaction avec l'utilisateur. La bibliothèque jQuery a été lourdement utilisée pour abstraire l'interface DOM (Document Object Model) fournie par le navigateur pour interagir avec le document HTML. Cette bibliothèque très extensible permet entre autres de manipuler facilement des collections entières d'éléments pour les modifier tous en même temps, de faire des requêtes complexes sur le document pour en récupérer une portion destinée à être manipulée, et
-fournit aussi une couche d'abstraction pour les requêtes réseau asynchrones et la manipulation de données au format JSON (JavaScript Object Notation), qui est le format utilisé dans les échanges entre le client et le serveur. Dans le cadre de ce projet, nous avons été amenés à écrire plusieurs petites extensions à la bibliothèque jQuery, ce qui a été à chaque fois une tâche relativement aisée, vérifiant ainsi l'extensibilité de cette bibliothèque.
+La deuxième version de l'application, écrite en HTML5, utilise le langage JavaScript pour l'interaction avec l'utilisateur. La bibliothèque JQuery a été lourdement utilisée pour abstraire l'interface DOM\footnote{Document Object Model} fournie par le navigateur pour interagir avec le document HTML. Cette bibliothèque, qui est extensible, permet entre autres de manipuler facilement des collections entières d'éléments pour les modifier en même temps, de faire des requêtes complexes sur le document pour en récupérer une portion destinée à être manipulée et
+fournit aussi une couche d'abstraction pour les requêtes réseau asynchrones et la manipulation de données au format JSON\footnote{JavaScript Object Notation}, qui est le format utilisé dans les échanges entre le client et le serveur. Dans le cadre de ce projet, nous avons été amenés à écrire plusieurs petites extensions à la bibliothèque JQuery, ce qui a été à chaque fois une tâche relativement aisée, vérifiant ainsi l'extensibilité de cette bibliothèque.
 
 \subsubsection{Gestionnaire de versions~: Git et Github}
 
-Pour synchroniser nos efforts sur le projet, nous avons utilisé le gestionnaire de versions distribué git, et hébergé notre projet sur la plate-forme github. Un des avantages d'un gestionnaire de version distribué par rapport à un gestionnaire de versions centralisé tel que SVN, est qu'il n'y a pas besoin d'un serveur central pour synchroniser deux copies du projet. Ainsi, nous avons pu partager nos modifications via une clé usb, même dans des lieux avec une connectivité réduite, comme la fac, où nous avons régulièrement travaillé. 
-De plus, git possède un algorithme de résolution des conflits d'édition beaucoup plus efficace que celui de SVN, ce qui nous a permis de développer certaines fonctionnalités dans des branches séparées, et de les fusionner par la suite avec la branche principale, sans avoir à craindre une fusion manuelle des deux branches.
+Pour synchroniser nos efforts sur le projet, nous avons utilisé le gestionnaire de versions distribué Git et hébergé notre projet sur la plateforme GitHub. Un des avantages d'un gestionnaire de version distribué par rapport à un gestionnaire de versions centralisé tel que SVN est qu'il n'y a pas besoin d'un serveur central pour synchroniser deux copies du projet. Ainsi, nous avons pu partager nos modifications via une clé usb, même dans des lieux avec une connectivité réduite, comme l'Université Montpellier II où nous avons régulièrement travaillé. 
+De plus, Git possède un algorithme de résolution des conflits d'édition beaucoup plus efficace que celui de SVN, ce qui nous a permis de développer certaines fonctionnalités dans des branches séparées et de les fusionner par la suite avec la branche principale sans avoir à craindre une fusion manuelle des deux branches.
 
-Une autre fonctionnalité appréciable de git est que chaque «clone» d'un dépôt conserve tout l'historique du projet, si bien qu'un crash du serveur n'impacte pas du tout le projet~: On met en place un autre serveur sur lequel on envoie une copie du projet, et tout fonctionne comme avant.
+Une autre fonctionnalité appréciable de Git est que chaque «clone» d'un dépôt conserve tout l'historique du projet, si bien qu'un crash du serveur n'impacte pas du tout le projet~: on met en place un autre serveur sur lequel on envoie une copie du projet et tout fonctionne comme avant.
 
-Nous avons choisi la plate-forme d'hébergement github pour la facilité de la mise en place d'un dépôt git (quelques clics suffisent), sa disponibilité élevée comparée à un serveur personnel, et parce que nous avions déjà utilisé cette plate-forme avec succès dans d'autres projets.
+Nous avons choisi la plateforme d'hébergement GitHub pour la facilité de la mise en place d'un dépôt Git (quelques clics suffisent), sa disponibilité élevée comparée à un serveur personnel et parce que nous avions déjà utilisé cette plateforme avec succès dans d'autres projets.
 
-Github offre des fonctionalités supplémentaires telles que des graphes permettant de visualiser l'avancement du projet, un outil de rapport de bug et un wiki pour la documentation. Nous n'avons cependant pas utilisé ces deux dernières fonctionnalités, préférant un simple fichier texte pour garder une trace des bugs à corriger et des tâches à effectuer. Une des raisons motivant ce choix est qu'un des membres du groupe possède un ordinateur relativement peu performant et une connexion à Internet très peu fiable, qui rendent l'utilisation de ces services pénible (voire impossibles lors des fréquentes coupures du réseau).
+Github offre des fonctionalités supplémentaires telles que des graphes permettant de visualiser l'avancement du projet, un outil de rapport de bug et un wiki pour la documentation. Nous n'avons cependant pas utilisé ces deux dernières fonctionnalités, préférant un simple fichier texte pour garder une trace des bugs à corriger et des tâches à effectuer. Une des raisons motivant ce choix est qu'un des membres du groupe possède un ordinateur relativement peu performant et une connexion à Internet très peu fiable, qui rendent l'utilisation de ces services pénible voire impossibles lors des fréquentes coupures du réseau.
+
+BOOKMARK
 
 \subsubsection{Environnement intégré de développement~: Eclipse}
 Eclipse est un IDE extensible (par plugin) et polyvalent permettant de créer des projets mettant en oeuvre n'importe quel langage de programmation. Il est écrit en Java, et c'est avec ce langage que l'on peut créer de nouvelles extensions. La grande force de cet IDE est qu'il est développer autour des plugins pour pouvoir l'étendre.
@@ -600,6 +599,182 @@ L'ADT est un plugin développé par Google pour faciliter le developpement d'app
 
 
 
+
+
+
+
+\subsection{Vue d'ensemble}
+
+\subsubsection{Cahier des charges initial}
+Avant le début du projet, nous avions planifié l'implémentation des fonctionnalités souhaitées de notre application. Le déroulement du travail devait s'effectuer en quatre itérations, décrites ci-dessous. Chaque itération comprenait 2 semaines pour l'implémentation des fonctionnalités, une semaine pour d'éventuelles améliorations ou pour
+implémenter des détails que nous n'aurions pas eu le temps d'implémenter et une semaine pour corriger les bugs signalés lors des alpha-tests. Après chaque itération, nous devions livrer une version stable aux alpha-testeurs, pour un alpha-test de deux semaines.
+
+\begin{itemize}
+\item Itération 1
+  \begin{itemize}
+  \item Serveur capable de générer les parties (choix du mot central et des mots du nuage).
+  \item Application \android{} qui récupère une partie, et permet d'y jouer.
+  \item Gestion des logins/mot de passe.
+  \end{itemize}
+\item Itération 2
+  \begin{itemize}
+  \item Ajout de niveaux de difficulté sur les parties.
+  \item Mode «Marathon»~: faire la plus longue partie possible avec un maximum de $n$ fautes.
+  \item Mode «Shoot'em up»~: Une seule relation et tous les mots du nuage affichés en même temps. L'utilisateur doit cliquer sur les mots qui appartiennent à cette relation puis indiquer qu'il a terminé. Ce mode est assez proche conceptuellement du fonctionnement original de PtiClic.
+  \end{itemize}
+\item Itération 3
+  \begin{itemize}
+  \item Thèmes pour l'apparence et pour des questions d'accessibilité~: modification des couleurs et des tailles des éléments.
+  \item Intégration d'un réseau social pour promouvoir l'application.
+  \item Mode de jeu «Multijoueur»~: Deux joueurs jouent à la même partie et leurs scores sont comparés.
+  \end{itemize}
+\item Itération 4
+  \begin{itemize}
+  \item Mode de jeu «Thématique»~: Après avoir choisi un thème (Noël, Saint Valentin, etc.), on propose à l'utilisateur des parties avec des mots centraux au thème en question.
+  \item Mode de jeu «Chrono»~: une seule relation, les mots du nuage apparaissent et disparaissent assez rapidement, obligeant l'utilisateur à cliquer sur la relation uniquement pour les mots qui y appartiennent, autrement le mot va implicitement à la poubelle. Ce mode nécessitait d'implémenter la possibilité de mettre en pause le jeu étant donné que le temps y a une importance.
+  \item Interface vocale, pour améliorer l'accessibilité de l'application.
+  \end{itemize}
+\end{itemize}
+
+TODO: METTRE DIAGRAMME DE GANTT ICI 
+ 
+Le diagramme de gantt en annexe \ref{sec:gantt-original} présente l'ordonancement et l'affectation des tâches de chacunes des itérations.
+
+L'itération 1 a pris plus de temps que prévu car nous ne savions pas que le code et d'autres aspects de l'existant ne nous seraient pas fournis. Les difficultés en partant d'une simple archive de base de données nous a demandé une grande réflexion \ref{sec:difficultes}.
+
+Entre autres, nous avons passé du temps à améliorer et régler les paramètres de l'algorithme de génération de parties, étant donné que l'algorithme naïf entamé vers les stades initiaux de réalisation donnait des résultats assez mauvais.
+
+Nous avons dû aussi effectuer les améliorations suivantes à la partie serveur de l'application~:
+\begin{itemize}
+\item Refus d'enregistrer les réponses pour une partie si elle a déjà été jouée afin de prévenir les tentatives de tricherie de la part des joueurs
+\item Protocole de transmission des erreurs entre le serveur et le client, par exemple lorsqu'un paramètre manque à la requête, ou lors d'un accès à une partie inexistante.
+\end{itemize}
+
+En outre, nous pensions initialement fournir directement l'application aux alpha-testeurs, mais étant donné la nécessité d'avoir les noms d'utilisateurs
+et des mots de passe dans la base, il semblait peu avantageux de gérer ces points manuellement. Nous avons aussi dû créer un site web à destination
+des utilisateurs, pour qu'ils puissent s'inscrire, télécharger l'application comprenant des explications sur la procédure d'installation). Aussi, à la fin de l'itération 1, après notre première livraison alpha-testeurs, et après l'accord de notre tuteur, nous avons radicalement changé le cahier des charges~:
+
+\begin{itemize}
+\item Itération 1 
+  \begin{itemize}
+  \item Serveur robuste capable de générer les parties d'une qualité acceptable
+  \item Application \android{} qui récupère une partie et permet d'y jouer avec un écran permettant aux utilisateurs de configurer
+    l'application (adresse du serveur, login et mot de passe)
+  \item Gestion des logins/mot de passe sur le serveur et le client
+  \item Site web de présentation du projet
+  \end{itemize}
+\item Itération 2
+  \begin{itemize}
+  \item Passage d'une version native à une version web«Précédent» pour pouvoir toucher plus d'utilisateurs, inspirée aussi du fait que l'environnement de développement ADT est très contraignante
+  \item Ajout d'un bouton «j'aime» ou «j'aime pas» permettant aux joueurs d'avoir des «amis» etc.
+  \item Outil de création manuelle de parties accessible aux joueurs sur le site avec les extensions du serveur nécessaires
+  \item Pousser plus loin la recherche sur les méthodes de création de parties et étude de la base du point de vue linguistique et TALN
+  \end{itemize}
+\end{itemize}
+
+Globalement, nous avons donc réduit le nombre de fonctionnalités à implémenter, tout en étoffant celles que nous avons conservé, afin
+d'éviter d'avoir une application offrant une multitude de fonctionnalités qui seraient implémentées de manière superficielle.
+
+
+% TODO : Factoriser ce qui suit en avant, apres et mettre la section du dessus entre les parties factoriser. Bertrand
+
+\subsection{Le premier prototype}
+
+La première version de l'application était une application native, c'est-à-dire qu'elle fût réalisée entiéremenent en Java avec le framework \android{}. Comme on peut le voir sur la figure \ref{fig:archi-proto1}, l'application est composée de plusieurs parties. Tout d'abord, au lancement de l'application, l'activité «Ecran principal» est lancée. Cette activité permet la navigation dans l'application, à savoir la navigation entre les différentes vues que possédent l'application. Ces autres vues sont «Préférences», qui comme son nom l'indique permet d'afficher les préférences, «Jeu», qui permet de joué, et «Score» et «A propos», qui donne des informations concernant le jeu.
+Nous avons aussi dans cet architecture des classes métiers permettant de réaliser des actions sur le réseau et de sauvegarder les préférences de l'utilisateur dans le téléphone.
+
+
+\begin{figure}[h!]
+  \begin{center}
+    \begin{tikzpicture}[
+      bend angle=10, shorten >=0.05cm, shorten <=0.05cm, text height=0.35cm,
+      communication/.style={draw,dashed,<->}
+      ]
+      
+      \node[draw] (appli) {Application \android{}};
+      % Pour que l'animation ne bouge pas.
+      \path[use as bounding box] (-5.2,0.4) rectangle (5.2,-5.1);
+      
+      \path node[draw,below=of appli] (frontpage) {Écran principal};
+      \path[draw,->] (appli) -- (frontpage);
+      
+      \path node[draw,below=of frontpage, anchor=north east, xshift=-0.3cm] (game) {Jeu};
+      \path[draw,->] (frontpage) -- (game);
+      
+      \path node[draw,left=of appli] (prefs) {Préférences};
+      
+      \path node[draw,below=of prefs,xshift=0.1cm] (reseau) {Réseau};
+      \path[communication] (game) -- (prefs);
+      \path[communication] (game) -- (reseau.south east);
+      
+      \path[draw,->] (game.south west) ++ (0,0.35cm) arc (90:360:0.35cm);
+      
+      \path node[draw,below=of frontpage, anchor=north west, xshift=0.3cm] (score) {score};
+      \path[draw,->] (game) -- (score);
+      
+      \path[draw,->] (score) -- (frontpage);
+      
+      \path node[draw,below left=of frontpage] (prefs-screen) {Préférences};
+      \path node[draw,below right=of frontpage] (about) {À propos};
+      \path[draw,->] (frontpage) -- (prefs-screen);
+      \path[draw,->] (frontpage) -- (about);
+      \path[communication] (prefs-screen.north west) to[bend left] (prefs.south west);
+      \path[communication] (prefs-screen) -- (reseau);
+    \end{tikzpicture}
+  \end{center}
+  \caption{Architecture du premier prototype}
+  \label{fig:archi-proto1}
+\end{figure}
+
+\subsection{Modification du cahier des charges}
+A la fin de la première iteration, nous avons décidé de ne plus utiliser le système de création de vues proposé par le SDK d'\android{} car,
+pour nous, la création de vues en passant par le format proposé nous prenait énormement de temps à réaliser. \android{}, supportant le framework WebKit
+ainsi que javascript dans son integralité, et notre groupe ayant un peu plus d'expérience dans le développement d'application web de par
+notre formation, nous avons décidé de développer les vues de l'application PtiClic en HTML5/Javascript. De ce fait, l'application à été
+simplifiée -- en une seule activité -- et une classe \verb!JavascriptInterface! réalisant un pont entre le code javascript et les fonctionnalitées du
+téléphone à été ajoutée.  
+
+Un autre avantage à l'utilisation d'une application web pour développer PtiClic est le public visé. En effet, le
+but de ce jeu étant de récupèrer des données d'un grand nombre d'utilisateurs, fournir l'application à d'autres personnes que celles
+disposant d'un smartphone sous \android{} nous a semblé interressant. En effet, la version HTML5 est jouable à partir de n'importe quel navigateur Web, que ce soit un ordinateur classique ou un smartphone.
+
+
+\subsection{Le deuxième prototype}
+Pour le deuxième prototype, nous avons radicalement changé la manière dont nous avons traité les vues de notre application. L'utilisation du framework WebKit nous a permis de simplifier grandement notre application sous smartphone.
+
+Comme vous pouvez le voir sur la figure \ref{fig:archi-proto2}, nous disposont à présent d'un gros module traitant tout les détails de l'application (jeu, score, information). Nous avons tout de même gardé la gestion des préferences sur le téléphone car le système sous \android{} était plus facile à utiliser que la réalisation de notre propre système de préférences, qui aurait pu utiliser par exemple le cache ou les cookies. % TODO : Georges peut tu confirme ?
+La communication entre le code Javascript de l'application et les préferences du téléphone se fait par le biais d'une classe Java injectée dans l'espace de nom global du code Javascript.
+
+\begin{figure}[h!]
+  \begin{center}
+    \begin{tikzpicture}[
+      bend angle=10, shorten >=0.05cm, shorten <=0.05cm, text height=0.35cm,
+      communication/.style={draw,dashed,<->}
+      ]
+      
+      \node[draw] (appli) {Application \android{}};
+      % Pour que l'animation ne bouge pas.
+      \path[use as bounding box] (-5.2,0.4) rectangle (5.2,-5.1);
+      
+      \path node[draw,left=of appli] (prefs) {Préférences};
+      
+      \node[below=of appli, text height=0.25cm, minimum width=2cm] (fake-webkit) {\phantom{Webkit}};
+      \path node[draw,below=of fake-webkit, text height=1.5cm, minimum width=2cm, text centered] (html5) {\shortstack{Html5\\JavaScript\\jQuery\\CSS}};
+      
+      \path[draw,->] (html5.south east) ++ (0,0.35cm) arc (90:-180:0.35cm);
+      
+      \path node[draw,below=of appli, text height=0.25cm, minimum width=2cm] (webkit) {Webkit};
+      \path[draw,->] (appli) -- (webkit);
+      \path[draw,->] (webkit) -- (html5);
+      
+      \path node[coordinate] (waypoint) at ($0.5*(webkit.center)+0.5*(webkit.west)$) {};
+      \path[communication] (html5) to[controls=(waypoint) and (waypoint)] node[pos=0.16, anchor=east, xshift=-0.1cm, font=\small] {Interface JavaScript} (prefs.south east);
+    \end{tikzpicture}
+  \end{center}
+  \caption{Architecture du second prototype}
+  \label{fig:archi-proto2}
+\end{figure}
+\pagebreak
 
 \subsection{Base de données}
 
@@ -655,189 +830,6 @@ correspond une activité.
 
 Comme une vue égal une activité si l'on veux que notre application présente plus d'une fenêtre il faut pouvoir lancer d'autre activité, et pouvoir revenir à la précédente. Pour ce faire une activité peut lancer une sous-activité qui sera empiler pour afin de pouvoir revenir à la précédente activité une fois celle-ci achevé. L'envoie de paramétres d'une activité à une autre est réalisé par les <<Intention>> (Intent).
 
-
-% TODO : Factoriser ce qui suit en avant, apres et mettre la section du dessus entre les parties factoriser. Bertrand
-
-\subsection{Le 1\up{er} prototype}
-
-La première version de l'application, été une application native, c'est à dire qu'elle fût réalisé entiéremenent en Java avec le framework \android{}. Comme on peut le voir sur la figure \ref{fig:archi-proto1}, l'application est composé de plusieurs parties. Tout d'abord au lancement de l'application, l'activité <<Écran principal>> est lancé. Cette activité permet la navigation dans l'application, à savoir qu'elle permet de naviger entre les différentes vue que posséde l'application. Ces autres vues sont <<Préférences>>, qui comme son nom l'indique permet d'afficher les préférences, <<Jeu>>, qui permet de joué, <<Score>> et <<À propos>>.
-Nous avons aussi dans cet architecture des classes métiers permettant de réaliser des actions sur le réseau, et de sauvegarder les préférences de l'utilisateur dans le téléphone.
-
-
-\begin{figure}[h!]
-  \begin{center}
-    \begin{tikzpicture}[
-      bend angle=10, shorten >=0.05cm, shorten <=0.05cm, text height=0.35cm,
-      communication/.style={draw,dashed,<->}
-      ]
-      
-      \node[draw] (appli) {Application \android{}};
-      % Pour que l'animation ne bouge pas.
-      \path[use as bounding box] (-5.2,0.4) rectangle (5.2,-5.1);
-      
-      \path node[draw,below=of appli] (frontpage) {Écran principal};
-      \path[draw,->] (appli) -- (frontpage);
-      
-      \path node[draw,below=of frontpage, anchor=north east, xshift=-0.3cm] (game) {Jeu};
-      \path[draw,->] (frontpage) -- (game);
-      
-      \path node[draw,left=of appli] (prefs) {Préférences};
-      
-      \path node[draw,below=of prefs,xshift=0.1cm] (reseau) {Réseau};
-      \path[communication] (game) -- (prefs);
-      \path[communication] (game) -- (reseau.south east);
-      
-      \path[draw,->] (game.south west) ++ (0,0.35cm) arc (90:360:0.35cm);
-      
-      \path node[draw,below=of frontpage, anchor=north west, xshift=0.3cm] (score) {score};
-      \path[draw,->] (game) -- (score);
-      
-      \path[draw,->] (score) -- (frontpage);
-      
-      \path node[draw,below left=of frontpage] (prefs-screen) {Préférences};
-      \path node[draw,below right=of frontpage] (about) {À propos};
-      \path[draw,->] (frontpage) -- (prefs-screen);
-      \path[draw,->] (frontpage) -- (about);
-      \path[communication] (prefs-screen.north west) to[bend left] (prefs.south west);
-      \path[communication] (prefs-screen) -- (reseau);
-    \end{tikzpicture}
-  \end{center}
-  \caption{Architecture du premier prototype}
-  \label{fig:archi-proto1}
-\end{figure}
-
-\subsection{Modification du cahier des charges}
-A la fin de la première iteration, nous avons décidé de ne plus utiliser le système de création de vue proposé par le SDK d'\android{}, car,
-pour nous, la création de vue en passant par le format proposé nous prennait énormement de temps. \android{} supportant le framework WebKit
-ainsi que javascript dans son integralité et notre groupe ayant un peu plus d'expérience dans le développement d'application web (de part
-notre formation), nous avons décidé de développer les vues de l'application PtiClic en HTML5/Javascript. De ce faite, l'application à été
-simplifié (une seul Activité) et une classe \verb!JavascriptInterface! réalisant un pont entre le code javascript et les fonctionnalitées du
-téléphone à été ajouté.  Un autre avantage à l'utilisation d'une application web pour développer PtiClic est le publique visé. En effet, le
-but de ce jeu étant de récupère des données d'un grand nombres d'utilisateur, fournir l'application à d'autres personnes que celles
-disposant d'un smartphone sous \android{} nous a semblé interressante. C'est pourquoi avec la version 2 nous avons aussi une application
-jouable à partir d'un navigateur internet <<normal>>, ce qui permet à un plus grand nombres de personnes de pouvoir jouer à PtiClic.
-
-
-\subsection{Le 2\up{ème} prototype}
-Pour le 2\up{nd} prototype, nous avons radicalement changé la manière dont nous avons traité les vues de notre application. L'utilisation du framework WebKit nous a permis de simplifier grandement notre application sous smartphone.
-Comme vous pouvez le voir sur la figure \ref{fig:archi-proto2}, nous disposont à présent d'un gros module traitant tout les détails de l'application (jeu, score, information\dots{}). Nous avons tout de même gardé la gestion des préferences sur le téléphone, car ce système sous \android{} était plus facile à utiliser que la réalisation de notre propre système de préférences, qui aurait pu utilisé par exemple le cache ou les cookies. % TODO : Georges peut tu confirme ?
-La communication entre le code Javascript de l'application et les préferences du téléphone ce fait par le biais d'une classe Java injecté dans l'espace de nom global du code Javascript.
-
-\begin{figure}[h!]
-  \begin{center}
-    \begin{tikzpicture}[
-      bend angle=10, shorten >=0.05cm, shorten <=0.05cm, text height=0.35cm,
-      communication/.style={draw,dashed,<->}
-      ]
-      
-      \node[draw] (appli) {Application \android{}};
-      % Pour que l'animation ne bouge pas.
-      \path[use as bounding box] (-5.2,0.4) rectangle (5.2,-5.1);
-      
-      \path node[draw,left=of appli] (prefs) {Préférences};
-      
-      \node[below=of appli, text height=0.25cm, minimum width=2cm] (fake-webkit) {\phantom{Webkit}};
-      \path node[draw,below=of fake-webkit, text height=1.5cm, minimum width=2cm, text centered] (html5) {\shortstack{Html5\\JavaScript\\jQuery\\CSS}};
-      
-      \path[draw,->] (html5.south east) ++ (0,0.35cm) arc (90:-180:0.35cm);
-      
-      \path node[draw,below=of appli, text height=0.25cm, minimum width=2cm] (webkit) {Webkit};
-      \path[draw,->] (appli) -- (webkit);
-      \path[draw,->] (webkit) -- (html5);
-      
-      \path node[coordinate] (waypoint) at ($0.5*(webkit.center)+0.5*(webkit.west)$) {};
-      \path[communication] (html5) to[controls=(waypoint) and (waypoint)] node[pos=0.16, anchor=east, xshift=-0.1cm, font=\small] {Interface JavaScript} (prefs.south east);
-    \end{tikzpicture}
-  \end{center}
-  \caption{Architecture du second prototype}
-  \label{fig:archi-proto2}
-\end{figure}
-\pagebreak
-\section{Réalisation}
-\subsection{Cahier des charges initial}
-Avant le début du projet, nous avions planifié l'implémentation des fonctionnalités souhaitées de notre application. Le déroulement du
-travail devait s'effectuer sur 4 itérations, décrites ci-dessous.
-
-Chaque itération comprenait 2 semaines pour implémenter les fonctionnalités, une semaine pour d'éventuelles améliorations ou pour
-implémenter des détails que nous n'aurions pas eu le temps d'implémenter, et une semaine pour corriger les bugs signalés lors des
-alpha-test. Après chaque itération, nous devions livrer une version stable aux alpha-testeurs, pour un alpha-test de 2 semaines.
-
-\begin{itemize}
-\item Itération 1
-  \begin{itemize}
-  \item Serveur capable de générer les parties (choix du mot central et des mots du nuage).
-  \item Application \android{} qui récupère une partie, et permet d'y jouer.
-  \item Gestion des logins/mot de passe.
-  \end{itemize}
-\item Itération 2
-  \begin{itemize}
-  \item Ajout de niveaux de difficulté sur les parties.
-  \item Mode «Marathon»~:faire la plus longue parties possible avec un maximum de $n$ fautes.
-  \item Mode «Shoot'em up»~:Une seule relation, et tous les mots du nuage affichés en même temps. L'utilisateur doit cliquer sur les mots
-    qui appartiennt à cette relation puis indiquer qu'il a terminé. Ce mode est assez proche conceptuellement du fonctionnement original de
-    PtiClic.
-  \end{itemize}
-\item Itération 3
-  \begin{itemize}
-  \item Thèmes pour l'apparence et pour des questions d'accessibilité~: modification des couleurs et des tailles des éléments.
-  \item Intégration avec des réseaux sociaux, pour promouvoir l'application.
-  \item Mode de jeu «Multijoueur»~: Deux joueurs jouent à la même partie, et leurs scores sont comparés.
-  \end{itemize}
-\item Itération 4
-  \begin{itemize}
-  \item Mode de jeu «Thématique»~: Après avoir choisi un thème (noël, informatique, \dots), on propose à l'utilisateur des parties avec des
-    mots centraux reliés à ce thème.
-  \item Mode de jeu «Chrono»~:une seule relation, les mots du nuage apparaissent et disparaissent assez rapidement, et il faut cliquer sur
-    la relation uniquement pour les mots qui y appartiennent (le reste va implicitement à la poubelle). Ce mode nécessitait d'implémenter la
-    possibilité de mettre en pause le jeu étant donné que le temps y a une importance.
-  \item Interface vocale, pour améliorer l'accessibilité de l'application.
-  \end{itemize}
-\end{itemize}
-
-Le diagramme de gantt en annexe \ref{sec:gantt-original} présente l'ordonancement et l'affectation des tâches de chacunes des itérations.
-
-\subsection{Travail effectué}
-
-L'itération 1 a pris plus de temps que prévu, en partie à cause des difficultés rencontrées \ref{sec:difficultes}, et aussi parce que nous
-nous sommes rendus comptes que certaines fonctionnalités devaient être plus avancées avant que l'application soit livrée.
-
-Entre autres, nous avons passé du temps à améliorer et régler les paramètres de l'algorithme de génération de parties, étant donné que
-l'algorithme naïf prévu au départ donnait des résultats assez mauvais.
-
-Nous avons aussi amélioré le serveur sur les points suivants~:
-\begin{itemize}
-\item Refus d'enregistrer les réponses pour une partie si elle a déjà été jouée (pour prévenir les tentatives de tricherie de la part des joueurs).
-\item Protocole de transmission des erreurs entre le serveur et le client, par exemple lorsqu'un paramètre manque à la requête, ou lors d'un
-  accès à une partie inexistante.
-\end{itemize}
-
-De plus, au départ, nous pensions fournir directement l'application aux alpha-testeurs, mais étant donné la nécessité d'avoir les noms d'utilisateurs
-et mots de passe dans la base, il semblait peu avantageux de gérer ces points manuellement. Nous avons aussi dû créer un site web à destination
-des utilisateurs, pour qu'ils puissent s'inscrire, télécharger l'application (avec des explications sur la procédure d'installation), et
-s'informer sur le projet.
-
-Ainsi, à la fin de l'itération 1, après envoi de la version aux alpha-testeurs, et après discussion avec notre tuteur, nous avons
-radicalement changé le cahier des charges pour qu'il devienne le suivant~:
-\begin{itemize}
-\item Itération 1 (effectuée)
-  \begin{itemize}
-  \item Serveur robuste capable de générer les parties d'une qualité acceptable.
-  \item Application \android{} qui récupère une partie, et permet d'y jouer, avec un écran permettant aux utilisateurs de configurer
-    l'application (adresse du serveur, login et mot de passe).
-  \item Gestion des logins/mot de passe sur le serveur et le client.
-  \item Site web de présentation du projet.
-  \end{itemize}
-\item Itération 2
-  \begin{itemize}
-  \item Passage d'une version native à une version web, pour pouvoir toucher plus d'utilisateurs, et à cause des difficultés de l'environnement Android.
-  \item Au lieu d'intégrer l'application à des réseaux sociaux, ajout d'un bouton «j'aime» ou «j'aime pas», et permettre aux joueurs d'avoir des «amis» etc.
-  \item Outil de création manuelle de parties accessible aux joueurs sur le site, avec les extensions du serveur nécessaires.
-  \item Pousser plus loin la recherche sur les méthodes de création de parties, et étude de la base du point de vue linguistique et TALN.
-  \end{itemize}
-\end{itemize}
-
-Globalement, nous avons donc réduit le nombre de fonctionnalités à implémenter, tout en étoffant celles que nous avons conservé, afin
-d'éviter d'avoir une application offrant une multitude de fonctionnalités qui seraient implémentées de manière superficielle.
 
 
 
