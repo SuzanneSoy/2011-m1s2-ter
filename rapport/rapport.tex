@@ -540,6 +540,66 @@ Pour conclure, les expériences menées dans le paquetage TALN ont été très e
 \section{Conception}
 
 
+\subsection{Outils utilisés}
+
+\subsubsection{Les Langages}
+Notre projet c'est découpé en 2 grosses parties. La première partie, la \og{}partie Serveur\fg{}, permet de réaliser des actions sur l'ensemble de la base de donnée (création de parti, validation de partie\ldots),
+la réalisation de celle-ci c'est fait principalement en PHP, l'autre étant du SHELL.
+La seconde partie, la \og{}partie Cliente\fg{}, permet à l'utilisateur de pouvoir intéragir avec le serveur, et surtout de pouvoir jouée à PtiClic. Elle à été réalisé en Java en utilisant le framework \android{} pour l'application mobile et avec le langage JavaScript pour l'application web.
+
+\subsubsection{PHP}
+Comme cité plus haut, nous avons utilisé PHP pour la création du serveur. PHP est un langage impératif, il dispose aussi depuis la version 5 de fonctionnalités objet, mais nous ne les utilisont pas dans notre projet. Ce langage est
+principalement utilisé pour produire des pages Web dynamiques, c'est la raison de sont utilisation dans notre projet. C'est un langage peu typé, souple, multiplate-forme, libre et gratuit.
+Nous utilisons donc PHP pour la création de notre site web \url{http://www.pticlic.fr} ainsi que pour toute la partie génération de partie à savoir la création, génération, envoie et récupération de partie PtiClic.
+
+\subsubsection{SHELL}
+Nous utilisons aussi le langage SHELL. Ce langage est surtout utilisé pour l'initialisation du serveur lors de sont installation sur un serveur différent. Son but, pour notre projet, et de récupérer le dernier dump (archive) de la base de donnée, de convertir ce dump en SQL et de l'insérer dans la base de donnée de type SQLite.
+
+\subsubsection{SQLite3}
+SQLite est une bibliothéque, écrite en C qui propose un moteur de base de données relationnelles accessible par le langage SQL. Contrairement aux serveurs de bases de donnée traditionnels, comme MySQL ou PostgreSQL, ça particularité est de ne pas reproduire le schéma habituel client-serveur mais d'être directement intégrée aux programmes. L'intégralité de la base de données est stockée dans un fichier indépendant de la plateforme. Le code source de SQLite est dans le domaine public, ce qui permet son utilisation sans restriction aussi bien dans les projets open source que dans les projet propriétaire.
+
+\subsubsection{Java}
+La partie cliente du projet est réalisé en Java. Ce langage est le plus utilisé dans le monde par les développeur. Java reprend en grande partie la syntaxe du langage C++. Néanmoins il a été épuré des concepts les plus déroutants du C++ tels que les pointeurs, les références, l'héritage multiples\dots{} La grande spécificité de ce langage est ça portabilité. En effet lors de la compilation, un bit code est généré, et celui-ci est ensuite lu par une machine virtuelle dépendante de la platforme.
+
+\subsubsection{HTML5, JavaScript et jQuery}
+
+La deuxième version de l'application, écrite en HTML5, utilise le langage JavaScript pour l'interaction avec l'utilisateur. La bibliothèque jQuery a été lourdement utilisée pour abstraire l'interface DOM (Document Object Model) fournie par le navigateur pour interagir avec le document HTML. Cette bibliothèque très extensible permet entre autres de manipuler facilement des collections entières d'éléments pour les modifier tous en même temps, de faire des requêtes complexes sur le document pour en récupérer une portion destinée à être manipulée, et
+fournit aussi une couche d'abstraction pour les requêtes réseau asynchrones et la manipulation de données au format JSON (JavaScript Object Notation), qui est le format utilisé dans les échanges entre le client et le serveur. Dans le cadre de ce projet, nous avons été amenés à écrire plusieurs petites extensions à la bibliothèque jQuery, ce qui a été à chaque fois une tâche relativement aisée, vérifiant ainsi l'extensibilité de cette bibliothèque.
+
+\subsubsection{Gestionnaire de versions~: Git et Github}
+
+Pour synchroniser nos efforts sur le projet, nous avons utilisé le gestionnaire de versions distribué git, et hébergé notre projet sur la plate-forme github. Un des avantages d'un gestionnaire de version distribué par rapport à un gestionnaire de versions centralisé tel que SVN, est qu'il n'y a pas besoin d'un serveur central pour synchroniser deux copies du projet. Ainsi, nous avons pu partager nos modifications via une clé usb, même dans des lieux avec une connectivité réduite, comme la fac, où nous avons régulièrement travaillé. 
+De plus, git possède un algorithme de résolution des conflits d'édition beaucoup plus efficace que celui de SVN, ce qui nous a permis de développer certaines fonctionnalités dans des branches séparées, et de les fusionner par la suite avec la branche principale, sans avoir à craindre une fusion manuelle des deux branches.
+
+Une autre fonctionnalité appréciable de git est que chaque «clone» d'un dépôt conserve tout l'historique du projet, si bien qu'un crash du serveur n'impacte pas du tout le projet~: On met en place un autre serveur sur lequel on envoie une copie du projet, et tout fonctionne comme avant.
+
+Nous avons choisi la plate-forme d'hébergement github pour la facilité de la mise en place d'un dépôt git (quelques clics suffisent), sa disponibilité élevée comparée à un serveur personnel, et parce que nous avions déjà utilisé cette plate-forme avec succès dans d'autres projets.
+
+Github offre des fonctionalités supplémentaires telles que des graphes permettant de visualiser l'avancement du projet, un outil de rapport de bug et un wiki pour la documentation. Nous n'avons cependant pas utilisé ces deux dernières fonctionnalités, préférant un simple fichier texte pour garder une trace des bugs à corriger et des tâches à effectuer. Une des raisons motivant ce choix est qu'un des membres du groupe possède un ordinateur relativement peu performant et une connexion à Internet très peu fiable, qui rendent l'utilisation de ces services pénible (voire impossibles lors des fréquentes coupures du réseau).
+
+\subsubsection{Environnement intégré de développement~: Eclipse}
+Eclipse est un IDE extensible (par plugin) et polyvalent permettant de créer des projets mettant en oeuvre n'importe quel langage de programmation. Il est écrit en Java, et c'est avec ce langage que l'on peut créer de nouvelles extensions. La grande force de cet IDE est qu'il est développer autour des plugins pour pouvoir l'étendre.
+Son choix d'utilisation vient aussi du faite qu'il est présent sur les ordinateurs de la faculté, et que nous avons l'habitude de l'utiliser.
+
+\subsubsection{\android{}}
+\android{} est un système d'exploitation open source pour smartphones. Pour ce TER nous avons donc utilisé le framework proposé par Google, pour le developpement d'application sur cet OS. Il est basé sur le langage Java, ce qui permet un apprentissage plus facile (du fait que ce langage est le plus utilisé dans le monde).
+
+\android{} est un système d'exploitation pour téléphone mobile basé sur le noyau Linux développé par \android{} Inc., racheté par Google en 2005. Google et d'autres membres du Open Handset Alliance ont par la suite contribué à son développement et le \android{} Open Source Project (AOSP) est chargé de la maintenance et l'évolution d'\android{}. Ce système d'exploitation est utilisé notamment dans des smartphones, appelé aussi ordiphones, «terminaux de poche» ou «téléphones intelligents», produits et distribués par un grand nombre de fabriquants de téléphones mobiles. Le nombre de téléphones mobiles intégrant le système d'exploitation d'\android{} a cru sensiblement récemment.
+
+Un grand nombre de développeurs ont créé des applications pour étendre la fonctionnalité des téléphones sous \android{} et il y a aujourd'hui
+plus de 200 000 applications disponibles. Bien qu'\android{} Market soit le magasin en ligne opéré par Google, il existe d'autres distributeurs
+d'applications \android{}. La majorité des applications sont écrites en Java, bien qu'il soit possible de développer des applications en
+Python, en Ruby et d'autres par le biais du \android{} Scripting Environment.
+
+\paragraph{Software Development Kit (SDK)}
+Le SDK d'\android{} posséde un grand nombre de classes et de paquetages sur l'ensemble des fonctionnalitées proposé par les périphèriques embarquant cet OS. On peut par exemple trouver un paquetage spécialisé dans les accès réseaux, bluetooth, d'autre pour la géolocalisation\dots{} Le developpement avec ce framework repose sur le modele (pattern en anglais) MVC (Model View Controller). Les modèles (du pattern MVC) sont principalement représenté avec des classes simple (héritant directement de \verb!java.lang.Object!). Les contrôlleurs eux hérite de la classe \verb!android.app.Activity! ou d'une de ces classes enfants. Quant aux vues, elles sont représenté avec un format XML.
+La connexion entre les contrôlleurs et le vues est réalisé grâce à la methode \verb!public View findViewById (int id)! de la classe \verb!android.app.Activity!, qui parcours l'arbre XML pour récuperer l'objet correspondant à l'id passé en paramétre.
+
+\paragraph{Developper Toolkit (ADT) Plugin}
+L'ADT est un plugin développé par Google pour faciliter le developpement d'application \android{} avec Eclipse. Il propose un menu permettant de créer des projets de type \android{} déjà parametré selon les besoins. Mais aussi un gestionnaire d'emulateur, une disposition (au sens d'Eclipse) DDMS permettant de contrôler l'emulateur\dots{}
+
+
+
 
 \subsection{Base de données}
 
@@ -563,361 +623,12 @@ RANDOM\_CENTER\_NODE(\underline{eid}) \\
 USER\_INFO(\underline{\#user, key}, value) \\
 }
 
-
-
-
-
-
-
-
-
-
 Si nous reprenons nos deux petits exemples d'entrées NODE et RELATION du dump de la base de données, il devient clair que les tables NODE et
 RELATION y correspondent strictement à la structure d'origine~: \verb!eid=231064:n="pour femme":t=1:w=50!, où «eid» correspond à «EID», $n$ à
 «name», $t$ à «type» et $w$ à «weight» de la table NODE de notre base~; \verb!rid=430049:n1=82029:n2=151553:t=12:w=18! où $rid$ correspond à «rid»,
 $n_1$ à «start», $n_2$ à «end», $t$ à «type» et $w$ à «weight» de la table RELATION de notre base.
 
 
-
-
-\pagebreak
-
-\subsection{Site Internet}
-
-Lorsqu'une nouvelle application ou jeu est développé, il est essentiel de faire connaître l'application.
-La communication est une étape fondamentale dans la chaîne de création d'une application et la création d'un jeu n'en fait pas exception.
-Internet est devenu un support de communication très important et très influant qui permet de faire découvrir aux
-personnes qui l'utilise un grand nombre de nouveaux produits. Il permet également dans certain cas d'influencer son public.
-L'outil Internet, et plus particulièrement de développement d'un site Web, s'est révélé la solution adaptée à nos besoins.
-
-Le site Internet est une vitrine de notre application. Il permet de présenter notre projet et le jeu sur la plate-forme \android{}.
-
-Si on veut faire passer un message clair et précis, le support de communication doit également être clair, intuitif et ergonomique. Le site Internet 
-doit par conséquent être constitué d'un nombre limité de pages aérée, chacune des pages ciblant un thème important et ayant donc un objectif bien précis.
-
-\begin{center}
-\includegraphics[width=14cm]{img/siteAccueil.png}
-\end{center}
-
-Dans les parties suivantes, les différentes pages de notre site seront décrites. 
-
-
-
-\subsubsection{Téléchargement}
-
-\begin{center}
-\includegraphics[width=14cm]{img/siteTelechargement.png}
-\end{center}
-
-La page 'Téléchargement' contient des instructions pour installer l'application Android de PtiClic. L'application peut être télécharger directement à partir d'un téléphone ou bien par le biais d'un ordinateur classique. 
-
-Quant à la version HTML5, aucune installation est nécessaire, mais il est nécessaire de s'inscrire et s'authentifier afin d'y jouer. 
-
-\subsubsection{L'inscription}
-Si une personne est intéressée par notre jeu et qu'il souhaite y jouer, il devra tout d'abord s'inscrire afin qu'il
-soit reconnu par le système. Cette opération est réalisée à partir du site à l'aide d'un formulaire comportant
-trois informations obligatoires~: 'nom d'utilisateur', 'mot de passe' et 'mail'. Le formulaire se limite à champs (deux champs 'mot de passe') pour éviter de décourager les utilisateurs de s'inscrire.
-
-\begin{center}
-\includegraphics[width=14cm]{img/siteInscription.png}
-\end{center}
-
-L'inscription se réalise la première fois qu'un internaute souhaite jouer au jeu~; lorsque l'on essayé de jouer au jeu sans être authentifié, on est invité soit à s'identifier soit à s'inscrire et l'utilisateur choisit selon le cas qui lui convient. L'inscription, une fois faite, définitive, permet aux utilisateurs de jouer librement et peuvent comparer leur performances à d'autres joueurs.
-
-\subsubsection{Contact}
-Pour qu'une application soit en accord avec ses utilisateurs, il faut un certain temps et apporter un certain nombre
-de modifications pour répondre à la demande et aux besoins de l'utilisateur final. Dans le but de récupérer les avis positifs et négatifs, les remarques et les critiques des utilisateurs, un formulaire de contact est disponible sur le site. 
-
-\begin{center}
-\includegraphics[width=14cm]{img/siteContact.png}
-\end{center}
-
-Ce formulaire est accessible sans inscription, ce qui permet d'envoyer un message s'il y a un problème lors de l'inscription au l'authentification, pour signaler un bogue concernant le site ou pour faire d'autres commentaires d'ordre général.
-
-\subsubsection{La création de parties}
-Un algorithme automatique de création de parties permet de créer un grand nombre de parties. Cependant, ce moyen
-de génération de partie est assez limité et donne régulièrement des résultat trop peu satisfaisant voire même incohérents.
-
-Pour palier à ce problème, une solution est de mettre en place un service permettant non pas à la machine, mais à des joueurs de créer eux-même des parties. Grâce à cette page, il est dorénavant possible d'obtenir des parties bien plus intéressantes, des parties qui contiennent un lexique spécifique à un domaine bien précis si le joueur est spécialiste d'un domaine précis ou bien des parties contenant de l'humour, par exemple. 
-
-
-\begin{center}
-\includegraphics[width=14cm]{img/siteCreerParties.png}
-\end{center}
-
-Cette page permet de créer des parties de taille et de thèmes variés. Les joueurs peuvent choisir des mots ou des expressions qu'ils souhaitent voir dans une partie ainsi que deux relations principales.
-Outre l'attractivité et l'intérêt de cette fonctionnalité, le joueur est mis en valeur du fait qu'il participe non seulement en tant que joueur, mais en tant que contributeur au projet. Les parties ainsi créées sont jouées par d'autres joueurs, améliorent la qualité des parties et le créateur et il serait même envisageable dans une future version de l'application de tenir le créateur de la partie au courant des joueurs qui ont joué sa partie et les scores obtenus.
-
-La partie création de partie a été développé en JavaScript au lieu de PHP, ce qui a permis d'avoir une interaction en temps avec l'utilisateur. En effet, lorsqu'un utilisateur saisit un mot ou expression, il est important pour lui de savoir si ce mot existe ou non. De ce fait, une requête est émise en direction du serveur afin de vérifier la validité du mot ou expression saisi. Lorsqu'un utilisateur souhaite créer une nouvelle partie 
-il ne sais pas forcément combien de mots va composer sa partie. Il devra par conséquent être en mesure d'augmenter au besoin le nombre de mots composants la partie.
-
-\subsubsection{Jouez en ligne~!}
-La seconde évolution majeure concernant le deuxième prototype du jeu est qu'il est possible de jouer directement depuis
-le site Internet sans forcément disposer de téléphone sous \android{}. Cette option permet de toucher un public bien plus large sans pénaliser ceux qui disposent d'un smartphone \android{}
-
-Une page du site Internet sera donc consacrée
-à la création manuelle de partie. Elle permetra de créer des parties de taille variée et de thème différents. Le joueurs pourra
-indiquer les mots qu'il souhaites voir dans la partie ainsi que les deux relations principales.
-Les parties ainsi créées pourront être jouées par les autres joueurs et permettrons d'améliorer l'attractivité et l'intérêt du jeu.
-
-\subsection{Site Internet 2}
-\subsubsection{La création de partie}
-La deuxième version du site à pour but de rendre plus intuitif et plus certain points un peu complexe comme la création de partie.
-Le service de création de partie sera dévoloppé en JavaScript au lieu de PHP ce qui permettra d'avoir une intéraction en temps avec l'utilisateur.
-En effet lorsqu'un utilisateur saisie un mot il est important pour lui de savoir si ce mot existe ou non, de ce fait une requête pourra être
-émise en direction du serveur afin de vérifier la validité du mots saisi. D'autre lorsqu'un utilisateur souhaite créer une nouvelle partie 
-il ne sais pas forcément combien de mots va composer sa partie. Il devra par conséquent être en mesure d'augmenter au besoin le nombre de mots
-composants la partie.
-
-\subsubsection{Jouez en ligne !}
-La seconde évolution majeure qui est liée à une nouvelle version de l'interface de jeu est qu'il est possible de jouer directement depuis
-le site Internet sans forcéement disposer de téléphone sous \android{}. Cette option permettra de toucher un public bien plus large tout en 
-ne pénalisant pas ceux qui disposent d'un smartphone \android{}.
-
-
-
-\subsection{Version html5 du jeu}
-\label{sec:html5}
-\subsubsection{Architecture}
-
-La version HTML5 du jeu est architecturée de la manière suivante~:
-
-L'application comporte 6 écrans~:
-\begin{itemize}
-\item Le «splash» au démarrage;
-\item L'éran d'accueil, avec des liens vers les 4 autres (sauf score);
-\item L'écran du jeu, avec le mot central, le mot du nuage et les quatre relations;
-\item Le score, affiché à la fin de la partie;
-\item Les préférences, qui permettent de choisir le thème de couleurs de l'application;
-\item L'écran de connexion, sur lequel on peut se rendre depuis l'écran d'accueil, et qui s'affiche automatiquement lorsqu'on tente de faire
-  une action (jouer ou modifier les préférences) sans être connecté;
-\item L'écran «À propos», qui explique l'origine du jeu.
-\end{itemize}
-Chaque écran est contenu dans un élément HTML (\verb!<div/>!) qui est affiché uniquement lorsque l'utilisateur est sur cet écran.
-
-La navigation entre les écrans et entre chaque mot du nuage lorsqu'on joue à la partie s'effectue en modifiant l'identifiant de fragment
-de l'URL (la partie après le \verb!#!). De cette manière, chaque état est stocké dans l'historique du navigateur, et on peut revenir à
-l'écran précédant à l'aide des boutons «Précédent» et «Suivant» classiques. De plus, cela permet d'annuler le choix d'une relation pour
-un mot donné simplement en cliquant sur «Précédent».
-
-L'état du programme -- écran en cours, thème de couleurs, structure de données représentant la partie en cours lorsqu'elle a été récupérée et de même pour les scores -- est stocké dans une variable nommée \verb!runstate!. Cependant, si l'on considère l'enchaînement d'actions
-suivantes, on se rend compte qu'il doit y avoir une décorrelation entre l'état du programme tel que dictée par l'URL et l'état réel du
-programme~:
-
-\begin{itemize}
-\item L'utilisateur clique sur «Jouer», ce qui l'amène à l'URL \verb!#game!;
-\item L'écran de connexion est affiché pour que l'utilisateur s'identifie sans modifier l'URL (pour ne pas enregistrer cette étape
-  transitoire dans l'historique).
-\item Une fois l'utilisateur connecté, la partie commence.
-\end{itemize}
-
-Cette décorrelation apporte une certaine complexité au code de transition entre les états du programme, d'autant plus que l'application
-effectue des requêtes réseau asynchrones, par exemple pour récupérer la partie, durant lesquelles n'importe quelle séquence «précédent» /
-«Suivant» ou de modification arbitraire peut avoir lieu. Ainsi, entre le moment où on effectue une requête pour récupérer une nouvelle
-partie, et le moment où cette requête aboutit, l'utilisateur peut avoir cliqué sur «Précédent», ce qui le ramène à l'écran d'accueil (auquel
-cas il ne faut pas afficher la partie lors de la réception), mais il peut aussi après ce «Précédent» faire «Suivant», auquel cas on se
-retrouve de nouveau sur l'écran du jeu, et il faut donc afficher la partie lors de sa réception (et ne pas faire une deuxième requête
-puisqu'il y en a déjà une en cours).
-
-Pour gérer cela, nous avons implémenté une routine de transition entre les états, qui envoie la séquence de messages suivante au nouvel
-écran~:
-\begin{itemize}
-\item «goto», qui envoie le message «leave» à l'écran en cours, met à jour la variable runstate.screen, et communique quelques informations
-  à l'application hôte en Java sous Android;
-\item «pre-enter», qui permet à l'écran d'effectuer des requêtes réseau avant son affichage;
-\item «enter», qui affiche l'écran, et modifie dynamiquement son contenu si nécessaire (par exemple affichage du texte décrivant les
-  relations dans l'écran du jeu);
-\item «update», appellée une première fois juste après l'affichage de l'écran, et à chaque changement d'URL qui ne modifie pas l'écran. Cela
-  permet par exemple à l'écran du jeu de détecter qu'une réponse a été donnée pour un des mots du nuage, et d'afficher le mot suivant.
-\end{itemize}
-
-Un changement d'URL déclenche donc soit un «goto», soit un «update», ce qui permet d'afficher l'écran voulu, tandis que les écrans peuvent
-s'envoyer les uns les autres ces messages (principalement le message «goto») pour basculer de l'un à l'autre sans modifier l'URL.
-
-\subsubsection{Concepts et techniques de programmation}
-
-Les actions à déclencher lors de la réception du résultat d'une requête réseau, ainsi que le cache partiel des parties et des scores (qui
-permet de ne pas renvoyer une requête qui est déjà en cours ou a déjà abouti), sont implémentés en utilisant le paradigme de programmation
-fonctionelle avec évaluation paresseuse, le côté «évaluation paresseuse» étant émulé en encapsulant le code dans des fonctions anonymes
-(lambda fonctions).
-
-Nous avons aussi employé une forme limitée de programmation réactive pour le cache, implémentée via l'objet \verb!Deferred! de jQuery.
-
-Enfin, nous avons utilisé les capactités de javaScript lui-même, qui est un langage objet basé sur les prototypes (et non les classes), pour
-étendre le langage là où cela s'est avéré nécessaire.
-
-\subsubsection{API Client-serveur}
-Le client et le serveur utilisent tout deux une API qui permet de facilement remplacer un des deux composants. Tous les appels au serveur se font en HTTP GET et peuvent avoir les deux paramètres \verb!user! et \verb!password!. De plus, elles peuvent renvoyer une erreur au format suivant~:
-\begin{alltt}
-\{"error":\textit{Code d'erreur}, "msg":\textit{Message d'erreur}, "isError":true\}
-\end{alltt}
-
-Voici les principaux messages que supporte le serveur~:
-\begin{itemize}
-\item Récupérer une partie jouable~:
-
-\verb!server.php?action=0!
-{
-\small
-\begin{alltt}
-\{
-\quad"author":"\textit{Créateur de la partie}",
-\quad"gid":\textit{Numéro de la partie},
-\quad"pgid":\textit{Numéro de la partie jouable},
-\quad"relations":[
-\quad\quad\{"id":7,"name":"Un contraire de %mc est %mn"\},
-\quad\quad…
-\quad],
-\quad"center":\{"id":\textit{eid mot central},"name":"\textit{Mot central}"\},
-\quad"cloud":[
-\quad\quad\{"id":\textit{eid mot nuage},"name":"\textit{Mot nuage}"\},
-\quad\quad…
-\quad]
-\}
-\end{alltt}
-}
-\item Répondre à une partie~:
-
-\verb!server.php?action=1&gid=!\textit{\texttt{numéro de partie}}\verb!&pgid=!\textit{\texttt{numéro de partie}}
-
-Cette requête doit aussi prendre un couple \textit{\texttt{numéro du mot du nuage}}\verb!=!\textit{\texttt{numéro de la relation}} pour
-chaque réponse. Elle renvoie la structure suivante~:
-{
-\small
-\begin{alltt}
-\{
-\quad"scoreTotal":\textit{Score pour la partie},
-\quad"alreadyPlayed":\textit{true si la partie a déjà été jouée, false sinon},
-\quad"author":\textit{Créateur de la partie}",
-\quad"minScore":\textit{Plus petit score pour un mot},
-\quad"maxScore":\textit{Plus grand score pour un mot},
-\quad"newGame":\textit{Nouvelle partie, même format que action=0},
-\quad"scores":[
-\quad\quad\{"name":"\textit{Mot nuage}", "score":\textit{Score pour le mot}\}
-\quad]
-\}
-\end{alltt}
-}
-
-\item D'autres actions de moindre intérêt sont disponibles, et permettent de~:
-\begin{description}
-\item[\verb!action=2!] Déclencher la création automatique de parties;
-\item[\verb!action=3!] Vérifier si un couple utilisateur/mot de passe est valide;
-\item[\verb!action=4!] Vérifier si un mot existe dans la base de données;
-% N°5 :
-\item[\verb!action=5!] Récupérer la liste des relations disponibles («fait partie de», «synonyme»…);
-\item[\verb!action=6!] Stocker une partie créée manuellement;
-\item[\verb!action=7!] Récupérer les préférences de l'utilisateur;
-\item[\verb!action=8!] Modifier les préférences de l'utilisateur;
-\item[\verb!action=9!] Terminer la session et déconnecter l'utilisateur;
-% n°10 :
-\item[\verb!action=10!] Indiquer si l'utilisateur aime ou non la partie à laquelle il a joué.
-\end{description}
-
-\end{itemize}
-
-\subsection{Protection contre les attaques des joueurs}
-
-Le serveur prévient quelques types d'attaques que des joueurs pourraient effectuer pour améliorer leur score. Entre autres, lorsqu'un joueur
-a envoyé ses réponses à une partie, et que ses scores lui ont été envoyés, la modification des réponses est refusée s'il tente de renvoyer
-d'autres réponses. Cela permet d'éviter qu'un joueur améliore son score en donnant les réponses attendues une fois qu'il les connait.
-
-Nous n'avons cependant pas de protection contre un utilisateur qui donnerait exprès les mauvaises réponses (une forme de SPAM qui influerait
-la base de données). La détection de ce comportement est difficile car il est tout à fait possible que les réponses que notre algorithme
-estime être les bonnes soient justes, et il est tout à fait légitime qu'un utilisateur soit en désacord avec les autres.
-
-Dans le cas de l'utilisation d'un robot pour donner en masse de mauvaises réponses, il serait possible de détecter la fréquence élevée des
-parties jouées, ce qui n'empêcherait cependant pas un robot de se créer plusieurs comptes pour éviter cette détection. De même que la
-détection de courriers indésirables est difficile dans le cadre de la messagerie électronique, la détection de la transmission massive de
-mauvaises réponses à notre serveur est compliquée, d'autant plus que peu de données sont transmises pour chaque partie.
-
-\section{Réalisation}
-\subsection{Cahier des charges initial}
-Avant le début du projet, nous avions planifié l'implémentation des fonctionnalités souhaitées de notre application. Le déroulement du
-travail devait s'effectuer sur 4 itérations, décrites ci-dessous.
-
-Chaque itération comprenait 2 semaines pour implémenter les fonctionnalités, une semaine pour d'éventuelles améliorations ou pour
-implémenter des détails que nous n'aurions pas eu le temps d'implémenter, et une semaine pour corriger les bugs signalés lors des
-alpha-test. Après chaque itération, nous devions livrer une version stable aux alpha-testeurs, pour un alpha-test de 2 semaines.
-
-\begin{itemize}
-\item Itération 1
-  \begin{itemize}
-  \item Serveur capable de générer les parties (choix du mot central et des mots du nuage).
-  \item Application \android{} qui récupère une partie, et permet d'y jouer.
-  \item Gestion des logins/mot de passe.
-  \end{itemize}
-\item Itération 2
-  \begin{itemize}
-  \item Ajout de niveaux de difficulté sur les parties.
-  \item Mode «Marathon»~:faire la plus longue parties possible avec un maximum de $n$ fautes.
-  \item Mode «Shoot'em up»~:Une seule relation, et tous les mots du nuage affichés en même temps. L'utilisateur doit cliquer sur les mots
-    qui appartiennt à cette relation puis indiquer qu'il a terminé. Ce mode est assez proche conceptuellement du fonctionnement original de
-    PtiClic.
-  \end{itemize}
-\item Itération 3
-  \begin{itemize}
-  \item Thèmes pour l'apparence et pour des questions d'accessibilité~: modification des couleurs et des tailles des éléments.
-  \item Intégration avec des réseaux sociaux, pour promouvoir l'application.
-  \item Mode de jeu «Multijoueur»~: Deux joueurs jouent à la même partie, et leurs scores sont comparés.
-  \end{itemize}
-\item Itération 4
-  \begin{itemize}
-  \item Mode de jeu «Thématique»~: Après avoir choisi un thème (noël, informatique, \dots), on propose à l'utilisateur des parties avec des
-    mots centraux reliés à ce thème.
-  \item Mode de jeu «Chrono»~:une seule relation, les mots du nuage apparaissent et disparaissent assez rapidement, et il faut cliquer sur
-    la relation uniquement pour les mots qui y appartiennent (le reste va implicitement à la poubelle). Ce mode nécessitait d'implémenter la
-    possibilité de mettre en pause le jeu étant donné que le temps y a une importance.
-  \item Interface vocale, pour améliorer l'accessibilité de l'application.
-  \end{itemize}
-\end{itemize}
-
-Le diagramme de gantt en annexe \ref{sec:gantt-original} présente l'ordonancement et l'affectation des tâches de chacunes des itérations.
-
-\subsection{Travail effectué}
-
-L'itération 1 a pris plus de temps que prévu, en partie à cause des difficultés rencontrées \ref{sec:difficultes}, et aussi parce que nous
-nous sommes rendus comptes que certaines fonctionnalités devaient être plus avancées avant que l'application soit livrée.
-
-Entre autres, nous avons passé du temps à améliorer et régler les paramètres de l'algorithme de génération de parties, étant donné que
-l'algorithme naïf prévu au départ donnait des résultats assez mauvais.
-
-Nous avons aussi amélioré le serveur sur les points suivants~:
-\begin{itemize}
-\item Refus d'enregistrer les réponses pour une partie si elle a déjà été jouée (pour prévenir les tentatives de tricherie de la part des joueurs).
-\item Protocole de transmission des erreurs entre le serveur et le client, par exemple lorsqu'un paramètre manque à la requête, ou lors d'un
-  accès à une partie inexistante.
-\end{itemize}
-
-De plus, au départ, nous pensions fournir directement l'application aux alpha-testeurs, mais étant donné la nécessité d'avoir les noms d'utilisateurs
-et mots de passe dans la base, il semblait peu avantageux de gérer ces points manuellement. Nous avons aussi dû créer un site web à destination
-des utilisateurs, pour qu'ils puissent s'inscrire, télécharger l'application (avec des explications sur la procédure d'installation), et
-s'informer sur le projet.
-
-Ainsi, à la fin de l'itération 1, après envoi de la version aux alpha-testeurs, et après discussion avec notre tuteur, nous avons
-radicalement changé le cahier des charges pour qu'il devienne le suivant~:
-\begin{itemize}
-\item Itération 1 (effectuée)
-  \begin{itemize}
-  \item Serveur robuste capable de générer les parties d'une qualité acceptable.
-  \item Application \android{} qui récupère une partie, et permet d'y jouer, avec un écran permettant aux utilisateurs de configurer
-    l'application (adresse du serveur, login et mot de passe).
-  \item Gestion des logins/mot de passe sur le serveur et le client.
-  \item Site web de présentation du projet.
-  \end{itemize}
-\item Itération 2
-  \begin{itemize}
-  \item Passage d'une version native à une version web, pour pouvoir toucher plus d'utilisateurs, et à cause des difficultés de l'environnement Android.
-  \item Au lieu d'intégrer l'application à des réseaux sociaux, ajout d'un bouton «j'aime» ou «j'aime pas», et permettre aux joueurs d'avoir des «amis» etc.
-  \item Outil de création manuelle de parties accessible aux joueurs sur le site, avec les extensions du serveur nécessaires.
-  \item Pousser plus loin la recherche sur les méthodes de création de parties, et étude de la base du point de vue linguistique et TALN.
-  \end{itemize}
-\end{itemize}
-
-Globalement, nous avons donc réduit le nombre de fonctionnalités à implémenter, tout en étoffant celles que nous avons conservé, afin
-d'éviter d'avoir une application offrant une multitude de fonctionnalités qui seraient implémentées de manière superficielle.
-
-% TODO : Devrais etre mis ailleur Bertrand
 \subsection{Le modéle MVC d'\android{}}
 Pour le développement d'application sur mobile, Google propose d'utilisé le patron de conception (design pattern) MVC. On peut trouver sur internet une multitude d'implémentation de MVC, Google n'echappe pas à la régle en proposant
 le sien (voir figure \ref{fig:MVC}).
@@ -1041,64 +752,332 @@ La communication entre le code Javascript de l'application et les préferences d
   \caption{Architecture du second prototype}
   \label{fig:archi-proto2}
 \end{figure}
+\pagebreak
+\section{Réalisation}
+\subsection{Cahier des charges initial}
+Avant le début du projet, nous avions planifié l'implémentation des fonctionnalités souhaitées de notre application. Le déroulement du
+travail devait s'effectuer sur 4 itérations, décrites ci-dessous.
 
-\subsection{Outils utilisés}
+Chaque itération comprenait 2 semaines pour implémenter les fonctionnalités, une semaine pour d'éventuelles améliorations ou pour
+implémenter des détails que nous n'aurions pas eu le temps d'implémenter, et une semaine pour corriger les bugs signalés lors des
+alpha-test. Après chaque itération, nous devions livrer une version stable aux alpha-testeurs, pour un alpha-test de 2 semaines.
 
-\subsubsection{Les Langages}
-Notre projet c'est découpé en 2 grosses parties. La première partie, la \og{}partie Serveur\fg{}, permet de réaliser des actions sur l'ensemble de la base de donnée (création de parti, validation de partie\ldots),
-la réalisation de celle-ci c'est fait principalement en PHP, l'autre étant du SHELL.
-La seconde partie, la \og{}partie Cliente\fg{}, permet à l'utilisateur de pouvoir intéragir avec le serveur, et surtout de pouvoir jouée à PtiClic. Elle à été réalisé en Java en utilisant le framework \android{} pour l'application mobile et avec le langage JavaScript pour l'application web.
+\begin{itemize}
+\item Itération 1
+  \begin{itemize}
+  \item Serveur capable de générer les parties (choix du mot central et des mots du nuage).
+  \item Application \android{} qui récupère une partie, et permet d'y jouer.
+  \item Gestion des logins/mot de passe.
+  \end{itemize}
+\item Itération 2
+  \begin{itemize}
+  \item Ajout de niveaux de difficulté sur les parties.
+  \item Mode «Marathon»~:faire la plus longue parties possible avec un maximum de $n$ fautes.
+  \item Mode «Shoot'em up»~:Une seule relation, et tous les mots du nuage affichés en même temps. L'utilisateur doit cliquer sur les mots
+    qui appartiennt à cette relation puis indiquer qu'il a terminé. Ce mode est assez proche conceptuellement du fonctionnement original de
+    PtiClic.
+  \end{itemize}
+\item Itération 3
+  \begin{itemize}
+  \item Thèmes pour l'apparence et pour des questions d'accessibilité~: modification des couleurs et des tailles des éléments.
+  \item Intégration avec des réseaux sociaux, pour promouvoir l'application.
+  \item Mode de jeu «Multijoueur»~: Deux joueurs jouent à la même partie, et leurs scores sont comparés.
+  \end{itemize}
+\item Itération 4
+  \begin{itemize}
+  \item Mode de jeu «Thématique»~: Après avoir choisi un thème (noël, informatique, \dots), on propose à l'utilisateur des parties avec des
+    mots centraux reliés à ce thème.
+  \item Mode de jeu «Chrono»~:une seule relation, les mots du nuage apparaissent et disparaissent assez rapidement, et il faut cliquer sur
+    la relation uniquement pour les mots qui y appartiennent (le reste va implicitement à la poubelle). Ce mode nécessitait d'implémenter la
+    possibilité de mettre en pause le jeu étant donné que le temps y a une importance.
+  \item Interface vocale, pour améliorer l'accessibilité de l'application.
+  \end{itemize}
+\end{itemize}
 
-\subsubsection{PHP}
-Comme cité plus haut, nous avons utilisé PHP pour la création du serveur. PHP est un langage impératif, il dispose aussi depuis la version 5 de fonctionnalités objet, mais nous ne les utilisont pas dans notre projet. Ce langage est
-principalement utilisé pour produire des pages Web dynamiques, c'est la raison de sont utilisation dans notre projet. C'est un langage peu typé, souple, multiplate-forme, libre et gratuit.
-Nous utilisons donc PHP pour la création de notre site web \url{http://www.pticlic.fr} ainsi que pour toute la partie génération de partie à savoir la création, génération, envoie et récupération de partie PtiClic.
+Le diagramme de gantt en annexe \ref{sec:gantt-original} présente l'ordonancement et l'affectation des tâches de chacunes des itérations.
 
-\subsubsection{SHELL}
-Nous utilisons aussi le langage SHELL. Ce langage est surtout utilisé pour l'initialisation du serveur lors de sont installation sur un serveur différent. Son but, pour notre projet, et de récupérer le dernier dump (archive) de la base de donnée, de convertir ce dump en SQL et de l'insérer dans la base de donnée de type SQLite.
+\subsection{Travail effectué}
 
-\subsubsection{SQLite3}
-SQLite est une bibliothéque, écrite en C qui propose un moteur de base de données relationnelles accessible par le langage SQL. Contrairement aux serveurs de bases de donnée traditionnels, comme MySQL ou PostgreSQL, ça particularité est de ne pas reproduire le schéma habituel client-serveur mais d'être directement intégrée aux programmes. L'intégralité de la base de données est stockée dans un fichier indépendant de la plateforme. Le code source de SQLite est dans le domaine public, ce qui permet son utilisation sans restriction aussi bien dans les projets open source que dans les projet propriétaire.
+L'itération 1 a pris plus de temps que prévu, en partie à cause des difficultés rencontrées \ref{sec:difficultes}, et aussi parce que nous
+nous sommes rendus comptes que certaines fonctionnalités devaient être plus avancées avant que l'application soit livrée.
 
-\subsubsection{Java}
-La partie cliente du projet est réalisé en Java. Ce langage est le plus utilisé dans le monde par les développeur. Java reprend en grande partie la syntaxe du langage C++. Néanmoins il a été épuré des concepts les plus déroutants du C++ tels que les pointeurs, les références, l'héritage multiples\dots{} La grande spécificité de ce langage est ça portabilité. En effet lors de la compilation, un bit code est généré, et celui-ci est ensuite lu par une machine virtuelle dépendante de la platforme.
+Entre autres, nous avons passé du temps à améliorer et régler les paramètres de l'algorithme de génération de parties, étant donné que
+l'algorithme naïf prévu au départ donnait des résultats assez mauvais.
 
-\subsubsection{HTML5, JavaScript et jQuery}
+Nous avons aussi amélioré le serveur sur les points suivants~:
+\begin{itemize}
+\item Refus d'enregistrer les réponses pour une partie si elle a déjà été jouée (pour prévenir les tentatives de tricherie de la part des joueurs).
+\item Protocole de transmission des erreurs entre le serveur et le client, par exemple lorsqu'un paramètre manque à la requête, ou lors d'un
+  accès à une partie inexistante.
+\end{itemize}
 
-La deuxième version de l'application, écrite en HTML5, utilise le langage JavaScript pour l'interaction avec l'utilisateur. La bibliothèque jQuery a été lourdement utilisée pour abstraire l'interface DOM (Document Object Model) fournie par le navigateur pour interagir avec le document HTML. Cette bibliothèque très extensible permet entre autres de manipuler facilement des collections entières d'éléments pour les modifier tous en même temps, de faire des requêtes complexes sur le document pour en récupérer une portion destinée à être manipulée, et
-fournit aussi une couche d'abstraction pour les requêtes réseau asynchrones et la manipulation de données au format JSON (JavaScript Object Notation), qui est le format utilisé dans les échanges entre le client et le serveur. Dans le cadre de ce projet, nous avons été amenés à écrire plusieurs petites extensions à la bibliothèque jQuery, ce qui a été à chaque fois une tâche relativement aisée, vérifiant ainsi l'extensibilité de cette bibliothèque.
+De plus, au départ, nous pensions fournir directement l'application aux alpha-testeurs, mais étant donné la nécessité d'avoir les noms d'utilisateurs
+et mots de passe dans la base, il semblait peu avantageux de gérer ces points manuellement. Nous avons aussi dû créer un site web à destination
+des utilisateurs, pour qu'ils puissent s'inscrire, télécharger l'application (avec des explications sur la procédure d'installation), et
+s'informer sur le projet.
 
-\subsubsection{Gestionnaire de versions~: Git et Github}
+Ainsi, à la fin de l'itération 1, après envoi de la version aux alpha-testeurs, et après discussion avec notre tuteur, nous avons
+radicalement changé le cahier des charges pour qu'il devienne le suivant~:
+\begin{itemize}
+\item Itération 1 (effectuée)
+  \begin{itemize}
+  \item Serveur robuste capable de générer les parties d'une qualité acceptable.
+  \item Application \android{} qui récupère une partie, et permet d'y jouer, avec un écran permettant aux utilisateurs de configurer
+    l'application (adresse du serveur, login et mot de passe).
+  \item Gestion des logins/mot de passe sur le serveur et le client.
+  \item Site web de présentation du projet.
+  \end{itemize}
+\item Itération 2
+  \begin{itemize}
+  \item Passage d'une version native à une version web, pour pouvoir toucher plus d'utilisateurs, et à cause des difficultés de l'environnement Android.
+  \item Au lieu d'intégrer l'application à des réseaux sociaux, ajout d'un bouton «j'aime» ou «j'aime pas», et permettre aux joueurs d'avoir des «amis» etc.
+  \item Outil de création manuelle de parties accessible aux joueurs sur le site, avec les extensions du serveur nécessaires.
+  \item Pousser plus loin la recherche sur les méthodes de création de parties, et étude de la base du point de vue linguistique et TALN.
+  \end{itemize}
+\end{itemize}
 
-Pour synchroniser nos efforts sur le projet, nous avons utilisé le gestionnaire de versions distribué git, et hébergé notre projet sur la plate-forme github. Un des avantages d'un gestionnaire de version distribué par rapport à un gestionnaire de versions centralisé tel que SVN, est qu'il n'y a pas besoin d'un serveur central pour synchroniser deux copies du projet. Ainsi, nous avons pu partager nos modifications via une clé usb, même dans des lieux avec une connectivité réduite, comme la fac, où nous avons régulièrement travaillé. 
-De plus, git possède un algorithme de résolution des conflits d'édition beaucoup plus efficace que celui de SVN, ce qui nous a permis de développer certaines fonctionnalités dans des branches séparées, et de les fusionner par la suite avec la branche principale, sans avoir à craindre une fusion manuelle des deux branches.
+Globalement, nous avons donc réduit le nombre de fonctionnalités à implémenter, tout en étoffant celles que nous avons conservé, afin
+d'éviter d'avoir une application offrant une multitude de fonctionnalités qui seraient implémentées de manière superficielle.
 
-Une autre fonctionnalité appréciable de git est que chaque «clone» d'un dépôt conserve tout l'historique du projet, si bien qu'un crash du serveur n'impacte pas du tout le projet~: On met en place un autre serveur sur lequel on envoie une copie du projet, et tout fonctionne comme avant.
 
-Nous avons choisi la plate-forme d'hébergement github pour la facilité de la mise en place d'un dépôt git (quelques clics suffisent), sa disponibilité élevée comparée à un serveur personnel, et parce que nous avions déjà utilisé cette plate-forme avec succès dans d'autres projets.
 
-Github offre des fonctionalités supplémentaires telles que des graphes permettant de visualiser l'avancement du projet, un outil de rapport de bug et un wiki pour la documentation. Nous n'avons cependant pas utilisé ces deux dernières fonctionnalités, préférant un simple fichier texte pour garder une trace des bugs à corriger et des tâches à effectuer. Une des raisons motivant ce choix est qu'un des membres du groupe possède un ordinateur relativement peu performant et une connexion à Internet très peu fiable, qui rendent l'utilisation de ces services pénible (voire impossibles lors des fréquentes coupures du réseau).
+\subsection{Site Internet}
 
-\subsubsection{Environnement intégré de développement~: Eclipse}
-Eclipse est un IDE extensible (par plugin) et polyvalent permettant de créer des projets mettant en oeuvre n'importe quel langage de programmation. Il est écrit en Java, et c'est avec ce langage que l'on peut créer de nouvelles extensions. La grande force de cet IDE est qu'il est développer autour des plugins pour pouvoir l'étendre.
-Son choix d'utilisation vient aussi du faite qu'il est présent sur les ordinateurs de la faculté, et que nous avons l'habitude de l'utiliser.
+Lorsqu'une nouvelle application ou jeu est développé, il est essentiel de faire connaître l'application.
+La communication est une étape fondamentale dans la chaîne de création d'une application et la création d'un jeu n'en fait pas exception.
+Internet est devenu un support de communication très important et très influant qui permet de faire découvrir aux
+personnes qui l'utilise un grand nombre de nouveaux produits. Il permet également dans certain cas d'influencer son public.
+L'outil Internet, et plus particulièrement de développement d'un site Web, s'est révélé la solution adaptée à nos besoins.
 
-\subsubsection{\android{}}
-\android{} est un système d'exploitation open source pour smartphones. Pour ce TER nous avons donc utilisé le framework proposé par Google, pour le developpement d'application sur cet OS. Il est basé sur le langage Java, ce qui permet un apprentissage plus facile (du fait que ce langage est le plus utilisé dans le monde).
+Le site Internet est une vitrine de notre application. Il permet de présenter notre projet et le jeu sur la plate-forme \android{}.
 
-\android{} est un système d'exploitation pour téléphone mobile basé sur le noyau Linux développé par \android{} Inc., racheté par Google en 2005. Google et d'autres membres du Open Handset Alliance ont par la suite contribué à son développement et le \android{} Open Source Project (AOSP) est chargé de la maintenance et l'évolution d'\android{}. Ce système d'exploitation est utilisé notamment dans des smartphones, appelé aussi ordiphones, «terminaux de poche» ou «téléphones intelligents», produits et distribués par un grand nombre de fabriquants de téléphones mobiles. Le nombre de téléphones mobiles intégrant le système d'exploitation d'\android{} a cru sensiblement récemment.
+Si on veut faire passer un message clair et précis, le support de communication doit également être clair, intuitif et ergonomique. Le site Internet 
+doit par conséquent être constitué d'un nombre limité de pages aérée, chacune des pages ciblant un thème important et ayant donc un objectif bien précis.
 
-Un grand nombre de développeurs ont créé des applications pour étendre la fonctionnalité des téléphones sous \android{} et il y a aujourd'hui
-plus de 200 000 applications disponibles. Bien qu'\android{} Market soit le magasin en ligne opéré par Google, il existe d'autres distributeurs
-d'applications \android{}. La majorité des applications sont écrites en Java, bien qu'il soit possible de développer des applications en
-Python, en Ruby et d'autres par le biais du \android{} Scripting Environment.
+\begin{center}
+\includegraphics[width=14cm]{img/siteAccueil.png}
+\end{center}
 
-\paragraph{Software Development Kit (SDK)}
-Le SDK d'\android{} posséde un grand nombre de classes et de paquetages sur l'ensemble des fonctionnalitées proposé par les périphèriques embarquant cet OS. On peut par exemple trouver un paquetage spécialisé dans les accès réseaux, bluetooth, d'autre pour la géolocalisation\dots{} Le developpement avec ce framework repose sur le modele (pattern en anglais) MVC (Model View Controller). Les modèles (du pattern MVC) sont principalement représenté avec des classes simple (héritant directement de \verb!java.lang.Object!). Les contrôlleurs eux hérite de la classe \verb!android.app.Activity! ou d'une de ces classes enfants. Quant aux vues, elles sont représenté avec un format XML.
-La connexion entre les contrôlleurs et le vues est réalisé grâce à la methode \verb!public View findViewById (int id)! de la classe \verb!android.app.Activity!, qui parcours l'arbre XML pour récuperer l'objet correspondant à l'id passé en paramétre.
+Dans les parties suivantes, les différentes pages de notre site seront décrites. 
 
-\paragraph{Developper Toolkit (ADT) Plugin}
-L'ADT est un plugin développé par Google pour faciliter le developpement d'application \android{} avec Eclipse. Il propose un menu permettant de créer des projets de type \android{} déjà parametré selon les besoins. Mais aussi un gestionnaire d'emulateur, une disposition (au sens d'Eclipse) DDMS permettant de contrôler l'emulateur\dots{}
+
+
+\subsubsection{Téléchargement}
+
+\begin{center}
+\includegraphics[width=14cm]{img/siteTelechargement.png}
+\end{center}
+
+La page 'Téléchargement' contient des instructions pour installer l'application Android de PtiClic. L'application peut être télécharger directement à partir d'un téléphone ou bien par le biais d'un ordinateur classique. 
+
+Quant à la version HTML5, aucune installation est nécessaire, mais il est nécessaire de s'inscrire et s'authentifier afin d'y jouer. 
+
+\subsubsection{L'inscription}
+Si une personne est intéressée par notre jeu et qu'il souhaite y jouer, il devra tout d'abord s'inscrire afin qu'il
+soit reconnu par le système. Cette opération est réalisée à partir du site à l'aide d'un formulaire comportant
+trois informations obligatoires~: 'nom d'utilisateur', 'mot de passe' et 'mail'. Le formulaire se limite à champs (deux champs 'mot de passe') pour éviter de décourager les utilisateurs de s'inscrire.
+
+\begin{center}
+\includegraphics[width=14cm]{img/siteInscription.png}
+\end{center}
+
+L'inscription se réalise la première fois qu'un internaute souhaite jouer au jeu~; lorsque l'on essayé de jouer au jeu sans être authentifié, on est invité soit à s'identifier soit à s'inscrire et l'utilisateur choisit selon le cas qui lui convient. L'inscription, une fois faite, définitive, permet aux utilisateurs de jouer librement et peuvent comparer leur performances à d'autres joueurs.
+
+\subsubsection{Contact}
+Pour qu'une application soit en accord avec ses utilisateurs, il faut un certain temps et apporter un certain nombre
+de modifications pour répondre à la demande et aux besoins de l'utilisateur final. Dans le but de récupérer les avis positifs et négatifs, les remarques et les critiques des utilisateurs, un formulaire de contact est disponible sur le site. 
+
+\begin{center}
+\includegraphics[width=14cm]{img/siteContact.png}
+\end{center}
+
+Ce formulaire est accessible sans inscription, ce qui permet d'envoyer un message s'il y a un problème lors de l'inscription au l'authentification, pour signaler un bogue concernant le site ou pour faire d'autres commentaires d'ordre général.
+
+\subsubsection{La création de parties}
+Un algorithme automatique de création de parties permet de créer un grand nombre de parties. Cependant, ce moyen
+de génération de partie est assez limité et donne régulièrement des résultat trop peu satisfaisant voire même incohérents.
+
+Pour palier à ce problème, une solution est de mettre en place un service permettant non pas à la machine, mais à des joueurs de créer eux-même des parties. Grâce à cette page, il est dorénavant possible d'obtenir des parties bien plus intéressantes, des parties qui contiennent un lexique spécifique à un domaine bien précis si le joueur est spécialiste d'un domaine précis ou bien des parties contenant de l'humour, par exemple. 
+
+
+\begin{center}
+\includegraphics[width=14cm]{img/siteCreerParties.png}
+\end{center}
+
+Cette page permet de créer des parties de taille et de thèmes variés. Les joueurs peuvent choisir des mots ou des expressions qu'ils souhaitent voir dans une partie ainsi que deux relations principales.
+Outre l'attractivité et l'intérêt de cette fonctionnalité, le joueur est mis en valeur du fait qu'il participe non seulement en tant que joueur, mais en tant que contributeur au projet. Les parties ainsi créées sont jouées par d'autres joueurs, améliorent la qualité des parties et le créateur et il serait même envisageable dans une future version de l'application de tenir le créateur de la partie au courant des joueurs qui ont joué sa partie et les scores obtenus.
+
+La partie création de partie a été développé en JavaScript au lieu de PHP, ce qui a permis d'avoir une interaction en temps avec l'utilisateur. En effet, lorsqu'un utilisateur saisit un mot ou expression, il est important pour lui de savoir si ce mot existe ou non. De ce fait, une requête est émise en direction du serveur afin de vérifier la validité du mot ou expression saisi. Lorsqu'un utilisateur souhaite créer une nouvelle partie 
+il ne sais pas forcément combien de mots va composer sa partie. Il devra par conséquent être en mesure d'augmenter au besoin le nombre de mots composants la partie.
+
+\subsubsection{Jouez en ligne~!}
+La seconde évolution majeure concernant le deuxième prototype du jeu est qu'il est possible de jouer directement depuis
+le site Internet sans forcément disposer de téléphone sous \android{}. Cette option permet de toucher un public bien plus large sans pénaliser ceux qui disposent d'un smartphone \android{}
+
+Une page du site Internet sera donc consacrée
+à la création manuelle de partie. Elle permetra de créer des parties de taille variée et de thème différents. Le joueurs pourra
+indiquer les mots qu'il souhaites voir dans la partie ainsi que les deux relations principales.
+Les parties ainsi créées pourront être jouées par les autres joueurs et permettrons d'améliorer l'attractivité et l'intérêt du jeu.
+
+
+\subsection{Version html5 du jeu}
+\label{sec:html5}
+\subsubsection{Architecture}
+
+La version HTML5 du jeu est architecturée de la manière suivante~:
+
+L'application comporte 6 écrans~:
+\begin{itemize}
+\item Le «splash» au démarrage;
+\item L'éran d'accueil, avec des liens vers les 4 autres (sauf score);
+\item L'écran du jeu, avec le mot central, le mot du nuage et les quatre relations;
+\item Le score, affiché à la fin de la partie;
+\item Les préférences, qui permettent de choisir le thème de couleurs de l'application;
+\item L'écran de connexion, sur lequel on peut se rendre depuis l'écran d'accueil, et qui s'affiche automatiquement lorsqu'on tente de faire
+  une action (jouer ou modifier les préférences) sans être connecté;
+\item L'écran «À propos», qui explique l'origine du jeu.
+\end{itemize}
+Chaque écran est contenu dans un élément HTML (\verb!<div/>!) qui est affiché uniquement lorsque l'utilisateur est sur cet écran.
+
+La navigation entre les écrans et entre chaque mot du nuage lorsqu'on joue s'effectue en modifiant l'identifiant de fragment
+de l'URL, c'est à dire la partie après le \verb!#!. De cette manière, chaque état est stocké dans l'historique du navigateur, et on peut revenir à
+l'écran précédant à l'aide des boutons «Précédent» et «Suivant» classiques. De plus, cela permet d'annuler le choix d'une relation pour
+un mot donné simplement en cliquant sur «Précédent».
+
+L'état du programme -- écran en cours, thème de couleurs, structure de données représentant la partie en cours lorsqu'elle a été récupérée et de même pour les scores -- est stocké dans une variable nommée \verb!runstate!. Cependant, si l'on considère l'enchaînement d'actions
+suivantes, on se rend compte qu'il doit y avoir une décorrelation entre l'état du programme tel que dictée par l'URL et l'état réel du
+programme~:
+
+\begin{itemize}
+\item L'utilisateur clique sur «Jouer», ce qui l'amène à l'URL \verb!#game!;
+\item L'écran de connexion est affiché pour que l'utilisateur s'identifie sans modifier l'URL (pour ne pas enregistrer cette étape
+  transitoire dans l'historique).
+\item Une fois l'utilisateur connecté, la partie commence.
+\end{itemize}
+
+Cette décorrelation apporte une certaine complexité au code de transition entre les états du programme, d'autant plus que l'application
+effectue des requêtes réseau asynchrones, par exemple pour récupérer la partie durant lesquelles n'importe quelle séquence «Précédent» /
+«Suivant» ou de modification arbitraire peut avoir lieu. Ainsi, entre le moment où l'on effectue une requête pour récupérer une nouvelle
+partie et le moment où cette requête aboutit, l'utilisateur peut avoir cliqué sur «Précédent», ce qui le ramène à l'écran d'accueil (auquel
+cas il ne faut pas afficher la partie lors de la réception), mais il peut aussi après ce «Précédent» faire «Suivant», auquel cas on se
+retrouve de nouveau sur l'écran du jeu, et il faut donc afficher la partie lors de sa réception (et ne pas faire une deuxième requête
+puisqu'il y en a déjà une en cours).
+
+Pour gérer cela, nous avons implémenté une routine de transition entre les états qui envoie la séquence de messages suivante au nouvel
+écran~:
+\begin{itemize}
+\item «goto», qui envoie le message «leave» à l'écran en cours, met à jour la variable runstate.screen, et communique quelques informations
+  à l'application hôte en Java sous Android
+\item «pre-enter», qui permet à l'écran d'effectuer des requêtes réseau avant son affichage;
+\item «enter», qui affiche l'écran, et modifie dynamiquement son contenu si nécessaire (par exemple affichage du texte décrivant les
+  relations dans l'écran du jeu)
+\item «update» appellée une première fois juste après l'affichage de l'écran et à chaque changement d'URL qui ne modifie pas l'écran. Cela
+  permet par exemple à l'écran du jeu de détecter qu'une réponse a été donnée pour un des mots du nuage et d'afficher le mot suivant.
+\end{itemize}
+
+Un changement d'URL déclenche donc soit un «goto», soit un «update», ce qui permet d'afficher l'écran voulu, tandis que les écrans peuvent
+s'envoyer les uns les autres ces messages (principalement le message «goto») pour basculer de l'un à l'autre sans modifier l'URL.
+
+\subsubsection{Concepts et techniques de programmation}
+
+Les actions à déclencher lors de la réception du résultat d'une requête réseau ainsi que le cache partiel des parties et des scores (qui
+permet de ne pas renvoyer une requête qui est déjà en cours ou a déjà abouti) sont implémentés en utilisant le paradigme de programmation
+fonctionelle avec évaluation paresseuse, le côté «évaluation paresseuse» étant émulé en encapsulant le code dans des fonctions anonymes
+(lambda fonctions).
+
+Nous avons aussi employé une forme limitée de programmation réactive pour le cache, implémentée via l'objet \verb!Deferred! de JQuery.
+
+Enfin, nous avons utilisé les capactités de JavaScript lui-même, qui est un langage objet basé sur les prototypes (et non les classes) pour
+étendre le langage là où cela s'est avéré nécessaire.
+
+\subsubsection{API Client-serveur}
+Le client et le serveur utilisent tout deux une API qui permet de facilement remplacer un des deux composants. Tous les appels au serveur se font en HTTP GET et peuvent avoir les deux paramètres \verb!user! et \verb!password!. De plus, elles peuvent renvoyer une erreur au format suivant~:
+\begin{alltt}
+\{"error":\textit{Code d'erreur}, "msg":\textit{Message d'erreur}, "isError":true\}
+\end{alltt}
+
+Voici les principaux messages que supporte le serveur~:
+\begin{itemize}
+\item Récupérer une partie jouable~:
+
+\verb!server.php?action=0!
+{
+\small
+\begin{alltt}
+\{
+\quad"author":"\textit{Créateur de la partie}",
+\quad"gid":\textit{Numéro de la partie},
+\quad"pgid":\textit{Numéro de la partie jouable},
+\quad"relations":[
+\quad\quad\{"id":7,"name":"Un contraire de %mc est %mn"\},
+\quad\quad…
+\quad],
+\quad"center":\{"id":\textit{eid mot central},"name":"\textit{Mot central}"\},
+\quad"cloud":[
+\quad\quad\{"id":\textit{eid mot nuage},"name":"\textit{Mot nuage}"\},
+\quad\quad…
+\quad]
+\}
+\end{alltt}
+}
+\item Répondre à une partie~:
+
+\verb!server.php?action=1&gid=!\textit{\texttt{numéro de partie}}\verb!&pgid=!\textit{\texttt{numéro de partie}}
+
+Cette requête doit aussi prendre un couple \textit{\texttt{numéro du mot du nuage}}\verb!=!\textit{\texttt{numéro de la relation}} pour
+chaque réponse. Elle renvoie la structure suivante~:
+{
+\small
+\begin{alltt}
+\{
+\quad"scoreTotal":\textit{Score pour la partie},
+\quad"alreadyPlayed":\textit{true si la partie a déjà été jouée, false sinon},
+\quad"author":\textit{Créateur de la partie}",
+\quad"minScore":\textit{Plus petit score pour un mot},
+\quad"maxScore":\textit{Plus grand score pour un mot},
+\quad"newGame":\textit{Nouvelle partie, même format que action=0},
+\quad"scores":[
+\quad\quad\{"name":"\textit{Mot nuage}", "score":\textit{Score pour le mot}\}
+\quad]
+\}
+\end{alltt}
+}
+
+\item D'autres actions de moindre intérêt sont disponibles, et permettent de~:
+\begin{description}
+\item[\verb!action=2!] Déclencher la création automatique de parties
+\item[\verb!action=3!] Vérifier si un couple utilisateur/mot de passe est valide
+\item[\verb!action=4!] Vérifier si un mot existe dans la base de données
+% N°5 :
+\item[\verb!action=5!] Récupérer la liste des relations disponibles («fait partie de», «synonyme»…)
+\item[\verb!action=6!] Stocker une partie créée manuellement
+\item[\verb!action=7!] Récupérer les préférences de l'utilisateur
+\item[\verb!action=8!] Modifier les préférences de l'utilisateur
+\item[\verb!action=9!] Terminer la session et déconnecter l'utilisateur
+% n°10 :
+\item[\verb!action=10!] Indiquer si l'utilisateur aime ou non la partie à laquelle il a joué.
+\end{description}
+
+\end{itemize}
+
+\subsection{Protection contre les attaques des joueurs}
+
+Le serveur prévient quelques types d'attaques que des joueurs pourraient effectuer pour améliorer leur score. Entre autres, lorsqu'un joueur
+a envoyé ses réponses à une partie et que ses scores lui ont été envoyés, la modification des réponses est refusée s'il tente de renvoyer
+d'autres réponses. Cela permet d'éviter qu'un joueur améliore son score en donnant les réponses attendues une fois qu'il les connaît.
+
+Nous n'avons cependant pas de protection contre un utilisateur qui donnerait exprès les mauvaises réponses (une forme de SPAM qui influerait
+la base de données). La détection de ce comportement est difficile car il est tout à fait possible que les réponses que notre algorithme
+estime être les bonnes soient justes et il est tout à fait légitime qu'un utilisateur soit en désacord avec les uns avec les autres.
+
+Dans le cas de l'utilisation d'un robot pour donner en masse de mauvaises réponses, il serait possible de détecter la fréquence élevée des
+parties jouées, ce qui n'empêcherait cependant pas un robot de se créer plusieurs comptes pour éviter cette détection. De même que la
+détection de courriers indésirables est difficile dans le cadre de la messagerie électronique, la détection de la transmission massive de
+mauvaises réponses à notre serveur est compliquée, d'autant plus que peu de données sont transmises pour chaque partie.
+
+
+
+
 
 \section{Discussion}
 \subsection{Difficultés rencontrées}
