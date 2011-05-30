@@ -638,22 +638,13 @@ Pour palier à ce problème, une solution est de mettre en place un service perm
 \includegraphics[width=14cm]{img/siteCreerParties.png}
 \end{center}
 
+Cette page permet de créer des parties de taille et de thèmes variés. Les joueurs peuvent choisir des mots ou des expressions qu'ils souhaitent voir dans une partie ainsi que deux relations principales.
+Outre l'attractivité et l'intérêt de cette fonctionnalité, le joueur est mis en valeur du fait qu'il participe non seulement en tant que joueur, mais en tant que contributeur au projet. Les parties ainsi créées sont jouées par d'autres joueurs, améliorent la qualité des parties et le créateur et il serait même envisageable dans une future version de l'application de tenir le créateur de la partie au courant des joueurs qui ont joué sa partie et les scores obtenus.
 
-. Une page du site Internet sera donc consacrée
-à la création manuelle de partie. Elle permetra de créer des parties de taille variée et de thème différents. Le joueurs pourra
-indiquer les mots qu'il souhaites voir dans la partie ainsi que les deux relations principales.
-Les parties ainsi créées pourront être jouées par les autres joueurs et permettrons d'améliorer l'attractivité et l'intérêt du jeu.
+La partie création de partie a été développé en JavaScript au lieu de PHP, ce qui a permis d'avoir une interaction en temps avec l'utilisateur. En effet, lorsqu'un utilisateur saisit un mot ou expression, il est important pour lui de savoir si ce mot existe ou non. De ce fait, une requête est émise en direction du serveur afin de vérifier la validité du mot ou expression saisi. Lorsqu'un utilisateur souhaite créer une nouvelle partie 
+il ne sais pas forcément combien de mots va composer sa partie. Il devra par conséquent être en mesure d'augmenter au besoin le nombre de mots composants la partie.
 
-\subsection{Site Internet 2}
-\subsubsection{La création de partie}
-La deuxième version du site à pour but de rendre plus intuitif et plus certain points un peu complexe comme la création de partie.
-Le service de création de partie sera dévoloppé en JavaScript au lieu de PHP ce qui permettra d'avoir une intéraction en temps avec l'utilisateur.
-En effet lorsqu'un utilisateur saisie un mot il est important pour lui de savoir si ce mot existe ou non, de ce fait une requête pourra être
-émise en direction du serveur afin de vérifier la validité du mots saisi. D'autre lorsqu'un utilisateur souhaite créer une nouvelle partie 
-il ne sais pas forcément combien de mots va composer sa partie. Il devra par conséquent être en mesure d'augmenter au besoin le nombre de mots
-composants la partie.
-
-\subsubsection{Jouez en ligne !}
+\subsubsection{Jouez en ligne~!}
 La seconde évolution majeure qui est liée à une nouvelle version de l'interface de jeu est qu'il est possible de jouer directement depuis
 le site Internet sans forcéement disposer de téléphone sous \android{}. Cette option permettra de toucher un public bien plus large tout en 
 ne pénalisant pas ceux qui disposent d'un smartphone \android{}
