@@ -656,14 +656,14 @@ correspond une activité.
   \end{center}
 \end{figure}
 
-Comme une vue égal une activité si l'on veux que notre application présente plus d'une fenêtre il faut pouvoir lancer d'autre activité, et pouvoir revenir à la précédente. Pour ce faire une activité peut lancer une sous-activité qui sera empiler pour afin de pouvoir revenir à la précédente activité une fois celle-ci achevé. L'envoie de paramétres d'une activité à une autre est réalisé par les <<Intention>> (Intent).
+Comme une vue égal une activité si l'on veux que notre application présente plus d'une fenêtre il faut pouvoir lancer d'autre activité, et pouvoir revenir à la précédente. Pour ce faire une activité peut lancer une sous-activité qui sera empiler pour afin de pouvoir revenir à la précédente activité une fois celle-ci achevé. L'envoie de paramétres d'une activité à une autre est réalisé par les «Intention» (Intent).
 
 
 % TODO : Factoriser ce qui suit en avant, apres et mettre la section du dessus entre les parties factoriser. Bertrand
 
 \subsection{Le 1\up{er} prototype}
 
-La première version de l'application, été une application native, c'est à dire qu'elle fût réalisé entiéremenent en Java avec le framework \android{}. Comme on peut le voir sur la figure \ref{fig:archi-proto1}, l'application est composé de plusieurs parties. Tout d'abord au lancement de l'application, l'activité <<Écran principal>> est lancé. Cette activité permet la navigation dans l'application, à savoir qu'elle permet de naviger entre les différentes vue que posséde l'application. Ces autres vues sont <<Préférences>>, qui comme son nom l'indique permet d'afficher les préférences, <<Jeu>>, qui permet de joué, <<Score>> et <<À propos>>.
+La première version de l'application, été une application native, c'est à dire qu'elle fût réalisé entiéremenent en Java avec le framework \android{}. Comme on peut le voir sur la figure \ref{fig:archi-proto1}, l'application est composé de plusieurs parties. Tout d'abord au lancement de l'application, l'activité «Écran principal» est lancé. Cette activité permet la navigation dans l'application, à savoir qu'elle permet de naviger entre les différentes vue que posséde l'application. Ces autres vues sont «Préférences», qui comme son nom l'indique permet d'afficher les préférences, «Jeu», qui permet de joué, «Score» et «À propos».
 Nous avons aussi dans cet architecture des classes métiers permettant de réaliser des actions sur le réseau, et de sauvegarder les préférences de l'utilisateur dans le téléphone.
 
 
@@ -718,7 +718,7 @@ simplifié (une seul Activité) et une classe \verb!JavascriptInterface! réalis
 téléphone à été ajouté.  Un autre avantage à l'utilisation d'une application web pour développer PtiClic est le publique visé. En effet, le
 but de ce jeu étant de récupère des données d'un grand nombres d'utilisateur, fournir l'application à d'autres personnes que celles
 disposant d'un smartphone sous \android{} nous a semblé interressante. C'est pourquoi avec la version 2 nous avons aussi une application
-jouable à partir d'un navigateur internet <<normal>>, ce qui permet à un plus grand nombres de personnes de pouvoir jouer à PtiClic.
+jouable à partir d'un navigateur internet «normal», ce qui permet à un plus grand nombres de personnes de pouvoir jouer à PtiClic.
 
 
 \subsection{Le 2\up{ème} prototype}
