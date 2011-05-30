@@ -13,6 +13,8 @@
 \usepackage{graphicx}
 \usepackage{alltt}
 \usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{shapes,positioning,snakes,calc}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{2ex}
@@ -833,17 +835,6 @@ alpha-test. Après chaque itération, nous devions livrer une version stable aux
 
 Le diagramme de gantt en annexe \ref{sec:gantt-original} présente l'ordonancement et l'affectation des tâches de chacunes des itérations.
 
-\subsection{Modification du cahier des charges}
-A la fin de la première iteration, nous avons décidé de ne plus utiliser le système de création de vue proposé par le SDK d'\android{}, car,
-pour nous, la création de vue en passant par le format proposé nous prennait énormement de temps. \android{} supportant le framework WebKit
-ainsi que javascript dans son integralité et notre groupe ayant un peu plus d'expérience dans le développement d'application web (de part
-notre formation), nous avons décidé de développer les vues de l'application PtiClic en HTML5/Javascript. De ce faite, l'application à été
-simplifié (une seul Activité) et une classe \verb!JavascriptInterface! réalisant un pont entre le code javascript et les fonctionnalitées du
-téléphone à été ajouté.  Un autre avantage à l'utilisation d'une application web pour développer PtiClic est le publique visé. En effet, le
-but de ce jeu étant de récupère des données d'un grand nombres d'utilisateur, fournir l'application à d'autres personnes que celles
-disposant d'un smartphone sous \android{} nous a semblé interressante. C'est pourquoi avec la version 2 nous avons aussi une application
-jouable à partir d'un navigateur internet <<normal>>, ce qui permet à un plus grand nombres de personnes de pouvoir jouer à PtiClic.
-
 \subsection{Travail effectué}
 
 L'itération 1 a pris plus de temps que prévu, en partie à cause des difficultés rencontrées \ref{sec:difficultes}, et aussi parce que nous
@@ -887,7 +878,134 @@ radicalement changé le cahier des charges pour qu'il devienne le suivant~:
 Globalement, nous avons donc réduit le nombre de fonctionnalités à implémenter, tout en étoffant celles que nous avons conservé, afin
 d'éviter d'avoir une application offrant une multitude de fonctionnalités qui seraient implémentées de manière superficielle.
 
-\subsection{Langages}
+% TODO : Devrais etre mis ailleur Bertrand
+\subsection{Le modéle MVC d'\android{}}
+Pour le développement d'application sur mobile, Google propose d'utilisé le patron de conception (design pattern) MVC. On peut trouver sur internet une multitude d'implémentation de MVC, Google n'echappe pas à la régle en proposant
+le sien (voir figure \ref{fig:MVC}).
+La particularité de ce MVC tient au tour du principe d'activité. En effet les écrans des téléphone portable étant bien plus petit que ce de nos ordinateur, il faut pouvoir adpter l'interface des applications. Pour ce faire il existe
+sous \android{} le concepte d'activité.
+Une activité représente une sous application de l'application. C'est à dire qu'une application est représenté par plusieurs vues affichants les informations importante que le développeur veut montrer à l'utilisateur, et donc à une vue
+correspond une activité.
+
+\begin{figure}[h!]
+  \begin{center}
+    \begin{tikzpicture}[bend angle=10, shorten >=0.1cm, shorten <=0.1cm]
+      \node[draw] (activite) {Contrôlleur (Activité)};
+      \node[draw,below right=of activite, anchor=east, xshift=1cm] (modele) {Modèle};
+      \node[draw,below left=of activite, anchor=west, xshift=-1cm] (xml) {Vue (XML)};
+      \draw[->] (activite.east) ++(0,+.1cm) to[out=0,   in=90] ($(modele.north)+(+.1cm,0)$);
+      \draw[<-] (activite.east) ++(0,-.1cm) to[out=0,   in=90] ($(modele.north)+(-.1cm,0)$);
+      \draw[->] (activite.west) ++(0,+.1cm) to[out=180, in=90] ($(xml.north)+(-.1cm,0)$);
+      \draw[<-] (activite.west) ++(0,-.1cm) to[out=180, in=90] ($(xml.north)+(+.1cm,0)$);
+    \end{tikzpicture}
+    \caption{Le modéle MVC proposé par Google}
+    \label{fig:MVC}
+  \end{center}
+\end{figure}
+
+Comme une vue égal une activité si l'on veux que notre application présente plus d'une fenêtre il faut pouvoir lancer d'autre activité, et pouvoir revenir à la précédente. Pour ce faire une activité peut lancer une sous-activité qui sera empiler pour afin de pouvoir revenir à la précédente activité une fois celle-ci achevé. L'envoie de paramétres d'une activité à une autre est réalisé par les <<Intention>> (Intent).
+
+
+% TODO : Factoriser ce qui suit en avant, apres et mettre la section du dessus entre les parties factoriser. Bertrand
+
+\subsection{Le 1\up{er} prototype}
+
+La première version de l'application, été une application native, c'est à dire qu'elle fût réalisé entiéremenent en Java avec le framework \android{}. Comme on peut le voir sur la figure \ref{fig:archi-proto1}, l'application est composé de plusieurs parties. Tout d'abord au lancement de l'application, l'activité <<Écran principal>> est lancé. Cette activité permet la navigation dans l'application, à savoir qu'elle permet de naviger entre les différentes vue que posséde l'application. Ces autres vues sont <<Préférences>>, qui comme son nom l'indique permet d'afficher les préférences, <<Jeu>>, qui permet de joué, <<Score>> et <<À propos>>.
+Nous avons aussi dans cet architecture des classes métiers permettant de réaliser des actions sur le réseau, et de sauvegarder les préférences de l'utilisateur dans le téléphone.
+
+
+\begin{figure}[h!]
+  \begin{center}
+    \begin{tikzpicture}[
+      bend angle=10, shorten >=0.05cm, shorten <=0.05cm, text height=0.35cm,
+      communication/.style={draw,dashed,<->}
+      ]
+      
+      \node[draw] (appli) {Application \android{}};
+      % Pour que l'animation ne bouge pas.
+      \path[use as bounding box] (-5.2,0.4) rectangle (5.2,-5.1);
+      
+      \path node[draw,below=of appli] (frontpage) {Écran principal};
+      \path[draw,->] (appli) -- (frontpage);
+      
+      \path node[draw,below=of frontpage, anchor=north east, xshift=-0.3cm] (game) {Jeu};
+      \path[draw,->] (frontpage) -- (game);
+      
+      \path node[draw,left=of appli] (prefs) {Préférences};
+      
+      \path node[draw,below=of prefs,xshift=0.1cm] (reseau) {Réseau};
+      \path[communication] (game) -- (prefs);
+      \path[communication] (game) -- (reseau.south east);
+      
+      \path[draw,->] (game.south west) ++ (0,0.35cm) arc (90:360:0.35cm);
+      
+      \path node[draw,below=of frontpage, anchor=north west, xshift=0.3cm] (score) {score};
+      \path[draw,->] (game) -- (score);
+      
+      \path[draw,->] (score) -- (frontpage);
+      
+      \path node[draw,below left=of frontpage] (prefs-screen) {Préférences};
+      \path node[draw,below right=of frontpage] (about) {À propos};
+      \path[draw,->] (frontpage) -- (prefs-screen);
+      \path[draw,->] (frontpage) -- (about);
+      \path[communication] (prefs-screen.north west) to[bend left] (prefs.south west);
+      \path[communication] (prefs-screen) -- (reseau);
+    \end{tikzpicture}
+  \end{center}
+  \caption{Architecture du premier prototype}
+  \label{fig:archi-proto1}
+\end{figure}
+
+\subsection{Modification du cahier des charges}
+A la fin de la première iteration, nous avons décidé de ne plus utiliser le système de création de vue proposé par le SDK d'\android{}, car,
+pour nous, la création de vue en passant par le format proposé nous prennait énormement de temps. \android{} supportant le framework WebKit
+ainsi que javascript dans son integralité et notre groupe ayant un peu plus d'expérience dans le développement d'application web (de part
+notre formation), nous avons décidé de développer les vues de l'application PtiClic en HTML5/Javascript. De ce faite, l'application à été
+simplifié (une seul Activité) et une classe \verb!JavascriptInterface! réalisant un pont entre le code javascript et les fonctionnalitées du
+téléphone à été ajouté.  Un autre avantage à l'utilisation d'une application web pour développer PtiClic est le publique visé. En effet, le
+but de ce jeu étant de récupère des données d'un grand nombres d'utilisateur, fournir l'application à d'autres personnes que celles
+disposant d'un smartphone sous \android{} nous a semblé interressante. C'est pourquoi avec la version 2 nous avons aussi une application
+jouable à partir d'un navigateur internet <<normal>>, ce qui permet à un plus grand nombres de personnes de pouvoir jouer à PtiClic.
+
+
+\subsection{Le 2\up{ème} prototype}
+Pour le 2\up{nd} prototype, nous avons radicalement changé la manière dont nous avons traité les vues de notre application. L'utilisation du framework WebKit nous a permis de simplifier grandement notre application sous smartphone.
+Comme vous pouvez le voir sur la figure \ref{fig:archi-proto2}, nous disposont à présent d'un gros module traitant tout les détails de l'application (jeu, score, information\dots{}). Nous avons tout de même gardé la gestion des préferences sur le téléphone, car ce système sous \android{} était plus facile à utiliser que la réalisation de notre propre système de préférences, qui aurait pu utilisé par exemple le cache ou les cookies. % TODO : Georges peut tu confirme ?
+La communication entre le code Javascript de l'application et les préferences du téléphone ce fait par le biais d'une classe Java injecté dans l'espace de nom global du code Javascript.
+
+\begin{figure}[h!]
+  \begin{center}
+    \begin{tikzpicture}[
+      bend angle=10, shorten >=0.05cm, shorten <=0.05cm, text height=0.35cm,
+      communication/.style={draw,dashed,<->}
+      ]
+      
+      \node[draw] (appli) {Application \android{}};
+      % Pour que l'animation ne bouge pas.
+      \path[use as bounding box] (-5.2,0.4) rectangle (5.2,-5.1);
+      
+      \path node[draw,left=of appli] (prefs) {Préférences};
+      
+      \node[below=of appli, text height=0.25cm, minimum width=2cm] (fake-webkit) {\phantom{Webkit}};
+      \path node[draw,below=of fake-webkit, text height=1.5cm, minimum width=2cm, text centered] (html5) {\shortstack{Html5\\JavaScript\\jQuery\\CSS}};
+      
+      \path[draw,->] (html5.south east) ++ (0,0.35cm) arc (90:-180:0.35cm);
+      
+      \path node[draw,below=of appli, text height=0.25cm, minimum width=2cm] (webkit) {Webkit};
+      \path[draw,->] (appli) -- (webkit);
+      \path[draw,->] (webkit) -- (html5);
+      
+      \path node[coordinate] (waypoint) at ($0.5*(webkit.center)+0.5*(webkit.west)$) {};
+      \path[communication] (html5) to[controls=(waypoint) and (waypoint)] node[pos=0.16, anchor=east, xshift=-0.1cm, font=\small] {Interface JavaScript} (prefs.south east);
+    \end{tikzpicture}
+  \end{center}
+  \caption{Architecture du second prototype}
+  \label{fig:archi-proto2}
+\end{figure}
+
+\subsection{Outils utilisés}
+
+\subsubsection{Les Langages}
 Notre projet c'est découpé en 2 grosses parties. La première partie, la \og{}partie Serveur\fg{}, permet de réaliser des actions sur l'ensemble de la base de donnée (création de parti, validation de partie\ldots),
 la réalisation de celle-ci c'est fait principalement en PHP, l'autre étant du SHELL.
 La seconde partie, la \og{}partie Cliente\fg{}, permet à l'utilisateur de pouvoir intéragir avec le serveur, et surtout de pouvoir jouée à PtiClic. Elle à été réalisé en Java en utilisant le framework \android{} pour l'application mobile et avec le langage JavaScript pour l'application web.
@@ -911,7 +1029,6 @@ La partie cliente du projet est réalisé en Java. Ce langage est le plus utilis
 La deuxième version de l'application, écrite en HTML5, utilise le langage JavaScript pour l'interaction avec l'utilisateur. La bibliothèque jQuery a été lourdement utilisée pour abstraire l'interface DOM (Document Object Model) fournie par le navigateur pour interagir avec le document HTML. Cette bibliothèque très extensible permet entre autres de manipuler facilement des collections entières d'éléments pour les modifier tous en même temps, de faire des requêtes complexes sur le document pour en récupérer une portion destinée à être manipulée, et
 fournit aussi une couche d'abstraction pour les requêtes réseau asynchrones et la manipulation de données au format JSON (JavaScript Object Notation), qui est le format utilisé dans les échanges entre le client et le serveur. Dans le cadre de ce projet, nous avons été amenés à écrire plusieurs petites extensions à la bibliothèque jQuery, ce qui a été à chaque fois une tâche relativement aisée, vérifiant ainsi l'extensibilité de cette bibliothèque.
 
-\subsection{Outils utilisés}
 \subsubsection{Gestionnaire de versions~: Git et Github}
 
 Pour synchroniser nos efforts sur le projet, nous avons utilisé le gestionnaire de versions distribué git, et hébergé notre projet sur la plate-forme github. Un des avantages d'un gestionnaire de version distribué par rapport à un gestionnaire de versions centralisé tel que SVN, est qu'il n'y a pas besoin d'un serveur central pour synchroniser deux copies du projet. Ainsi, nous avons pu partager nos modifications via une clé usb, même dans des lieux avec une connectivité réduite, comme la fac, où nous avons régulièrement travaillé. 
