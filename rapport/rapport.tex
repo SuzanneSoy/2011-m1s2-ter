@@ -562,57 +562,25 @@ $n_1$ à «start», $n_2$ à «end», $t$ à «type» et $w$ à «weight» de la
 
 
 
-TYPE\_NODE(\underline{num}, name) \\
-
-%// ---- Node stats
-
-%/// 3 occurrences of nodes n_generic (t=0)
-%/// 228800 occurrences of nodes n_term (t=1)
-%/// 0 occurrences of nodes n_acception (t=2)
-%/// 0 occurrences of nodes n_definition (t=3)
-%/// 143 occurrences of nodes n_pos (t=4)
-%/// 1001 occurrences of nodes n_concept (t=5)
-%/// 42 occurrences of nodes n_flpot (t=6)
-%/// 0 occurrences of nodes n_hub (t=7)
-%/// 17 occurrences of nodes n_data (t=18)
-%/// 39 occurrences of nodes n_data_pot (t=36)
-%/// 956 occurrences of nodes AKI (t=666)
-
-TYPE\_RELATION(\underline{num}, name, extended\_name, info) \\
-
-???
-
-%*************
-%NE PAS EFFECER -> CI-DESSOUS LE SCHEMA COMME DECRIT PAR GD 
-
-%NODE(EID integer primary key autoincrement, name string, #type (ref TYPE_NODE.num), weight);
-%RELATION(RID integer primary key autoincrement, #start (ref NODE.eid), #end (ref NODE.eid), #type (ref %TYPE_RELATION.num), weight);
-%TYPE_NODE(NUM, name string);
-%TYPE_RELATION(NUM, name string, extended_name string, info string);
-%USER(LOGIN string primary key, mail string, hash_passwd string (md5sum du password), #score (contrainte : somme de tous les scores des PLAYED_GAME_CLOUD);
-%GAME(GID integer primary key autoincrement, #eid_central_word (ref NODE.eid, #relation_1 (ref RELATION.rid), #relation_2 ( (ref RELATION.rid), difficulty (contrainte : 10 <= difficulty <= 100));
-%GAME_CLOUD(GID, NUM, difficulty (contrainte : 1 <= difficulty <= 10), #eid_word(ref NODE.eid), totalWeight (contrainte : = somme des probas), probaR1 (contrainte : = somme des probas des PLAYED_GAME_CLOUD.weight avec la bonne relation et la même gid et num), probaR2 (idem), probaR0 (idem), probaTrash (idem));
-%PLAYED_GAME(PGID integer primary key autoincrement, #gid (ref GAME.gid), #login (ref USER.login);
-%PLAYED_GAME_CLOUD(#PGID (ref PLAYED_GAME.pgid), #GID (ref PLAYED_GAME.gid), NUM, type (contrainte : 0 = partie de référence, 1 = réponse d'un joueur), #relation (ref RELATION.rid), weight (contrainte : probabilité estimée de cette réponse pour les bots (robots), réputation du joueur sinon), score (score donné au joueur, 0 pour les bots);
-
 
 \subsection{Site Internet}
 % TODO : Yoann
-\subsubsection{Un site internet, pourquoi ?}
-Lorsqu'une nouvelle application ou jeux vidéo est développé, il est difficile de faire connaitre l'application
-sans utiliser de support de communication.
-La communication est une étape fondamentale dans la chaine de création d'une application ou celle de création d'un jeu.
-Internet est devene un support de communication très important et très influant qui permet de faire décourir aux
-personnes qui l'utilise un grand nombre de nouveau produits et permet également dans certain cas de les influencer.
-L'outil internet et plus particulièrement c'est révélé être une solution adapté à nos besoins.
+\subsubsection{Pourquoi un site Internet~?}
+Lorsqu'une nouvelle application ou jeux vidéo est développé, il est essentiel de faire connaître l'application.
+La communication est une étape fondamentale dans la chaîne de création d'une application et la création d'un jeu n'en fait pas exception.
+Internet est devenu un support de communication très important et très influant qui permet de faire découvrir aux
+personnes qui l'utilise un grand nombre de nouveaux produits. Il permet également dans certain cas d'influencer son public.
+L'outil Internet, et plus particulièrement de développement d'un site Web, s'est révélé la solution adaptée à nos besoins.
 
-Le site Internet est une vitrine de notre application. Il permetra de présenter notre projet et le jeu sur la plate-forme \android{}.
+Le site Internet est une vitrine de notre application. Il permet de présenter notre projet et le jeu sur la plate-forme \android{}.
 
-Si on veut faire passer un message clair et précis, le support de communication doit également être clair. Le site Internet 
-doit par conséquent être constitué d'un petit nombre de pages. Chaque page devant être aérée et cible un théme important.
+Si on veut faire passer un message clair et précis, le support de communication doit également être clair, intuitif et ergonomique. Le site Internet 
+doit par conséquent être constitué d'un nombre limité de pages aérée ciblant un thème important, chacune des pages ayant un objectif bien précis.
+
+Dans les parties suivantes, les différentes pages de notre site seront décrites. 
 
 \subsubsection{Téléchargement et installation}
-Il comportera aussi une page dédié au télécharge de l'application sur \android{] avec une série d'instructions qui permettront
+Il comportera aussi une page dédiée au téléchargement de l'application sur \android{} avec une série d'instructions qui permettront
 aux utilisateur d'installer en toute simplicité l'application sur leurs smartphone.
 
 \subsubsection{L'inscription}
