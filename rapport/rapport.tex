@@ -507,125 +507,30 @@ On voit que les relations n'utilise que quatre catégories grammaticales~: des n
 
 Dans la relation 0, la relation la plus générale, n'importe quelle catégorie de mot peut être associée à n'importe quelle autre catégorie de mot, ce qui n'est pas le cas des autres relations sémantiques. Dans les relations de synonymies et d'antonymies, le mot central peut être de n'importe quelle des ces quatre catégories grammaticales, mais les mots nuage corresondants doivent être de la même catégorie grammaticale que le mot central. Il n'est pas possible qu'un nom ait comme synonyme un adjectif ou un verbe. D'autres relations impose des contraintes bien plus fortes. Dans la relation 13 ('mc'\footnote{mot central} pourrait 'mn'\footnote{mot nuage}, le mot central doit être un verbe et le mot nuage doit être un adjectif, sinon il est sûr et certain que la relation, si elle a été choisie, est fausse. Ces contraintes doivent être prises en compte dans l'application non seulement dans l'algorithme de génération de nuage mais aussi lorsqu'un joueur tente de donner une telle réponse. Une telle réponse ne doivent jamais être correcte, même si deux joueurs jouant l'un contre l'autre donne de telles réponses. Par ailleurs, de telles réponses pourraient être pénalisées plus fortement ou être utilisées pour détecter des personnes ou logiciels malveillants tentant de nuire à la base de données.   
 
-Le fait que les mots soient de la bonne catégorie grammaticale est une condition nécessaire mais non suffisante. 
+Le fait que les mots soient de la bonne catégorie grammaticale est une condition nécessaire mais pas suffisante. Par exemple, dans la relation 10, 'mc' fait partie de 'mn', la phrase "'écran' fait partie de 'ordinateur'" tient la route, mais la phrase "'humidité' fait partie de 'honnêteté'" est un non sens. Pour cette raison, il serait intéressant que les noeuds de type 36 qui nous donnent des informations métalinguistiques supplémentaires pour nous indiquer s'il s'agit de lieux, de choses, de personnes, etc. pourrait nous être d'une grande utilité. Néanmoins, il s'agit d'une condition qui est nécessaire, mais toujours insuffisante~: la phrase "'roue' fait partie d'un 'arbre'" et des phrases de ce genre ne nous aident pas et ne rend pas le jeu intéressant pour l'utilisateur. D'autres filtres pourraient être utilisés afin d'accroître les probabilités qu'un nuage généré automatiquement crée une partie intéressante, la relation de domaine, qui est assez général.     
+
+Mais il y a encore une autre dimension de ces relations dont il faut être vigilent~: toutes les relations ne sont pas compatibles. Pour prendre un exemple simple, mettons qu'une partie était composée de deux relations, les relations 9 ('mn' est une partie de 'mc') et 13 ('mn' pourrait 'mc'). Dans la relation 9, le mot central doit être un nom alors que dans la relation 13 il doit être un verbe. A l'exception d'un nombre très limité de mots qui peuvent être à la fois un verbe et un nom\footnote{Mais même dans ce cas, aucun problème existe car les deux mots seraient des noms ou des verbes. Le problème se pose justement lorsque cela n'est pas la cas.}, il faudrait éviter de combiner ces deux relations. Des exemples de relations qui peuvent être combinées sans problèmes sont les relations 6, 8, 9 et 10. On pourrait aussi combiner ces quatre relations avec les relations de synonymie et d'antonymie si on choisit des substantifs pour ces derniers. Les relations 5 et 7, de synonymie et d'antonymie, vont parfaitement ensemble.
 
 
-
-Remarquez qu'il ne suffit pas de choisir un mot nuage de la bonne catégorie grammaticale. Par exemple, dans la relation 16, les mots nuages potentiels doivent non seulement être des substantifs, mais doivent aussi être des choses. Le mot 'beauté' est un substantif mais ne sera pas un candidat mot nuage pour la relation 16. 
+\subsubsection{Algorithmique}
 
 Il est plus intéressant de créer le nuage à partir de la relation 0 et d'introduire des relations plus spécifiques, c'est-à-dire n'importe quelle relation à l'exception de la relation 0, car presque toute relation est un sous-ensemble de la relation 0, la relation d'antonymie étant parfois une exception à la règle. 
 
-L'isolation d'une seule relation permet d'établir si oui ou si non un mot est lié à un autre mot. Lorsqu'il y a deux ou plusieurs relations, le fait qu'un mot peut appartenir à un seul relation diminue le nombre de fois qu'un mot sera inclu dans une telle relation. 
+L'isolation d'une seule relation permet d'établir si oui ou si non un mot est lié à un autre mot. Lorsqu'il y a deux ou plusieurs relations, le fait qu'un mot peut appartenir à un seul relation diminue le nombre de fois qu'un mot sera inclu dans l'une des deux relations. 
 
-Certaines relations sont incompatibles. Par exemple, la relation 13 doit avoir comme mot central un verbe alors que la relation 17 doit avoir comme mot central un nom. Si une partie est composée uniquement de la relation 13 et la relation 17, il est évident qu'une des relations n'aura aucune réponse possible car elle sera dépourvue de sens. Un autre exemple d'incompatibilité est dans le relation nuage. Si une partie contient seulement les relations 10 et 17, qui ont toutes les deux comme mot central un substantif, il serait possible de déduire à partir de la catégorie grammaticale quels mots sont candidats aux relations en question~: seuls les adjectifs sont candidats à la relation 17, seuls les noms sont candidats à la relation 10. Il serait intéressant de sanctionner plus sévèrement un utilisateur qui fait ce genre d'erreur lors d'une partie. 
+Lorsque l'on trouve un moyen d'introduire de nouvelles relations tels que la LSA, il serait intéressant dans un premier temps d'introduire un mot central, des mots nuages générés par la LSA ou une autre méthode et uniquement la relation 0 afin que les joueurs valident les relations de fortes poides de la LSA. Ensuite, ces mots validés pourraient être utilisés pour la création de nuage et des parties générées qui ne mettent en jeu que des relations plus spécifiques (autre que la relation 0) afin d'affiner les relations qu'entretient le mot central aux mots nuage.  
 
-Les relations 5 et 7 vont bien ensemble car elles contiennent exactement les même possibilités de POS comme mots central et nuages. En outre, les relations synonyme/antonyme sont antonymique, donc, il est rare que deux réponse soit possible, bien que la polysémie peut donner lieu à une exception (par exemple, le mot 'terrible' peut être synonyme ou antonyme à la fois de 'très bien' et de 'très mauvais'). Si l'on combine ces relations avec d'autres relations, il faudrait vérifier que les POS correspondent. Par exemple, 5, 7, 8, 9 et 10 peuvent être combiné pourvu que les relations 5 et 7 n'utilise que des noms.
+Introduire la relation 0 et d'autres relations n'est en principe pas une bonne idée étant donné qu'il est presque sûr et certain que ceci donne lieu à deux réponses possibles. L'utilisateur n'aurait qu'à donner la relation qui est plus sûr, la relation, ce qui ne nous aide pas quant à avoir des informations sémantiques plus spécifiques concernant le mot central et inversement au mot nuage en question. Les seules raisons valables d'introduire la relation 0 parmi d'autres relations est de combler des problèmes liés à la génération de nuage et, en même temps, de travailler sur l'affinement des liens sémantiques et l'alimentation de la relation 0 afin de créer de nouveaux nuages dans de futures parties.   
 
-Lorsque l'on trouve un moyen d'introduire de nouvelles relations tels que la LSA, il serait intéressant dans un premier temps d'introduire un mot central, des mots nuages et uniquement la relation 0. Ensuite, les données récupérées à partir de ce procédé pourraient utiliser pour raffiner ces relations. c'est-à-dire, à un mot central C et des mots nuages $N_{1}$ à $N_{n}$ qui ont été liés à C par la relation C, on prend ce même mot central et on introduit des relations autre que la relation 0. 
+Il est intéressant de varier le nombre de relations. Avoir une seule relation permet d'isoler une lien sémantique et de savoir si oui ou non il est valable. 
+ 
+Si nous nous occupons pas d'introduire de nouvelles relations aux noeuds qui n'ont aucune relation sémantique sortante ou entrante, outre l'affinage des informations sémantiques de la base en partant de la relation 0 pour la génération du nuage et en introduisant des relations plus spécifiques, il est possible de renforcer des relations déjà existantes et d'en introduire de nouvelles relations en se servant des stratègies spécifiques à des relations ou plus précisement à des paires de relations.
 
+Pour la synonymie, il est intéressant d'explorer les possibilités d'un nuage créé à partir d'un synonyme d'un synonyme ou bien d'un synonyme d'un synonyme d'un synonyme. De même, pour l'antonymie, un synonyme d'un antonyme ou un antonyme d'un synonyme. Le résultat est parfois très bon, parfois complètement inutile à cause de la polysémie d'un mot intermédiaire dont on se sert comme pivot.
 
-BOOKMARK
-\subsection{*****CE QUI SUIT A ETE REDIGE IL Y A QUELQUE TEMPS ET DOIT ETRE RELU, DEVELOPPE, SUPPRIME OU INTEGRE AU TEXTE CI-DESSUS****}
+On peut parfois faire des observations et des constatations lors de telles expériences. Par exemple, pour la relation 8, "Un spécifique de 'mc' est 'mn'", on peut générer le nuage en créant un spécifique d'un générique d'un spécifique. Pour le mot 'véhicule', cela pourrait donner 'bus', qui pourrait donner 'mode de transport', qui pourrait donner 'train', 'avions', 'bicyclette'. Ou bien, deuxième cas de figure, 'véhicule' nous donne 'scooter' qui nous donne 'deux-roues'. Ce qui est intéressant est que, dans les deux cas, les termes génériques pourraient éventuellement générer des nuages qui sont des sous-ensembles l'un de l'autre~: Est-ce que tout deux-roues est un véhicule ? Est-ce que tout 'véhicule' est un 'mode de transport'. Si ce fait est établi, il serait possible de le prendre en compte dans le réseau lexical. 
 
-\subsubsection{Quelles relations mettre ensemble~? Quelles relations seraient en conflit~?}
-
-\subsubsection{La relation 0}
-La relation 0, r\_associated, "\%mn n'est pas lié à \%mc", est très générale et presque toute relation peut aussi être ajoutée à cette relation. Un synonyme a aussi "un rapport avec", un "instrument pour" a aussi "un rapport" avec. La seule exception qui pourrait parfois s'y produire est la relation d'antonymie, mais même là, elle pourrait bien avoir un rapport avec (froid/chaud, chat/chien). Pour cette raison, puisque il est plus intéressant de produire des relations plus spécifiques pour affiner les liens sémantiques, et étant donné que les mots issues de JDM ont été généré à l'aide de cette relation, il n'y a que deux cas où cette relation est intéressante~: 
-
-- pour générer le nuage afin de mettre les mots de cette relation dans des relations plus spécifiques
-- d'introduire des mots issus de LSA dans cette relation pour ensuite pouvoir affiner à l'aide du point précédent
-
-\subsubsection{Nombre de relations}
-Il serait intéressant de varier le nombre de relations. Avoir une seule relation (plus la relation "poubelle") permet d'isoler une seule relation. Il s'agit d'un 'oui' ou 'non' et on élimine la possibilité qu'un mot n'est pas affecté à une relation à cause du fait qu'il irait potentiellement dans deux relations différentes. 
-
-Puis, certains relations sont directement lié et présente aucun conflit. Par exemple, la relation d'antonymie et de synonymie sont elle-même antonymique et prennent les mêmes types de mots (POS) en tant que mots nuages et mot central. Aucun conflit pourrait y arriver si tout mot est de la méme POS.  
-
-
-\subsubsection{Des relations en conflit à cause du POS}
-Certaines relations seraient en conflit si combiner~: Il n'est pas possible de combiner la relation 16 et la relation 17 car le mot central de la relation "Un instrument pour \%mc est \%mn" prend comme mot central un verbe et la relation "Un caractéristique de \%mc est \%mn" prend comme mot central un nom. En outre, les mots nuages correspondants ne sont non plus du même POS~: la relation 16 prend comme mot nuage un nom alors que la relation 17 prend comme mot nuage un adjectif. 
-
-De même, même si un mot central prenait un mot de même POS, si les mots nuages étaient obligatoirement de POS différents, cela faciliterait la tâche du joueur, qui, consciemment ou non, pourrait "tricher" en sachant qu'une des relations prend un nom alors que l'autre prend un adjectif. C'est le cas de la relation 8, 9 et 10 qui ont comme mots central et nuages un nom et la relation 17 qui elle aussi a comme mot central un nom mais qui prend obligatoirement un adjectif comme mot nuage. Ces relations devraient jamais être combinées, ou bien, ce serait intéressant de pénaliser un jour davantage lorsqu'il se trompe de POS attendu. 
-
-
-
-Bien sûr, il est tout à fait possible de mélanger des POS en ayant 3 ou 4 relations et pour tester la légitimité des réponses des joueurs et leur fiabilité, mais cela rend en quelque sorte plus facile au joueur de jouer, quoique tout mot ne va pas forcément dans une catégorie, il existe aussi des mots poubelles, mais cela fournit une aide tout de même pour le joueur, s'il peut savoir à 100\% qu'un mot ne peut pas correspondre à une relation à cause de sa catégorie grammaticale. 
-
-
-
-\subsubsection{POS correct, mais conflit tout de même~!}
-Il peut arriver dans une relation qu'on a les bonnes catégories grammaticales dans les mots nuages, mais que les mots nuages sont inappropriés pour la relation en question. 
-
-Par exemple, pour la relation "Quoi/Qui pourrait \%mc", la relation 13, il ne suffit pas que le mot nuage soit un nom, loin de là~!. Le substantif "honnêteté" ne convient pas du tout~! Il faudrait aussi exploiter d'autres ressources de la base de données, par exemple, un substantif qui est aussi un métier ou une personne ou un animal.
-
-Ou bien, pour la relation partie/tout, il faut absolument que la chose soit un objet physique, une chose. 
-
-Nuage noms -> 6, 8, 9, 10, 13, (15 .. LIEU), 16 (à vérifier)
-
-Noms/choses -> 6, 8, 9, 10 (à vérifier)
-
-
-
-TODO~: 
-
-\subsubsection{Relations qui pourraient être ajoutées au jeu (car lien avec la sémantique)}
-TODO: lister, développer
-
-\subsubsection{Relations qui ne pourraient pas être ajoutées au jeu (car aucun lien avec la sémantique)}
-Liste avec brièves explications
-
-?? des moyens de contourner les problèmes liés au problème de relation à l'aide de la relation 'est de la même famille' et des expressions régulières, etc.~??
-
-
-
-\subsubsection{Algorithmes pour affiner ou renforcer des relations déjà existantes}
-
-Les algorithmes ci-dessous serait potentiellement générateur de nouvelles relations. Ce ne sera pas toujours le cas à cause de la polysémie et le fait que différents mots ont différentes nuances de signification. Il faudrait tester les algorithmes pour savoir ce qu'ils donnent. Il faudrait toujours vérifier que le mot obtenu par ces algorithmes ne produisent pas le mot de départ, de vérifier que le résultat est différent que le ou les mots passés en paramètre. 
-
-\subsubsection{Relation 0 - "\%mn n'est pas lié à \%mc"}
-A ne pas utiliser pour cette fin. Seulement comme indiquer ci-dessus, je répète ici: 
-- pour générer le nuage afin de mettre les mots de cette relation dans des relations plus spécifiques
-- d'introduire des mots issus de LSA dans cette relation pour ensuite pouvoir affiner à l'aide du point précédent
-
-\subsubsection{Relation 5 - "\%mc est un synonyme de \%mn"}
-
-- un synonyme d'un synonyme pourrait être un synonyme, ainsi qu'un synonyme d'un synonyme d'un synonyme
-- un antonyme (relation 7) d'un antonyme pourrait être un synonyme, ansi qu'un antonyme d'un antonyme d'un antonyme  d'un antonyme (Bonjour~!) 
-
-\subsubsection{Relation 6 - "\%mc est une sorte de \%mn"}
-- "Une moto est une sorte véhicule" où "moto" est le mot central et "véhicule" est un parmi plusieurs mots nuages. L'algorithme va partir de "moto" pour trouver "véhicule" ou bien "deux roues" (relation 6), puis faire marche arrière (relation 8, "Un spécifique de \%mc est \%mn"), par exemple, un spécifique "véhicule" est "voiture" ou bien un spécifique de "deux roues" est "vélo". Ensuite, on génère la relation "sorte de" à partir de ce résultat... "voiture" est une sorte de "moyen de transport" ou bien "vélo" est un "équipement de loisir". Le résultat final~: "moto" est-elle un "moyen de transport"~? "moto" est-elle un "équipement de loisir"~? 
-En somme, on effectue la relation 6, la relation 8 puis la relation 6 encore.  
-
-\subsubsection{Relation 7 - "Un contraire de \%mc est \%mn"}
-- un synonyme d'un antonyme pourrait être un antonyme
-- un antonyme d'un synonyme pourrait être un antonyme
-- un antonyme d'un antonyme d'un antonyme pourrait être un antonyme (Bonjour~!)
-
-
-\subsubsection{Relation 8 - "Un spécifique de \%mc est \%mn"}
-
-- C'est l'inverse de la relation 6. On effectue la relation 8, puis la relation 6, puis la relation 8.
-
-
-\subsubsection{Relation 9 -  "\%mn est une partie de \%mc"}
-- "salon" est une partie de "maison". On peut choisir un spécifique de "maison" et ensuite effectuer la relation 9. Si spécifique nous donne "église", il y a des parties de l'église qui sont commune aux parties d'une maison, d'autres qui sont spécifiques à "église".
-- On peut également basculer de la partie vers le tout puis encore vers la partie
-- On peut trouver la partie d'une partie, puis le tout de cette dernière.
-- On peut trouver le tout du mot central "maison" fait partie de "ville", une partie de cette dernière ("ville"), puis encore une partie de cette dernière.  
-
-
-\subsubsection{Relation 10 - "\%mc fait partie de \%mn"}
-- il s'agit de l'inverse de la relation 9. Il suffit d'effectuer les étapes inverses aux algorithmes de la relation 9
-
-
-
-\subsection{CONCLUSIONS}
-Il est intéressant que lorsque l'on fait une recherche dans ce domaine, on apprend énormément de choses de la machine, puis à partir des choses apprises, on modifie le fonctionnement de la machine, qui elle, nous fournit encore des résultats, et ainsi de suite. La machine apprend de nous et nous, nous apprenons de la machine. C'est un vrai dialogue~! ... 
-
-
-
-
-
-
+Pour conclure, les expériences menées dans le paquetage TALN ont été très enrichissantes dans l'interaction entre l'homme et la machine. Ayant des connaissances linguistiques, il est très intéressant de partir d'une idée, de lancer un algorithme avec un grand nombre de données, d'avoir les résultats instantanément puis d'en faire de déductions,\footnote{telles que celles de la relation 8 décrites dans le paragraphe précédent} ensuite, de modifier l'algorithme grace à ce que l'algorithme précédent nous a appris. En effet, l'homme apprend de la machine, et la machine 'apprend' de l'homme, qui modifie ses algorithmes. Ces expériences nous permet d'apprendre des faits sur la langue et le langage qui ne serait pas possible sans l'outil informatique que nous avons à notre disposition aujourd'hui.  
 
 
 \section{Conception}
@@ -633,21 +538,34 @@ Il est intéressant que lorsque l'on fait une recherche dans ce domaine, on appr
 
 \subsection{Base de données}
 
-Le schéma relationnel suivant a été modélisé à partir des informations du dump de la base de données d'origine et nos besoin en matière d'authentification et de sécurité côté serveur~:
+Le schéma relationnel suivant a été modélisé à partir des informations de l'archive de la base de données d'origine et nos besoin en matière d'authentification et de sécurité côté serveur~:
 
-TODO : A METTRE A JOUR, PLUS D'ACTUALITE
 
 {\footnotesize
-NODE(\underline{EID}, name, \#type, weight) \\ 
-RELATION(\underline{RID}, \#start, \#end, \#type, weight) \\
+NODE(\underline{eid}, name, \#type, weight) \\ 
+RELATION(\underline{rid}, \#start, \#end, \#type, weight) \\
 TYPE\_NODE(\underline{num}, name) \\
 TYPE\_RELATION(\underline{num}, name, extended\_name, info) \\
-USER(\underline{login}, mail, hash\_passwd, \#score) \\
-GAME(\underline{GID}, \#eid\_central\_word, \#relation\_1, \#relation\_2, difficulty) \\
-GAME\_CLOUD(\underline{GID, num}, difficulty, \#eid\_word, totalWeight, probaR1, probaR2, probaR0, probaTrash) \\
-PLAYED\_GAME(\underline{PGID}, \#gid, \#login) \\
-PLAYED\_GAME\_CLOUD(\underline{\#PGID, \#GID, num}, type, \#relation, weight, score) 
+USER(\underline{login}, mail, hash\_passwd, \#score, ugroup, cgCount) \\
+GAME(\underline{gid}, \#eid\_central\_word, \#relation\_1, \#relation\_2, difficulty, author, nb\_like, nb\_dislike) \\
+GAME\_CLOUD(\underline{gid, num}, difficulty, \#eid\_word, totalWeight, probaR1, probaR2, probaR0, probaTrash) \\
+PLAYED\_GAME(\underline{pgid, \#login}, \#gid, timestamp, like) \\
+PLAYED\_GAME\_SEQUENCE(\underline{id}); \\
+PLAYED\_GAME\_CLOUD(\underline{\#pgid, \#gid, \#login, num}, type, \#relation, weight, score)  \\
+COLON\_NODES(\underline{eid}) \\
+RANDOM\_CLOUD\_NODE(\underline{eid}, nbneighbors) \\
+RANDOM\_CENTER\_NODE(\underline{eid}) \\
+USER\_INFO(\underline{\#user, key}, value) \\
 }
+
+
+
+
+
+
+
+
+
 
 Si nous reprenons nos deux petits exemples d'entrées NODE et RELATION du dump de la base de données, il devient clair que les tables NODE et
 RELATION y correspondent strictement à la structure d'origine~: \verb!eid=231064:n="pour femme":t=1:w=50!, où «eid» correspond à «EID», $n$ à
@@ -656,76 +574,25 @@ $n_1$ à «start», $n_2$ à «end», $t$ à «type» et $w$ à «weight» de la
 
 
 
-TYPE\_NODE(\underline{num}, name) \\
-
-%// ---- Node stats
-
-%/// 3 occurrences of nodes n_generic (t=0)
-%/// 228800 occurrences of nodes n_term (t=1)
-%/// 0 occurrences of nodes n_acception (t=2)
-%/// 0 occurrences of nodes n_definition (t=3)
-%/// 143 occurrences of nodes n_pos (t=4)
-%/// 1001 occurrences of nodes n_concept (t=5)
-%/// 42 occurrences of nodes n_flpot (t=6)
-%/// 0 occurrences of nodes n_hub (t=7)
-%/// 17 occurrences of nodes n_data (t=18)
-%/// 39 occurrences of nodes n_data_pot (t=36)
-%/// 956 occurrences of nodes AKI (t=666)
-
-TYPE\_RELATION(\underline{num}, name, extended\_name, info) \\
-
-???
-
-%*************
-%NE PAS EFFECER -> CI-DESSOUS LE SCHEMA COMME DECRIT PAR GD 
-
-%NODE(EID integer primary key autoincrement, name string, #type (ref TYPE_NODE.num), weight);
-%RELATION(RID integer primary key autoincrement, #start (ref NODE.eid), #end (ref NODE.eid), #type (ref %TYPE_RELATION.num), weight);
-%TYPE_NODE(NUM, name string);
-%TYPE_RELATION(NUM, name string, extended_name string, info string);
-%USER(LOGIN string primary key, mail string, hash_passwd string (md5sum du password), #score (contrainte : somme de tous les scores des PLAYED_GAME_CLOUD);
-%GAME(GID integer primary key autoincrement, #eid_central_word (ref NODE.eid, #relation_1 (ref RELATION.rid), #relation_2 ( (ref RELATION.rid), difficulty (contrainte : 10 <= difficulty <= 100));
-%GAME_CLOUD(GID, NUM, difficulty (contrainte : 1 <= difficulty <= 10), #eid_word(ref NODE.eid), totalWeight (contrainte : = somme des probas), probaR1 (contrainte : = somme des probas des PLAYED_GAME_CLOUD.weight avec la bonne relation et la même gid et num), probaR2 (idem), probaR0 (idem), probaTrash (idem));
-%PLAYED_GAME(PGID integer primary key autoincrement, #gid (ref GAME.gid), #login (ref USER.login);
-%PLAYED_GAME_CLOUD(#PGID (ref PLAYED_GAME.pgid), #GID (ref PLAYED_GAME.gid), NUM, type (contrainte : 0 = partie de référence, 1 = réponse d'un joueur), #relation (ref RELATION.rid), weight (contrainte : probabilité estimée de cette réponse pour les bots (robots), réputation du joueur sinon), score (score donné au joueur, 0 pour les bots);
-
-%**INT unless otherwise marked
-
-%create table node(eid integer primary key autoincrement, name, type, weight);
-%create table relation(rid integer primary key autoincrement, start, end, type, weight);
-%create table type_node(name, num);
-%create table type_relation(name, num, extended_name, info);
-%create table user(login primary key, mail, hash_passwd, score);
-%create table game(gid integer primary key autoincrement, eid_central_word, relation_1, relation_2, difficulty);
-%create table game_cloud(gid, num, difficulty, eid_word, totalWeight, probaR1, probaR2, probaR0, probaTrash);
-%create table played_game(pgid integer primary key autoincrement, gid, login);
-%create table played_game_cloud(pgid, gid, type, num, relation, weight, score);
-
-%create index i_relation_start on relation(start);
-%create index i_relation_end on relation(end);
-%create index i_relation_type on relation(type);
-%create index i_relation_start_type on relation(start,type);
-%create index i_relation_end_type on relation(end,type);
-
-TODO: UML, diagrammes de classes, Use cases, etc.
 
 \subsection{Site Internet}
 % TODO : Yoann
-\subsubsection{Un site internet, pourquoi ?}
-Lorsqu'une nouvelle application ou jeux vidéo est développé, il est difficile de faire connaitre l'application
-sans utiliser de support de communication.
-La communication est une étape fondamentale dans la chaine de création d'une application ou celle de création d'un jeu.
-Internet est devene un support de communication très important et très influant qui permet de faire décourir aux
-personnes qui l'utilise un grand nombre de nouveau produits et permet également dans certain cas de les influencer.
-L'outil internet et plus particulièrement c'est révélé être une solution adapté à nos besoins.
+\subsubsection{Pourquoi un site Internet~?}
+Lorsqu'une nouvelle application ou jeux vidéo est développé, il est essentiel de faire connaître l'application.
+La communication est une étape fondamentale dans la chaîne de création d'une application et la création d'un jeu n'en fait pas exception.
+Internet est devenu un support de communication très important et très influant qui permet de faire découvrir aux
+personnes qui l'utilise un grand nombre de nouveaux produits. Il permet également dans certain cas d'influencer son public.
+L'outil Internet, et plus particulièrement de développement d'un site Web, s'est révélé la solution adaptée à nos besoins.
 
-Le site Internet est une vitrine de notre application. Il permetra de présenter notre projet et le jeu sur la plate-forme \android{}.
+Le site Internet est une vitrine de notre application. Il permet de présenter notre projet et le jeu sur la plate-forme \android{}.
 
-Si on veut faire passer un message clair et précis, le support de communication doit également être clair. Le site Internet 
-doit par conséquent être constitué d'un petit nombre de pages. Chaque page devant être aérée et cible un théme important.
+Si on veut faire passer un message clair et précis, le support de communication doit également être clair, intuitif et ergonomique. Le site Internet 
+doit par conséquent être constitué d'un nombre limité de pages aérée ciblant un thème important, chacune des pages ayant un objectif bien précis.
+
+Dans les parties suivantes, les différentes pages de notre site seront décrites. 
 
 \subsubsection{Téléchargement et installation}
-Il comportera aussi une page dédié au télécharge de l'application sur \android{] avec une série d'instructions qui permettront
+Il comportera aussi une page dédiée au téléchargement de l'application sur \android{} avec une série d'instructions qui permettront
 aux utilisateur d'installer en toute simplicité l'application sur leurs smartphone.
 
 \subsubsection{L'inscription}
