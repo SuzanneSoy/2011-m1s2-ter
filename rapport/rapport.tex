@@ -77,9 +77,9 @@ Reconception du jeu Pticlic sous \android{}}
 
 \section{Introduction}
 
-PtiClic\footnote{http://pticlic.org} est un jeu qui a été conçu et développé par Matthieu Lafourcade et Virginie Zampa. Le jeu a été créé afin de faire des études sur le vocabulaire et la sémantique sur des sujets de divers horizons dans un contexte ludique et motivant. Un mot central apparait, un nuage de mots entoure le mot central et le joueur clique et dépose des mots du nuage dans des catégories proposé sous forme d'énoncés. 
+PtiClic\footnote{\url{http://pticlic.org}} est un jeu qui a été conçu et développé par Matthieu Lafourcade et Virginie Zampa. Le jeu a été créé afin de faire des études sur le vocabulaire et la sémantique sur des sujets de divers horizons dans un contexte ludique et motivant. Un mot central apparait, un nuage de mots entoure le mot central et le joueur clique et dépose des mots du nuage dans des catégories proposé sous forme d'énoncés. 
 
-Par exemple, pour le mot central «bicyclette», les mots «pédale», «piéton», «pied», «automobile», «Sébastien Chabal», «Lance Armstrong», «pédalier», «voiture», «yeux», «rapide», «routier», «maillot», «pédaler», «dopage», «véhicule», «musclé», «nez», etc. sont proposés. Le joueur dépose ces mots dans les catégories «\dots{} est une partie de 'cycliste'», «Un contraire de 'cycliste' est \dots{}», «'cycliste' a un rapport avec \dots{}»,  «Une caractéristique de 'cycliste' est \dots{}» ou aucune de ces catégorie. Un score est obtenu en soustrayant les mots manquants et les mots incorrects aux mots corrects. 
+Par exemple, pour le mot central «bicyclette», les mots «pédale», «piéton», «pied», «automobile», «Sébastien Chabal», «Lance Armstrong», «pédalier», «voiture», «yeux», «rapide», «routier», «maillot», «pédaler», «dopage», «véhicule», «musclé», «nez», etc. sont proposés. Le joueur dépose ces mots dans les catégories «\dots{} est une partie de `cycliste'», «Un contraire de `cycliste' est \dots{}», «`cycliste' a un rapport avec \dots{}»,  «Une caractéristique de `cycliste' est \dots{}» ou aucune de ces catégorie. Un score est obtenu en soustrayant les mots manquants et les mots incorrects de chaque catégorie aux mots corrects. 
 
 Des linguistes et des informaticiens récupèrent les données liées aux parties jouées, ce qui leur permet de faire de la recherche dans leurs domaines respectifs.
 
@@ -97,7 +97,7 @@ Notre travail consiste à créer une version du PtiClic sous \android{}, une ver
 
 Dans un premier temps, une version de base a été conçue et réalisée. Ensuite, il a été prévu d'ajouter des fonctionnalités supplémentaires. La démarche adoptée par notre groupe a été une approche itérative. Initialement, quatre itérations et quatre livraisons devaient donner comme résultat une version de base et des versions plus élaborées~: un joueur pourrait, entre autres, modifier ses préférences ou choisir son niveau. L'idée était aussi de rendre le jeu plus attirant afin d'accroître le nombre de sujets participant aux études liées au résultat des données extraits des parties jouées.
 
-Nos objectifs initiaux ont été modifié, nous avons créé deux prototypes, l'une sous Android en Java, l'autre en HTML5 élargissant notre public leur donnant la possibilité de jouer au jeu sur divers types de smartphones.  
+Nos objectifs initiaux ont été modifié, nous avons créé deux prototypes, l'un sous Android en Java, l'autre en HTML5 élargissant notre public leur donnant la possibilité de jouer au jeu sur divers types de smartphones et sur leur ordinateur.
 
 
 \pagebreak
@@ -266,9 +266,9 @@ Selon Saussure, le signe linguistique est une entité à deux faces~: le signifi
   \caption{A la représentation qu'on a d'un cheval est associé la forme phonique du mot cheval}
 \end{figure}
 
-Cette notion semble assez simple mais, au contraire, la relation signifié-signifiant est très complexe. Cette entité a un très grand nombre de caractéristiques et le signifiant comprend des dénotations ainsi que des connotations qui peuvent être liées à des contextes multidimensionnels, généraux et spécifiques. Puis, à la notion de concept s'ajoute l'objet lui-même... s'il s'agit d'un objet physique~! Et s'il s'agit d'une émotion~? D'une action~? D'un sentiment~? D'une idée abstraite~? 
+Cette notion semble assez simple mais, au contraire, la relation signifié-signifiant est très complexe. Cette entité a un très grand nombre de caractéristiques et le signifiant comprend des dénotations ainsi que des connotations qui peuvent être liées à des contextes multidimensionnels, généraux et spécifiques. Puis, à la notion de concept s'ajoute l'objet lui-même\dots{} s'il s'agit d'un objet physique~! Et s'il s'agit d'une émotion~? D'une action~? D'un sentiment~? D'une idée abstraite~? 
 
-On peut aussi parler de sens figuré et de sens propre des mots. Par exemple au mot 'poésie' on pourrait associer les idées 'littérature', 'écrivain', 'auteur', 'strophes', etc. ... mais aussi 'musique', 'rêve', 'amour'. On parlera de ce deuxième sens lorsque l'on parle de la notion de 'bruit' dans la relation entre mots ou expressions. Et si on prenait en compte la polysémie d'un signifiant~?
+On peut aussi parler de sens figuré et de sens propre des mots. Par exemple au mot 'poésie' on pourrait associer les idées 'littérature', 'écrivain', 'auteur', 'strophes', etc. … mais aussi 'musique', 'rêve', 'amour'. On parlera de ce deuxième sens lorsque l'on parle de la notion de 'bruit' dans la relation entre mots ou expressions. Et si on prenait en compte la polysémie d'un signifiant~?
 
 Un demi-siècle plus tard, Emile Benveniste ajouta une autre dimension à ce schéma intégrant un 'référent' qui remplace le 'signifié', le 'signifié' étant, pour Benveniste, la dénotation du mot, c'est-à-dire bien l'objet lui-même. 
 
@@ -1257,7 +1257,7 @@ php\/ressources/footer.inc  -- pied de pages du site
 php\/ressources/locations.inc  -- petit fichier facilitant la navigation de page en page
 php\/ressources/menu.inc  -- menu du site
 php\/ressources/pticlic-alpha-v0.1.apk  -- exécutable PtiClic (fichier d'installation de l'application)
-php\/ressources/showmsg.inc  -- ?? (pour l'affichage des messages... mais dans quel contexte~? Pourquoi~?)
+php\/ressources/showmsg.inc  -- ?? (pour l'affichage des messages… mais dans quel contexte~? Pourquoi~?)
 php\/ressources/simple.css  -- CSS de base du site
 php\/ressources/strings.inc -- fichier de configuration des strings (phrases utilisés de manière répétitive dans le site, par exemple, les messages d'erreurs)
 
