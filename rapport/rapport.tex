@@ -50,7 +50,7 @@ Reconception du jeu Pticlic sous \android{}}
 \selectlanguage{frenchb}
 \begin{abstract}
   PtiClic est un jeu de mots où des utilisateurs jouent et des données lexicales et sémantiques sont récoltées automatiquement ou
-  semi-automatiquement. De telles approches pour peupler une base de données sont rapide, efficace, peu coûteuses et présentent bien
+  semi-automatiquement. De telles approches pour peupler une base de données sont rapides, efficaces, peu coûteuses et présentent bien
   d'autres avantages. Dans PtiClic, les joueurs associent des idées à des mots et marquent des points si leurs réponses correspondent aux
   réponses d'autres utilisateurs. PtiClic est une application Web qui a été créée par Mathieu Lafourcade et Virginie Zampa.
 
@@ -173,7 +173,7 @@ L'archive de la base de données est un fichier plat d'environ 2 000 000 lignes.
 la version à notre disposition lorsque nous avons commencé à l'analyser, en extraire des données puis à créer notre propre base de données
 n'était pas encodée en UTF-8.
 
-La base de données de laquelle est extraite ce dump provient d'un autre jeu de l'équipe TALN du Lirmm, nommé Jeuxdemots. L'objectif principal de JeuxDeMots est d'ajouter des mots et des expressions au réseau lexical alors que l'objectif principal de PtiClic est d'accroître le nombre de relations sémantiques entre les mots du réseau.
+La base de données de laquelle est extraite ce dump provient d'un autre jeu de l'équipe TALN\footnote{Traitement Automatique du Langage Naturel, NLP en anglais, Natural Language Processing} du Lirmm, nommé Jeuxdemots. L'objectif principal de JeuxDeMots est d'ajouter des mots et des expressions au réseau lexical alors que l'objectif principal de PtiClic est d'accroître le nombre de relations sémantiques entre les mots du réseau.
 
 L'archive contient en tout début des remerciements et quelques explications des acronymes et des abréviations utilisés, puis des statistiques, à savoir, le nombre d'occurrences de relations, la fréquence des noeuds, les 50 termes les plus fréquents. Plus un terme ou expression est fréquent, plus son poids est élevé. 
 
@@ -301,7 +301,7 @@ La notion de synchronie correspond à l'étude ou l'analyse d'une langue à un m
 
 Quoiqu'il soit intéressant d'étudier une langue à un moment donné dans le temps, cela ne correspond pas au monde réel. Une langue évolue quotidiennement grâce à ou à cause des nouveaux produits introduits sur le marché et les événements politiques du monde entre autre. Il est donc important de pouvoir tenir compte de ces changements. Ils sont pris en compte dans la base de données de JeuxDeMots grâce au fait que le réseau lexical évolue en temps réel ; le jeu qui alimente ce réseau est en ligne et est alimenté de manière continue. Une telle base de donnée permet aussi d'associer à de nouvelles entrées des dates précises. Il est aussi possible de se servir d'autres outils en TALN et en sémantique plus précisément pour mettre à jour une telle base de données, la LSA, l'analyse sémantique latente, par exemple, qui sera décrite ci-dessous.
 
-Un exemple d'une application qui pourrait prendre en compte la diachronie est un moteur de recherche basé sur un réseau lexical mis à jour en temps réel ou à intervalle de temps très court. Lorsqu'une affaire paraît à la une des journaux concernant un homme politique ou une catastrophique, les relations sémantiques qu'entretiennent les mots maîtres de tels articles changent.
+Un exemple d'une application qui pourrait prendre en compte la diachronie est un moteur de recherche basé sur un réseau lexical mis à jour en temps réel ou à intervalle de temps très court. Lorsqu'une affaire paraît à la une des journaux concernant un homme politique ou une catastrophique, les relations sémantiques qu'entretiennent les mots maîtres avec les mots subordonnés changent.
 
 \subsubsection{Langue et parole}
 
