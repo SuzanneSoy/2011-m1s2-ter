@@ -590,27 +590,27 @@ De plus, Git possède un algorithme de résolution des conflits d'édition beauc
 
 Une autre fonctionnalité appréciable de Git est que chaque «clone» d'un dépôt conserve tout l'historique du projet, si bien qu'un crash du serveur n'impacte pas du tout le projet~: on met en place un autre serveur sur lequel on envoie une copie du projet et tout fonctionne comme avant.
 
-Nous avons choisi la plateforme d'hébergement GitHub pour la facilité de la mise en place d'un dépôt Git (quelques clics suffisent), sa disponibilité élevée comparée à un serveur personnel et parce que nous avions déjà utilisé cette plateforme avec succès dans d'autres projets.
+Nous avons choisi la plateforme d'hébergement GitHub pour la facilité de la mise en place d'un dépôt Git (quelques clics suffisent), sa disponibilité élevée par rapport à un serveur personnel et parce que nous avions déjà utilisé cette plateforme avec succès dans d'autres projets.
 
-Github offre des fonctionalités supplémentaires telles que des graphes permettant de visualiser l'avancement du projet, un outil de rapport de bug et un wiki pour la documentation. Nous n'avons cependant pas utilisé ces deux dernières fonctionnalités, préférant un simple fichier texte pour garder une trace des bugs à corriger et des tâches à effectuer. Une des raisons motivant ce choix est qu'un des membres du groupe possède un ordinateur relativement peu performant et une connexion à Internet très peu fiable, qui rendent l'utilisation de ces services pénible voire impossibles lors des fréquentes coupures du réseau.
+Github offre des fonctionalités supplémentaires telles que des graphes permettant de visualiser l'avancement du projet, un outil de rapport de bug et un wiki pour la documentation. Nous n'avons cependant pas utilisé ces deux dernières fonctionnalités, préférant un simple fichier texte pour garder une trace des bugs à corriger et des tâches à effectuer. Une des raisons motivant ce choix est qu'un des membres du groupe possède un ordinateur relativement peu performant et une connexion à Internet très peu fiable, qui rendent l'utilisation de ces services difficile voire impossible lors des fréquentes coupures du réseau.
 
 
 \subsubsection{Environnement intégré de développement~: Eclipse}
-Eclipse est un environnement intégré de développement extensible et polyvalent permettant de créer des projets mettant en oeuvre un très grand nombre de langages de programmation. Il est écrit en Java, et c'est avec ce langage que l'on peut créer de nouvelles extensions. La grande force de cet environnement est qu'il est développer autour des plugins pour pouvoir l'étendre.
+Eclipse est un environnement intégré de développement extensible et polyvalent permettant de créer des projets mettant en oeuvre un très grand nombre de langages de programmation. Il est écrit en Java, et c'est avec ce langage que l'on peut créer de nouvelles extensions. La grande force de cet environnement est qu'il est développé autour des plugins pour pouvoir l'étendre.
 Son choix d'utilisation vient aussi du fait qu'il est présent sur les ordinateurs de l'Université Montpellier II.
 
 \subsubsection{\android{}}
 \android{} est un système d'exploitation open source pour smartphones. Pour ce TER nous avons donc utilisé le framework proposé par Google, pour le developpement d'application sur ce SE.\footnote{Système d'Exploitation} Il est basé sur le langage Java, ce qui permet un apprentissage plus aisé du fait que Java est le langage de programmation le plus utilisé dans le monde.
 
-\android{} est un système d'exploitation pour téléphone mobile basé sur le noyau Linux développé par \android{} Inc., racheté par Google en 2005. Google et d'autres membres du Open Handset Alliance ont par la suite contribué à son développement et le \android{} Open Source Project (AOSP) est chargé de la maintenance et l'évolution d'\android{}. Ce système d'exploitation est utilisé notamment dans des smartphones, appelé aussi ordiphones, «terminaux de poche» ou «téléphones intelligents», produits et distribués par un grand nombre de fabriquants de téléphones mobiles. Le nombre de téléphones mobiles intégrant le système d'exploitation d'\android{} a cru sensiblement récemment.
+\android{} est un système d'exploitation pour téléphone mobile basé sur le noyau Linux développé par \android{} Inc., racheté par Google en 2005. Google et d'autres membres du Open Handset Alliance ont par la suite contribué à son développement et le \android{} Open Source Project (AOSP) est chargé de la maintenance et l'évolution d'\android{}. Ce système d'exploitation est utilisé notamment dans des smartphones, appelés aussi ordiphones, «terminaux de poche» ou «téléphones intelligents», produits et distribués par un grand nombre de fabriquants de téléphones mobiles. Le nombre de téléphones mobiles intégrant le système d'exploitation d'\android{} a crû sensiblement récemment.
 
 Un grand nombre de développeurs ont créé des applications pour étendre la fonctionnalité des téléphones sous \android{} et il y a aujourd'hui
-plus de 200 000 applications disponibles. Bien qu'\android{} Market soit le magasin en ligne opéré par Google, il existe d'autres distributeurs
+plus de 200~000 applications disponibles sur Android Market. Bien qu'\android{} Market soit le magasin en ligne opéré par Google, il existe d'autres distributeurs
 d'applications \android{}. La majorité des applications sont écrites en Java, bien qu'il soit possible de développer des applications en
 Python, en Ruby et d'autres par le biais du \android{} Scripting Environment.
 
 \paragraph{Software Development Kit (SDK)}
-Le SDK d'\android{} posséde un grand nombre de classes et de paquetages sur l'ensemble des fonctionnalités proposées par les périphèriques embarquant ce SE. On peut par exemple trouver un paquetage spécialisé dans les accès réseaux, bluetooth ou pour la géolocalisation. Le developpement avec ce framework repose sur le modèle MVC\footnote{Model View Controller}. Les modèles MVC sont principalement représentés avec des classes simple héritant directement de \verb!java.lang.Object!. Les contrôleurs, eux, héritent de la classe \verb!android.app.Activity! ou d'une de ses classes enfants. Quant aux vues, elles sont représentées au format XML.
+Le SDK d'\android{} posséde un grand nombre de classes et de paquetages sur l'ensemble des fonctionnalités proposées par les périphèriques embarquant ce SE. On peut par exemple trouver un paquetage spécialisé dans les accès réseau, bluetooth ou pour la géolocalisation. Le developpement avec ce framework repose sur le modèle MVC\footnote{Model View Controller}. Les modèles de cette architecture sont principalement représentés avec des classes simple héritant directement de \verb!java.lang.Object!. Les contrôleurs, eux, héritent de la classe \verb!android.app.Activity! ou d'une de ses classes enfants. Quant aux vues, elles sont représentées au format XML.
 La connexion entre les contrôleurs et les vues est réalisée grâce à la methode \verb!public View findViewById (int id)! de la classe \verb!android.app.Activity!, qui parcours l'arbre XML pour récuperer l'objet correspondant à l'id passé en paramétre.
 
 \paragraph{Developper Toolkit (ADT) Plugin}
@@ -651,11 +651,10 @@ implémenter des détails que nous n'aurions pas eu le temps d'implémenter et u
   \end{itemize}
 \end{itemize}
 
-TODO: METTRE DIAGRAMME DE Gantt ICI 
- 
-Le diagramme de Gantt en annexe \ref{sec:Gantt-original} présente l'ordonancement et l'affectation des tâches de chacunes des itérations.
 
-L'itération 1 a pris plus de temps que prévu car nous ne savions pas que le code et d'autres aspects de l'existant ne nous seraient pas fournis au moments où nous avons effectué le diagramme de Gantt. Les difficultés en partant d'une simple archive de base de données nous a demandé une grande réflexion \ref{sec:difficultes}.
+Le diagramme de Gantt en annexe \ref{sec:gantt-original} présente l'ordonancement et l'affectation des tâches de chacunes des itérations.
+
+L'itération 1 a pris plus de temps que prévu car nous ne savions pas que le code et d'autres aspects de l'existant ne nous seraient pas fournis au moments où nous avons effectué le diagramme de Gantt. Les difficultés en partant d'une simple archive de base de données nous a demandé une grande réflexion (voir la partie \ref{sec:difficultes}).
 
 Entre autres, nous avons passé du temps à améliorer et régler les paramètres de l'algorithme de génération de parties, étant donné que l'algorithme naïf entamé vers les stades initiaux de réalisation donnait des résultats assez mauvais.
 
@@ -1326,6 +1325,7 @@ mauvaises réponses à notre serveur est compliquée, d'autant plus que peu de d
 \pagebreak
 
 \section{Discussion et conclusion}
+\label{sec:difficultes}
 
 Dès le début du projet, nous avons été confrontés à de nombreux problèmes. L'émulateur \android{}, qui devait nous permettre de tester
 l'application lors du développement, s'est révélé être extrêmement lent au point d'être inutilisable sur les ordinateurs de plusieurs membres
