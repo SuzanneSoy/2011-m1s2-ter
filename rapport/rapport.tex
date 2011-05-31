@@ -549,7 +549,7 @@ la réalisation de celle-ci s'est fait principalement en PHP, l'autre étant du 
 La seconde partie, la \og{}partie client\fg{}, permet à l'utilisateur de pouvoir interagir avec le serveur, de pouvoir jouée à PtiClic. On verra que le premier prototype a été réalisée en Java en utilisant le framework \android{} alors   que la deuxième version a été réalisée en HTML5 et JavaScript.
 
 \subsubsection{PHP}
-Nous avons utilisé PHP pour la création du serveur. PHP est un langage impératif, il dispose aussi depuis la version 5 de fonctionnalités objet, mais nous ne les avons pas utilisées dans notre projet. Outil par excellence pour produire des pages Web dynamiques, c'est pour cette raison que nous l'avons utilisé dans notre projet. C'est un langage peu typé, souple, multiplate-forme, libre et gratuit.
+Nous avons utilisé PHP pour la création du serveur. PHP est un langage impératif, il dispose aussi depuis la version 5 de fonctionnalités objet, mais nous ne les avons pas utilisées dans notre projet. Outil par excellence pour produire des pages Web dynamiques, c'est pour cette raison que nous l'avons utilisé dans notre projet. C'est un langage peu typé, souple, multiplateforme, libre et gratuit.
 Nous avons utilisé PHP pour la création de notre site Web \url{http://www.pticlic.fr} ainsi que pour la génération de partie, à savoir la création, la génération, l'envoie et la récupération de parties PtiClic.
 
 \subsubsection{SHELL}
@@ -577,14 +577,13 @@ Nous avons choisi la plateforme d'hébergement GitHub pour la facilité de la mi
 
 Github offre des fonctionalités supplémentaires telles que des graphes permettant de visualiser l'avancement du projet, un outil de rapport de bug et un wiki pour la documentation. Nous n'avons cependant pas utilisé ces deux dernières fonctionnalités, préférant un simple fichier texte pour garder une trace des bugs à corriger et des tâches à effectuer. Une des raisons motivant ce choix est qu'un des membres du groupe possède un ordinateur relativement peu performant et une connexion à Internet très peu fiable, qui rendent l'utilisation de ces services pénible voire impossibles lors des fréquentes coupures du réseau.
 
-BOOKMARK
 
 \subsubsection{Environnement intégré de développement~: Eclipse}
-Eclipse est un IDE extensible (par plugin) et polyvalent permettant de créer des projets mettant en oeuvre n'importe quel langage de programmation. Il est écrit en Java, et c'est avec ce langage que l'on peut créer de nouvelles extensions. La grande force de cet IDE est qu'il est développer autour des plugins pour pouvoir l'étendre.
-Son choix d'utilisation vient aussi du faite qu'il est présent sur les ordinateurs de la faculté, et que nous avons l'habitude de l'utiliser.
+Eclipse est un environnement intégré de développement extensible et polyvalent permettant de créer des projets mettant en oeuvre un très grand nombre de langages de programmation. Il est écrit en Java, et c'est avec ce langage que l'on peut créer de nouvelles extensions. La grande force de cet environnement est qu'il est développer autour des plugins pour pouvoir l'étendre.
+Son choix d'utilisation vient aussi du fait qu'il est présent sur les ordinateurs de l'Université Montpellier II.
 
 \subsubsection{\android{}}
-\android{} est un système d'exploitation open source pour smartphones. Pour ce TER nous avons donc utilisé le framework proposé par Google, pour le developpement d'application sur cet OS. Il est basé sur le langage Java, ce qui permet un apprentissage plus facile (du fait que ce langage est le plus utilisé dans le monde).
+\android{} est un système d'exploitation open source pour smartphones. Pour ce TER nous avons donc utilisé le framework proposé par Google, pour le developpement d'application sur ce SE.\footnote{Système d'Exploitation} Il est basé sur le langage Java, ce qui permet un apprentissage plus aisé du fait que Java est le langage de programmation le plus utilisé dans le monde.
 
 \android{} est un système d'exploitation pour téléphone mobile basé sur le noyau Linux développé par \android{} Inc., racheté par Google en 2005. Google et d'autres membres du Open Handset Alliance ont par la suite contribué à son développement et le \android{} Open Source Project (AOSP) est chargé de la maintenance et l'évolution d'\android{}. Ce système d'exploitation est utilisé notamment dans des smartphones, appelé aussi ordiphones, «terminaux de poche» ou «téléphones intelligents», produits et distribués par un grand nombre de fabriquants de téléphones mobiles. Le nombre de téléphones mobiles intégrant le système d'exploitation d'\android{} a cru sensiblement récemment.
 
@@ -594,15 +593,11 @@ d'applications \android{}. La majorité des applications sont écrites en Java, 
 Python, en Ruby et d'autres par le biais du \android{} Scripting Environment.
 
 \paragraph{Software Development Kit (SDK)}
-Le SDK d'\android{} posséde un grand nombre de classes et de paquetages sur l'ensemble des fonctionnalitées proposé par les périphèriques embarquant cet OS. On peut par exemple trouver un paquetage spécialisé dans les accès réseaux, bluetooth, d'autre pour la géolocalisation\dots{} Le developpement avec ce framework repose sur le modele (pattern en anglais) MVC (Model View Controller). Les modèles (du pattern MVC) sont principalement représenté avec des classes simple (héritant directement de \verb!java.lang.Object!). Les contrôlleurs eux hérite de la classe \verb!android.app.Activity! ou d'une de ces classes enfants. Quant aux vues, elles sont représenté avec un format XML.
-La connexion entre les contrôlleurs et le vues est réalisé grâce à la methode \verb!public View findViewById (int id)! de la classe \verb!android.app.Activity!, qui parcours l'arbre XML pour récuperer l'objet correspondant à l'id passé en paramétre.
+Le SDK d'\android{} posséde un grand nombre de classes et de paquetages sur l'ensemble des fonctionnalités proposées par les périphèriques embarquant ce SE. On peut par exemple trouver un paquetage spécialisé dans les accès réseaux, bluetooth ou pour la géolocalisation. Le developpement avec ce framework repose sur le modèle MVC\footnote{Model View Controller}. Les modèles MVC sont principalement représentés avec des classes simple héritant directement de \verb!java.lang.Object!. Les contrôleurs, eux, héritent de la classe \verb!android.app.Activity! ou d'une de ses classes enfants. Quant aux vues, elles sont représentées au format XML.
+La connexion entre les contrôleurs et les vues est réalisée grâce à la methode \verb!public View findViewById (int id)! de la classe \verb!android.app.Activity!, qui parcours l'arbre XML pour récuperer l'objet correspondant à l'id passé en paramétre.
 
 \paragraph{Developper Toolkit (ADT) Plugin}
-L'ADT est un plugin développé par Google pour faciliter le developpement d'application \android{} avec Eclipse. Il propose un menu permettant de créer des projets de type \android{} déjà parametré selon les besoins. Mais aussi un gestionnaire d'emulateur, une disposition (au sens d'Eclipse) DDMS permettant de contrôler l'emulateur\dots{}
-
-
-
-
+L'ADT est un plugin développé par Google pour faciliter le developpement d'application \android{} avec Eclipse. Il propose un menu permettant de créer des projets de type \android{} déjà parametrés selon les besoins, mais aussi un gestionnaire d'emulateur, une disposition (au sens d'Eclipse) DDMS\footnote{Dalvik Debug Monitor Server} permettant de contrôler l'emulateur\dots{}
 
 
 
@@ -639,12 +634,11 @@ implémenter des détails que nous n'aurions pas eu le temps d'implémenter et u
   \end{itemize}
 \end{itemize}
 
-TODO: METTRE DIAGRAMME DE GANTT ICI 
+TODO: METTRE DIAGRAMME DE Gantt ICI 
  
-Le diagramme de gantt en annexe \ref{sec:gantt-original} présente l'ordonancement et l'affectation des tâches de chacunes des itérations.
+Le diagramme de Gantt en annexe \ref{sec:Gantt-original} présente l'ordonancement et l'affectation des tâches de chacunes des itérations.
 
-L'itération 1 a pris plus de temps que prévu car nous ne savions pas que le code et d'autres aspects de l'existant ne nous seraient pas fournis. Les difficultés en partant d'une simple archive de base de données nous a demandé une grande réflexion \ref{sec:difficultes}.
-
+L'itération 1 a pris plus de temps que prévu car nous ne savions pas que le code et d'autres aspects de l'existant ne nous seraient pas fournis au moments où nous avons effectué le diagramme de Gantt. Les difficultés en partant d'une simple archive de base de données nous a demandé une grande réflexion \ref{sec:difficultes}.
 
 Entre autres, nous avons passé du temps à améliorer et régler les paramètres de l'algorithme de génération de parties, étant donné que l'algorithme naïf entamé vers les stades initiaux de réalisation donnait des résultats assez mauvais.
 
@@ -685,7 +679,7 @@ Comme une vue égal une activité si l'on veux que notre application présente p
 
 % TODO : Factoriser ce qui suit en avant, apres et mettre la section du dessus entre les parties factoriser. Bertrand
 
-\subsection{Le premier prototype}
+\subsubsection{Le premier prototype}
 
 La première version de l'application était une application native, c'est-à-dire qu'elle fût réalisée entiéremenent en Java avec le framework \android{}. Comme on peut le voir sur la figure \ref{fig:archi-proto1}, l'application est composée de plusieurs parties. Tout d'abord, au lancement de l'application, l'activité «Ecran principal» est lancée. Cette activité permet la navigation dans l'application, à savoir la navigation entre les différentes vues que possédent l'application. Ces autres vues sont «Préférences», qui comme son nom l'indique permet d'afficher les préférences, «Jeu», qui permet de joué, et «Score» et «A propos», qui donne des informations concernant le jeu.
 Nous avons aussi dans cet architecture des classes métiers permettant de réaliser des actions sur le réseau et de sauvegarder les préférences de l'utilisateur dans le téléphone.
@@ -734,24 +728,24 @@ Nous avons aussi dans cet architecture des classes métiers permettant de réali
   \label{fig:archi-proto1}
 \end{figure}
 
-\subsection{Modification du cahier des charges}
+\subsubsection{Modification du cahier des charges}
 
 A la fin de la première iteration, nous avons décidé de ne plus utiliser le système de création de vues proposé par le SDK d'\android{} car,
 pour nous, la création de vues en passant par le format proposé nous prenait énormement de temps à réaliser. \android{}, supportant le framework WebKit
-ainsi que javascript dans son integralité, et notre groupe ayant un peu plus d'expérience dans le développement d'application Web de par
-notre formation, nous avons décidé de développer les vues de l'application PtiClic en HTML5/Javascript. De ce fait, l'application à été
-simplifiée -- en une seule activité -- et une classe \verb!JavascriptInterface! réalisant un pont entre le code javascript et les fonctionnalitées du
+ainsi que JavaScript dans son integralité, et notre groupe ayant un peu plus d'expérience dans le développement d'application Web de par
+notre formation, nous avons décidé de développer les vues de l'application PtiClic en HTML5/JavaScript. De ce fait, l'application à été
+simplifiée -- en une seule activité -- et une classe \verb!JavascriptInterface! réalisant un pont entre le code JavaScript et les fonctionnalitées du
 téléphone à été ajoutée.  
 
 Un autre avantage à l'utilisation d'une application Web pour développer PtiClic est le public visé. En effet, le
 but de ce jeu étant de récupèrer des données d'un grand nombre d'utilisateurs, fournir l'application à d'autres personnes que celles
-disposant d'un smartphone sous \android{} nous a semblé interressant. En effet, la version HTML5 est jouable à partir de n'importe quel navigateur Web, que ce soit un ordinateur classique ou un smartphone.
+disposant d'un smartphone sous \android{} nous a semblé donc interressant. En effet, la version HTML5 est jouable à partir de n'importe quel navigateur Web, que ce soit un ordinateur classique ou un smartphone.
 
 
-\subsection{Le deuxième prototype}
+\subsubsection{Le deuxième prototype}
 Pour le deuxième prototype, nous avons radicalement changé la manière dont nous avons traité les vues de notre application. L'utilisation du framework WebKit nous a permis de simplifier grandement notre application sous smartphone.
 
-Comme vous pouvez le voir sur la figure \ref{fig:archi-proto2}, nous disposont à présent d'un gros module traitant tout les détails de l'application (jeu, score, information). Nous avons tout de même gardé la gestion des préferences sur le téléphone car le système sous \android{} était plus facile à utiliser que la réalisation de notre propre système de préférences, qui aurait pu utiliser par exemple le cache ou les cookies. % TODO : Georges peut tu confirme ?
+Comme vous pouvez le constater sur la figure \ref{fig:archi-proto2}, nous disposont à présent d'un gros module traitant tout les détails de l'application (jeu, score, information). Nous avons tout de même gardé la gestion des préferences sur le téléphone car le système sous \android{} était plus facile à utiliser que la réalisation de notre propre système de préférences, qui aurait pu utiliser par exemple le cache ou les cookies. % TODO : Georges peut tu confirme ?
 La communication entre le code Javascript de l'application et les préferences du téléphone se fait par le biais d'une classe Java injectée dans l'espace de nom global du code Javascript.
 
 
@@ -808,18 +802,18 @@ RANDOM\_CENTER\_NODE(\underline{eid}) \\
 USER\_INFO(\underline{\#user, key}, value) \\
 }
 
-Si nous reprenons nos deux petits exemples d'entrées NODE et RELATION du dump de la base de données, il devient clair que les tables NODE et
+Si nous reprenons nos deux petits exemples d'entrées NODE et RELATION de l'archive de la base de données, il devient clair que les tables NODE et
 RELATION y correspondent strictement à la structure d'origine~: \verb!eid=231064:n="pour femme":t=1:w=50!, où «eid» correspond à «EID», $n$ à
 «name», $t$ à «type» et $w$ à «weight» de la table NODE de notre base~; \verb!rid=430049:n1=82029:n2=151553:t=12:w=18! où $rid$ correspond à «rid»,
 $n_1$ à «start», $n_2$ à «end», $t$ à «type» et $w$ à «weight» de la table RELATION de notre base.
 
 
 \subsection{Le modéle MVC d'\android{}}
-Pour le développement d'application sur mobile, Google propose d'utilisé le patron de conception (design pattern) MVC. On peut trouver sur Internet une multitude d'implémentation de MVC, Google n'echappe pas à la régle en proposant
+Pour le développement d'application sur mobile, Google propose d'utiliser le patron de conception MVC. On peut trouver sur Internet une multitude d'implémentation d'MVC, Google n'echappe pas à la régle en proposant
 le sien (voir figure \ref{fig:MVC}).
-La particularité de ce MVC tient au tour du principe d'activité. En effet les écrans des téléphone portable étant bien plus petit que ce de nos ordinateur, il faut pouvoir adpter l'interface des applications. Pour ce faire il existe
-sous \android{} le concepte d'activité.
-Une activité représente une sous application de l'application. C'est à dire qu'une application est représenté par plusieurs vues affichants les informations importante que le développeur veut montrer à l'utilisateur, et donc à une vue
+La particularité du modèle MVC de Google tient au tour du principe d'activité. En effet les écrans des téléphones portables étant bien plus petits que ceux de nos ordinateur, il faut pouvoir adpter l'interface des applications. Pour ce faire il existe
+sous \android{} le concepte d'«activité».
+Une activité représente une sous application, c'est-à-dire qu'une application est représentée par plusieurs vues affichants les informations importantes que le développeur veut montrer à l'utilisateur. Autrement dit, à une vue
 correspond une activité.
 
 \begin{figure}[h!]
@@ -838,7 +832,7 @@ correspond une activité.
   \end{center}
 \end{figure}
 
-Comme une vue égal une activité si l'on veux que notre application présente plus d'une fenêtre il faut pouvoir lancer d'autre activité, et pouvoir revenir à la précédente. Pour ce faire une activité peut lancer une sous-activité qui sera empiler pour afin de pouvoir revenir à la précédente activité une fois celle-ci achevé. L'envoie de paramétres d'une activité à une autre est réalisé par les <<Intention>> (Intent).
+Comme une vue se traduit par une activité, si l'on veux que notre application présente plus d'une fenêtre, il faut pouvoir lancer d'autres activités et pouvoir revenir à la précédente. Pour cela, une activité peut lancer une sous-activité qui sera empilée pour afin de pouvoir revenir à la précédente activité une fois la sous-activité achevée. L'envoie de paramétres d'une activité à une autre est réalisé par les «Intention»\footnote{'intent' en anglais.}.
 
 
 
@@ -851,7 +845,7 @@ Internet est devenu un support de communication très important et très influan
 personnes qui l'utilise un grand nombre de nouveaux produits. Il permet également dans certain cas d'influencer son public.
 L'outil Internet, et plus particulièrement de développement d'un site Web, s'est révélé la solution adaptée à nos besoins.
 
-Le site Internet est une vitrine de notre application. Il permet de présenter notre projet et le jeu sur la plate-forme \android{}.
+Le site Internet est une vitrine de notre application. Il permet de présenter notre projet et le jeu sur la plateforme \android{}.
 
 Si on veut faire passer un message clair et précis, le support de communication doit également être clair, intuitif et ergonomique. Le site Internet 
 doit par conséquent être constitué d'un nombre limité de pages aérée, chacune des pages ciblant un thème important et ayant donc un objectif bien précis.
@@ -926,9 +920,7 @@ Les parties ainsi créées pourront être jouées par les autres joueurs et perm
 \label{sec:html5}
 \subsubsection{Architecture}
 
-La version HTML5 du jeu est architecturée de la manière suivante~:
-
-L'application comporte 6 écrans~:
+La version HTML5 du jeu  comporte 6 écrans~:
 \begin{itemize}
 \item Le «splash» au démarrage;
 \item L'éran d'accueil, avec des liens vers les 4 autres (sauf score);
@@ -939,6 +931,7 @@ L'application comporte 6 écrans~:
   une action (jouer ou modifier les préférences) sans être connecté;
 \item L'écran «À propos», qui explique l'origine du jeu.
 \end{itemize}
+
 Chaque écran est contenu dans un élément HTML (\verb!<div/>!) qui est affiché uniquement lorsque l'utilisateur est sur cet écran.
 
 La navigation entre les écrans et entre chaque mot du nuage lorsqu'on joue s'effectue en modifiant l'identifiant de fragment
@@ -1077,18 +1070,12 @@ parties jouées, ce qui n'empêcherait cependant pas un robot de se créer plusi
 détection de courriers indésirables est difficile dans le cadre de la messagerie électronique, la détection de la transmission massive de
 mauvaises réponses à notre serveur est compliquée, d'autant plus que peu de données sont transmises pour chaque partie.
 
+\section{Discussion et conclusion}
 
-
-
-
-\section{Discussion}
-\subsection{Difficultés rencontrées}
-\label{sec:difficultes}
 Dès le début du projet, nous avons été confrontés à des difficultés techniques. L'émulateur \android{} qui devait nous permettre de tester
-l'application lors du développement s'est révélé être très lent, au point d'être innutilisable sur les ordinateurs de plusieurs des membres
+l'application lors du développement s'est révélé être extrêmement lent au point d'être inutilisable sur les ordinateurs de plusieurs des membres
 du groupe. Pour contourner ce problème, nous avons installé l'émulateur sur les machines du RezUFR (bâtiments 5, 6 et 16), mais sa
-configuration était très pénible, ce qui nous a fait perdre beaucoup de temps, pour finalement nous rendre compte que l'installation était
-plutôt instable.
+configuration s'est avérée problématique, ce qui nous a fait perdre beaucoup de temps, pour finalement nous rendre compte que l'installation était plutôt instable.
 
 En ce qui concerne le travail sur le serveur, la tâche a été compliquée par des erreurs de syntaxe (guillemets non échappés, etc.) dans
 l'archive de la base de données qui nous a été fournie, ce qui nous a obligés à passer du temps à contourner ces erreurs avant de pouvoir
@@ -1101,51 +1088,49 @@ SQLite3 n'est pas capable d'utiliser un index pour la requête extérieure sur u
 \begin{verbatim}
 select * from (select * from table where condition) where condition
 \end{verbatim}
-Donc nécessité de ré-écrire certaines requêtes avec des jointures à priori beaucoup moins efficaces, mais qui le sont plus grâce aux index.
+Il y a eu par conséquent nécessité de réécrire certaines requêtes avec des jointures a priori beaucoup moins efficaces, mais sont tout de même efficace grâce aux index.
 
 SQLite3 tranforme les requêtes de la forme \verb!select * from table limit 100 order by random();! en une requête qui récupère tout le set
 de résultats, ajoute une colonne random(), prend les 100 premiers résultats et les trie. Mais cela l'oblige à récupérer tout le set de
-résultats, et calculer le random() pour chaque ligne, pour ensuite jeter tout ce qui dépasse la ligne 100. Cela est évidemment très coûteux
-dans le cadre de requêtes avec beaucoup de résultats, et nous avons donc dû isoler la requête avec \verb!limit! de son \verb!order by! avec
+résultats et de calculer le random() pour chaque ligne, pour ensuite jeter tout ce qui dépasse la ligne 100. Cela est évidemment très coûteux
+dans le cadre de requêtes avec beaucoup de résultats. Nous avons donc dû isoler la requête avec \verb!limit! de son \verb!order by! avec
 des «hacks» assez tordus pour tromper l'optimiseur.
 
 Lors du développement de l'application Java, le langage de description des interfaces utilisateur d'\android{}, qui est une application XML,
 s'est montré peu pratique pour la construction de l'interface d'un jeu, et difficile à modifier pour de petits ajustements (ajout d'un
-bouton, d'une icône…). C'est une des raisons pour l'abandon de la plate-forme \android{} + Java, en faveur de HTML5 + CSS + JavaScript.
+bouton, d'une icône…). C'est une des raisons pour l'abandon de la plateforme \android{} + Java, en faveur de HTML5 + CSS + JavaScript.
 
 Dans l'application HTML5, l'omniprésence d'évènements asynchrones a été la source de nombreux bugs. De plus, des légères différences de
-comportement entre le navigateur Web d'\android{} et les navigateurs sur les PC ont fait en sorte que certains problèmes ne se posaient que
+comportement entre le navigateur Web d'\android{} et les navigateurs sur les PC ont fait que certains problèmes ne se posaient que
 sur le téléphonne physique, ce qui a rendu leur résolution difficile.
 
-\subsection{Perspectives}
+L'application pourrait bénéficier d'une restructuration du code. Nous avons effectué cette restructuration et un gros
+nettoyage du code du client, mais le serveur n'est pas aussi propre et extensible que souhaitable.
 
 Bien que fonctionnelle, notre application peut encore être améliorée. L'implémentation d'un des modes de jeu prévus au départ, par exemple
-le mode «thématique», peut-être couplé avec un mode «l'image cachée» (on choisit un thème, et au bout de plusieurs parties, on découvre une
-image associée à ce thème) serait certainement un plus pour l'addictivité du jeu.
+le mode «thématique», pourrait être couplé avec un mode «l'image cachée»~: on choisit un thème et au bout de plusieurs parties on découvre une
+image associée à ce thème, ce qui contribuerait à l'addictivité du jeu.
 
-Un autre point améliorable est la qualité des nuages de mots générés. Actuellement, l'algorithme de génération des nuages ne tient pas
+Un autre aspect qui pourrait être amélioré est la qualité des nuages des mots générés. Actuellement, l'algorithme de génération des nuages ne tient pas
 compte de la partie du discours à laquelle le mot central et les mots du nuage appartiennent. Par exemple, la relation «fait partie de» n'a
 de sens que pour des noms, alors que notre algorithme peut aussi bien la choisir avec un adjectif comme mot central.
 
 Nous avons pensé à utiliser une forme de réseau de neurones pour déterminer si un mot central et des mots du nuage sont pertinants pour une
 relation donnée. Nous avons commencé à implémenter un tel algorithme, mais n'avons pas eu le temps terminer cette amélioration.
 
-Il est aussi à noter que l'application bénéficierait d'une restructuration du code. Nous avons effectué cette restructuration et un gros
-nettoyage du code du client, mais le serveur n'est pas aussi propre et extensible que souhaitable.
+Un paquetage TALN séparé a été en cours de développement et les résultats sont prometteux, mais ce paquetage est toujours au stade expérimental et les classes qui étaient prévues d'être intégrées au projet n'ont pas vu le jour.
 
-\section{Conclusions}
 
 Le client et le serveur constituent tous les deux des briques logicielles réutilisables. Le serveur peut être réutilisé assez facilement
 pour d'autres applications qui souhaiteraient afficher par exemple le nuage pour un mot donné. Le client communique avec le serveur en
-utilisant seulement quelques types de requêtes différents, et pourrait donc être couplé avec un autre serveur avec peu de modifications
-(nous pensons ici au serveur existant de la version de PtiClic réalisée par le LIRMM).
+utilisant seulement quelques types de requêtes différents et pourrait donc être couplés avec un autre serveur avec peu de modifications\footnote{nous pensons ici au serveur existant de la version de PtiClic réalisée par le LIRMM}.
 
 Le client est aussi extensible~: son architecture permet l'ajout de nouveaux écrans, de nouveaux thèmes, voire de nouveaux modes de jeu. Le
-fait qu'il soit écrit principalement en HTML5 et JavaScript permet de l'adapter à la plupart des téléphonnes intelligents et tablettes à
+fait qu'il soit écrit principalement en HTML5 et JavaScript permet de l'adapter à la plupart des téléphonnes intelligents et aux tablettes à
 moindre coût.
 
 Nous espérons que notre travail pourra être réutilisé par l'équipe du LIRMM pour offir une interface au jeu PtiClic qui soit compatible avec
-les plates-formes mobiles.
+les platesformes mobiles.
 
 \newpage
 
