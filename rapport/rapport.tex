@@ -112,7 +112,7 @@ une archive de la base de données dans un format textuel.
 L'analyse de l'existant consistait donc d'une analyse du format et du contenu de cette archive ainsi que l'application sur Internet que nous avons testé et analysé. Il était également possible d'avoir d'autres informations concernant l'application Web PtiClic à travers de nombreux articles écrits sur ce sujet et en communiquant avec les créateurs du jeu.
 
 \subsection{Le déroulement du jeu}
-L'utilisateur clique sur le boutont «Je joue !». Un mot\footnote{Pour simplifier l'écriture, nous parlons de 'mots', mais un mot peu aussi être un mot composé, un syntagme ou une phrase, y compris des noms propres} se dirige vers le centre de la page, c'est le 'mot central'. D'autres mots viennent entourer le mot central, ce sont les 'mots nuage'. La police du mot central est plus grande que celle des mots nuages. Le mot central et les mots du nuage sont de couleurs contrastées.
+L'utilisateur clique sur le boutont «Je joue !». Un mot\footnote{Pour simplifier l'écriture, nous parlons de 'mots', mais un mot peu aussi être un mot composé, un syntagme ou une phrase, y compris des noms propres.} se dirige vers le centre de la page, c'est le 'mot central'. D'autres mots viennent entourer le mot central, ce sont les 'mots nuage'. La police du mot central est plus grande que celle des mots nuages. Le mot central et les mots du nuage sont de couleurs contrastées.
 
 \subsubsection{L'écran du jeu}
 \begin{center}
@@ -170,22 +170,22 @@ utilisateurs, le vocabulaire rencontré peut ne pas convenir aux moins de 16 ans
 \subsection{L'archive de la base de données}
 
 L'archive de la base de données est un fichier plat d'environ 2 000 000 lignes. Ce fichier contient un grand nombre de caractères accentués et
-la version à notre disposition lorsque nous avons commencé à l'analyser, en extraire des données puis à créer notre propre base de données
+la version à notre disposition lorsque nous avons commencé à l'analyser, à en extraire des données puis à créer notre propre base de données
 n'était pas encodée en UTF-8.
 
-La base de données de laquelle est extraite ce dump provient d'un autre jeu de l'équipe TALN\footnote{Traitement Automatique du Langage Naturel, NLP en anglais, Natural Language Processing} du Lirmm, nommé JeuxDeMots. L'objectif principal de JeuxDeMots est d'ajouter des mots et des expressions au réseau lexical alors que l'objectif principal de PtiClic est d'accroître le nombre de relations sémantiques entre les mots du réseau.
+La base de données de laquelle est extraite cette archive provient d'un autre jeu de l'équipe TALN\footnote{Traitement Automatique du Langage Naturel, NLP en anglais, Natural Language Processing.} du Lirmm, nommé JeuxDeMots. L'objectif principal de JeuxDeMots est d'ajouter des mots et des expressions au réseau lexical alors que l'objectif principal de PtiClic est d'accroître le nombre de relations sémantiques entre les mots du réseau.
 
 L'archive contient en tout début des remerciements et quelques explications des acronymes et des abréviations utilisés, puis des statistiques, à savoir, le nombre d'occurrences de relations, la fréquence des noeuds, les 50 termes les plus fréquents. Plus un terme ou expression est fréquent, plus son poids est élevé. 
 
-L'archive a proprement parler contient deux grandes parties~: une partie 'noeuds' (\verb!NODES!) et une partie 'relations' (\verb!RELATIONS!). La partie 'noeuds'  contient sont de divers types. Les noeuds de type 'terme' contiennent non seulement des adjectifs, des adverbes, des substantifs et des verbes, mais aussi des locutions et des syntagmes, des mots tels que les prépositions, les conjonctions, les pronoms, les articles et les déterminants. Les substantifs peuvent être des noms propres, y compris des noms de lieux, des noms de personnes. Il existe de noeuds qui donnent d'autres informations, et on verra plus tard que ceux qui nous intéressent le plus, outre les termes, sont ceux concernant la catégorie grammaticale des mots et d'autres informations métalinguistiques plus précises.
+L'archive à proprement parler contient deux grandes parties~: une partie «noeuds» (\verb!NODES!) et une partie «relations» (\verb!RELATIONS!). Les «noeuds» sont de divers types. Les noeuds de type «terme» contiennent non seulement des adjectifs, des adverbes, des substantifs et des verbes, mais aussi des locutions et des syntagmes, des mots tels que les prépositions, les conjonctions, les pronoms, les articles et les déterminants. Les substantifs peuvent être des noms propres, y compris des noms de lieux, des noms de personnes. Il existe des noeuds qui donnent d'autres informations, et on verra plus tard que ceux qui nous intéressent le plus, outre les termes, sont ceux concernant la catégorie grammaticale des mots et d'autres informations métalinguistiques plus précises.
 
-Dans la partie 'mots et expressions', chaque entrée -- chaque ligne -- contient un $eid$ (Entry IDentifier), un nom $n$ (name), un type $t$ et un poids $w$ (weight). En voici un exemple~:
+Dans la partie «mots et expressions», chaque entrée -- chaque ligne -- contient un $eid$ (Entry IDentifier), un nom $n$ (name), un type $t$ et un poids $w$ (weight). En voici un exemple~:
 \indent%
 \begin{verbatim}
 eid=231064:n="pour femme":t=1:w=50
 \end{verbatim}
 
-Pour la partie relation, l'identifiant est le $rid$ (Relation IDentifier), le noeud de début $n1$ (starting node), le noeud de fin $n2$ (ending node), le $type$ (relation type) et le poids $w$ (weight). En voici un exemple~:
+Pour la partie relation, l'identifiant est le $rid$ (Relation IDentifier), le noeud de départ $n1$ (starting node), le noeud d'arrivée $n2$ (ending node), le $type$ (relation type) et le poids $w$ (weight). En voici un exemple~:
 \begin{verbatim}
 rid=430049:n1=82029:n2=151553:t=12:w=18
 \end{verbatim}
