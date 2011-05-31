@@ -173,7 +173,7 @@ L'archive de la base de données est un fichier plat d'environ 2 000 000 lignes.
 la version à notre disposition lorsque nous avons commencé à l'analyser, en extraire des données puis à créer notre propre base de données
 n'était pas encodée en UTF-8.
 
-La base de données de laquelle est extraite ce dump provient d'un autre jeu de l'équipe TALN\footnote{Traitement Automatique du Langage Naturel, NLP en anglais, Natural Language Processing} du Lirmm, nommé Jeuxdemots. L'objectif principal de JeuxDeMots est d'ajouter des mots et des expressions au réseau lexical alors que l'objectif principal de PtiClic est d'accroître le nombre de relations sémantiques entre les mots du réseau.
+La base de données de laquelle est extraite ce dump provient d'un autre jeu de l'équipe TALN\footnote{Traitement Automatique du Langage Naturel, NLP en anglais, Natural Language Processing} du Lirmm, nommé JeuxDeMots. L'objectif principal de JeuxDeMots est d'ajouter des mots et des expressions au réseau lexical alors que l'objectif principal de PtiClic est d'accroître le nombre de relations sémantiques entre les mots du réseau.
 
 L'archive contient en tout début des remerciements et quelques explications des acronymes et des abréviations utilisés, puis des statistiques, à savoir, le nombre d'occurrences de relations, la fréquence des noeuds, les 50 termes les plus fréquents. Plus un terme ou expression est fréquent, plus son poids est élevé. 
 
@@ -550,7 +550,7 @@ La seconde partie, la \og{}partie client\fg{}, permet à l'utilisateur de pouvoi
 
 \subsubsection{PHP}
 Nous avons utilisé PHP pour la création du serveur. PHP est un langage impératif, il dispose aussi depuis la version 5 de fonctionnalités objet, mais nous ne les avons pas utilisées dans notre projet. Outil par excellence pour produire des pages Web dynamiques, c'est pour cette raison que nous l'avons utilisé dans notre projet. C'est un langage peu typé, souple, multiplate-forme, libre et gratuit.
-Nous avons utilisé PHP pour la création de notre site web \url{http://www.pticlic.fr} ainsi que pour la génération de partie, à savoir la création, la génération, l'envoie et la récupération de parties PtiClic.
+Nous avons utilisé PHP pour la création de notre site Web \url{http://www.pticlic.fr} ainsi que pour la génération de partie, à savoir la création, la génération, l'envoie et la récupération de parties PtiClic.
 
 \subsubsection{SHELL}
 Nous nous sommes servi aussi du langage SHELL. Ce langage est surtout utilisé pour l'initialisation du serveur lors de sont installation sur un serveur. Son but, pour notre projet, est de récupérer la dernière archive de la base de données, de convertir cette archive en SQL et de peupler la base de donnée.
@@ -561,12 +561,12 @@ SQLite est une bibliothéque, écrite en C, qui propose un moteur de base de don
 \subsubsection{Java}
 La partie client du projet a été réalisée en Java. Ce langage est le langage le plus utilisé dans le monde par les développeurs. Java reprend en grande partie la syntaxe du langage C++, néanmoins il a été épuré des concepts les plus déroutants du C++ tels que les pointeurs, les références et l'héritage multiple. La grande spécificité de ce langage est sa portabilité. En effet, lors de la compilation, un bit code est généré et celui-ci est ensuite lu par une machine virtuelle dépendante de la platforme utilisée.
 
-\subsubsection{HTML5, JavaScript et jQuery}
+\subsubsection{HTML5, JavaScript et JQuery}
 
 La deuxième version de l'application, écrite en HTML5, utilise le langage JavaScript pour l'interaction avec l'utilisateur. La bibliothèque JQuery a été lourdement utilisée pour abstraire l'interface DOM\footnote{Document Object Model} fournie par le navigateur pour interagir avec le document HTML. Cette bibliothèque, qui est extensible, permet entre autres de manipuler facilement des collections entières d'éléments pour les modifier en même temps, de faire des requêtes complexes sur le document pour en récupérer une portion destinée à être manipulée et
 fournit aussi une couche d'abstraction pour les requêtes réseau asynchrones et la manipulation de données au format JSON\footnote{JavaScript Object Notation}, qui est le format utilisé dans les échanges entre le client et le serveur. Dans le cadre de ce projet, nous avons été amenés à écrire plusieurs petites extensions à la bibliothèque JQuery, ce qui a été à chaque fois une tâche relativement aisée, vérifiant ainsi l'extensibilité de cette bibliothèque.
 
-\subsubsection{Gestionnaire de versions~: Git et Github}
+\subsubsection{Gestionnaire de versions~: Git et GitHub}
 
 Pour synchroniser nos efforts sur le projet, nous avons utilisé le gestionnaire de versions distribué Git et hébergé notre projet sur la plateforme GitHub. Un des avantages d'un gestionnaire de version distribué par rapport à un gestionnaire de versions centralisé tel que SVN est qu'il n'y a pas besoin d'un serveur central pour synchroniser deux copies du projet. Ainsi, nous avons pu partager nos modifications via une clé usb, même dans des lieux avec une connectivité réduite, comme l'Université Montpellier II où nous avons régulièrement travaillé. 
 De plus, Git possède un algorithme de résolution des conflits d'édition beaucoup plus efficace que celui de SVN, ce qui nous a permis de développer certaines fonctionnalités dans des branches séparées et de les fusionner par la suite avec la branche principale sans avoir à craindre une fusion manuelle des deux branches.
@@ -655,7 +655,7 @@ Nous avons dû aussi effectuer les améliorations suivantes à la partie serveur
 \end{itemize}
 
 En outre, nous pensions initialement fournir directement l'application aux alpha-testeurs, mais étant donné la nécessité d'avoir les noms d'utilisateurs
-et des mots de passe dans la base, il semblait peu avantageux de gérer ces points manuellement. Nous avons aussi dû créer un site web à destination
+et des mots de passe dans la base, il semblait peu avantageux de gérer ces points manuellement. Nous avons aussi dû créer un site Web à destination
 des utilisateurs, pour qu'ils puissent s'inscrire, télécharger l'application comprenant des explications sur la procédure d'installation). Aussi, à la fin de l'itération 1, après notre première livraison alpha-testeurs, et après l'accord de notre tuteur, nous avons radicalement changé le cahier des charges~:
 
 \begin{itemize}
@@ -665,11 +665,11 @@ des utilisateurs, pour qu'ils puissent s'inscrire, télécharger l'application c
   \item Application \android{} qui récupère une partie et permet d'y jouer avec un écran permettant aux utilisateurs de configurer
     l'application (adresse du serveur, login et mot de passe)
   \item Gestion des logins/mot de passe sur le serveur et le client
-  \item Site web de présentation du projet
+  \item Site Web de présentation du projet
   \end{itemize}
 \item Itération 2
   \begin{itemize}
-  \item Passage d'une version native à une version web«Précédent» pour pouvoir toucher plus d'utilisateurs, inspirée aussi du fait que l'environnement de développement ADT est très contraignante
+  \item Passage d'une version native à une version Web «Précédent» pour pouvoir toucher plus d'utilisateurs, inspirée aussi du fait que l'environnement de développement ADT est très contraignante
   \item Ajout d'un bouton «j'aime» ou «j'aime pas» permettant aux joueurs d'avoir des «amis» etc.
   \item Outil de création manuelle de parties accessible aux joueurs sur le site avec les extensions du serveur nécessaires
   \item Pousser plus loin la recherche sur les méthodes de création de parties et étude de la base du point de vue linguistique et TALN
@@ -738,12 +738,12 @@ Nous avons aussi dans cet architecture des classes métiers permettant de réali
 
 A la fin de la première iteration, nous avons décidé de ne plus utiliser le système de création de vues proposé par le SDK d'\android{} car,
 pour nous, la création de vues en passant par le format proposé nous prenait énormement de temps à réaliser. \android{}, supportant le framework WebKit
-ainsi que javascript dans son integralité, et notre groupe ayant un peu plus d'expérience dans le développement d'application web de par
+ainsi que javascript dans son integralité, et notre groupe ayant un peu plus d'expérience dans le développement d'application Web de par
 notre formation, nous avons décidé de développer les vues de l'application PtiClic en HTML5/Javascript. De ce fait, l'application à été
 simplifiée -- en une seule activité -- et une classe \verb!JavascriptInterface! réalisant un pont entre le code javascript et les fonctionnalitées du
 téléphone à été ajoutée.  
 
-Un autre avantage à l'utilisation d'une application web pour développer PtiClic est le public visé. En effet, le
+Un autre avantage à l'utilisation d'une application Web pour développer PtiClic est le public visé. En effet, le
 but de ce jeu étant de récupèrer des données d'un grand nombre d'utilisateurs, fournir l'application à d'autres personnes que celles
 disposant d'un smartphone sous \android{} nous a semblé interressant. En effet, la version HTML5 est jouable à partir de n'importe quel navigateur Web, que ce soit un ordinateur classique ou un smartphone.
 
@@ -769,7 +769,7 @@ La communication entre le code Javascript de l'application et les préferences d
       \path node[draw,left=of appli] (prefs) {Préférences};
       
       \node[below=of appli, text height=0.25cm, minimum width=2cm] (fake-webkit) {\phantom{Webkit}};
-      \path node[draw,below=of fake-webkit, text height=1.5cm, minimum width=2cm, text centered] (html5) {\shortstack{Html5\\JavaScript\\jQuery\\CSS}};
+      \path node[draw,below=of fake-webkit, text height=1.5cm, minimum width=2cm, text centered] (html5) {\shortstack{Html5\\JavaScript\\JQuery\\CSS}};
       
       \path[draw,->] (html5.south east) ++ (0,0.35cm) arc (90:-180:0.35cm);
       
@@ -815,7 +815,7 @@ $n_1$ à «start», $n_2$ à «end», $t$ à «type» et $w$ à «weight» de la
 
 
 \subsection{Le modéle MVC d'\android{}}
-Pour le développement d'application sur mobile, Google propose d'utilisé le patron de conception (design pattern) MVC. On peut trouver sur internet une multitude d'implémentation de MVC, Google n'echappe pas à la régle en proposant
+Pour le développement d'application sur mobile, Google propose d'utilisé le patron de conception (design pattern) MVC. On peut trouver sur Internet une multitude d'implémentation de MVC, Google n'echappe pas à la régle en proposant
 le sien (voir figure \ref{fig:MVC}).
 La particularité de ce MVC tient au tour du principe d'activité. En effet les écrans des téléphone portable étant bien plus petit que ce de nos ordinateur, il faut pouvoir adpter l'interface des applications. Pour ce faire il existe
 sous \android{} le concepte d'activité.
@@ -1114,7 +1114,7 @@ s'est montré peu pratique pour la construction de l'interface d'un jeu, et diff
 bouton, d'une icône…). C'est une des raisons pour l'abandon de la plate-forme \android{} + Java, en faveur de HTML5 + CSS + JavaScript.
 
 Dans l'application HTML5, l'omniprésence d'évènements asynchrones a été la source de nombreux bugs. De plus, des légères différences de
-comportement entre le navigateur web d'\android{} et les navigateurs sur les PC ont fait en sorte que certains problèmes ne se posaient que
+comportement entre le navigateur Web d'\android{} et les navigateurs sur les PC ont fait en sorte que certains problèmes ne se posaient que
 sur le téléphonne physique, ce qui a rendu leur résolution difficile.
 
 \subsection{Perspectives}
