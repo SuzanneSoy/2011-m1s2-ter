@@ -105,21 +105,22 @@ Nos objectifs initiaux ont été modifié, nous avons créé deux prototypes, l'
  
 \section{Analyse de l'existant}
 
-L'application du jeu du PtiClic d'origine est une application disponible en ligne sur \url{http://www.lirmm.fr/pticlic/pticlic.php}. Nous
-n'avions pas accès au code source de l'application ni à des diagrammes UML. La seule partie de cette application qui nous a été fournie est
-une archive de la base de données dans un format textuel.
+L'application du jeu du PtiClic d'origine est une application disponible en ligne sur \url{http://www.lirmm.fr/pticlic/pticlic.php}. Lors de
+la réalisation de ce projet, nous n'avions pas accès au code source de l'application ni à des diagrammes UML. La seule partie de cette
+application qui nous a été fournie est une archive de la base de données dans un format textuel.
 
 L'analyse de l'existant consistait donc d'une analyse du format et du contenu de cette archive ainsi que l'application sur Internet que nous avons testé et analysé. Il était également possible d'avoir d'autres informations concernant l'application Web PtiClic à travers de nombreux articles écrits sur ce sujet et en communiquant avec les créateurs du jeu.
 
 \subsection{Le déroulement du jeu}
-L'utilisateur clique sur le boutont «Je joue !». Un mot\footnote{Pour simplifier l'écriture, nous parlons de 'mots', mais un mot peu aussi être un mot composé, un syntagme ou une phrase, y compris des noms propres} se dirige vers le centre de la page, c'est le 'mot central'. D'autres mots viennent entourer le mot central, ce sont les 'mots nuage'. La police du mot central est plus grande que celle des mots nuages. Le mot central et les mots du nuage sont de couleurs contrastées.
+
+L'utilisateur clique sur le bouton «Je joue !». Un mot\footnote{Pour simplifier l'écriture, nous parlons de 'mots', mais un mot peu aussi être un mot composé, un syntagme ou une phrase, y compris des noms propres.} se dirige vers le centre de la page, c'est le «mot central». D'autres mots viennent entourer le mot central, ce sont les «mots nuage». La police du mot central est plus grande que celle des mots nuages. Le mot central et les mots du nuage sont de couleurs contrastées.
 
 \subsubsection{L'écran du jeu}
 \begin{center}
 \includegraphics[width=14cm]{img/PtiClicJeu.png}
 \end{center}
 
-Les relations apparaissent à droite des mots. Une partie peut comporter d'une à quatre relations. Un carré apparaît à droite de la relation suivi de la relation sous forme de syntagme tel que «\emph{(mot central)} est en rapport avec\dots{}», «Quoi/Qui pourrait \emph{(mot central)}~?». S'il y a plus d'une relation, les relations apparaîssent les unes en dessous les autres, toujours à droite des mots.
+Les relations apparaissent à droite des mots. Une partie peut comporter d'une à quatre relations. Un carré apparaît à droite de la relation suivi de la relation sous forme de syntagme tel que «\emph{(mot central)} est en rapport avec\dots{}», «Quoi/Qui pourrait \emph{(mot central)}~?». S'il y a plus d'une relation, les relations apparaissent les unes en dessous les autres, toujours à droite des mots.
 
 Encore plus à droite, un bref explicatif du principe du jeu, et tout en bas, le bouton «J'ai fini~!», 
 
@@ -132,15 +133,15 @@ Le principe du jeu est simple. Lorsque l'utilisateur estime qu'un mot nuage est 
 
 Si le joueur se trompe, il peut double-cliquer sur le carré pour extraire le dernier mot déposé. En fait, le joueur peut double-cliquer
 autant de fois qu'il le veut pour extraire tous les mots ayant été mis dans la relation un par un afin de modifier ses choix. Lorsque le
-joueur a fait ses choix et souhaite terminer la partie, il clique sur «J'ai fini~!», ce qui renvoie vers la page des résultats et du score. Il
-n'y a aucune limite de temps pour terminer une partie.
+joueur a fait ses choix et souhaite terminer la partie, il clique sur «J'ai fini~!», ce qui le renvoie vers la page des résultats et du
+score. Il n'y a aucune limite de temps pour terminer une partie.
 
 \subsubsection{Score obtenu}
 \begin{center}
 \includegraphics[width=14cm]{img/PtiClicResultats.png}
 \end{center}
 
-La page des scores contient aussi le corrigé de la partie\footnote{Un joueur joue contre un autre joueur. Le 'corrigé' contient donc les réponses qui correspondent à celles du joueur contre qui il joue. En conséquence, une 'bonne' réponse peut correspondre à deux mauvaises réponses, mais qui ont été choisit par les deux joueurs en question. Toutefois, le poids des relations augmentent seulement si plusieurs paires de joueurs donne les mêmes réponses.} . Les mots qui ont été mis dans la bonne categorie apparaissent en vert, les
+La page des scores contient aussi le corrigé de la partie\footnote{Un joueur joue contre un autre joueur. Le «corrigé» contient donc les réponses qui correspondent à celles du joueur contre qui il joue. En conséquence, une «bonne» réponse peut correspondre à deux mauvaises réponses, mais qui ont été choisit par les deux joueurs en question. Toutefois, le poids des relations augmentent seulement si plusieurs paires de joueurs donne les mêmes réponses.}. Les mots qui ont été mis dans la bonne categorie apparaissent en vert, les
 mauvaises réponses en rouge et les omissions en gris. Un point est marqué par bonne réponse tandis qu'une mauvaise réponse ou une omission
 fait perdre un demi-point. Lorsque deux réponses sont possibles, le point est marqué quelque soit la relation choisie. Le score final est
 soit un entier, soit un entier plus un demi point~; il peut être négatif, nul ou positif.
@@ -239,7 +240,7 @@ Le jeu de base du PtiClic sous \android{} présente plus ou moins les mêmes cas
 
 \pagebreak
 
-\section{PtiClic et TALN}
+\section{PtiClic et le TALN}
 
 
 Les projets JeuxDeMots et PtiClic s'inscrivent dans le domaine de la recherche en traitement automatique du langage naturel, et plus précisément dans celui du traitement de la sémantique du langage. Les données et les conclusions issues de ces projets pourraient contribuer directement ou indirectement à la recherche et à des applications en traduction automatique, l'indexation des textes, les correcteurs automatiques d'orthographe et de grammaire, la classification et la catégorisation des documents, des algorithmes de moteurs de recherche.
@@ -247,7 +248,7 @@ Les projets JeuxDeMots et PtiClic s'inscrivent dans le domaine de la recherche e
 
 \subsection{Ferdinand de Saussure, la linguistique moderne, le TALN, JeuxDeMots et PtiClic}
 
-Dans la partie qui suit, des notions de linguistique générale seront évoquées suivies d'une discussion d'applications dans le traitement automatique du langage naturel~: les dichotomies signifié-signifiant, langue et parole, synchronie et diachronie et l'arbitraire du signe. C'est Ferdinand de Saussure (1857-1913), fondateur de la linguistique moderne, qui a défini formellement pour la première fois ces concepts fondamentaux dans son Cours de linguistique général.\footnote{Ferdinand de Saussure, Cours de linguistique générale, édition originale~: 1916, édition 1979~: Payot, Paris. Il s'agit d'une oeuvre posthume rédigée à partir de notes de cours par deux disciples de Saussure~: Charles Bally et Albert Sechehaye. La publication de cet ouvrage marque le début de la linguistique moderne.}
+Dans la partie qui suit, des notions de linguistique générale seront évoquées suivies d'une discussion d'applications dans le traitement automatique du langage naturel~: les dichotomies signifié-signifiant, langue et parole, synchronie et diachronie et l'arbitraire du signe. C'est Ferdinand de Saussure (1857-1913), fondateur de la linguistique moderne, qui a défini formellement pour la première fois ces concepts fondamentaux dans son Cours de linguistique général\footnote{Ferdinand de Saussure, Cours de linguistique générale, édition originale~: 1916, édition 1979~: Payot, Paris. Il s'agit d'une oeuvre posthume rédigée à partir de notes de cours par deux disciples de Saussure~: Charles Bally et Albert Sechehaye. La publication de cet ouvrage marque le début de la linguistique moderne.}.
 
 \subsubsection{Le signe linguistique~: signifié, signifiant, référent}
 
@@ -268,7 +269,9 @@ Selon Saussure, le signe linguistique est une entité à deux faces~: le signifi
 
 Cette notion semble assez simple mais, au contraire, la relation signifié-signifiant est très complexe. Cette entité a un très grand nombre de caractéristiques et le signifiant comprend des dénotations ainsi que des connotations qui peuvent être liées à des contextes multidimensionnels, généraux et spécifiques. Puis, à la notion de concept s'ajoute l'objet lui-même... s'il s'agit d'un objet physique~! Et s'il s'agit d'une émotion~? D'une action~? D'un sentiment~? D'une idée abstraite~? 
 
-On peut aussi parler de sens figuré et de sens propre des mots. Par exemple au mot 'poésie' on pourrait associer les idées 'littérature', 'écrivain', 'auteur', 'strophes', etc. ... mais aussi 'musique', 'rêve', 'amour'. On parlera de ce deuxième sens lorsque l'on parle de la notion de 'bruit' dans la relation entre mots ou expressions. Et si on prenait en compte la polysémie d'un signifiant~?
+
+On peut aussi parler de sens figuré et de sens propre des mots. Par exemple au mot «poésie» on pourrait associer les idées «littérature», «écrivain», «auteur», «strophes», etc. mais aussi «musique», «rêve», «amour». On parlera de ce deuxième sens lorsque l'on parle de la notion de «bruit» dans la relation entre mots ou expressions. Et si on prenait en compte la polysémie d'un signifiant~?
+
 
 Un demi-siècle plus tard, Emile Benveniste ajouta une autre dimension à ce schéma intégrant un 'référent' qui remplace le 'signifié', le 'signifié' étant, pour Benveniste, la dénotation du mot, c'est-à-dire bien l'objet lui-même. 
 
