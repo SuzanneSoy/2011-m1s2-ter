@@ -54,22 +54,22 @@ Reconception du jeu Pticlic sous \android{}}
   d'autres avantages. Dans PtiClic, les joueurs associent des idées à des mots et marquent des points si leurs réponses correspondent aux
   réponses d'autres utilisateurs. PtiClic est une application Web qui a été créée par Mathieu Lafourcade et Virginie Zampa.
 
-  L'objectif du présent projet est de créer un prototype pour téléphones sous \android{}. Cette nouvelle version permettrait à des utilisateurs
+  L'objectif du présent projet est de créer un prototype pour téléphones sous Android. Cette nouvelle version permettrait à des utilisateurs
   de jouer n'importe quand et n'importe où. Le sujet du projet a été élargi pour inclure une application qui pourrait fonctionner sur un
-  grand nombre de téléphones mobiles et non pas seulement ceux sous \android{}. Les avantages, les inconvénients, les problèmes et les
+  grand nombre de téléphones mobiles et non pas seulement ceux sous Android. Les avantages, les inconvénients, les problèmes et les
   solutions associés à l'adaptation de ce jeu pour smartphone sont présentés dans ce document.
 \end{abstract}
 
 \selectlanguage{english}
 \begin{abstract}
-  PtiClic is a fun word game in which users play and lexical and semantic data is collected automatically or semi-automatically. Such
+  PtiClic is a fun game word game in which users play and lexical and semantic data is collected automatically or semi-automatically. Such
   methods of populating a database are fast and inexpensive and have many other advantages. In PtiClic, players associate ideas with words
   and score points if their answers correspond to that of other users. PtiClic is a Web-based game which was created by Mathieu Lafourcade
   and Viginie Zampa.
 
-  The purpose of this project is to create a prototype for telephones using the \android{} operating system. The application would permit users
+  The purpose of this project is to create a prototype for telephones using the Android operating system. The application would permit users
   to play anywhere, anytime. The topic of the project was widened to include an application that can run on many different types of
-  smartphones, not only those using the \android{} operating system. The advantages, drawbacks, problems and solutions associated with adapting
+  smartphones, not only those using the Android operating system. The advantages, drawbacks, problems and solutions associated with adapting
   the application for mobile phones are discussed throughout the document.
 \end{abstract}
 \selectlanguage{frenchb}
@@ -77,9 +77,9 @@ Reconception du jeu Pticlic sous \android{}}
 
 \section{Introduction}
 
-PtiClic\footnote{\url{http://pticlic.org}} est un jeu qui a été conçu et développé par Matthieu Lafourcade et Virginie Zampa. Le jeu a été créé afin de faire des études sur le vocabulaire et la sémantique sur des sujets de divers horizons dans un contexte ludique et motivant. Un mot central apparait, un nuage de mots entoure le mot central et le joueur clique et dépose des mots du nuage dans des catégories proposé sous forme d'énoncés. 
+PtiClic\footnote{http://pticlic.org} est un jeu qui a été conçu et développé par Matthieu Lafourcade et Virginie Zampa. Le jeu a été créé afin de faire des études sur le vocabulaire et la sémantique sur des sujets de divers horizons dans un contexte ludique et motivant. Un mot central apparait, un nuage de mots entoure le mot central et le joueur clique et dépose des mots du nuage dans des catégories proposé sous forme d'énoncés. 
 
-Par exemple, pour le mot central «bicyclette», les mots «pédale», «piéton», «pied», «automobile», «Sébastien Chabal», «Lance Armstrong», «pédalier», «voiture», «yeux», «rapide», «routier», «maillot», «pédaler», «dopage», «véhicule», «musclé», «nez», etc. sont proposés. Le joueur dépose ces mots dans les catégories «\dots{} est une partie de `cycliste'», «Un contraire de `cycliste' est \dots{}», «`cycliste' a un rapport avec \dots{}»,  «Une caractéristique de `cycliste' est \dots{}» ou aucune de ces catégorie. Un score est obtenu en soustrayant les mots manquants et les mots incorrects de chaque catégorie aux mots corrects. 
+Par exemple, pour le mot central «bicyclette», les mots «pédale», «piéton», «pied», «automobile», «Sébastien Chabal», «Lance Armstrong», «pédalier», «voiture», «yeux», «rapide», «routier», «maillot», «pédaler», «dopage», «véhicule», «musclé», «nez», etc. sont proposés. Le joueur dépose ces mots dans les catégories «\dots{} est une partie de 'cycliste'», «Un contraire de 'cycliste' est \dots{}», «'cycliste' a un rapport avec \dots{}»,  «Une caractéristique de 'cycliste' est \dots{}» ou aucune de ces catégorie. Un score est obtenu en soustrayant les mots manquants et les mots incorrects aux mots corrects. 
 
 Des linguistes et des informaticiens récupèrent les données liées aux parties jouées, ce qui leur permet de faire de la recherche dans leurs domaines respectifs.
 
@@ -97,7 +97,7 @@ Notre travail consiste à créer une version du PtiClic sous \android{}, une ver
 
 Dans un premier temps, une version de base a été conçue et réalisée. Ensuite, il a été prévu d'ajouter des fonctionnalités supplémentaires. La démarche adoptée par notre groupe a été une approche itérative. Initialement, quatre itérations et quatre livraisons devaient donner comme résultat une version de base et des versions plus élaborées~: un joueur pourrait, entre autres, modifier ses préférences ou choisir son niveau. L'idée était aussi de rendre le jeu plus attirant afin d'accroître le nombre de sujets participant aux études liées au résultat des données extraits des parties jouées.
 
-Nos objectifs initiaux ont été modifié, nous avons créé deux prototypes, l'un sous Android en Java, l'autre en HTML5 élargissant notre public leur donnant la possibilité de jouer au jeu sur divers types de smartphones et sur leur ordinateur.
+Nos objectifs initiaux ont été modifié, nous avons créé deux prototypes, l'une sous Android en Java, l'autre en HTML5 élargissant notre public leur donnant la possibilité de jouer au jeu sur divers types de smartphones.  
 
 
 \pagebreak
@@ -112,7 +112,7 @@ une archive de la base de données dans un format textuel.
 L'analyse de l'existant consistait donc d'une analyse du format et du contenu de cette archive ainsi que l'application sur Internet que nous avons testé et analysé. Il était également possible d'avoir d'autres informations concernant l'application Web PtiClic à travers de nombreux articles écrits sur ce sujet et en communiquant avec les créateurs du jeu.
 
 \subsection{Le déroulement du jeu}
-L'utilisateur clique sur le boutont «Je joue !». Un mot\footnote{Pour simplifier l'écriture, nous parlons de 'mots', mais un mot peu aussi être un mot composé, un syntagme ou une phrase, y compris des noms propres.} se dirige vers le centre de la page, c'est le 'mot central'. D'autres mots viennent entourer le mot central, ce sont les 'mots nuage'. La police du mot central est plus grande que celle des mots nuages. Le mot central et les mots du nuage sont de couleurs contrastées.
+L'utilisateur clique sur le boutont «Je joue !». Un mot\footnote{Pour simplifier l'écriture, nous parlons de 'mots', mais un mot peu aussi être un mot composé, un syntagme ou une phrase, y compris des noms propres} se dirige vers le centre de la page, c'est le 'mot central'. D'autres mots viennent entourer le mot central, ce sont les 'mots nuage'. La police du mot central est plus grande que celle des mots nuages. Le mot central et les mots du nuage sont de couleurs contrastées.
 
 \subsubsection{L'écran du jeu}
 \begin{center}
@@ -170,22 +170,22 @@ utilisateurs, le vocabulaire rencontré peut ne pas convenir aux moins de 16 ans
 \subsection{L'archive de la base de données}
 
 L'archive de la base de données est un fichier plat d'environ 2 000 000 lignes. Ce fichier contient un grand nombre de caractères accentués et
-la version à notre disposition lorsque nous avons commencé à l'analyser, à en extraire des données puis à créer notre propre base de données
+la version à notre disposition lorsque nous avons commencé à l'analyser, en extraire des données puis à créer notre propre base de données
 n'était pas encodée en UTF-8.
 
-La base de données de laquelle est extraite cette archive provient d'un autre jeu de l'équipe TALN\footnote{Traitement Automatique du Langage Naturel, NLP en anglais, Natural Language Processing.} du Lirmm, nommé JeuxDeMots. L'objectif principal de JeuxDeMots est d'ajouter des mots et des expressions au réseau lexical alors que l'objectif principal de PtiClic est d'accroître le nombre de relations sémantiques entre les mots du réseau.
+La base de données de laquelle est extraite ce dump provient d'un autre jeu de l'équipe TALN\footnote{Traitement Automatique du Langage Naturel, NLP en anglais, Natural Language Processing} du Lirmm, nommé JeuxDeMots. L'objectif principal de JeuxDeMots est d'ajouter des mots et des expressions au réseau lexical alors que l'objectif principal de PtiClic est d'accroître le nombre de relations sémantiques entre les mots du réseau.
 
 L'archive contient en tout début des remerciements et quelques explications des acronymes et des abréviations utilisés, puis des statistiques, à savoir, le nombre d'occurrences de relations, la fréquence des noeuds, les 50 termes les plus fréquents. Plus un terme ou expression est fréquent, plus son poids est élevé. 
 
-L'archive à proprement parler contient deux grandes parties~: une partie «noeuds» (\verb!NODES!) et une partie «relations» (\verb!RELATIONS!). Les «noeuds» sont de divers types. Les noeuds de type «terme» contiennent non seulement des adjectifs, des adverbes, des substantifs et des verbes, mais aussi des locutions et des syntagmes, des mots tels que les prépositions, les conjonctions, les pronoms, les articles et les déterminants. Les substantifs peuvent être des noms propres, y compris des noms de lieux, des noms de personnes. Il existe des noeuds qui donnent d'autres informations, et on verra plus tard que ceux qui nous intéressent le plus, outre les termes, sont ceux concernant la catégorie grammaticale des mots et d'autres informations métalinguistiques plus précises.
+L'archive a proprement parler contient deux grandes parties~: une partie 'noeuds' (\verb!NODES!) et une partie 'relations' (\verb!RELATIONS!). La partie 'noeuds'  contient sont de divers types. Les noeuds de type 'terme' contiennent non seulement des adjectifs, des adverbes, des substantifs et des verbes, mais aussi des locutions et des syntagmes, des mots tels que les prépositions, les conjonctions, les pronoms, les articles et les déterminants. Les substantifs peuvent être des noms propres, y compris des noms de lieux, des noms de personnes. Il existe de noeuds qui donnent d'autres informations, et on verra plus tard que ceux qui nous intéressent le plus, outre les termes, sont ceux concernant la catégorie grammaticale des mots et d'autres informations métalinguistiques plus précises.
 
-Dans la partie «mots et expressions», chaque entrée -- chaque ligne -- contient un $eid$ (Entry IDentifier), un nom $n$ (name), un type $t$ et un poids $w$ (weight). En voici un exemple~:
+Dans la partie 'mots et expressions', chaque entrée -- chaque ligne -- contient un $eid$ (Entry IDentifier), un nom $n$ (name), un type $t$ et un poids $w$ (weight). En voici un exemple~:
 \indent%
 \begin{verbatim}
 eid=231064:n="pour femme":t=1:w=50
 \end{verbatim}
 
-Pour la partie relation, l'identifiant est le $rid$ (Relation IDentifier), le noeud de départ $n1$ (starting node), le noeud d'arrivée $n2$ (ending node), le $type$ (relation type) et le poids $w$ (weight). En voici un exemple~:
+Pour la partie relation, l'identifiant est le $rid$ (Relation IDentifier), le noeud de début $n1$ (starting node), le noeud de fin $n2$ (ending node), le $type$ (relation type) et le poids $w$ (weight). En voici un exemple~:
 \begin{verbatim}
 rid=430049:n1=82029:n2=151553:t=12:w=18
 \end{verbatim}
@@ -219,10 +219,10 @@ Comme tout outil, l'environnement smartphone présente à la fois des avantages 
 Les avantages sont nombreux~: un instrument portatif avec un bref temps de démarrage adapté à effectuer des tâches ponctuelles souvent de courte durée avec un écran tactile permettant d'agir directement sur des éléments affichés sur son écran. Le smartphone présente encore d'autres avantages, il est à la fois un lecteur mp3, un dictaphone, un appareil, un chronomètre et réveil, pour ne citer que quelques exemples.
 
 Les inconvénients par rapport à un ordinateur classique sont aussi nombreux. L'écran est nettement plus petit limitant l'espace de travail
-et obligeant davantage de navigation de page en page. L'entrée des données est plus difficile, il n'y a pas de clavier, ou bien seulement
+et obligeant davantage de navigation de page en page. L'entrée des données est plus difficile, il n'existe pas de clavier, ou bien seulement
 un clavier virtuel ou un micro-clavier intégré. Malgré les avantages de l'écran tactile, son utilisation permet une précision bien moindre
-que l'utilisation d'une souris à cause de la petite taille de l'écran et des doigts et mains qui bloquent la vue de l'écran lors d'un
-glisser-déposer par exemple.
+que l'utilisation d'une souris à cause de la petite taille de l'écran et des doigts et mains qui bloquent la vue de l'écran lors du
+glissement-et-déposé par exemple.
 
 Le faible espace de stockage et les limites d'autonomie et d'énergie se traduisent par une nécessité d'économie de la part des concepteurs
 d'applications par rapport aux ordinateurs classiques, de plus en plus performants actuellement. C'est pour cette raison que le smartphone
@@ -235,7 +235,7 @@ simples (casual games) et le jeu du PtiClic n'est pas une exception à cette der
 qu'il est possible d'y jouer lorsque l'on est en file d'attente à la Poste ou à la Préfecture ou bien dans les transports en commun. En effet, lorsque l'on a un smartphone, on peut jouer n'importe quand et n'importe où. Un tel
 prototypage du jeu demande toutefois une réflexion non seulement quant aux limites d'un smartphone mais aussi ses avantages.
 
-Le jeu de base du PtiClic sous \android{} présente plus ou moins les mêmes cas d'utilisations que l'application d'origine. Toutefois, les «comment» de ces cas d'utilisation sont loin d'être les mêmes, la plus grande différence étant la gestion des mots nuage. Une discussion de ce sujet fera l'objet du chapitre «Conception et réalisation».
+Le jeu de base du PtiClic sous \android{} présente plus ou moins les mêmes cas d'utilisations que l'application d'origine. Toutefois, le 'comment' de ces cas d'utilisation sont loin d'être les mêmes, la plus grande différence étant la gestion des mots nuage. Une discussion de ce sujet fera l'objet des chapitres 'Conception' et 'Réalisation'.
 
 \pagebreak
 
@@ -266,9 +266,9 @@ Selon Saussure, le signe linguistique est une entité à deux faces~: le signifi
   \caption{A la représentation qu'on a d'un cheval est associé la forme phonique du mot cheval}
 \end{figure}
 
-Cette notion semble assez simple mais, au contraire, la relation signifié-signifiant est très complexe. Cette entité a un très grand nombre de caractéristiques et le signifiant comprend des dénotations ainsi que des connotations qui peuvent être liées à des contextes multidimensionnels, généraux et spécifiques. Puis, à la notion de concept s'ajoute l'objet lui-même\dots{} s'il s'agit d'un objet physique~! Et s'il s'agit d'une émotion~? D'une action~? D'un sentiment~? D'une idée abstraite~? 
+Cette notion semble assez simple mais, au contraire, la relation signifié-signifiant est très complexe. Cette entité a un très grand nombre de caractéristiques et le signifiant comprend des dénotations ainsi que des connotations qui peuvent être liées à des contextes multidimensionnels, généraux et spécifiques. Puis, à la notion de concept s'ajoute l'objet lui-même... s'il s'agit d'un objet physique~! Et s'il s'agit d'une émotion~? D'une action~? D'un sentiment~? D'une idée abstraite~? 
 
-On peut aussi parler de sens figuré et de sens propre des mots. Par exemple au mot 'poésie' on pourrait associer les idées 'littérature', 'écrivain', 'auteur', 'strophes', etc. … mais aussi 'musique', 'rêve', 'amour'. On parlera de ce deuxième sens lorsque l'on parle de la notion de 'bruit' dans la relation entre mots ou expressions. Et si on prenait en compte la polysémie d'un signifiant~?
+On peut aussi parler de sens figuré et de sens propre des mots. Par exemple au mot 'poésie' on pourrait associer les idées 'littérature', 'écrivain', 'auteur', 'strophes', etc. ... mais aussi 'musique', 'rêve', 'amour'. On parlera de ce deuxième sens lorsque l'on parle de la notion de 'bruit' dans la relation entre mots ou expressions. Et si on prenait en compte la polysémie d'un signifiant~?
 
 Un demi-siècle plus tard, Emile Benveniste ajouta une autre dimension à ce schéma intégrant un 'référent' qui remplace le 'signifié', le 'signifié' étant, pour Benveniste, la dénotation du mot, c'est-à-dire bien l'objet lui-même. 
 
@@ -540,7 +540,7 @@ Pour conclure, les expériences menées dans le paquetage TALN ont été très e
 
 \pagebreak
 
-\section{Conception et réalisation}
+\section{Conception et Réalisation}
 
 \subsection{Outils}
 
@@ -922,15 +922,16 @@ Les parties ainsi créées pourront être jouées par les autres joueurs et perm
 
 La version HTML5 du jeu  comporte 6 écrans~:
 \begin{itemize}
-\item Le «splash» au démarrage
-\item L'éran d'accueil, avec des liens vers les quatre autres (sauf score)
-\item L'écran du jeu, avec le mot central, le mot du nuage et les quatre relations
-\item Le score, affiché à la fin de la partie
-\item Les préférences, qui permettent de choisir le thème de couleurs de l'application
+\item Le «splash» au démarrage;
+\item L'éran d'accueil, avec des liens vers les 4 autres (sauf score);
+\item L'écran du jeu, avec le mot central, le mot du nuage et les quatre relations;
+\item Le score, affiché à la fin de la partie;
+\item Les préférences, qui permettent de choisir le thème de couleurs de l'application;
 \item L'écran de connexion, sur lequel on peut se rendre depuis l'écran d'accueil, et qui s'affiche automatiquement lorsqu'on tente de faire
-  une action (jouer ou modifier les préférences) sans être connecté
-\item L'écran «À propos», qui explique l'origine du jeu
+  une action (jouer ou modifier les préférences) sans être connecté;
+\item L'écran «À propos», qui explique l'origine du jeu.
 \end{itemize}
+
 
 
 \begin{figure}[h!]
@@ -975,6 +976,7 @@ La version HTML5 du jeu  comporte 6 écrans~:
       \includegraphics[width=0.3\textwidth]{img/phone-info.png}
   \caption{L'écran «À propos», qui explique l'origine du jeu}
 \end{figure}
+
 
 Chaque écran est contenu dans un élément HTML (\verb!<div/>!) qui est affiché uniquement lorsque l'utilisateur est sur cet écran.
 
@@ -1099,220 +1101,6 @@ chaque réponse. Elle renvoie la structure suivante~:
 
 \end{itemize}
 
-\subsection{Protection contre les attaques des joueurs}
-
-Le serveur prévient quelques types d'attaques que des joueurs pourraient effectuer pour améliorer leur score. Entre autres, lorsqu'un joueur
-a envoyé ses réponses à une partie et que ses scores lui ont été envoyés, la modification des réponses est refusée s'il tente de renvoyer
-d'autres réponses. Cela permet d'éviter qu'un joueur améliore son score en donnant les réponses attendues une fois qu'il les connaît.
-
-Nous n'avons cependant pas de protection contre un utilisateur qui donnerait exprès les mauvaises réponses (une forme de SPAM qui influerait
-la base de données). La détection de ce comportement est difficile car il est tout à fait possible que les réponses que notre algorithme
-estime être les bonnes soient justes et il est tout à fait légitime qu'un utilisateur soit en désacord avec les uns avec les autres.
-
-Dans le cas de l'utilisation d'un robot pour donner en masse de mauvaises réponses, il serait possible de détecter la fréquence élevée des
-parties jouées, ce qui n'empêcherait cependant pas un robot de se créer plusieurs comptes pour éviter cette détection. De même que la
-détection de courriers indésirables est difficile dans le cadre de la messagerie électronique, la détection de la transmission massive de
-mauvaises réponses à notre serveur est compliquée, d'autant plus que peu de données sont transmises pour chaque partie.
-
-
-
-
-
-\section{Discussion}
-\subsection{Difficultés rencontrées}
-\label{sec:difficultes}
-Dès le début du projet, nous avons été confrontés à des difficultés techniques. L'émulateur \android{} qui devait nous permettre de tester
-l'application lors du développement s'est révélé être très lent, au point d'être innutilisable sur les ordinateurs de plusieurs des membres
-du groupe. Pour contourner ce problème, nous avons installé l'émulateur sur les machines du RezUFR (bâtiments 5, 6 et 16), mais sa
-configuration était très pénible, ce qui nous a fait perdre beaucoup de temps, pour finalement nous rendre compte que l'installation était
-plutôt instable.
-
-En ce qui concerne le travail sur le serveur, la tâche a été compliquée par des erreurs de syntaxe (guillemets non échappés, etc.) dans
-l'archive de la base de données qui nous a été fournie, ce qui nous a obligés à passer du temps à contourner ces erreurs avant de pouvoir
-analyser la base de données. Pour cette analyse, le volume de données à traiter (base de données de plus de 100Mo) nous a ralentis lors de
-l'élaboration de l'algorithme de création de parties.
-
-Lors de la construction des requêtes utilisées dans le serveur, nous nous sommes confrontés à d'autres problèmes~:
-
-SQLite3 n'est pas capable d'utiliser un index pour la requête extérieure sur une requête du type
-\begin{verbatim}
-select * from (select * from table where condition) where condition
-\end{verbatim}
-Donc nécessité de ré-écrire certaines requêtes avec des jointures à priori beaucoup moins efficaces, mais qui le sont plus grâce aux index.
-
-SQLite3 tranforme les requêtes de la forme \verb!select * from table limit 100 order by random();! en une requête qui récupère tout le set
-de résultats, ajoute une colonne random(), prend les 100 premiers résultats et les trie. Mais cela l'oblige à récupérer tout le set de
-résultats, et calculer le random() pour chaque ligne, pour ensuite jeter tout ce qui dépasse la ligne 100. Cela est évidemment très coûteux
-dans le cadre de requêtes avec beaucoup de résultats, et nous avons donc dû isoler la requête avec \verb!limit! de son \verb!order by! avec
-des «hacks» assez tordus pour tromper l'optimiseur.
-
-Lors du développement de l'application Java, le langage de description des interfaces utilisateur d'\android{}, qui est une application XML,
-s'est montré peu pratique pour la construction de l'interface d'un jeu, et difficile à modifier pour de petits ajustements (ajout d'un
-bouton, d'une icône…). C'est une des raisons pour l'abandon de la plate-forme \android{} + Java, en faveur de HTML5 + CSS + JavaScript.
-
-Dans l'application HTML5, l'omniprésence d'évènements asynchrones a été la source de nombreux bugs. De plus, des légères différences de
-comportement entre le navigateur Web d'\android{} et les navigateurs sur les PC ont fait en sorte que certains problèmes ne se posaient que
-sur le téléphonne physique, ce qui a rendu leur résolution difficile.
-
-\subsection{Perspectives}
-
-Bien que fonctionnelle, notre application peut encore être améliorée. L'implémentation d'un des modes de jeu prévus au départ, par exemple
-le mode «thématique», peut-être couplé avec un mode «l'image cachée» (on choisit un thème, et au bout de plusieurs parties, on découvre une
-image associée à ce thème) serait certainement un plus pour l'addictivité du jeu.
-
-Un autre point améliorable est la qualité des nuages de mots générés. Actuellement, l'algorithme de génération des nuages ne tient pas
-compte de la partie du discours à laquelle le mot central et les mots du nuage appartiennent. Par exemple, la relation «fait partie de» n'a
-de sens que pour des noms, alors que notre algorithme peut aussi bien la choisir avec un adjectif comme mot central.
-
-Nous avons pensé à utiliser une forme de réseau de neurones pour déterminer si un mot central et des mots du nuage sont pertinants pour une
-relation donnée. Nous avons commencé à implémenter un tel algorithme, mais n'avons pas eu le temps terminer cette amélioration.
-
-Il est aussi à noter que l'application bénéficierait d'une restructuration du code. Nous avons effectué cette restructuration et un gros
-nettoyage du code du client, mais le serveur n'est pas aussi propre et extensible que souhaitable.
-
-\section{Conclusions}
-
-Le client et le serveur constituent tous les deux des briques logicielles réutilisables. Le serveur peut être réutilisé assez facilement
-pour d'autres applications qui souhaiteraient afficher par exemple le nuage pour un mot donné. Le client communique avec le serveur en
-utilisant seulement quelques types de requêtes différents, et pourrait donc être couplé avec un autre serveur avec peu de modifications
-(nous pensons ici au serveur existant de la version de PtiClic réalisée par le LIRMM).
-
-Le client est aussi extensible~: son architecture permet l'ajout de nouveaux écrans, de nouveaux thèmes, voire de nouveaux modes de jeu. Le
-fait qu'il soit écrit principalement en HTML5 et JavaScript permet de l'adapter à la plupart des téléphonnes intelligents et tablettes à
-moindre coût.
-
-Nous espérons que notre travail pourra être réutilisé par l'équipe du LIRMM pour offir une interface au jeu PtiClic qui soit compatible avec
-les plates-formes mobiles.
-
-\newpage
-
-
-\section{Bibliographie}
-\subsection{PtiClic et TALN}
-
-Lafourcade, Mathieu, Making people play for Lexical Acquisition. In Proc. SNLP 2007, 7th Symposium on Natural Language Processing. Pattaya, Thailande, 13-15 December 2007.
-
-Lafourcade, Mathieu and Alain Joubert, Computing trees of named word usages from a crowdsourced lexical network. In proc Computational Linguistics Applications - International Multi-Conference on Computer Science and Information Technology, Wisla, Pologne, 18-20 October 2010.
-
-Lafourcade, Mathieu and Alain Joubert, Détermination et pondération des raffinements d'un terme à partir de son arbre des usages nommés. In proc of TALN'10, Montreal, Canada, 19-23 Juillet 2010.
-
-Lafourcade, Mathieu and Alain Joubert, JeuxDeMots : un prototype ludique pour l’émergence de relations entre termes. In proc of JADT'2008, Ecole normale supérieure Lettres et sciences humaines , Lyon, France, 12-14 mars 2008.
-
-Lafourcade, Mathieu and Virginie Zampa, PtiClic~: a game for vocabulary assessment combining JeuxDeMots and LSA. In proc of CICLing (Conference on Intelligent text processing and Comptational Linguistics). Mexico : 1-7 mars 2009.
-
-Lafourcade, Mathieu and Virginie Zampa, PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010 et PtiClic: a game for vocabulary assessment combining JeuxDeMots and LSA. In proc of CICLing (Conference on Intelligent text processing and Comptational Linguistics). Mexico : 1-7 mars, 2010.
-
-Schwab, Didier and Mathieu Lafourcade, Modelling, Detection and Exploitation of Lexical Functions for Analysis, ECTI Journal, 2007, Vol.2, No2, ISSN 1905-050X, pp 97-108.
-
-Wikipedia, Latent Semantic Analysis http:\/\/en.wikipedia.org\/wiki\/Latent\_semantic\_analysis.
-
-Wikipedia, Analyse sémantique latante, http:\/\/fr.wikipedia.org\/wiki\/Analyse\_s\%C3\%A9mantique\_latente.
-
-
-\subsection{Linguistique}
-
-Saussure, Ferdinand de, Cours de linguistique générale, édition originale~: 1916, édition 1979~: Payot, Paris. 
-
-
-
-
-\subsection{Java}
-
-Code Conventions for the Java Programming Language, Oracle, 1999. (\url{http://www.oracle.com/technetwork/java/codeconvtoc-136057.html, www.oracle.com/technetwork/java/codeconventions-150003.pdf})
-
-\subsection{\android{}}
-
-Android Developer, 2011. (\url{http://developer.android.com/})
-
-
-
-
-% \section{Notes Georges}
-% Les relations suivantes seront peut-être utilisées (* = oui, c'est sûr, on a/doit faire les icônes et des requêtes sql)~:
-
-% \begin{tabular}{|c|l|l|l|}
-% \hline
-% icône~? & nom & num & signification \\
-% \hline
-% $*$ & r\_syn       & 5  & synonyme (chat -> matou) \\
-% $*$ & r\_anto      & 7  & antonyme (bon -> mauvais) \\
-% $*$ & r\_has\_part & 9  & A comme partie (chat -> patte) \\
-% $*$ & r\_holo      & 10 & Fait partie de (patte -> chat) \\
-%     & r\_agent     & 13 & Peut exécuter comme action (chat -> manger) \\
-%     & r\_patient   & 14 & Peut subir comme action (chat -> laver) \\
-%     & r\_carac     & 17 & Caractéristique (chat -> affectueux (ou pas…)) \\
-% \hline
-% \end{tabular}
-
-\newpage
-
-\appendix
-
-\section{Diagramme de Gantt prévisionnel}
-\label{sec:gantt-original}
-\noindent
-\hskip -2.6cm%
-\includegraphics[trim=1.7cm 19cm 1.7cm 4cm,clip,width=20cm]{../feuille-route/gp-pticlic.pdf}
-\newpage
-
-% \section{Annexe A}
-
-% \subsection{14 janvier 2010}
-
-% Durée du projet 4 mois (4 itérations de 4 semaines)
-
-% Conventions de code : \url{http://java.sun.com/docs/codeconv/html/CodeConventions.doc6.html}
-
-% Code (noms de variables, etc.) en anglais, commentaires en français, javadoc en français.
-
-% \subsection{26 janvier 2011}
-% Mettre le serveur (PHP) sur free.fr, pour pouvoir tester facilement
-
-% Utilisation d'une classe \verb!Constant!
-
-% Écran d'accueil du jeu : Image (splash), puis directement les icônes des modes de jeu + configuration, au lieu d'avoir un écran avec le logo et jouer/config, suivi du choix du mode de jeu.
-
-\section{Annexe A}
-
-%\subsection{Serveur}
-
-****SQL****
-2011-m1s2-ter\/code\/serveur\$ ls
-02122011-LEXICALNET-JEUXDEMOTS-FR-NOHTML.txt  -- dump de Lafourcade
-dump.url -- contient l'URL du dump le plus récent
-dump2mysql.sh -- Script pour convertir dump de Lafourcade en sql (pas terminé~? On utilise sqlite, donc on a laissé tombé~?)
-dump2sqlite.sh  -- Script pour convertir dump de Lafourcade en sql
-README.sh -- Ce n'est pas un README, c'est un script pour faire l'ensemble de la création de la BD, du téléchargement à la création d'indexes en passant par la création des tables et les insertions.
-sql -- Le script sql à proprement parler
-php\/db -- fichier binaire sqlite pour le chargement de la bd
-php\/db.old -- fichier binaire sqlite pour le chargement de la bd, version précédente (backup)
-dossier: select
-
-****SERVEUR****
-php\/db.php -- fichier pour ouvrir et fermer ou récupérer l'instance de l'ouverture de la base de données à l'aide d'un singleton. 
-		Fichier très court, deux fonctions seulement.
-php\/pticlic.php -- contient un grand nombre de fonctions pour le jeu
-php\/relations.php -- contient un tableau et les phrases 'relation'
-php\/server.php --
-
-
-
-****SITE****
-php\/contact.php
-php\/createGame.php
-php\/download.php
-php\/index.php
-php\/login.php
-php\/showGame.php -- ??
-php\/signup.php
-php\/ressources/backend.css  -- CSS pour showGame.php
-php\/ressources/footer.inc  -- pied de pages du site
-php\/ressources/locations.inc  -- petit fichier facilitant la navigation de page en page
-php\/ressources/menu.inc  -- menu du site
-php\/ressources/pticlic-alpha-v0.1.apk  -- exécutable PtiClic (fichier d'installation de l'application)
-php\/ressources/showmsg.inc  -- ?? (pour l'affichage des messages… mais dans quel contexte~? Pourquoi~?)
-php\/ressources/simple.css  -- CSS de base du site
-php\/ressources/strings.inc -- fichier de configuration des strings (phrases utilisés de manière répétitive dans le site, par exemple, les messages d'erreurs)
 
 \subsection{Algorithmes de création du nuage}
 
@@ -1581,23 +1369,31 @@ les platesformes mobiles.
 
 \newpage
 
-
 \section{Bibliographie}
-\subsection{PtiClic}
+\subsection{PtiClic et TALN}
 
-PtiClic : a game for vocabulary assessment combining JeuxDeMots and LSA. In proc of CICLing (Conference on Intelligent text processing and Comptational Linguistics). Mexico : 1-7 mars 2009. (\url{http://www.cicling.org/2009/RCS-41/289-298.pdf})
+Lafourcade, Mathieu, Making people play for Lexical Acquisition. In Proc. SNLP 2007, 7th Symposium on Natural Language Processing. Pattaya, Thailande, 13-15 December 2007.
 
-Making people play for Lexical Acquisition. In Proc. SNLP 2007, 7th Symposium on Natural Language Processing. Pattaya, Thailande, 13-15 December 2007. (\url{http://www.lirmm.fr/~lafourcade/ML-biblio/SNLP07/MLF-snlp2007-v5.doc})
+Lafourcade, Mathieu and Alain Joubert, Computing trees of named word usages from a crowdsourced lexical network. In proc Computational Linguistics Applications - International Multi-Conference on Computer Science and Information Technology, Wisla, Pologne, 18-20 October 2010.
+
+Lafourcade, Mathieu and Alain Joubert, Détermination et pondération des raffinements d'un terme à partir de son arbre des usages nommés. In proc of TALN'10, Montreal, Canada, 19-23 Juillet 2010.
+
+Lafourcade, Mathieu and Alain Joubert, JeuxDeMots : un prototype ludique pour l’émergence de relations entre termes. In proc of JADT'2008, Ecole normale supérieure Lettres et sciences humaines , Lyon, France, 12-14 mars 2008.
+
+Lafourcade, Mathieu and Virginie Zampa, PtiClic~: a game for vocabulary assessment combining JeuxDeMots and LSA. In proc of CICLing (Conference on Intelligent text processing and Comptational Linguistics). Mexico : 1-7 mars 2009.
+
+Lafourcade, Mathieu and Virginie Zampa, PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010 et PtiClic: a game for vocabulary assessment combining JeuxDeMots and LSA. In proc of CICLing (Conference on Intelligent text processing and Comptational Linguistics). Mexico : 1-7 mars, 2010.
+
+Schwab, Didier and Mathieu Lafourcade, Modelling, Detection and Exploitation of Lexical Functions for Analysis, ECTI Journal, 2007, Vol.2, No2, ISSN 1905-050X, pp 97-108.
+
+Wikipedia, Latent Semantic Analysis http:\/\/en.wikipedia.org\/wiki\/Latent\_semantic\_analysis.
+
+Wikipedia, Analyse sémantique latante, http:\/\/fr.wikipedia.org\/wiki\/Analyse\_s\%C3\%A9mantique\_latente.
 
 
 \subsection{Linguistique}
 
-Ferdinand de Saussure, Cours de linguistique générale, édition originale~: 1916, édition 1979~: Payot, Paris. 
-
-Latent
-
-Modelling, Detection and Exploitation of Lexical Functions for Analysis , ECTI Journal, 2007, Vol.2, No2, ISSN 1905-050X, pp 97-108. (\url{http://www.lirmm.fr/\%7Eschwab/Publications/SL_ECTI_journal.pdf})
-
+Saussure, Ferdinand de, Cours de linguistique générale, édition originale~: 1916, édition 1979~: Payot, Paris. 
 
 
 \subsection{Java}
@@ -1607,6 +1403,7 @@ Code Conventions for the Java Programming Language, Oracle, 1999. (\url{http://w
 \subsection{\android{}}
 
 Android Developer, 2011. (\url{http://developer.android.com/})
+
 
 
 
