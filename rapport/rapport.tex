@@ -77,16 +77,16 @@ Reconception du jeu Pticlic sous \android{}}
 
 \section{Introduction}
 
-PtiClic\footnote{http://pticlic.org} est un jeu qui a été conçu et développé par Matthieu Lafourcade et Virginie Zampa. Le jeu a été créé afin de faire des études sur le vocabulaire et la sémantique sur des sujets de divers horizons dans un contexte ludique et motivant. Un mot central apparait, un nuage de mots entoure le mot central et le joueur clique et dépose des mots du nuage dans des catégories proposé sous forme d'énoncés. 
+PtiClic\footnote{http://www.pticlic.org} est un jeu qui a été conçu et développé par Matthieu Lafourcade et Virginie Zampa. Le jeu a été créé afin de faire des études sur le vocabulaire et la sémantique sur des sujets de divers horizons dans un contexte ludique et motivant. Un mot central apparait, un nuage de mots entoure le mot central et le joueur clique et dépose des mots du nuage dans des catégories proposées sous forme d'énoncés. 
 
 Par exemple, pour le mot central «bicyclette», les mots «pédale», «piéton», «pied», «automobile», «Sébastien Chabal», «Lance Armstrong», «pédalier», «voiture», «yeux», «rapide», «routier», «maillot», «pédaler», «dopage», «véhicule», «musclé», «nez», etc. sont proposés. Le joueur dépose ces mots dans les catégories «\dots{} est une partie de 'cycliste'», «Un contraire de 'cycliste' est \dots{}», «'cycliste' a un rapport avec \dots{}»,  «Une caractéristique de 'cycliste' est \dots{}» ou aucune de ces catégorie. Un score est obtenu en soustrayant les mots manquants et les mots incorrects aux mots corrects. 
 
-Des linguistes et des informaticiens récupèrent les données liées aux parties jouées, ce qui leur permet de faire de la recherche dans leurs domaines respectifs.
+Des linguistes et des informaticiens récupèrent les données liées aux parties jouées, ce qui leur permet de faire de la recherche dans leurs domaines respectifs. Le réseau lexical peut aussi être utilisé directement dans des applications pour le traitement automatique du langage.
 
-Notre travail consiste à créer une version du PtiClic sous \android{}, une version modifiée du jeu adaptée pour téléphone mobile. Le sujet du TER définit clairement l'objectif de ce projet~:
+Notre travail consiste à créer une version du PtiClic sous \android{}, une version du jeu adaptée pour téléphone mobile. Le sujet du TER définit clairement l'objectif de ce projet~:
 
 \begin{quotation}
-\noindent  L'étude et le prototypage d'une version fonctionnant sur \android{} semble intéressante. En particulier on s'intéressera à deux aspects :
+\noindent  L'étude et le prototypage d'une version fonctionnant sur \android{} semble intéressante. En particulier on s'intéressera à deux aspects~:
   \begin{itemize}
   \item les contraintes imposées par l'environnement smartphone
   \item le biais qu'imposent ces contraintes sur le jeu et les données récoltées.
@@ -95,9 +95,9 @@ Notre travail consiste à créer une version du PtiClic sous \android{}, une ver
 \noindent  Il s'agira donc de modéliser une version adaptée aux smartphones et d'en implémenter un prototype fonctionnel.
 \end{quotation}
 
-Dans un premier temps, une version de base a été conçue et réalisée. Ensuite, il a été prévu d'ajouter des fonctionnalités supplémentaires. La démarche adoptée par notre groupe a été une approche itérative. Initialement, quatre itérations et quatre livraisons devaient donner comme résultat une version de base et des versions plus élaborées~: un joueur pourrait, entre autres, modifier ses préférences ou choisir son niveau. L'idée était aussi de rendre le jeu plus attirant afin d'accroître le nombre de sujets participant aux études liées au résultat des données extraits des parties jouées.
+Dans un premier temps, une version de base a été conçue et réalisée. Ensuite, il a été prévu d'ajouter des fonctionnalités supplémentaires. La démarche adoptée par notre groupe a été une approche incrémentale et itérative. Initialement, quatre itérations et quatre livraisons devaient donner comme résultat une version de base et des versions plus élaborées~: un joueur pourrait, entre autres, modifier ses préférences ou choisir son niveau. L'idée était aussi de rendre le jeu plus attrayant afin d'accroître le nombre de sujets participant aux études liées au résultat des données extraites des parties jouées.
 
-Nos objectifs initiaux ont été modifié, nous avons créé deux prototypes, l'une sous Android en Java, l'autre en HTML5 élargissant notre public leur donnant la possibilité de jouer au jeu sur divers types de smartphones.  
+Nos objectifs initiaux ont changé, nous avons créé deux prototypes~: l'un sous Android en Java, l'autre en HTML5 élargissant notre public, leur donnant la possibilité de jouer au jeu sur divers types de smartphones.  
 
 
 \pagebreak
@@ -105,7 +105,7 @@ Nos objectifs initiaux ont été modifié, nous avons créé deux prototypes, l'
  
 \section{Analyse de l'existant}
 
-L'application du jeu du PtiClic d'origine est une application disponible en ligne sur \url{http://www.lirmm.fr/pticlic/pticlic.php}. Lors de
+L'application du jeu PtiClic d'origine est une application disponible en ligne sur \url{http://www.lirmm.fr/pticlic/pticlic.php}. Lors de
 la réalisation de ce projet, nous n'avions pas accès au code source de l'application ni à des diagrammes UML. La seule partie de cette
 application qui nous a été fournie est une archive de la base de données dans un format textuel.
 
@@ -113,40 +113,48 @@ L'analyse de l'existant consistait donc d'une analyse du format et du contenu de
 
 \subsection{Le déroulement du jeu}
 
-L'utilisateur clique sur le bouton «Je joue !». Un mot\footnote{Pour simplifier l'écriture, nous parlons de 'mots', mais un mot peu aussi être un mot composé, un syntagme ou une phrase, y compris des noms propres.} se dirige vers le centre de la page, c'est le «mot central». D'autres mots viennent entourer le mot central, ce sont les «mots nuage». La police du mot central est plus grande que celle des mots nuages. Le mot central et les mots du nuage sont de couleurs contrastées.
+L'utilisateur clique sur le bouton «Je joue~!». Un mot\footnote{Nous parlerons de 'mots' dans cette discussion, mais un mot peu aussi être un mot composé, un syntagme ou une phrase.} se dirige vers le centre de la page, c'est le «mot central». D'autres mots viennent entourer le mot central, ce sont les «mots nuage». La police du mot central est plus grande que celle des mots nuages. Le mot central et les mots du nuage sont de couleurs contrastées.
 
-\subsubsection{L'écran du jeu}
-\begin{center}
+\subsubsection{Le mise en page du jeu}
+
+\begin{figure}[h!]
+  \centering
 \includegraphics[width=14cm]{img/PtiClicJeu.png}
-\end{center}
+ \caption{Version originale du jeu PtiClic de Mathieu Lafourcade et Virginie Zampa}
+\end{figure}
 
-Les relations apparaissent à droite des mots. Une partie peut comporter d'une à quatre relations. Un carré apparaît à droite de la relation suivi de la relation sous forme de syntagme tel que «\emph{(mot central)} est en rapport avec\dots{}», «Quoi/Qui pourrait \emph{(mot central)}~?». S'il y a plus d'une relation, les relations apparaissent les unes en dessous les autres, toujours à droite des mots.
+Les relations apparaissent à droite des mots. Une partie peut comporter d'une à quatre relations. Un carré apparaît à droite de la relation suivi de la relation sous forme d'énoncé tel que «\emph{(mot central)} est en rapport avec\dots{}», «Quoi/Qui pourrait \emph{(mot central)}~?». S'il y a plus d'une relation, les relations apparaissent les unes en dessous les autres, toujours à droite des mots.
 
 Encore plus à droite, un bref explicatif du principe du jeu, et tout en bas, le bouton «J'ai fini~!», 
 
 Le principe du jeu est simple. Lorsque l'utilisateur estime qu'un mot nuage est lié au mot central par une des relations, il glisse et dépose le mot nuage sur le carré de la relation. Si l'utilisateur pense qu'aucune des relations ne convient, il laisse le mot dans le nuage tout simplement. 
 
-\subsubsection{Déroulement de la partie}
-\begin{center}
+\subsubsection{Le déroulement de la partie}
+
+\begin{figure}[h!]
+  \centering
 \includegraphics[width=14cm]{img/PtiClicJeu2.png}
-\end{center}
+ \caption{Version originale du jeu PtiClic de Mathieu Lafourcade et Virginie Zampa -- Déroulement de la partie}
+\end{figure}
+
 
 Si le joueur se trompe, il peut double-cliquer sur le carré pour extraire le dernier mot déposé. En fait, le joueur peut double-cliquer
-autant de fois qu'il le veut pour extraire tous les mots ayant été mis dans la relation un par un afin de modifier ses choix. Lorsque le
+autant de fois qu'il veut pour extraire autant de mots qu'il souhaite qui ont été mis dans la relation préalablement un par un afin de modifier ses choix. Lorsque le
 joueur a fait ses choix et souhaite terminer la partie, il clique sur «J'ai fini~!», ce qui le renvoie vers la page des résultats et du
 score. Il n'y a aucune limite de temps pour terminer une partie.
 
-\subsubsection{Score obtenu}
-\begin{center}
+\begin{figure}[h!]
+  \centering
 \includegraphics[width=14cm]{img/PtiClicResultats.png}
-\end{center}
+ \caption{Version originale du jeu PtiClic de Mathieu Lafourcade et Virginie Zampa -- Page score}
+\end{figure}
 
-La page des scores contient aussi le corrigé de la partie\footnote{Un joueur joue contre un autre joueur. Le «corrigé» contient donc les réponses qui correspondent à celles du joueur contre qui il joue. En conséquence, une «bonne» réponse peut correspondre à deux mauvaises réponses, mais qui ont été choisit par les deux joueurs en question. Toutefois, le poids des relations augmentent seulement si plusieurs paires de joueurs donne les mêmes réponses.}. Les mots qui ont été mis dans la bonne categorie apparaissent en vert, les
+La page des scores contient aussi le corrigé de la partie\footnote{Un joueur joue contre un autre joueur. Le «corrigé» contient donc les réponses qui correspondent à celles du joueur contre qui il joue. En conséquence, une «bonne» réponse peut correspondre à deux mauvaises réponses, mais qui ont été choisies par les deux joueurs en question. Toutefois, le poids des relations augmentent seulement si plusieurs paires de joueurs donne les mêmes réponses.}. Les mots qui ont été mis dans la bonne categorie apparaissent en vert, les
 mauvaises réponses en rouge et les omissions en gris. Un point est marqué par bonne réponse tandis qu'une mauvaise réponse ou une omission
 fait perdre un demi-point. Lorsque deux réponses sont possibles, le point est marqué quelque soit la relation choisie. Le score final est
 soit un entier, soit un entier plus un demi point~; il peut être négatif, nul ou positif.
 
-Lorsque l'on clique sur le bouton «J'ai vu !», on retourne sur la page d'accueil.
+Lorsque l'on clique sur le bouton «J'ai vu~!», on retourne sur la page d'accueil.
 
 \subsubsection{L'écran d'accueil du site}
 \begin{center}
@@ -154,27 +162,27 @@ Lorsque l'on clique sur le bouton «J'ai vu !», on retourne sur la page d'accue
 \end{center}
 
 Le joueur par défaut est l'utilisateur "joueur". Il est aussi possible de s'inscrire sur le site afin de créer son propre identifiant et mot
-de passe afin de cumuler des points à chaque partie joué. Les dix joueurs qui ont cumulé le plus grand nombre de points sont inscrits sur la
+de passe afin de cumuler des points à chaque partie jouée. Les dix joueurs qui ont cumulé le plus grand nombre de points sont inscrits sur la
 liste des «Top 10». Les points cumulés par le joueur «joueur», qui est l'ensemble de parties jouées par des internautes non inscrits au
-site, figure parmi les «Top 10». A droite de ceci, le score du joueur en question, c'est-à-dire, la somme totale des scores de toutes les
+site, figurent parmi les «Top 10». A droite de ceci, le score du joueur en question, c'est-à-dire la somme totale des scores de toutes les
 parties jouées par l'utilisateur. Si l'utilisateur veut jouer une partie de plus, il clique sur le bouton «Je joue~!» en bas de la page et
 une nouvelle partie est entamée.
 
 Huit styles de couleurs sont disponibles et modifiables dans le menu déroulant en haut à droite de la page d'accueil. D'autres modifications résultent lors d'un changement de style, par exemple, les phrases associées aux relations. Lorsque le joueur s'authentifie avec succès, son identifiant apparaît dans le fond de page en très grande taille.
 
-Lorsqu'un utilisateur souhaite s'inscrire au site, il est invité à lire un document explicatif de l'objectif du jeu dans le cadre du projet
-de recherche de ce dernier. Il est aussi averti du contenu potentiel du jeu : comme les mots centraux et du nuage sont fournis par d'autres
+Lorsqu'un utilisateur souhaite s'inscrire au site, il est invité à lire un document explicatif concernant l'objectif du jeu dans le cadre du projet
+de recherche de ce dernier. Il est aussi averti du contenu potentiel du jeu~: comme les mots centraux et du nuage peuvent être fournis par d'autres
 utilisateurs, le vocabulaire rencontré peut ne pas convenir aux moins de 16 ans.
 
 
 
 \subsection{L'archive de la base de données}
 
-L'archive de la base de données est un fichier plat d'environ 2 000 000 lignes. Ce fichier contient un grand nombre de caractères accentués et
+L'archive de la base de données est un fichier plat d'environ 2~000~000 lignes. Ce fichier contient un grand nombre de caractères accentués et
 la version à notre disposition lorsque nous avons commencé à l'analyser, en extraire des données puis à créer notre propre base de données
 n'était pas encodée en UTF-8.
 
-La base de données de laquelle est extraite ce dump provient d'un autre jeu de l'équipe TALN\footnote{Traitement Automatique du Langage Naturel, NLP en anglais, Natural Language Processing} du Lirmm, nommé JeuxDeMots. L'objectif principal de JeuxDeMots est d'ajouter des mots et des expressions au réseau lexical alors que l'objectif principal de PtiClic est d'accroître le nombre de relations sémantiques entre les mots du réseau.
+La base de données de laquelle est extraite cette archive provient d'un autre jeu de l'équipe TALN\footnote{Traitement Automatique du Langage Naturel, NLP en anglais, Natural Language Processing} du Lirmm, nommé JeuxDeMots. L'objectif principal de JeuxDeMots est d'ajouter des mots et des expressions au réseau lexical alors que l'objectif principal de PtiClic est d'accroître le nombre de relations sémantiques entre les mots du réseau.
 
 L'archive contient en tout début des remerciements et quelques explications des acronymes et des abréviations utilisés, puis des statistiques, à savoir, le nombre d'occurrences de relations, la fréquence des noeuds, les 50 termes les plus fréquents. Plus un terme ou expression est fréquent, plus son poids est élevé. 
 
@@ -192,14 +200,14 @@ rid=430049:n1=82029:n2=151553:t=12:w=18
 \end{verbatim}
 
 \subsection{Analyse plus approfondie du jeu}
-Bien que l'archive de la base de données contienne 55 relations différentes, la version en ligne du jeu du PtiClic n'en utilise que treize (uniquement celles qui sont pertinentes pour le jeu)~:
+Bien que l'archive de la base de données contienne 55 relations différentes, la version en ligne du jeu PtiClic n'en utilise que treize (uniquement celles qui sont pertinentes pour le jeu)~:
 
 \begin{itemize}
 \item r\_associated|0|idée|Tout terme lié d'une façon ou d'une autre au mot cible\dots{} Ce mot vous fait penser à quoi~? 
 \item r\_syn|5|synonyme|A partir d'un terme, il est demandé d'énumérer les synonymes ou quasi-synonymes de ce terme. \item r\_isa|6|générique|'animal' est un générique de «chat', «mammifère', «être vivant' etc. en sont d'autres\dots{}
-\item r\_anto|7|contraire|'chaud' est le contraire de «froid', vous vous rappelez~? :)
+\item r\_anto|7|contraire|'chaud' est le contraire de «froid', vous vous rappelez~?~:)
 \item r\_hypo|8|spécifique|'mouche', «abeille', «guêpe' sont des spécifiques de «insecte»\dots{}
-\item r\_has\_part|9|partie|Il faut donner des parties/constituants/éléments du mot cible. Par exemple, «voiture» pourrait avoir comme parties : «porte», «roue», «moteur»\dots{}
+\item r\_has\_part|9|partie|Il faut donner des parties/constituants/éléments du mot cible. Par exemple, «voiture» pourrait avoir comme parties~: «porte», «roue», «moteur»\dots{}
 \item r\_holo|10|tout|Le tout est ce qui contient l'objet en question. Pour «main', on aura «bras', «corps', «personne', etc. On peut aussi voir le tout comme l'ensemble auquel appartient un élément, comme «classe' pour «élève'.
 \item r\_agent|13|action>agent|L'agent (qu'on appelle aussi le sujet) est l'entité qui effectue l'action. Par exemple dans - Le chat mange la souris -, l'agent est le chat. Des agents typiques de «courir» peuvent être «sportif», «enfant»\dots{} 
 \item r\_lieu|15|chose>lieu|A partir d'un nom d'objet (ou autre), il est demandé d'énumérer les lieux typiques où peut se trouver l'objet en question.
@@ -232,7 +240,7 @@ l'utilisation du réseau est lente, potentiellement coûteuse pour l'utilisateur
 consommatrice d'énergie.
 
 Les applications bien adaptées au smartphone sont des applications telles que les calculatrices, les logiciels de prise de notes, les jeux
-simples (casual games) et le jeu du PtiClic n'est pas une exception à cette dernière catégorie. L'avantage de ces applications sur un smartphone est
+simples (casual games) et le jeu PtiClic n'est pas une exception à cette dernière catégorie. L'avantage de ces applications sur un smartphone est
 qu'il est possible d'y jouer lorsque l'on est en file d'attente à la Poste ou à la Préfecture ou bien dans les transports en commun. En effet, lorsque l'on a un smartphone, on peut jouer n'importe quand et n'importe où. Un tel
 prototypage du jeu demande toutefois une réflexion non seulement quant aux limites d'un smartphone mais aussi ses avantages.
 
@@ -302,7 +310,7 @@ Ce fait peut sembler évident, mais il est bon d'en être conscient. En effet, s
 
 La notion de synchronie correspond à l'étude ou l'analyse d'une langue à un moment donné, figé dans le temps. La diachronie, elle, s'intéresse à l'évolution d'une langue.
 
-Quoiqu'il soit intéressant d'étudier une langue à un moment donné dans le temps, cela ne correspond pas au monde réel. Une langue évolue quotidiennement grâce à ou à cause des nouveaux produits introduits sur le marché et les événements politiques du monde entre autre. Il est donc important de pouvoir tenir compte de ces changements. Ils sont pris en compte dans la base de données de JeuxDeMots grâce au fait que le réseau lexical évolue en temps réel ; le jeu qui alimente ce réseau est en ligne et est alimenté de manière continue. Une telle base de donnée permet aussi d'associer à de nouvelles entrées des dates précises. Il est aussi possible de se servir d'autres outils en TALN et en sémantique plus précisément pour mettre à jour une telle base de données, la LSA, l'analyse sémantique latente, par exemple, qui sera décrite ci-dessous.
+Quoiqu'il soit intéressant d'étudier une langue à un moment donné dans le temps, cela ne correspond pas au monde réel. Une langue évolue quotidiennement grâce à ou à cause des nouveaux produits introduits sur le marché et les événements politiques du monde entre autre. Il est donc important de pouvoir tenir compte de ces changements. Ils sont pris en compte dans la base de données de JeuxDeMots grâce au fait que le réseau lexical évolue en temps réel~; le jeu qui alimente ce réseau est en ligne et est alimenté de manière continue. Une telle base de donnée permet aussi d'associer à de nouvelles entrées des dates précises. Il est aussi possible de se servir d'autres outils en TALN et en sémantique plus précisément pour mettre à jour une telle base de données, la LSA, l'analyse sémantique latente, par exemple, qui sera décrite ci-dessous.
 
 Un exemple d'une application qui pourrait prendre en compte la diachronie est un moteur de recherche basé sur un réseau lexical mis à jour en temps réel ou à intervalle de temps très court. Lorsqu'une affaire paraît à la une des journaux concernant un homme politique ou une catastrophique, les relations sémantiques qu'entretiennent les mots maîtres avec les mots subordonnés changent.
 
@@ -332,7 +340,7 @@ Il serait intéressant d'introduire de nouvelles relations entrantes et sortante
 
 \subsection{LSA et le réseau lexical JeuxDeMots}
 
-PtiClic combine deux moyens pour la création d'une partie, c'est-à-dire la composition mot central et mots nuages~: LSA et le réseau lexical JeuxDeMots.\footnote{PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010 et PtiClic: a game for vocabulary assessment combining JeuxDeMots and LSA. In proc of CICLing (Conference on Intelligent text processing and Comptational Linguistics). Mexico : 1-7 mars.}
+PtiClic combine deux moyens pour la création d'une partie, c'est-à-dire la composition mot central et mots nuages~: LSA et le réseau lexical JeuxDeMots.\footnote{PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010 et PtiClic: a game for vocabulary assessment combining JeuxDeMots and LSA. In proc of CICLing (Conference on Intelligent text processing and Comptational Linguistics). Mexico~: 1-7 mars.}
 
 
 \subsubsection{La LSA}
@@ -537,7 +545,7 @@ Si nous nous occupons pas d'introduire de nouvelles relations aux noeuds qui n'o
 
 Pour la synonymie, il est intéressant d'explorer les possibilités d'un nuage créé à partir d'un synonyme d'un synonyme ou bien d'un synonyme d'un synonyme d'un synonyme. De même, pour l'antonymie, un synonyme d'un antonyme ou un antonyme d'un synonyme. Le résultat est parfois très bon, parfois complètement inutile à cause de la polysémie d'un mot intermédiaire dont on se sert comme pivot.
 
-On peut parfois faire des observations et des constatations lors de telles expériences. Par exemple, pour la relation 8, "Un spécifique de 'mc' est 'mn'", on peut générer le nuage en créant un spécifique d'un générique d'un spécifique. Pour le mot 'véhicule', cela pourrait donner 'bus', qui pourrait donner 'mode de transport', qui pourrait donner 'train', 'avions', 'bicyclette'. Ou bien, deuxième cas de figure, 'véhicule' nous donne 'scooter' qui nous donne 'deux-roues'. Ce qui est intéressant est que, dans les deux cas, les termes génériques pourraient éventuellement générer des nuages qui sont des sous-ensembles l'un de l'autre~: Est-ce que tout deux-roues est un véhicule ? Est-ce que tout 'véhicule' est un 'mode de transport'. Si ce fait est établi, il serait possible de le prendre en compte dans le réseau lexical. 
+On peut parfois faire des observations et des constatations lors de telles expériences. Par exemple, pour la relation 8, "Un spécifique de 'mc' est 'mn'", on peut générer le nuage en créant un spécifique d'un générique d'un spécifique. Pour le mot 'véhicule', cela pourrait donner 'bus', qui pourrait donner 'mode de transport', qui pourrait donner 'train', 'avions', 'bicyclette'. Ou bien, deuxième cas de figure, 'véhicule' nous donne 'scooter' qui nous donne 'deux-roues'. Ce qui est intéressant est que, dans les deux cas, les termes génériques pourraient éventuellement générer des nuages qui sont des sous-ensembles l'un de l'autre~: Est-ce que tout deux-roues est un véhicule~? Est-ce que tout 'véhicule' est un 'mode de transport'. Si ce fait est établi, il serait possible de le prendre en compte dans le réseau lexical. 
 
 Pour conclure, les expériences menées dans le paquetage TALN ont été très enrichissantes dans l'interaction entre l'homme et la machine. Ayant des connaissances linguistiques, il est très intéressant de partir d'une idée, de lancer un algorithme avec un grand nombre de données, d'avoir les résultats instantanément puis d'en faire de déductions,\footnote{telles que celles de la relation 8 décrites dans le paragraphe précédent} ensuite, de modifier l'algorithme grace à ce que l'algorithme précédent nous a appris. En effet, l'homme apprend de la machine, et la machine 'apprend' de l'homme, qui modifie ses algorithmes. Ces expériences nous permet d'apprendre des faits sur la langue et le langage qui ne serait pas possible sans l'outil informatique que nous avons à notre disposition aujourd'hui.  
 
@@ -680,7 +688,7 @@ Comme une vue égal une activité si l'on veux que notre application présente p
 
 
 
-% TODO : Factoriser ce qui suit en avant, apres et mettre la section du dessus entre les parties factoriser. Bertrand
+% TODO~: Factoriser ce qui suit en avant, apres et mettre la section du dessus entre les parties factoriser. Bertrand
 
 \subsubsection{Le premier prototype}
 
@@ -748,7 +756,7 @@ disposant d'un smartphone sous \android{} nous a semblé donc interressant. En e
 \subsubsection{Le deuxième prototype}
 Pour le deuxième prototype, nous avons radicalement changé la manière dont nous avons traité les vues de notre application. L'utilisation du framework WebKit nous a permis de simplifier grandement notre application sous smartphone.
 
-Comme vous pouvez le constater sur la figure \ref{fig:archi-proto2}, nous disposont à présent d'un gros module traitant tout les détails de l'application (jeu, score, information). Nous avons tout de même gardé la gestion des préferences sur le téléphone car le système sous \android{} était plus facile à utiliser que la réalisation de notre propre système de préférences, qui aurait pu utiliser par exemple le cache ou les cookies. % TODO : Georges peut tu confirme ?
+Comme vous pouvez le constater sur la figure \ref{fig:archi-proto2}, nous disposont à présent d'un gros module traitant tout les détails de l'application (jeu, score, information). Nous avons tout de même gardé la gestion des préferences sur le téléphone car le système sous \android{} était plus facile à utiliser que la réalisation de notre propre système de préférences, qui aurait pu utiliser par exemple le cache ou les cookies. % TODO~: Georges peut tu confirme~?
 La communication entre le code Javascript de l'application et les préferences du téléphone se fait par le biais d'une classe Java injectée dans l'espace de nom global du code Javascript.
 
 
@@ -1132,10 +1140,10 @@ Pour construire le nuage de mots à partir d'un mot central et de deux relations
       \path[exist] (mc) edge[bend right] node[rel]{idée associée} (mn0);
       \path[exist] (mc) edge node[rel]{synonyme} (mi1);
       \path[exist] (mi1) edge node[rel]{sorte de} (mn2);
-      \path[guess,swap] (mc) edge node[rel]{sorte de ?} (mn2);
-      \path[guess,swap] (mc) edge[bend left] node[rel]{\shortstack{sorte de ?\\synonyme ?\\\dots}} (mn0);
+      \path[guess,swap] (mc) edge node[rel]{sorte de~?} (mn2);
+      \path[guess,swap] (mc) edge[bend left] node[rel]{\shortstack{sorte de~?\\synonyme~?\\\dots}} (mn0);
       \path[exist] (mn3) edge[bend right] node[rel]{spécifique} (mc);
-      \path[guess] (mc) edge[bend right] node[rel]{sorte de ?} (mn3);
+      \path[guess] (mc) edge[bend right] node[rel]{sorte de~?} (mn3);
     \end{tikzpicture}
     \caption{Algorithme de création d'un nuage de mot par sélection des mots proches du mot central.}
     \label{fig:algo-proximite}
@@ -1381,11 +1389,11 @@ Lafourcade, Mathieu and Alain Joubert, Computing trees of named word usages from
 
 Lafourcade, Mathieu and Alain Joubert, Détermination et pondération des raffinements d'un terme à partir de son arbre des usages nommés. In proc of TALN'10, Montreal, Canada, 19-23 Juillet 2010.
 
-Lafourcade, Mathieu and Alain Joubert, JeuxDeMots : un prototype ludique pour l’émergence de relations entre termes. In proc of JADT'2008, Ecole normale supérieure Lettres et sciences humaines , Lyon, France, 12-14 mars 2008.
+Lafourcade, Mathieu and Alain Joubert, JeuxDeMots~: un prototype ludique pour l’émergence de relations entre termes. In proc of JADT'2008, Ecole normale supérieure Lettres et sciences humaines , Lyon, France, 12-14 mars 2008.
 
-Lafourcade, Mathieu and Virginie Zampa, PtiClic~: a game for vocabulary assessment combining JeuxDeMots and LSA. In proc of CICLing (Conference on Intelligent text processing and Comptational Linguistics). Mexico : 1-7 mars 2009.
+Lafourcade, Mathieu and Virginie Zampa, PtiClic~: a game for vocabulary assessment combining JeuxDeMots and LSA. In proc of CICLing (Conference on Intelligent text processing and Comptational Linguistics). Mexico~: 1-7 mars 2009.
 
-Lafourcade, Mathieu and Virginie Zampa, PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010 et PtiClic: a game for vocabulary assessment combining JeuxDeMots and LSA. In proc of CICLing (Conference on Intelligent text processing and Comptational Linguistics). Mexico : 1-7 mars, 2010.
+Lafourcade, Mathieu and Virginie Zampa, PtiClic et PtiClic-kids~: Jeux avec les mots permettant une double acquisition. In proc TICE 2010, 7e coloque TICE, Nancy~: 6-8 décembre 2010 et PtiClic: a game for vocabulary assessment combining JeuxDeMots and LSA. In proc of CICLing (Conference on Intelligent text processing and Comptational Linguistics). Mexico~: 1-7 mars, 2010.
 
 Schwab, Didier and Mathieu Lafourcade, Modelling, Detection and Exploitation of Lexical Functions for Analysis, ECTI Journal, 2007, Vol.2, No2, ISSN 1905-050X, pp 97-108.
 
@@ -1445,7 +1453,7 @@ Android Developer, 2011. (\url{http://developer.android.com/})
 
 % Durée du projet 4 mois (4 itérations de 4 semaines)
 
-% Conventions de code : \url{http://java.sun.com/docs/codeconv/html/CodeConventions.doc6.html}
+% Conventions de code~: \url{http://java.sun.com/docs/codeconv/html/CodeConventions.doc6.html}
 
 % Code (noms de variables, etc.) en anglais, commentaires en français, javadoc en français.
 
@@ -1454,9 +1462,9 @@ Android Developer, 2011. (\url{http://developer.android.com/})
 
 % Utilisation d'une classe \verb!Constant!
 
-% Écran d'accueil du jeu : Image (splash), puis directement les icônes des modes de jeu + configuration, au lieu d'avoir un écran avec le logo et jouer/config, suivi du choix du mode de jeu.
+% Écran d'accueil du jeu~: Image (splash), puis directement les icônes des modes de jeu + configuration, au lieu d'avoir un écran avec le logo et jouer/config, suivi du choix du mode de jeu.
 
-\section{Annexe A}
+\section{Informations diverses}
 
 %\subsection{Serveur}
 
